@@ -35,9 +35,9 @@ source ~/.cache/wal/colors-tty.sh
 #######################################################
 
 # systemctl --user problem
-export XDG_RUNTIME_DIR="/run/user/$UID"
-export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
-export DBUS_SESSION_BUS_ADDRESS=/run/user/$(id -u user)/bus
+# export XDG_RUNTIME_DIR="/run/user/$UID"
+# export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
+# export DBUS_SESSION_BUS_ADDRESS=/run/user/$(id -u user)/bus
 
 # Disable the bell
 if [[ $iatest -gt 0 ]]; then bind "set bell-style visible"; fi
