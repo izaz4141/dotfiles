@@ -21,17 +21,22 @@
 
 * {
     font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-    border: none;
-    border-radius: 0px;
+    /* border: none; */
+    /* border-radius: 0px; */
 }
 
 window#waybar {
     background-color: rgba(0,0,0,0.8);
-    border-bottom: 0px solid #ffffff;
+    border-top: 2px solid @textcolor5;
+    border-bottom: 2px solid @textcolor5;
+    /* border-bottom: 0px solid #ffffff; */
     /* color: #FFFFFF; */
     background: transparent;
     transition-property: background-color;
     transition-duration: .5s;
+}
+window#waybar.hidden {
+    opacity: 0.2;
 }
 
 /* -----------------------------------------------------

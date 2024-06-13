@@ -1,1 +1,1 @@
-kate
+mousepad

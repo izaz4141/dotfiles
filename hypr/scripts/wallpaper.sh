@@ -148,6 +148,7 @@ fi
 # -----------------------------------------------------
 pywalfox update
 pywal-discord -t default
+cp -rf ~/.cache/wal/colors-cava-config ~/dotfiles/cava/config
 
 # ----------------------------------------------------- 
 # Created blurred wallpaper

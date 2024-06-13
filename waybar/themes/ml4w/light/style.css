@@ -11,8 +11,8 @@
 @define-color textcolor1 #FFFFFF;
 @define-color textcolor2 @color11;
 @define-color textcolor3 @color12;
-@define-color textcolor3 @color13;
-@define-color textcolor4 @color14;
+@define-color textcolor4 @color13;
+@define-color textcolor5 @color14;
 @define-color iconcolor #FFFFFF;
 
 @import '../style.css';

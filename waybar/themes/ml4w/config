@@ -11,12 +11,11 @@
 {
     // General Settings
     "layer": "top",
-    "margin-top": 10,
+    "margin-top": 5,
     "margin-bottom": 0,
-    "layer": "top",
     "margin-left": 0,
-    "margin-right": 0,    
-    "spacing": 0,
+    "margin-right": 0,
+    "spacing": 2,
 
     // Load Modules
     "include": ["~/dotfiles/waybar/modules.json"],
@@ -42,14 +41,14 @@
     "modules-right": [
         "custom/updates",
         "pulseaudio",
-        "bluetooth",
+        // "bluetooth",
         "battery", 
         "network",
         "group/hardware",
-        "custom/cliphist",
-        "custom/hypridle",
+        // "custom/cliphist",
+        // "custom/hypridle",
         // "custom/hyprshade",
-        // "tray",
+        "tray",
         "custom/exit",
         "custom/ml4w-welcome",
         "clock"

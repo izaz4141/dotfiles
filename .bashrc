@@ -36,6 +36,7 @@ source ~/.cache/wal/colors-tty.sh
 
 # systemctl --user problem
 # export XDG_RUNTIME_DIR="/run/user/$UID"
+# export XDG_RUNTIME_DIR=/run/user/$UID systemctl --user status
 # export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
 # export DBUS_SESSION_BUS_ADDRESS=/run/user/$(id -u user)/bus
 
@@ -335,7 +336,7 @@ alias dotsync="~/dotfiles-versions/dotfiles/.dev/sync.sh dotfiles"
 # Fastfetch if on wm
 # -----------------------------------------------------
 if [[ $(tty) == *"pts"* ]]; then
-    fastfetch --config examples/13
+    fastfetch -c ~/dotfiles/fastfetch/nadeko-chibi.jsonc
 else
     echo
     if [ -f /bin/qtile ]; then
