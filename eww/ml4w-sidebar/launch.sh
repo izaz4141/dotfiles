@@ -27,7 +27,7 @@ if [[ ! -f "$FILE" ]]; then
 	${EWW} --config "$CFG" open shutdown --screen $sc
 	${EWW} --config "$CFG" open close --screen $sc
 else
-	${EWW} --config "$CFG" close ml4wlauncher resources logout suspend lock reboot shutdown close
+	${EWW} --config "$CFG" close resources ml4wlauncher logout suspend lock reboot shutdown close
 	echo ":: Closing widgets"
 	rm "$FILE"
 fi
