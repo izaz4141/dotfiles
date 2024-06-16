@@ -49,14 +49,14 @@
     },
     {
         "key": "hypridle_hyprlock_timeout",
-        "value": 600
+        "value": 0
     },
     {
         "key": "hypridle_dpms_timeout",
-        "value": 660
+        "value": 0
     },
     {
         "key": "hypridle_suspend_timeout",
-        "value": 1800
+        "value": 0
     }
 ]
