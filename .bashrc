@@ -39,6 +39,8 @@ source ~/.cache/wal/colors-tty.sh
 # export XDG_RUNTIME_DIR=/run/user/$UID systemctl --user status
 # export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
 # export DBUS_SESSION_BUS_ADDRESS=/run/user/$(id -u user)/bus
+export OPENMC_CROSS_SECTIONS="/home/glicole/Downloads/Compressed/endfb-vii.1-hdf5/cross_sections.xml"
+# source /home/glicole/.local/share/pipx/venvs/openmc/bin/activate
 
 # Disable the bell
 if [[ $iatest -gt 0 ]]; then bind "set bell-style visible"; fi
@@ -447,13 +449,21 @@ up() {
 }
 
 # Automatically do an ls after each cd, z, or zoxide
-cd ()
-{
+cd () {
 	if [ -n "$1" ]; then
 		z "$@" && ls
 	else
 		z ~ && ls
 	fi
+}
+
+yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
 }
 
 # Returns the last 2 fields of the working directory

@@ -41,7 +41,7 @@
     },
     {
         "key": "waybar_screenlock",
-        "value": false
+        "value": true
     },
     {
         "key": "waybar_window",

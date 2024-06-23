@@ -1,0 +1,55 @@
+#!/bin/bash
+
+## Files and cmd
+FILE="$HOME/.cache/eww_launch.dashboard"
+CFG="$HOME/.config/eww/dashboard"
+EWW=`which eww`
+
+## Run eww daemon if not running already
+if [[ ! `pidof eww` ]]; then
+	${EWW} daemon
+	sleep 1
+fi
+
+if [ -f $HOME/dotfiles/.settings/eww-monitor.sh ] && [ $(cat $HOME/dotfiles/.settings/eww-monitor.sh) != "auto" ] ;then
+	echo ":: Using monitor id from $HOME/dotfiles/.settings/eww-monitor.sh"
+	sc=$(cat $HOME/dotfiles/.settings/eww-monitor.sh)
+else
+	echo ":: Autodetect current focused monitor."
+	sc=$(python $HOME/dotfiles/hypr/scripts/active-monitor.py)
+fi
+
+## Open widgets 
+run_eww() {
+	${EWW} --config "$CFG" open background --screen $sc
+	${EWW} --config "$CFG" open profile --screen $sc
+	${EWW} --config "$CFG" open system --screen $sc
+	${EWW} --config "$CFG" open clock --screen $sc
+	${EWW} --config "$CFG" open uptime --screen $sc
+	${EWW} --config "$CFG" open music --screen $sc
+	${EWW} --config "$CFG" open github --screen $sc
+	${EWW} --config "$CFG" open reddit --screen $sc
+	${EWW} --config "$CFG" open twitter --screen $sc
+	${EWW} --config "$CFG" open youtube --screen $sc
+	${EWW} --config "$CFG" open weather --screen $sc
+	${EWW} --config "$CFG" open apps --screen $sc
+	${EWW} --config "$CFG" open mail --screen $sc
+	${EWW} --config "$CFG" open logout --screen $sc
+	${EWW} --config "$CFG" open sleep --screen $sc
+	${EWW} --config "$CFG" open reboot --screen $sc
+	${EWW} --config "$CFG" open poweroff --screen $sc
+	${EWW} --config "$CFG" open folders --screen $sc
+}
+
+## Launch or close widgets accordingly
+if [[ ! -f "$FILE" ]]; then
+	touch "$FILE"
+	echo ":: Opening on Monitor $sc"
+	run_eww
+else
+	${EWW} --config "$CFG" close \
+					background profile system clock uptime music github \
+					reddit twitter youtube weather apps mail logout sleep reboot poweroff folders
+	echo ":: Closing widgets"
+	rm "$FILE"
+fi

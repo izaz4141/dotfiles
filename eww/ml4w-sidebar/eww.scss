@@ -10,13 +10,13 @@
 	border: 1px solid #444444;
 	border-radius: 12px;
 	box-shadow: 0 0 4px 2px #000000;
-	margin: 10px;
+	margin: 4px;
 }
 
 .res_box {
 	background-color: #242424;
 	border-radius: 12px;
-	padding: 14px 18px 14px 18px;
+	padding: 4px 6px 4px 6px;
 }
 
 .res_circle {
@@ -29,23 +29,46 @@
 
 .ml4w_icon {
     background-repeat: no-repeat;
-	background-size: 48px;
-	min-height: 48px;
-	min-width: 48px;
+	background-size: 26px;
+	min-height: 26px;
+	min-width: 26px;
+}
+
+.resource_icon {
+    background-repeat: no-repeat;
+	background-size: 16px;
+	background-color: #242424;
+	min-height: 16px;
+	min-width: 16px;
+	background-position: center;
+	padding: 10px;
 }
 
 .res_circle_small {
 	background-color: #242424;
 	border: 0px solid #161616;
 	border-radius: 100%;
-	padding: 40px;
+	background-size: 20px;
+	padding: 18px;
 	color:#FFFFFF;
 }
 
 .res_text {
 	border-radius: 16px;
 	color: #FFFFFF;
-	font-size : 16px;
+	font-size : 12px;
+	padding: 0px 8px 0px 8px;
+	margin: 0px 0px 0px 0px;
+	font-weight : bold;
+}
+
+.resource_text {
+	border-radius: 16px;
+	border-color: #FFFFFF;
+	border-width: 1px;
+	border-style: solid;
+	color: #FFFFFF;
+	font-size : 12px;
 	padding: 0px 8px 0px 8px;
 	margin: 0px 0px 0px 0px;
 	font-weight : bold;
@@ -65,12 +88,13 @@
 
 .powericons {
 		background-repeat: no-repeat;
-		background-size: 30px;
-		min-height: 30px;
-		min-width: 30px;
+		background-size: 20px;
+		min-height: 20px;
+		min-width: 20px;
 }
 
 .closeicon {
+	border-radius: 100%;
 	background-repeat: no-repeat;
 	background-size: 16px;
 	min-height: 16px;
