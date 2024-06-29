@@ -1,0 +1,73 @@
+;; **
+;; ** Widgets config for EWW
+
+;;  Music
+(defwidget music_pop []
+		(box :class "music_pop" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false"
+			(box :class "music_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${COVER}');")
+			(box :orientation "v" :spacing 20 :space-evenly "false" :vexpand "false" :hexpand "false"
+				(label :halign "center" :class "music_title" :wrap "true" :limit-width 20 :text SONG)
+				(label :halign "center" :class "music_artist" :wrap "true" :limit-width 15 :text ARTIST)
+				(box :orientation "h" :spacing 15 :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+					(button :class "music_btn_prev" :onclick "~/.config/eww/scripts/music_info --prev" "")
+					(button :class "music_btn_play" :onclick "~/.config/eww/scripts/music_info --toggle" STATUS)
+					(button :class "music_btn_next" :onclick "~/.config/eww/scripts/music_info --next" ""))
+				(box :class "music_bar_top" :halign "center" :vexpand "false" :hexpand "false" :space-evenly "false"
+					(scale :onscroll "mpc -q seek {}" :min 0 :active "true" :max 100 :value CURRENT)))))
+
+
+;;  music
+		(defwindow music_win :stacking "fg" :focusable "false" :screen 1
+			    :geometry (geometry :x "0" :y "5px" :width 360 :height 90 :anchor "top center")
+			     				(music_pop))
+
+(defwidget cal []
+	(box :class "cal" :orientation "v"
+	(box :class "cal-in"
+	(calendar :class "cal"
+			  :day calendar_day
+			  :year calendar_year))))
+
+(defwindow calendar
+	:geometry (geometry :x "5px"
+						:y "0px"
+                        :anchor "top right"
+						:width "270px"
+						:height "60px")
+(cal))
+
+(defwidget audio []
+	(box :class "audio-box" :orientation "v" :space-evenly "false" :vexpand "false" :hexpand "false"
+	(box :halign "v" :space-evenly "false" :hexpand "false" :vexpand "false"
+	(label :class "speaker_icon" :orientation "v" :text "󰕾")
+	(box :orientation "v" :halign "center" :vexpand "false" :hexpand "false"
+    (label :class "speaker_text" :text "SPEAKER" :valign "center" :halign "left" )
+	(box :class "speaker_bar" :halign "center" :vexpand "false" :hexpand "false"
+	(scale    :value VOLUME
+              :space-evenly "false"
+			  :orientation "h"
+			  :onchange "wpctl set-volume @DEFAULT_SINK@ {}%"
+              :tooltip "volume on ${VOLUME}%"
+			  :max 150
+			  :min 0))))
+            (label :text "" :class "audio_sep" :halign "center")
+	(box :halign "v" :space-evenly "false" :hexpand "false" :vexpand "false"
+	(label :class "mic_icon" :orientation "v" :text "󰍬")
+	(box :orientation "v" :halign "center" :vexpand "false" :hexpand "false"
+    (label :class "mic_text" :text "MIC" :valign "center" :halign "left" )
+	(box :class "mic_bar" :halign "center" :vexpand "false" :hexpand "false"
+	(scale    :value MICVOL
+              :space-evenly "false"
+			  :orientation "h"
+              :tooltip "mic on ${MICVOL}%"
+			  :onchange "wpctl set-volume @DEFAULT_SOURCE@ {}%"
+			  :max 100
+			  :min 0))))))
+
+(defwindow audio_ctl
+	:geometry (geometry :x "5px"
+						:y "0px"
+                        :anchor "top right"
+						:width "280px"
+						:height "60px")
+(audio))

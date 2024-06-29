@@ -20,7 +20,7 @@ fi
 
 ## Get data
 get_weather_data() {
-	weather=`curl -sf "http://api.openweathermap.org/data/2.5/weather?APPID="$KEY"&id="$ID"&units="$UNIT""`
+	weather=`curl -sf "http://api.openweathermap.org/data/2.5/weather?APPID=$KEY&id=$ID&units=$UNIT"`
 	echo ${weather}
 
 	if [ ! -z "$weather" ]; then
@@ -109,7 +109,7 @@ get_weather_data() {
 			weather_icon=" "
 			weather_quote="Forecast says it's a misty night \nDon't go anywhere tonight or you might get lost..."
 			weather_hex="#84afdb"
-		else 
+		else
 			weather_icon=" "
 			weather_quote="Sort of odd, I don't know what to forecast \nMake sure you have a good time!"
 			weather_hex="#adadff"
@@ -144,4 +144,3 @@ elif [[ "$1" == "--quote" ]]; then
 elif [[ "$1" == "--quote2" ]]; then
 	cat ${cache_weather_quote} | tail -n1
 fi
-

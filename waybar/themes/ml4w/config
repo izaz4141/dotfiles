@@ -27,13 +27,14 @@
         "group/settings",
         //"wlr/taskbar",
         "group/quicklinks",
-        "hyprland/window"
+        //"hyprland/window",
+        "hyprland/workspaces"
         // "custom/empty"
     ],
 
     // Modules Center
     "modules-center": [
-        "hyprland/workspaces"
+        "custom/song"
         // "custom/cava"
     ],
 
@@ -43,12 +44,12 @@
         "pulseaudio",
         // "bluetooth",
         "battery", 
-        "network",
         "group/hardware",
         // "custom/cliphist",
         // "custom/hypridle",
         // "custom/hyprshade",
         "tray",
+        "network",
         "custom/exit",
         "custom/ml4w-welcome",
         "clock"

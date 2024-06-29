@@ -7,7 +7,7 @@
 
 /** Background ***************************************/
 .bg {
-	background-image: url("images/bg.png");
+	background-image: url("dashboard/images/bg.png");
 	background-color: #474D59;
 	opacity: 1;
 	border-radius: 20px;
@@ -42,14 +42,14 @@
 }
 
 /** System ********************************************/
-.iconcpu, .iconmem, .iconbright, .iconbat {
+.iconmic, .iconvol, .iconbright, .iconbat {
 	font-size : 20px;
 	font-weight : normal;
 }
-.iconcpu {
+.iconmic {
 	color: #BF616A;
 }
-.iconmem {
+.iconvol {
 	color: #A3BE8C;
 }
 .iconbright {
@@ -230,7 +230,9 @@
 	margin: 2px 10px 2px 10px;
 }
 
-.app_fox {}
+.app_fox {
+	transition: all .2s ease-in-out;
+}
 .app_telegram {}
 .app_discord {}
 .app_terminal {}

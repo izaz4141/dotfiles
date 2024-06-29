@@ -30,11 +30,11 @@
 
     // Cava Visualizer
     "custom/cava": {
-        "format": "{icon}{}",
+        "format": "{icon} {}",
+        "format-Stopped": "",
         "format-icons": {
-            // "Playing": " ", // Uncomment if not using caway
-            "Paused": " ",
-            "Stopped": "&#x202d;ﭥ " // This stop symbol is RTL. So &#x202d; is left-to-right override.
+            "Playing": " ", // Uncomment if not using caway
+            "Paused": " "
         },
         "escape": true,
         "tooltip": true,
@@ -45,6 +45,26 @@
         "on-scroll-down": "playerctl next",
         "on-click-right": "g4music",
         "max-length": 35
+    },
+    
+    // Just Song Name
+    "custom/song": {
+    	"format": "{icon} {}",
+    	"format-Stopped": "",
+        "format-icons": {
+            "Playing": " ",
+            "Paused": " "
+        },
+        "escape": true,
+        "tooltip": true,
+        "exec": "bash ~/dotfiles/waybar/music-bar.sh",
+        "return-type": "json",
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl previous",
+        "on-scroll-down": "playerctl next",
+        "on-click-right": "bash ~/dotfiles/eww/bar/scripts/pop music",
+        "max-length": 35,
+        "restart-interval": 60
     },
 
     // Taskbar
@@ -142,11 +162,18 @@
         "tooltip-format": "Select a waybar theme"
     },
     
-    // Settings
+    // Dashboard
     "custom/settings": {
-        "format": "",
+        "format": "󰕮",
         "on-click": "~/dotfiles/eww/dashboard/launch_dashboard",
         "tooltip-format": "Dashboard"
+    },
+
+    // Eww KILL
+    "custom/ewwkill": {
+        "format": "󱓇",
+        "on-click": "killall eww",
+        "tooltip-format": "Kill All Eww"
     },
 
     // Keybindings
@@ -211,7 +238,7 @@
 
     // Power Menu
     "custom/exit": {
-        "format": "",
+        "format": "󰐥",
         "on-click": "wlogout",
         "tooltip-format": "Power Menu"
     },
@@ -259,8 +286,9 @@
         // "timezone": "America/New_York",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         // START CLOCK FORMAT
-        "format-alt": "{:%Y-%m-%d}"
+        "format-alt": "{:%Y-%m-%d}",
         // END CLOCK FORMAT
+        "on-click-right": "bash ~/dotfiles/eww/bar/scripts/pop calendar"
     },
 
     // System
@@ -331,7 +359,8 @@
             "custom/settings",
             "custom/waybarthemes",
             "custom/wallpaper",
-            "custom/ml4w-hyprland-settings"
+            "custom/ewwkill"
+//            "custom/ml4w-hyprland-settings"
         ]
     },
 
@@ -347,11 +376,11 @@
     // Network
     "network": {
         "format": "{ifname}",
-        "format-wifi": "   {signalStrength}%",
-        "format-ethernet": "  {ifname}",
-        "format-disconnected": "Disconnected",
+        "format-wifi": "󰖩",
+        "format-ethernet": "",
+        "format-disconnected": "󰖪",
         "tooltip-format": " {ifname} via {gwaddri}",
-        "tooltip-format-wifi": "  {ifname} @ {essid}\nIP: {ipaddr}\nStrength: {signalStrength}%\nFreq: {frequency}MHz\nUp: {bandwidthUpBits} Down: {bandwidthDownBits}",
+        "tooltip-format-wifi": "󰖩  {ifname} @ {essid}\nIP: {ipaddr}\nStrength: {signalStrength}%\nFreq: {frequency}MHz\nUp: {bandwidthUpBits} Down: {bandwidthDownBits}",
         "tooltip-format-ethernet": " {ifname}\nIP: {ipaddr}\n up: {bandwidthUpBits} down: {bandwidthDownBits}",
         "tooltip-format-disconnected": "Disconnected",
         "max-length": 50,
@@ -385,15 +414,16 @@
         "format-source": "{volume}% ",
         "format-source-muted": "",
         "format-icons": {
-            "headphone": " ",
+            "headphone": "󰋋",
             "hands-free": " ",
             "headset": " ",
             "phone": " ",
             "portable": " ",
             "car": " ",
-            "default": [" ", " ", " "]
+            "default": ["󰕿", "󰖀", "󰕾"]
         },
-        "on-click": "pavucontrol"
+        "on-click": "~/dotfiles/eww/bar/scripts/pop audio",
+        "on-right-click": "pavucontrol"
     },
 
     // Bluetooth

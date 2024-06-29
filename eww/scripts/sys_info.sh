@@ -71,6 +71,18 @@ get_disk() {
 	df -h / | awk '{print $5}' | tail -n1 | sed 's/%//g'
 }
 
+## Get Volume
+get_vol() {
+	VOL=`wpctl get-volume @DEFAULT_SINK@ | sed -ne 's/^.*\([0-9.]\{4\}\).*$/\1/p' `
+	echo "$VOL*100" | bc | cut -d "." -f 1 | cut -d "," -f 1
+}
+
+## Get Mic Volume
+get_mic() {
+	MIC=`wpctl get-volume @DEFAULT_SOURCE@ | sed -ne 's/^.*\([0-9.]\{4\}\).*$/\1/p' `
+	echo "$MIC*100" | bc | cut -d "." -f 1 | cut -d "," -f 1
+}
+
 ## Execute accordingly
 if [[ "$1" == "--cpu" ]]; then
 	get_cpu
@@ -82,4 +94,8 @@ elif [[ "$1" == "--bat" ]]; then
 	get_battery
 elif [[ "$1" == "--disk" ]]; then
 	get_disk
+elif [[ "$1" == "--volume" ]]; then
+	get_vol
+elif [[ "$1" == "--mic" ]]; then
+	get_mic
 fi

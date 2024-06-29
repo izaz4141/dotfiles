@@ -171,7 +171,8 @@ window#waybar.empty #window {
 #custom-system,
 #custom-hyprshade,
 #custom-hypridle,
-#custom-waybarthemes {
+#custom-waybarthemes,
+#custom-ewwkill {
     margin-right: 23px;
     font-size: 20px;
     font-weight: bold;
@@ -232,7 +233,7 @@ window#waybar.empty #window {
 }
 
 /* -----------------------------------------------------
- * Custom Exit
+ * Custom Module
  * ----------------------------------------------------- */
 
 
@@ -258,10 +259,26 @@ window#waybar.empty #window {
     color: @textcolor2;
     border-radius: 15px;
     font-size: 12px;
+    font-weight: bold;
     margin: 3px 15px 3px 14px;
     padding: 0px 1px;
     opacity: 0.8;
 }
+
+#custom-song.Playing,
+#custom-song.Paused {
+    background: @backgrounddark;
+    background-color: @backgroundlight;
+    font-size: 12px;
+    font-weight: bold;
+    color: @textcolor2;
+    border-radius: 15px;
+    padding: 2px 10px 0px 10px;
+    margin: 5px 15px 5px 0px;
+    opacity:0.8;
+}
+
+#custom-song.Stopped {}
 
 /* -----------------------------------------------------
  * Idle Inhibator
@@ -405,23 +422,20 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #network {
-    background-color: @backgroundlight;
-    font-size: 16px;
-    color: @textcolor2;
-    border-radius: 15px;
-    padding: 2px 10px 0px 10px;
-    margin: 5px 15px 5px 0px;
-    opacity:0.8;
+    margin: 0px 20px 0px 0px;
+    padding:0px;
+    font-size:20px;
+    color: @iconcolor;
 }
 
 #network.ethernet {
-    background-color: @backgroundlight;
-    color: @textcolor2;
+    font-size:20px;
+    color: @iconcolor;
 }
 
 #network.wifi {
-    background-color: @backgroundlight;
-    color: @textcolor2;
+    font-size:20px;
+    color: @iconcolor;
 }
 
 /* -----------------------------------------------------

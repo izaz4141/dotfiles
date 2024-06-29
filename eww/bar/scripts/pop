@@ -1,0 +1,104 @@
+#!/bin/bash
+
+EWW_BIN=`which eww`
+
+## Run eww daemon if not running already
+if [[ ! `pidof eww` ]]; then
+	${EWW} daemon
+	sleep 1
+fi
+
+if [ -f $HOME/dotfiles/.settings/eww-monitor.sh ] && [ $(cat $HOME/dotfiles/.settings/eww-monitor.sh) != "auto" ] ;then
+	echo ":: Using monitor id from $HOME/dotfiles/.settings/eww-monitor.sh"
+	sc=$(cat $HOME/dotfiles/.settings/eww-monitor.sh)
+else
+	echo ":: Autodetect current focused monitor."
+	sc=$(python $HOME/dotfiles/hypr/scripts/active-monitor.py)
+fi
+
+calendar() {
+LOCK_FILE="$HOME/.cache/eww-calendar.lock"
+
+run() {
+    ${EWW_BIN} -c $HOME/dotfiles/eww open calendar --screen $sc
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE" ]]; then
+    ${EWW_BIN} -c $HOME/dotfiles/eww close system music_win audio_ctl
+    touch "$LOCK_FILE"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/dotfiles/eww close calendar
+    rm "$LOCK_FILE" && echo "closed"
+fi
+}
+
+
+system() {
+LOCK_FILE_MEM="$HOME/.cache/eww-system.lock"
+
+run() {
+    ${EWW_BIN} -c $HOME/dotfiles/eww open system --screen $sc
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_MEM" ]]; then
+    ${EWW_BIN} -c $HOME/dotfiles/eww close calendar music_win audio_ctl
+    touch "$LOCK_FILE_MEM"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/dotfiles/eww close system 
+    rm "$LOCK_FILE_MEM" && echo "closed"
+fi
+}
+
+
+music() {
+LOCK_FILE_SONG="$HOME/.cache/eww-song.lock"
+
+run() {
+    ${EWW_BIN} -c $HOME/dotfiles/eww open music_win --screen $sc
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_SONG" ]]; then
+    ${EWW_BIN} -c $HOME/dotfiles/eww close system calendar
+    touch "$LOCK_FILE_SONG"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/dotfiles/eww close music_win
+    rm "$LOCK_FILE_SONG" && echo "closed"
+fi
+}
+
+
+
+audio() {
+LOCK_FILE_AUDIO="$HOME/.cache/eww-audio.lock"
+
+run() {
+    ${EWW_BIN} -c $HOME/dotfiles/eww open audio_ctl --screen $sc
+}
+
+# Open widgets
+if [[ ! -f "$LOCK_FILE_AUDIO" ]]; then
+    ${EWW_BIN} -c $HOME/dotfiles/eww close system calendar music
+    touch "$LOCK_FILE_AUDIO"
+    run && echo "ok good!"
+else
+    ${EWW_BIN} -c $HOME/dotfiles/eww close audio_ctl
+    rm "$LOCK_FILE_AUDIO" && echo "closed"
+fi
+}
+
+
+if [ "$1" = "calendar" ]; then
+calendar
+elif [ "$1" = "system" ]; then
+system
+elif [ "$1" = "music" ]; then
+music
+elif [ "$1" = "audio" ]; then
+audio
+fi

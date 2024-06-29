@@ -1,0 +1,6 @@
+;; ***** Variables *****
+(include "variables.yuck")
+
+;; ***** Widgets *****
+(include "dashboard/eww.yuck")
+(include "bar/eww.yuck")
