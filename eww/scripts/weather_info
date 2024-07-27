@@ -10,7 +10,7 @@ cache_weather_icon=${cache_dir}/weather-icon
 
 ## Weather data
 KEY="13c52832fd850336b2c8fda7b4442e1d"
-ID="1627459"
+ID="Yogyakarta"
 UNIT="metric"	# Available options : 'metric' or 'imperial'
 
 ## Make cache dir
@@ -20,7 +20,7 @@ fi
 
 ## Get data
 get_weather_data() {
-	weather=`curl -sf "http://api.openweathermap.org/data/2.5/weather?APPID=$KEY&id=$ID&units=$UNIT"`
+	weather=`curl -sf "http://api.openweathermap.org/data/2.5/weather?APPID=$KEY&q=$ID&units=$UNIT"`
 	echo ${weather}
 
 	if [ ! -z "$weather" ]; then

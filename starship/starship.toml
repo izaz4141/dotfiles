@@ -1,4 +1,3 @@
-
 format = """
 [](#3B4252)\
 $python\
@@ -85,8 +84,8 @@ style = "bg:#4C566A"
 format = '[ $symbol $branch ]($style)'
 
 [character]
-success_symbol = "[>](bold green)"
-error_symbol = "[x](bold red)"
+success_symbol = "[• ](bold fg:green) "
+error_symbol = "[• 󰅙](bold fg:red) "
 vimcmd_symbol = "[<](bold green)"
 
 [git_commit]

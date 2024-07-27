@@ -30,10 +30,10 @@
 				(label :class "iconvol" :text "󰕾 ")
 				(scale :min 0 :max 150 :value VOLUME :onchange "wpctl set-volume @DEFAULT_SINK@ {}%"))
 			(box :class "bright_bar" :orientation "h" :spacing 15 :space-evenly "false" :vexpand "false" :hexpand "false" 
-				(label :class "iconbright" :text "")
+				(label :class "iconbright" :text "󰃞 ")
 				(scale :orientation "h" :min 0 :max 100 :value BLIGHT :onchange "brightnessctl set {}%"))
 			(box :class "bat_bar" :orientation "h" :spacing 15 :space-evenly "false" :vexpand "false" :hexpand "false" 
-				(label :class "iconbat" :text "")
+				(label :class "iconbat" :text " ")
 				(scale :min 0 :max 100 :value BATTERY :active "false")))))
 
 ;; clock
@@ -128,16 +128,16 @@
 ;; power buttons
 (defwidget logout [] 
 	(box :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_logout" :onclick "../../hypr/scripts/power.sh exit &" "")))
+		(button :class "btn_logout" :onclick "../../hypr/scripts/power.sh exit &" "󰿅")))
 (defwidget sleep [] 
 	(box :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_sleep" :onclick "../../hypr/scripts/power.sh suspend &" "")))
+		(button :class "btn_sleep" :onclick "../../hypr/scripts/power.sh suspend &" "󰤄")))
 (defwidget reboot [] 
 	(box :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_reboot" :onclick "../../hypr/scripts/power.sh reboot &" "")))
+		(button :class "btn_reboot" :onclick "../../hypr/scripts/power.sh reboot &" "󰜉")))
 (defwidget poweroff [] 
 	(box :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_poweroff" :onclick "../../hypr/scripts/power.sh shutdown &" "")))
+		(button :class "btn_poweroff" :onclick "../../hypr/scripts/power.sh shutdown &" "")))
 
 ;; folders
 (defwidget folders [] 

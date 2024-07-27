@@ -13,7 +13,7 @@
     },
     {
         "key": "waybar_workspaces",
-        "value": 3
+        "value": 5
     },
     {
         "key": "rofi_bordersize",
@@ -41,22 +41,22 @@
     },
     {
         "key": "waybar_screenlock",
-        "value": false
+        "value": true
     },
     {
         "key": "waybar_window",
-        "value": false
+        "value": true
     },
     {
         "key": "hypridle_hyprlock_timeout",
-        "value": 0
+        "value": 600
     },
     {
         "key": "hypridle_dpms_timeout",
-        "value": 0
+        "value": 660
     },
     {
         "key": "hypridle_suspend_timeout",
-        "value": 0
+        "value": 1800
     }
 ]

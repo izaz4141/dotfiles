@@ -1,7 +1,7 @@
 ;; ** Variables ***********************************************************************
 
 ;; Profile vars
-(defvar IMAGE "../../Pictures/Profile/nadeko-coffee.png")
+(defvar IMAGE "./assets/profile-pic.jpg")
 (defvar NAME "Izaz")
 (defpoll UNAME :interval "5m" `whoami`)
 
@@ -15,10 +15,10 @@
 (defpoll MICVOL :interval "1s" `scripts/sys_info.sh --mic`)
 
 ;; Time vars
-(defpoll HOUR :interval "5s" `date +\"%I\"`)
-(defpoll MIN :interval "5s" `date +\"%M\"`)
-(defpoll MER :interval "5s" `date +\"%p\"`)
-(defpoll DAY :interval "5s" `date +\"%A\"`)
+(defpoll HOUR :interval "30s" `date +\"%H\"`)
+(defpoll MIN :interval "30s" `date +\"%M\"`)
+(defpoll MER :interval "30s" `date +\"%p\"`)
+(defpoll DAY :interval "1h" `date +\"%A\"`)
 
 ;; Uptime vars
 (defpoll UPHOUR :interval "5s" `uptime -p | awk '{print $2 \" \" $3}' | sed 's/,//g'`)
@@ -35,15 +35,19 @@
 
 ;; Calendar vars
 (defpoll calendar_day :interval "20h" "date '+%d'")
+(defpoll calendar_month :interval "20h" "date '+%m'")
 (defpoll calendar_year :interval "20h" "date '+%Y'")
+(defpoll date :interval "30s" "date '+%d %b, %I:%M %p'")
+(defpoll completeday :interval "1h" "date '+%A, %d %B'")
 
 ;; Weather vars
-(defpoll ICON :interval "15m" `scripts/weather_info --icon`)
-(defpoll STAT :interval "15m" `scripts/weather_info --stat`)
-(defpoll TEMP :interval "15m" `scripts/weather_info --temp`)
-(defpoll HEX :interval "15m" `scripts/weather_info --hex`)
-(defpoll QUOTE :interval "15m" `scripts/weather_info --quote`)
-(defpoll QUOTE2 :interval "15m" `scripts/weather_info --quote2`)
+(defpoll ICON :interval "1h" `scripts/weather_info --icon`)
+(defpoll STAT :interval "1h" `scripts/weather_info --stat`)
+(defpoll TEMP :interval "1h" `scripts/weather_info --temp`)
+(defpoll HEX :interval "1h" `scripts/weather_info --hex`)
+(defpoll QUOTE :interval "1h" `scripts/weather_info --quote`)
+(defpoll QUOTE2 :interval "1h" `scripts/weather_info --quote2`)
+(defpoll WEATHER :interval "1h" `scripts/weather_info --getdata`)
 
 ;; Apps vars
 (defpoll MAILS :interval "5m" `scripts/mails`)

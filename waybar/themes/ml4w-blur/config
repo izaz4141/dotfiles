@@ -19,7 +19,10 @@
     "spacing": 0,
 
     // Load Modules
-    "include": ["~/dotfiles/waybar/modules.json"],
+    "include": [
+        "~/dotfiles/.settings/waybar-quicklinks.json",
+        "~/dotfiles/waybar/modules.json"
+    ],
 
     // Modules Left
     "modules-left": [
@@ -28,12 +31,13 @@
         "group/settings",
         //"wlr/taskbar",
         "group/quicklinks",
-        //"hyprland/window",
+        "hyprland/window",
         "custom/empty"
     ],
 
     // Modules Center
     "modules-center": [
+        "custom/song",
         "hyprland/workspaces"
     ],
 
@@ -42,15 +46,13 @@
         "custom/updates",
         "pulseaudio",
         "bluetooth",
-        "battery", 
         "network",
         "group/hardware",
-        "custom/cliphist",
-        "custom/hypridle",
-        "custom/hyprshade",
+        "group/tools",
         "tray",
         "custom/exit",
-        "custom/ml4w-welcome",
+        // "custom/ml4w-welcome",
+        "battery",
         "clock"
     ]
 }

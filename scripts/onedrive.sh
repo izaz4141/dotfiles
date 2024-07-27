@@ -8,5 +8,5 @@
 # by Stephan Raabe (2023) 
 # ----------------------------------------------------- 
 
-rclone mount --vfs-cache-mode writes  --drive-use-trash onedrive-365: ~/Documents/OneDrive
+rclone --vfs-cache-mode writes mount OneDrive: ~/OneDrive &
 notify-send "OneDrive connected" "Microsoft OneDrive successfully mounted."

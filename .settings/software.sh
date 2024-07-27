@@ -1,1 +1,1 @@
-alacritty -e pacseek
+foot -e pacseek

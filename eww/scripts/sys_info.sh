@@ -52,7 +52,7 @@ get_blight() {
 		BNESS=`xbacklight -get`
 		LIGHT=${BNESS%.*}
 	else
-		BNESS=`blight -d $CARD get brightness`
+		BNESS=`brightnessctl g`
 		PERC="$(($BNESS*100/255))"
 		LIGHT=${PERC%.*}
 	fi
@@ -60,7 +60,7 @@ get_blight() {
 	echo "$LIGHT"
 }
 
-## Get Battery 
+## Get Battery
 get_battery() {
 	BAT=`ls /sys/class/power_supply | grep BAT | head -n 1`
 	cat /sys/class/power_supply/${BAT}/capacity

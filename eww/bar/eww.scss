@@ -3,6 +3,8 @@
 .music_pop {
     background-color: $background;
 	border-radius: 16px;
+	border: 2px solid $color1;
+	opacity: 0.9;
 }
 .music_cover_art {
 	background-size: cover;
@@ -65,33 +67,95 @@
 }
 
 // Calendar
-.cal {
+.date {
 	background-color: $background;
-	font-family: JetBrainsMono Nerd Font;
-	font-size: 12px;
-	font-weight: normal;
+	color: $color3;
 	border-radius: 16px;
+	border: 2px solid $color1;
+	opacity: 0.9;
+}
 
-	.cal-in {
-		padding: 0px 6px 0px 6px;
-		color: $color3;
+.timebox {
+	margin: 0.7rem 1.7rem 0 1.7rem;
 
-		.cal {
-			&.highlight {
-				padding: 10px;
-			}
+	.time-container {
+		.content {
+			font-family: JetBrainsMono NF;
+			font-weight: Bolder;
+			font-size: 18px;
+			color: $color5;
+		}
 
-			padding: 3px 3px 3px 3px;
-			margin-left: 6px;
+		.divider {
+			margin: 0.2rem 15px;
+			padding: 0px 1px;
+			background: linear-gradient($color3, $color1);
+		}
+	}
+
+	.date-container {
+		font-family: JetBrainsMono Nerd Font;
+		font-weight: Bold;
+		font-size: 12px;
+		color: $color1;
+		margin: 2.7px 0;
+	}
+}
+
+.cal-box {
+	font-family: Cantarell;
+	font-weight: Bold;
+	font-size: 12px;
+	background-color: $background;
+	border-radius: 16px;
+	padding: 0 5px 0.2rem;
+	color: $color3;
+	margin: 0.45rem 0.3rem 0.45rem 0.3rem;
+
+	.cal {
+		background-color: inherit;
+		padding: 0.25rem 0.4rem 0.1rem;
+		margin-left: 5px;
+
+		&>* {
+			border: solid 0px transparent;
+		}
+
+		&.highlight {
+			padding: 5rem;
 		}
 	}
 }
 
+calendar:selected {
+	color: $color6;
+	font-weight: bold;
+}
+
+calendar.header {
+	color: white;
+	font-weight: bold;
+}
+
+calendar.button {
+	color: $color3;
+}
+
+calendar.highlight {
+	color: white;
+	font-weight: bold;
+}
+
+calendar:indeterminate {
+	color: $color8;
+}
 
 
 .audio-box {
 	background-color: $background;
 	border-radius: 16px;
+	border: 2px solid $color1;
+	opacity: 0.9;
 }
 .speaker_icon {
 	font-size: 58px;
@@ -111,13 +175,13 @@
 
 .speaker_bar scale trough highlight {
 	all: unset;
-	background-image: linear-gradient(to right, $color7 30%, $color5 50%, $color4 100% *50);
+	background-image: linear-gradient(to right, $color1 40%, $color5 100% *50);
 	border-radius: 24px;
 }
 .speaker_bar scale trough {
 	all: unset;
 	background-color: $color8;
-	box-shadow: 0 3px 2px 1px $color2;
+	box-shadow: 0 2px 2px 1px $color7;
 	border-radius: 24px;
 	min-height: 13px;
 	min-width: 120px;
@@ -143,12 +207,12 @@
 
 .mic_bar scale trough highlight {
 	all: unset;
-	background-image: linear-gradient(to right, $color7 30%, $color5 50%, $color4 100% *50);
+	background-image: linear-gradient(to right, $color1 40%, $color5 100% *50);
 	border-radius: 24px;
 }
 .mic_bar scale trough {
 	all: unset;
-	box-shadow: 0 3px 2px 1px $color2;
+	box-shadow: 0 2px 2px 1px $color7;
 	background-color: $color8;
 	border-radius: 24px;
 	min-height: 13px;

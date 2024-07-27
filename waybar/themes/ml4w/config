@@ -11,14 +11,18 @@
 {
     // General Settings
     "layer": "top",
-    "margin-top": 5,
+    "margin-top": 14,
     "margin-bottom": 0,
+    "layer": "top",
     "margin-left": 0,
-    "margin-right": 0,
-    "spacing": 2,
+    "margin-right": 0,    
+    "spacing": 0,
 
     // Load Modules
-    "include": ["~/dotfiles/waybar/modules.json"],
+    "include": [
+        "~/dotfiles/.settings/waybar-quicklinks.json",
+        "~/dotfiles/waybar/modules.json"
+    ],
 
     // Modules Left
     "modules-left": [
@@ -27,29 +31,25 @@
         "group/settings",
         //"wlr/taskbar",
         "group/quicklinks",
-        //"hyprland/window",
-        "hyprland/workspaces"
-        // "custom/empty"
+        "hyprland/window",
+        "custom/empty"
     ],
 
     // Modules Center
     "modules-center": [
-        "custom/song"
-        // "custom/cava"
+        "hyprland/workspaces"
     ],
 
     // Modules Right    
     "modules-right": [
         "custom/updates",
         "pulseaudio",
-        // "bluetooth",
+        "bluetooth",
         "battery", 
-        "group/hardware",
-        // "custom/cliphist",
-        // "custom/hypridle",
-        // "custom/hyprshade",
-        "tray",
         "network",
+        "group/hardware",
+        "group/tools",
+        "tray",
         "custom/exit",
         "custom/ml4w-welcome",
         "clock"

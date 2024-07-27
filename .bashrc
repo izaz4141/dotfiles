@@ -1,9 +1,9 @@
-#    _               _              
-#   | |__   __ _ ___| |__  _ __ ___ 
+#    _               _
+#   | |__   __ _ ___| |__  _ __ ___
 #   | '_ \ / _` / __| '_ \| '__/ __|
-#  _| |_) | (_| \__ \ | | | | | (__ 
+#  _| |_) | (_| \__ \ | | | | | (__
 # (_)_.__/ \__,_|___/_| |_|_|  \___|
-# 
+#
 # by Stephan Raabe (2023)
 # -----------------------------------------------------
 # ~/.bashrc
@@ -715,6 +715,15 @@ eval "$(starship init bash)"
 eval "$(zoxide init bash)"
 
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
-eval "$(atuin init bash --disable-up-arrow)"
+# eval "$(atuin init bash --disable-up-arrow)"
 
-export PATH=$PATH:/home/glicole/.spicetify
+export PATH=$PATH:/home/glicole/.spicetify:/home/glicole/MCNP/MCNP_CODE/bin
+ 
+# Increase the stacksize 
+ulimit -s unlimited
+ 
+ 
+# DATAPATH for MCNP cross-section data
+export DATAPATH
+DATAPATH="/home/glicole/MCNP/MCNP_DATA"
+ 
