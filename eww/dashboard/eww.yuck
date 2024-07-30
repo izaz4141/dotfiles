@@ -128,16 +128,16 @@
 ;; power buttons
 (defwidget logout [] 
 	(box :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_logout" :onclick "../../hypr/scripts/power.sh exit &" "󰿅")))
+		(button :class "btn_logout" :onclick "../../hypr/scripts/power.sh exit &" "logout")))
 (defwidget sleep [] 
 	(box :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_sleep" :onclick "../../hypr/scripts/power.sh suspend &" "󰤄")))
+		(button :class "btn_sleep" :onclick "../../hypr/scripts/power.sh suspend &" "bedtime")))
 (defwidget reboot [] 
 	(box :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_reboot" :onclick "../../hypr/scripts/power.sh reboot &" "󰜉")))
+		(button :class "btn_reboot" :onclick "../../hypr/scripts/power.sh reboot &" "restart_alt")))
 (defwidget poweroff [] 
 	(box :class "genwin" :vexpand "false" :hexpand "false" 
-		(button :class "btn_poweroff" :onclick "../../hypr/scripts/power.sh shutdown &" "")))
+		(button :class "btn_poweroff" :onclick "../../hypr/scripts/power.sh shutdown &" "power_settings_new")))
 
 ;; folders
 (defwidget folders [] 

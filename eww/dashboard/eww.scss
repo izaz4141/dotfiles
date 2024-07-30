@@ -1,8 +1,9 @@
 /** Global *******************************************/
 *{
 	all: unset;
-	font-family: feather;
-	font-family: Iosevka;
+	// font-family: feather;
+	// font-family: Iosevka;
+	// font-family: "feather", "IosevkaTerm Nerd Font", 'Material Symbols Outlined'
 }
 
 /** Background ***************************************/
@@ -30,6 +31,7 @@
 
 .fullname {
 	color: #D46389;
+	font-family: "Waltograph";
 	font-size : 26px;
 	font-weight : bold;
 }
@@ -88,6 +90,7 @@
 /** Clock ********************************************/
 .time_hour, .time_min {
 	color: #81A1C1;
+	font-family: "IosevkaTerm Nerd Font";
 	font-size : 46px;
 	font-weight : bold;
 }
@@ -100,6 +103,7 @@
 
 .time_mer {
 	color: #A3BE8C;
+	font-family: "IosevkaTerm Nerd Font";
 	font-size : 30px;
 	font-weight : bold;
 	margin : 15px 0px 0px 0px;
@@ -107,6 +111,7 @@
 
 .time_day {
 	color: #EBCB8B;
+	font-family: "IosevkaTerm Nerd Font";
 	font-size : 26px;
 	font-weight : normal;
 	margin : 0px 0px 15px -15px;
@@ -115,6 +120,7 @@
 /** Uptime ********************************************/
 .icontimer {
 	color: #B48EAD;
+	font-family: "IosevkaTerm Nerd Font";
 	font-size : 70px;
 	font-weight : normal;
 	padding-right: 20px;
@@ -122,12 +128,14 @@
 
 .uphour {
 	color: #E5E9F0;
+	font-family: "IosevkaTerm Nerd Font";
 	font-size : 26px;
 	font-weight : bold;
 }
 
 .upmin {
 	color: #E5E9F0;
+	font-family: "IosevkaTerm Nerd Font";
 	font-size : 20px;
 	font-weight : bold;
 }
@@ -191,7 +199,7 @@
 
 /** Weather ***************************************/
 .iconweather {
-	font-family: Iosevka Nerd Font;
+	font-family: "IosevkaTerm Nerd Font";
 	font-size : 80px;
 	font-weight : normal;
 	margin : 7px 0px 0px 15px;
@@ -199,6 +207,7 @@
 
 .label_temp {
 	color : #A6D1DD;
+	font-family: "IosevkaTerm Nerd Font";
 	font-size : 60px;
 	font-weight : bold;
 	margin : -7px 15px 0px 0px;
@@ -289,6 +298,7 @@
 
 /** Power buttons ***************************************/
 .btn_logout, .btn_sleep, .btn_reboot, .btn_poweroff {
+	font-family: 'Material Symbols Outlined';
 	font-size : 48px;
 	font-weight : bold;
 }

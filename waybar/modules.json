@@ -174,7 +174,7 @@
 
     // Power Menu
     "custom/exit": {
-        "format": "⏼",
+        "format": "settings_power",
         "on-click": "wlogout",
         "tooltip-format": "Power Menu"
     },
@@ -397,7 +397,7 @@
 
     // Cava Visualizer
     "custom/cava": {
-        "format": "{icon} {}",
+        "format": "{icon}    {}",
         "format-Stopped": "",
         "format-icons": {
             "Playing": " ", // Uncomment if not using caway
@@ -411,12 +411,12 @@
         "on-scroll-up": "playerctl previous",
         "on-scroll-down": "playerctl next",
         "on-click-right": "g4music",
-        "max-length": 35
+        "max-length": 15
     },
 
     // Just Song Name
     "custom/song": {
-    	"format": "{icon} {}",
+    	"format": "{icon}   {}",
     	"format-Stopped": "",
     	"icon-size": 21,
         "format-icons": {
@@ -432,7 +432,7 @@
         "on-scroll-up": "playerctl previous",
         "on-scroll-down": "playerctl next",
         "on-click-right": "bash ~/dotfiles/eww/bar/scripts/pop music",
-        "max-length": 20,
+        "max-length": 25,
         "restart-interval": 10
     }
 }

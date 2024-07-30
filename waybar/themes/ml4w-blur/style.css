@@ -294,6 +294,7 @@ window#waybar.empty #window {
 #custom-exit {
     margin: 0px 20px 0px 0px;
     padding:0px;
+    font-family: 'Material Symbols Outlined';
     font-size:24px;
     font-weight: bolder;
     color: @iconcolor;
