@@ -8,5 +8,5 @@
 # by Stephan Raabe (2023) 
 # ----------------------------------------------------- 
 
-rclone --vfs-cache-mode writes mount OneDrive: ~/OneDrive &
+rclone --vfs-cache-mode writes mount onedrive:Documents ~/Documents/OneDrive &
 notify-send "OneDrive connected" "Microsoft OneDrive successfully mounted."

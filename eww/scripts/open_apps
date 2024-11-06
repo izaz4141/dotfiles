@@ -13,25 +13,25 @@ close_dash() {
 }
 
 if [[ "$1" == "--ff" ]]; then
-	close_dash && firefox-developer-edition &
+	close_dash && firefox &
 
 elif [[ "$1" == "--tg" ]]; then
 	close_dash && telegram-desktop &
 
 elif [[ "$1" == "--dc" ]]; then
-	close_dash && discord &
+	close_dash && vesktop &
 
 elif [[ "$1" == "--tr" ]]; then
-	close_dash && alacritty --working-directory ~ &
+	close_dash && foot &
 
 elif [[ "$1" == "--fm" ]]; then
-	close_dash && thunar ~ &
+	close_dash && nautilus &
 
 elif [[ "$1" == "--ge" ]]; then
-	close_dash && mousepad &
+	close_dash && kate &
 
 elif [[ "$1" == "--cd" ]]; then
-	close_dash && code &
+	close_dash && codium &
 
 elif [[ "$1" == "--gp" ]]; then
 	close_dash && gimp &
