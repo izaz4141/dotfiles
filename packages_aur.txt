@@ -1,5 +1,4 @@
 aylurs-gtk-shell
-bibata-cursor-theme
 btrfs-assistant
 cava
 downgrade
@@ -13,12 +12,13 @@ python-conda
 python-pywalfox
 python-screeninfo
 rustdesk-bin
+smile
 snapper-rollback
 snapper-support
 spotube-bin
 ttf-ms-win11-auto
 vesktop-bin
-vscodium-bin
+visual-studio-code-bin
 waypaper
 wlogout
 zotero-bin
