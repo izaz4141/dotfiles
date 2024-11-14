@@ -25,10 +25,12 @@ gimp
 git
 github-cli
 gnome-bluetooth-3.0
+grim
 grub
 grub-btrfs
 gtk4
 gvfs
+hyprpicker
 imagemagick
 inkscape
 jq
@@ -48,6 +50,8 @@ networkmanager
 nm-connection-editor
 noto-fonts-cjk
 noto-fonts-emoji
+ntfs-3g
+nwg-icon-picker
 nwg-look
 os-prober
 otf-font-awesome
