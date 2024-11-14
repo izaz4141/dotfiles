@@ -16,6 +16,7 @@ options="$(ls ~/.config/hypr/effects/wallpaper/)\noff"
 choice=$(echo -e "$options" | rofi -dmenu -replace -config ~/.config/rofi/config-themes.rasi -i -no-show-icons -l 5 -width 30 -p "Hyprshade") 
 if [ ! -z $choice ] ;then
     echo "$choice" > ~/.config/ml4w/settings/wallpaper-effect.sh
-    dunstify "Changing Wallpaper Effect to " "$choice"
+    # dunstify "Changing Wallpaper Effect to " "$choice"
+    notify-send Wallpaper-Effect "Changing Wallpaper Effect to $choice"
     waypaper --wallpaper $(cat $cache_file)
 fi

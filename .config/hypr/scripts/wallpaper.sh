@@ -92,6 +92,7 @@ if [ -f $wallpapereffect ]; then
         else
             echo ":: Generate new cached wallpaper $effect-$wallpaperfilename with effect $effect"
 #             dunstify "Using wallpaper effect $effect..." "with image $wallpaperfilename" -h int:value:33 -h string:x-dunst-stack-tag:wallpaper
+            notify-send Wallpaper-Effect "Using wallpaper effect $effect with image $wallpaperfilename" -h int:value:33 -h string:x-dunst-stack-tag:wallpaper
             source $HOME/.config/hypr/effects/wallpaper/$effect
         fi
         echo ":: Loading wallpaper $generatedversions/$effect-$wallpaperfilename with effect $effect"
@@ -152,6 +153,7 @@ if [ -f $generatedversions/blur-$blur-$effect-$wallpaperfilename.png ] && [ "$fo
 else
     echo ":: Generate new cached wallpaper blur-$blur-$effect-$wallpaperfilename with blur $blur"
 #     dunstify "Generate new blurred version" "with blur $blur" -h int:value:66 -h string:x-dunst-stack-tag:wallpaper
+    notify-send Generating-Blur "With blur $blur" -h int:value:66 -h string:x-dunst-stack-tag:wallpaper
     magick $used_wallpaper -resize 75% $blurredwallpaper
     echo ":: Resized to 75%"
     if [ ! "$blur" == "0x0" ]; then
