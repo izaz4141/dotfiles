@@ -33,9 +33,9 @@ export default (): Window<Child, Attribute> =>
             class_name: 'powermenu horizontal',
             children: [
                 SysButton('shutdown', 'SHUTDOWN'),
-                SysButton('logout', 'LOG OUT'),
                 SysButton('reboot', 'REBOOT'),
                 SysButton('sleep', 'SLEEP'),
+                SysButton('logout', 'LOG OUT'),
             ],
         }),
     });

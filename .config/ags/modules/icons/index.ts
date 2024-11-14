@@ -99,10 +99,10 @@ export default {
         screen: 'display-brightness-symbolic',
     },
     powermenu: {
-        sleep: 'weather-clear-night-symbolic',
-        reboot: 'system-reboot-symbolic',
-        logout: 'system-log-out-symbolic',
-        shutdown: 'system-shutdown-symbolic',
+        sleep: 'sleep',
+        reboot: 'system-reboot',
+        logout: 'system-log-out',
+        shutdown: 'system-shutdown',
     },
     recorder: {
         recording: 'media-record-symbolic',

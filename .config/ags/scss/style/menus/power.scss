@@ -192,15 +192,15 @@ window#powermenu .powermenu {
 
 .system-button_icon {
   &.shutdown {
-    color: $red;
+    color: #BD366F;
   }
 
   &.logout {
-    color: $green;
+    color: #DC8CDA;
   }
 
   &.reboot {
-    color: $peach;
+    color: #E400E5;
   }
 
   &.sleep {
@@ -210,15 +210,15 @@ window#powermenu .powermenu {
 
 .system-button_label {
   &.shutdown {
-    color: $red;
+    color: #BD366F;
   }
 
   &.logout {
-    color: $green;
+    color: #DC8CDA;
   }
 
   &.reboot {
-    color: $peach;
+    color: #E400E5;
   }
 
   &.sleep {
