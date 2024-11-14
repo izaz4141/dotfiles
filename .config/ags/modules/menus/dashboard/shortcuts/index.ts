@@ -12,9 +12,10 @@ const Shortcuts = (): BoxWidget => {
     const isRecording = Variable(false, {
         poll: [
             1000,
-            `${App.configDir}/services/screen_record.sh status`,
+            // `${App.configDir}/services/screen_record.sh status`,
+            `${App.configDir}/services/hypridle.sh status`,
             (out): boolean => {
-                if (out === 'recording') {
+                if (out === 'active') {
                     return true;
                 }
                 return false;
@@ -122,14 +123,15 @@ const Shortcuts = (): BoxWidget => {
                         App.closeWindow('dashboardmenu');
                         App.toggleWindow('settings-dialog');
                     } else if (shortcut.command === 'record') {
-                        if (isRecording.value === true) {
-                            App.closeWindow('dashboardmenu');
-                            return Utils.execAsync(`${App.configDir}/services/screen_record.sh stop`).catch((err) =>
-                                console.error(err),
-                            );
-                        } else {
-                            recordingDropdown.popup_at_pointer(event);
-                        }
+                        // if (isRecording.value === true) {
+                        //     App.closeWindow('dashboardmenu');
+                        //     return Utils.execAsync(`${App.configDir}/services/screen_record.sh stop`).catch((err) =>
+                        //         console.error(err),
+                        //     );
+                        // } else {
+                        //     recordingDropdown.popup_at_pointer(event);
+                        // }
+                        Utils.execAsync(`${App.configDir}/services/hypridle.sh toggle`)
                     }
                 },
                 child: Widget.Label({
@@ -294,9 +296,9 @@ const Shortcuts = (): BoxWidget => {
                                             ),
                                             createButtonIfCommandExists(
                                                 {
-                                                    tooltip: 'Record Screen',
+                                                    tooltip: 'Toggle Hypridle',
                                                     command: 'record',
-                                                    icon: '󰑊',
+                                                    icon: '',
                                                     configurable: false,
                                                 },
                                                 `dashboard-button record ${isRecording.value ? 'active' : ''}`,

@@ -68,9 +68,9 @@ stop)
     ;;
 status)
     if checkRecording; then
-        echo "recording"
+        echo "active"
     else
-        echo "not recording"
+        echo "notactive"
     fi
     ;;
 *)
