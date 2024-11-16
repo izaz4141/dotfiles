@@ -16,11 +16,14 @@ dosfstools
 efibootmgr
 eza
 fastfetch
+fd
+ffmpegthumbnailer
 firefox
 fish
 foot
 fuse2
 fzf
+gamemode
 gimp
 git
 github-cli
@@ -36,10 +39,12 @@ inkscape
 jq
 jre-openjdk
 kate
+lib32-vulkan-radeon
 libadwaita
 libgtop
 libreoffice-fresh
 man-db
+mangohud
 mtools
 nano
 nautilus
@@ -69,6 +74,7 @@ qt5-quickcontrols2
 qt5-svg
 qt6ct
 rclone
+ripgrep
 rofi-wayland
 sddm
 slurp
@@ -76,6 +82,7 @@ snap-pac
 snapper
 sof-firmware
 starship
+steam
 swww
 tree
 ttf-fira-code
@@ -83,6 +90,7 @@ ttf-fira-sans
 ttf-firacode-nerd
 ttf-iosevkaterm-nerd
 tumbler
+vulkan-radeon
 wireplumber
 xclip
 xdg-desktop-portal-gtk
