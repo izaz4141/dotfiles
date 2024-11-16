@@ -1,8 +1,10 @@
+7-zip
 aylurs-gtk-shell
 btrfs-assistant
 cava
 downgrade
 freedownloadmanager
+grimblast-git
 hyprshade
 multitail
 nautilus-open-any-terminal
