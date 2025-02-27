@@ -54,7 +54,7 @@ install_themes() {
     execute_command sudo cp -an $dotfiles_dir/themes/grub/. /usr/share/grub/themes
     execute_command sudo cp -an /etc/default/grub /etc/default/grub.bak
     execute_command sudo sed -i "s|.*GRUB_THEME=.*|GRUB_THEME=\"/usr/share/grub/themes/Elegant-wave-float-right-dark/theme.txt\"|" /etc/default/grub
-    execute_command sudo update-grub
+    execute_command sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
 install_dotfiles() {
