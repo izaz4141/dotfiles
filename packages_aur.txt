@@ -2,6 +2,7 @@
 ags-hyprpanel-git
 bibata-cursor-theme-bin
 btrfs-assistant
+caffeine-ng
 cava
 downgrade
 freedownloadmanager
@@ -9,9 +10,10 @@ grimblast-git
 hyprshade
 multitail
 nautilus-open-any-terminal
+onlyoffice-bin
 pacseek
 photoqt-bin
-python-conda
+pipes-rs
 python-pywalfox
 python-screeninfo
 rustdesk-bin
@@ -23,4 +25,5 @@ ttf-ms-win11-auto
 vesktop-bin
 waypaper
 wlogout
+zen-browser-avx2-bin
 zotero-bin

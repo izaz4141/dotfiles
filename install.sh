@@ -61,6 +61,8 @@ install_dotfiles() {
     execute_command ln -s -f $HOME/dotfiles/.config/* $HOME/.config/
 }
 
+sudo pacman -Sy
+sudo pacman -S --needed --noconfirm gum
 mode=$(gum choose "Full Installation" "Main Installation" "AUR Installation" "Theme Installation")
 case $mode in
     "Full Installation")

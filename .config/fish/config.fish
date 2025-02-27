@@ -15,10 +15,23 @@ end
 # DATAPATH for MCNP cross-section data
 export DATAPATH="/home/glicole/MCNP/MCNP_DATA"
 export OPENMC_CROSS_SECTIONS="/home/glicole/Documents/OpenMC/endfb71/cross_sections.xml"
+export OMP_NUM_THREADS=4
 
 #######################################################
 # Init Module
 #######################################################
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+if test -f /opt/miniforge/bin/conda
+    eval /opt/miniforge/bin/conda "shell.fish" "hook" $argv | source
+else
+    if test -f "/opt/miniforge/etc/fish/conf.d/conda.fish"
+        . "/opt/miniforge/etc/fish/conf.d/conda.fish"
+    else
+        set -x PATH "/opt/miniforge/bin" $PATH
+    end
+end
+# <<< conda initialize <<<
 starship init fish | source
 zoxide init fish | source
 cat ~/.cache/wal/sequences
@@ -167,6 +180,7 @@ alias wifi='nmtui'
 alias winclass="xprop | grep 'CLASS'"
 alias dot="z ~/dotfiles"
 alias cleanup='~/.config/ml4w/scripts/cleanup.sh'
+alias zj='zellij'
 
 # -----------------------------------------------------
 # ML4W Apps
@@ -207,6 +221,8 @@ alias gcredential="git config credential.helper store"
 alias ascii='~/.config/ml4w/scripts/figlet.sh'
 alias onedrive_pull='~/.config/ml4w/scripts/onedrive.sh --pull'
 alias onedrive_sync='~/.config/ml4w/scripts/onedrive.sh --sync'
+alias package_main='yay -Qqen > ~/dotfiles/packages_main.txt'
+alias package_aur='yay -Qqem > ~/dotfiles/packages_aur.txt'
 
 # -----------------------------------------------------
 # VIRTUAL MACHINE
@@ -295,3 +311,4 @@ function yy
 end
 
 fastfetch -c ~/.config/fastfetch/nadeko-chibi.jsonc
+
