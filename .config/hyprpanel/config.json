@@ -74,9 +74,9 @@
   "menus.dashboard.powermenu.logout": "bash -c \"$HOME/.config/hypr/scripts/power.sh exit\"",
   "menus.dashboard.powermenu.shutdown": "bash -c \"$HOME/.config/hypr/scripts/power.sh shutdown\"",
   "menus.dashboard.powermenu.reboot": "bash -c \"$HOME/.config/hypr/scripts/power.sh reboot\"",
-  "menus.dashboard.shortcuts.left.shortcut1.icon": "",
-  "menus.dashboard.shortcuts.left.shortcut1.command": "firefox",
-  "menus.dashboard.shortcuts.left.shortcut1.tooltip": "Firefox",
+  "menus.dashboard.shortcuts.left.shortcut1.icon": "",
+  "menus.dashboard.shortcuts.left.shortcut1.command": "brave",
+  "menus.dashboard.shortcuts.left.shortcut1.tooltip": "Brave",
   "menus.dashboard.shortcuts.left.shortcut2.icon": "",
   "menus.dashboard.shortcuts.left.shortcut2.command": "spotube",
   "menus.dashboard.shortcuts.left.shortcut3.command": "vesktop",
@@ -459,7 +459,7 @@
       "left": [
         "dashboard",
         "workspaces",
-        "cpu",
+        "hypridle",
         "ram"
       ],
       "middle": [
@@ -516,7 +516,12 @@
   "bar.customModules.netstat.rateUnit": "auto",
   "bar.workspaces.reverse_scroll": true,
   "bar.workspaces.applicationIconMap": {
-    "class:vesktop": ""
+    "class:vesktop": "",
+    "class:Brave-browser": "",
+    "class:codium": "󰨞",
+    "class:org.kde.kate": "",
+    "class:org.gnome.Nautilus": "󰣆",
+    "class:fdm": ""
   },
   "bar.customModules.updates.leftClick": "foot $HOME/.config/ml4w/scripts/installupdates.sh",
   "theme.bar.buttons.modules.updates.spacing": "0.45em",
@@ -528,5 +533,20 @@
   "menus.dashboard.directories.right.directory1.command": "bash -c \"nautilus $HOME/Documents/\"",
   "theme.bar.buttons.modules.ram.enableBorder": true,
   "bar.customModules.cpu.round": false,
-  "menus.power.showLabel": true
+  "menus.power.showLabel": true,
+  "bar.customModules.cava.showActiveOnly": true,
+  "theme.bar.buttons.modules.hypridle.enableBorder": true,
+  "bar.customModules.hypridle.offIcon": "󱙲",
+  "bar.customModules.hypridle.onIcon": "󱚨",
+  "bar.customModules.hypridle.offLabel": "Off",
+  "bar.customModules.hypridle.onLabel": "On",
+  "bar.customModules.hypridle.label": false,
+  "menus.power.lowBatteryNotification": true,
+  "theme.bar.buttons.modules.cava.enableBorder": true,
+  "bar.customModules.cava.showIcon": false,
+  "theme.bar.buttons.modules.cava.spacing": "0.5em",
+  "bar.customModules.cava.leftClick": "playerctl play-pause",
+  "bar.customModules.cava.rightClick": "hyprpanel t mediamenu",
+  "bar.customModules.cava.scrollDown": "playerctl next",
+  "bar.customModules.cava.scrollUp": "playerctl previous"
 }
