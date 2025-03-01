@@ -22,13 +22,13 @@ export OMP_NUM_THREADS=4
 #######################################################
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if test -f /opt/miniforge/bin/conda
-    eval /opt/miniforge/bin/conda "shell.fish" "hook" $argv | source
+if test -f /home/glicole/miniforge3/bin/conda
+    eval /home/glicole/miniforge3/bin/conda "shell.fish" "hook" $argv | source
 else
-    if test -f "/opt/miniforge/etc/fish/conf.d/conda.fish"
-        . "/opt/miniforge/etc/fish/conf.d/conda.fish"
+    if test -f "/home/glicole/miniforge3/etc/fish/conf.d/conda.fish"
+        . "/home/glicole/miniforge3/etc/fish/conf.d/conda.fish"
     else
-        set -x PATH "/opt/miniforge/bin" $PATH
+        set -x PATH "/home/glicole/miniforge3/bin" $PATH
     end
 end
 # <<< conda initialize <<<

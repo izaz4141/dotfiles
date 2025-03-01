@@ -527,5 +527,6 @@
   "menus.dashboard.directories.left.directory3.command": "bash -c \"nautilus $HOME/Projects/\"",
   "menus.dashboard.directories.right.directory1.command": "bash -c \"nautilus $HOME/Documents/\"",
   "theme.bar.buttons.modules.ram.enableBorder": true,
-  "bar.customModules.cpu.round": false
+  "bar.customModules.cpu.round": false,
+  "menus.power.showLabel": true
 }

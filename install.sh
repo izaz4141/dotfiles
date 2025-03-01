@@ -47,17 +47,21 @@ install_themes() {
     execute_command cp -an $dotfiles_dir/themes/.icons/. $HOME/.icons/
     execute_command sudo mkdir -p /usr/share/sddm/themes
     execute_command sudo cp -an $dotfiles_dir/themes/sddm/. /usr/share/sddm/themes
+    execute_command sudo mkdir -p /etc/sddm.conf.d
     execute_command sudo cp -an /etc/sddm.conf.d/sddm.conf /etc/sddm.conf.d/sddm.conf.bak
-    execute_command sudo sed -i "s/Current=/\c Current=eucalyptus-drop" /etc/sddm.conf.d/sddm.conf
+    execute_command sudo cp -an /usr/lib/sddm/sddm.conf.d/default.conf /etc/sddm.conf.d/sddm.conf
+    execute_command sudo sed -i "s|.*Current=.*|Current=eucalyptus-drop|" /etc/sddm.conf.d/sddm.conf
     execute_command gsettings set org.gnome.desktop.interface icon-theme "candy-icons-modified"
     execute_command gsettings set org.gnome.desktop.interface cursor-theme "Sweet-cursors"
     execute_command sudo cp -an $dotfiles_dir/themes/grub/. /usr/share/grub/themes
     execute_command sudo cp -an /etc/default/grub /etc/default/grub.bak
     execute_command sudo sed -i "s|.*GRUB_THEME=.*|GRUB_THEME=\"/usr/share/grub/themes/Elegant-wave-float-right-dark/theme.txt\"|" /etc/default/grub
     execute_command sudo grub-mkconfig -o /boot/grub/grub.cfg
+    execute_command sudo systemctl enable --now sddm
 }
 
 install_dotfiles() {
+    execute_command ln -s -f $HOME/dotfiles/wallpaper $HOME/wallpaper
     execute_command ln -s -f $HOME/dotfiles/.config/* $HOME/.config/
 }
 
@@ -69,14 +73,14 @@ case $mode in
         install_yay
         install_packages
         install_aur
-        install_themes
-        install_dotfiles;;
+        install_dotfiles 
+        install_themes ;;
     "Main Installation")
         install_packages ;;
     "AUR Installation")
         install_yay
         install_aur ;;
     "Theme Installation")
-        install_themes
-        install_dotfiles;;
+        install_dotfiles
+        install_themes ;;
 esac

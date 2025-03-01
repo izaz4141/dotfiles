@@ -1,6 +1,7 @@
 7-zip
 ags-hyprpanel-git
 bibata-cursor-theme-bin
+brave-bin
 btrfs-assistant
 caffeine-ng
 cava
@@ -23,7 +24,7 @@ snapper-support
 spotube-bin
 ttf-ms-win11-auto
 vesktop-bin
+vscodium-bin
 waypaper
 wlogout
-zen-browser-avx2-bin
 zotero-bin

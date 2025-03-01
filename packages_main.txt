@@ -1,5 +1,4 @@
 alsa-ucm-conf
-amd-ucode
 base
 base-devel
 bash-completion
@@ -12,7 +11,6 @@ btop
 btrfs-progs
 cliphist
 cmake
-code
 dart-sass
 dialog
 dosfstools
@@ -45,7 +43,6 @@ jq
 jre-openjdk
 kate
 krita
-lib32-vulkan-radeon
 libadwaita
 libgtop
 linux
@@ -101,7 +98,6 @@ ttf-fira-sans
 ttf-firacode-nerd
 ttf-iosevkaterm-nerd
 tumbler
-vulkan-radeon
 wireplumber
 xclip
 xdg-desktop-portal-gtk
