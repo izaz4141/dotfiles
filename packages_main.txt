@@ -19,7 +19,8 @@ eza
 fastfetch
 fd
 ffmpegthumbnailer
-firefox
+figlet
+filezilla
 fish
 flatpak
 foot
@@ -36,12 +37,14 @@ gtk4
 gvfs
 gvfs-mtp
 htop
+hyprlock
 hyprpicker
 imagemagick
 inkscape
 jq
 jre-openjdk
 kate
+kitty
 krita
 libadwaita
 libgtop
@@ -83,6 +86,7 @@ qt6ct
 rclone
 ripgrep
 rofi-wayland
+rsync
 sddm
 slurp
 snap-pac
@@ -98,6 +102,7 @@ ttf-fira-sans
 ttf-firacode-nerd
 ttf-iosevkaterm-nerd
 tumbler
+wget
 wireplumber
 xclip
 xdg-desktop-portal-gtk

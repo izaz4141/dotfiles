@@ -459,8 +459,7 @@
       "left": [
         "dashboard",
         "workspaces",
-        "hypridle",
-        "ram"
+        "hypridle"
       ],
       "middle": [
         "media"
@@ -518,6 +517,7 @@
   "bar.workspaces.applicationIconMap": {
     "class:vesktop": "",
     "class:Brave-browser": "",
+    "class:LibreWolf": "",
     "class:codium": "󰨞",
     "class:org.kde.kate": "",
     "class:org.gnome.Nautilus": "󰣆",

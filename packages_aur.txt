@@ -3,12 +3,14 @@ ags-hyprpanel-git
 bibata-cursor-theme-bin
 brave-bin
 btrfs-assistant
-caffeine-ng
 cava
 downgrade
 freedownloadmanager
 grimblast-git
 hyprshade
+jdownloader2
+librewolf-bin
+mpvpaper
 multitail
 nautilus-open-any-terminal
 onlyoffice-bin
