@@ -9,12 +9,14 @@ breeze
 brightnessctl
 btop
 btrfs-progs
+clang
 cliphist
 cmake
 dart-sass
 dialog
 dosfstools
 efibootmgr
+extra-cmake-modules
 eza
 fastfetch
 fd
@@ -34,6 +36,7 @@ grim
 grub
 grub-btrfs
 gtk4
+gum
 gvfs
 gvfs-mtp
 htop
@@ -44,6 +47,7 @@ inkscape
 jq
 jre-openjdk
 kate
+kio5
 kitty
 krita
 libadwaita
@@ -52,6 +56,7 @@ linux
 linux-firmware
 man-db
 mangohud
+mesa-demos
 mtools
 mtpfs
 nano
@@ -70,10 +75,10 @@ os-prober
 otf-font-awesome
 papirus-icon-theme
 pavucontrol
-pinta
 pipewire
 pipewire-alsa
 pipewire-pulse
+playerctl
 polkit-gnome
 power-profiles-daemon
 python-gobject
@@ -82,6 +87,7 @@ python-pywal
 qt5-graphicaleffects
 qt5-quickcontrols2
 qt5-svg
+qt5-tools
 qt6ct
 rclone
 ripgrep

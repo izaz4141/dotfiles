@@ -15,7 +15,6 @@ end
 # DATAPATH for MCNP cross-section data
 export DATAPATH="/home/glicole/MCNP/MCNP_DATA"
 export OPENMC_CROSS_SECTIONS="/home/glicole/Documents/OpenMC/endfb71/cross_sections.xml"
-export OMP_NUM_THREADS=4
 
 #######################################################
 # Init Module
@@ -249,7 +248,7 @@ alias setkb='setxkbmap de;echo "Keyboard set back to de."'
 alias res1='xrandr --output DisplayPort-0 --mode 2560x1440 --rate 120'
 alias res2='xrandr --output DisplayPort-0 --mode 1920x1080 --rate 120'
 
-export PATH="/usr/lib/ccache/bin/:$PATH"
+export PATH="$HOME/Downloads/bin/:/usr/lib/ccache/bin/:$PATH"
 
 # -----------------------------------------------------
 # DEVELOPMENT
@@ -309,6 +308,43 @@ function yy
 	end
 	rm -f -- "$tmp"
 end
+
+# Convert to audio
+function convert_audio --description 'Convert to audio with metadata and cover art'
+    argparse i/= o/= -- $argv
+    or return
+
+    set -l input $_flag_i
+    set -l output $_flag_o
+    set -l extracted_cover (mktemp -t cover.XXXXXXXXXX.jpg)
+
+    # Extract cover art silently (ignore sequence warnings)
+    ffmpeg -y -i "$input" -an -c:v copy -vframes 1 "$extracted_cover"
+
+    # Check if cover art was actually extracted (file exists and is non-zero size)
+    if test -s "$extracted_cover"
+        # Convert with cover art
+        ffmpeg -i "$input" -i "$extracted_cover" \
+            -map 0:a -map 1:v \
+            -c:a copy \
+            -c:v copy \
+            -disposition:v attached_pic \
+            -map_metadata 0 \
+            "$output"
+        echo "Converted with cover art: $output"
+    else
+        # Convert without cover art
+        ffmpeg -i "$input" \
+            -c:a copy -b:a 256k \
+            -map_metadata 0 \
+            "$output"
+        echo "Converted without cover art: $output"
+    end
+
+    # Cleanup temporary files
+    rm -f "$extracted_cover"
+end
+
 
 fastfetch -c ~/.config/fastfetch/nadeko-chibi.jsonc
 

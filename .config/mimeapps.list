@@ -1,0 +1,36 @@
+[Default Applications]
+text/plain=org.kde.kate.desktop
+application/x-shellscript=org.kde.kate.desktop
+text/x-csrc=org.kde.kate.desktop
+application/schema+json=org.kde.kate.desktop
+x-scheme-handler/fdm=freedownloadmanager_fdm_up.desktop
+image/jpeg=org.photoqt.PhotoQt.desktop
+image/png=org.photoqt.PhotoQt.desktop
+application/json=org.kde.kate.desktop
+text/vnd.trolltech.linguist=org.kde.kate.desktop
+text/html=brave-browser.desktop
+image/gif=org.photoqt.PhotoQt.desktop
+x-scheme-handler/magnet=freedownloadmanager_magnet_up.desktop
+application/x-bittorrent=freedownloadmanager_torrent.desktop
+application/pdf=onlyoffice-desktopeditors.desktop
+application/xml=org.kde.kate.desktop
+x-scheme-handler/http=brave-browser.desktop
+x-scheme-handler/https=brave-browser.desktop
+x-scheme-handler/about=brave-browser.desktop
+x-scheme-handler/unknown=brave-browser.desktop
+inode/directory=org.gnome.Nautilus.desktop
+
+[Added Associations]
+text/plain=org.kde.kate.desktop;
+application/x-shellscript=org.kde.kate.desktop;
+text/x-csrc=org.kde.kate.desktop;
+application/schema+json=org.kde.kate.desktop;
+image/jpeg=org.photoqt.PhotoQt.desktop;
+image/png=org.photoqt.PhotoQt.desktop;
+application/json=org.kde.kate.desktop;
+text/vnd.trolltech.linguist=org.kde.kate.desktop;
+text/html=code.desktop;
+image/gif=org.photoqt.PhotoQt.desktop;
+application/x-trash=org.kde.kate.desktop;
+application/pdf=libreoffice-draw.desktop;onlyoffice-desktopeditors.desktop;
+application/xml=org.kde.kate.desktop;

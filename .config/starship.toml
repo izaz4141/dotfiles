@@ -70,7 +70,7 @@ Pop = " "
 
 [hostname]
 ssh_only = true
-style = 'bg:#3B4252 bold dimmed green'
+style = 'bg:#3B4252 bold dimmed fg:#8dd8a9'
 format = "[$hostname ]($style)"
 
 # You can also replace your username with a neat symbol like  to save some space

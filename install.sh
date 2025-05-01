@@ -51,6 +51,7 @@ install_themes() {
     execute_command sudo cp -an /etc/sddm.conf.d/sddm.conf /etc/sddm.conf.d/sddm.conf.bak
     execute_command sudo cp -an /usr/lib/sddm/sddm.conf.d/default.conf /etc/sddm.conf.d/sddm.conf
     execute_command sudo sed -i "s|.*Current=.*|Current=eucalyptus-drop|" /etc/sddm.conf.d/sddm.conf
+    execute_command sudo ln -sf /etc/sddm.conf.d/sddm.conf /etc/sddm.conf
     execute_command gsettings set org.gnome.desktop.interface icon-theme "candy-icons-modified"
     execute_command gsettings set org.gnome.desktop.interface cursor-theme "Sweet-cursors"
     execute_command sudo cp -an $dotfiles_dir/themes/grub/. /usr/share/grub/themes
@@ -65,8 +66,7 @@ install_dotfiles() {
     execute_command ln -s -f $HOME/dotfiles/.config/* $HOME/.config/
 }
 
-sudo pacman -Sy
-sudo pacman -S --needed --noconfirm gum
+sudo pacman -Sy --needed --noconfirm gum
 mode=$(gum choose "Full Installation" "Main Installation" "AUR Installation" "Theme Installation")
 case $mode in
     "Full Installation")

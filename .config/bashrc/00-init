@@ -6,4 +6,4 @@
 # Exports
 # -----------------------------------------------------
 export EDITOR=nvim
-export PATH="/usr/lib/ccache/bin/:$PATH"
+export PATH="$HOME/Downloads/bin/:/usr/lib/ccache/bin/:$PATH"
