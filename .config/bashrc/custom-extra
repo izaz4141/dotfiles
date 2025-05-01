@@ -9,9 +9,8 @@ fi
 # ENVIRONMENT VARIABLE
 #######################################################
 # DATAPATH for MCNP cross-section data
-export DATAPATH="/home/glicole/MCNP/MCNP_DATA"
-export OPENMC_CROSS_SECTIONS="/home/glicole/Documents/OpenMC/endfb71/cross_sections.xml"
-export OMP_NUM_THREADS=4
+export DATAPATH="$HOME/MCNP/MCNP_DATA"
+export OPENMC_CROSS_SECTIONS="$HOME/Documents/OpenMC/endfb71/cross_sections.xml"
 
 #######################################################
 # SPECIAL FUNCTIONS
