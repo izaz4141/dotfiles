@@ -1,86 +1,165 @@
 #!/bin/bash
-dotfiles_dir=$(pwd)
-execute_command() {
-    while true; do
-        "$@"
-        exit_code=$?
-        if [ $exit_code -eq 0 ]; then
-            break
+
+clear
+
+# Set some colors for output messages
+OK="$(tput setaf 2)[OK]$(tput sgr0)"
+ERROR="$(tput setaf 1)[ERROR]$(tput sgr0)"
+NOTE="$(tput setaf 3)[NOTE]$(tput sgr0)"
+INFO="$(tput setaf 4)[INFO]$(tput sgr0)"
+WARN="$(tput setaf 1)[WARN]$(tput sgr0)"
+CAT="$(tput setaf 6)[ACTION]$(tput sgr0)"
+MAGENTA="$(tput setaf 5)"
+ORANGE="$(tput setaf 214)"
+WARNING="$(tput setaf 1)"
+YELLOW="$(tput setaf 3)"
+GREEN="$(tput setaf 2)"
+BLUE="$(tput setaf 4)"
+SKY_BLUE="$(tput setaf 6)"
+RESET="$(tput sgr0)"
+
+# Create Directory for Install Logs
+if [ ! -d Install-Logs ]; then
+    mkdir Install-Logs
+fi
+
+# Set the name of the log file to include the current date and time
+LOG="Install-Logs/01-Hyprland-Install-Scripts-$(date +%d-%H%M%S).log"
+
+# Check if running as root. If root, script will exit
+if [[ $EUID -eq 0 ]]; then
+    echo "${ERROR}   This script should ${WARNING}NOT${RESET} be executed as root!! Exiting......." | tee -a "$LOG"
+    printf "\n%.0s" {1..2}
+    exit 1
+fi
+
+if [ ! -d "$HOME/dotfiles" ]; then
+    mkdir $HOME/dotfiles
+    cp * $HOME/dotfiles/ || { printf "%s - Failed to copy ${YELLOW}dotfiles${RESET}\n" "${ERROR}"; exit 1; }
+    echo "${OK}      dotfiles directory has been copied to HOME" | tee -a "$LOG"
+fi
+
+
+if sudo pacman -Sy --needed --noconfirm base-devel libnewt git; then
+    echo "${OK}      base packages has been installed successfully." | tee -a "$LOG"
+else
+    echo "${ERROR}   base-packages not found nor cannot be installed."  | tee -a "$LOG"
+    echo "${ACTION}  Please install base-devel libnewt git manually before running this script... Exiting" | tee -a "$LOG"
+    exit 1
+fi
+
+clear
+
+echo -e "\e[35m
+   ___       __  ____ __
+  / _ \___  / /_/ _(_) /__ ___
+ / // / _ \/ __/ _/ / / -_|_-<
+/____/\___/\__/_//_/_/\__/___/
+================================
+\e[0m"
+printf "\n%.0s" {1..1}
+
+# Welcome message using whiptail (for displaying information)
+whiptail --title "Glicole Dotfiles Install Script" \
+    --msgbox "Welcome to Glicole Arch-Hyprland Install Script!!!\n\n\
+ATTENTION: Run a full system update and Reboot first !!! (Highly Recommended)\n\n\
+NOTE: If you are installing on a VM, ensure to enable 3D acceleration else Hyprland may NOT start!" \
+    15 80
+
+    # Ask if the user wants to proceed
+if ! whiptail --title "Proceed with Installation?" \
+    --yesno "Would you like to proceed?" 7 50; then
+    echo -e "\n"
+    echo "${INFO}    You chose ${YELLOW}NOT${RESET} to proceed. ${YELLOW}Exiting...${RESET}" | tee -a "$LOG"
+    echo -e "\n"
+    exit 1
+fi
+
+echo "${OK}      ${MAGENTA}Okay!!${RESET} ${SKY_BLUE}lets continue with the installation...${RESET}" | tee -a "$LOG"
+
+sleep 1
+printf "\n%.0s" {1..1}
+
+
+script_directory="install-scripts"
+
+# Function to execute a script if it exists and make it executable
+execute_script() {
+    local script="$1"
+    local script_path="$script_directory/$script"
+    if [ -f "$script_path" ]; then
+        chmod +x "$script_path"
+        if [ -x "$script_path" ]; then
+            env "$script_path"
         else
-            echo "Command failed with exit code $exit_code."
-            choice=$(gum choose "Continue the script" "Retry the command" "Exit the script")
-            case $choice in
-                "Continue the script") break ;;
-                "Retry the command") continue ;;
-                "Exit the script") exit 1 ;;
-            esac
+            echo "Failed to make script '$script' executable."
         fi
+    else
+        echo "Script '$script' not found in '$script_directory'."
+    fi
+}
+
+# Get all scripts
+# mapfile -t scripts < <(find "$script_directory" -maxdepth 1 -type f -name "*.sh" ! -name "base.sh" -exec basename {} \; | sort)
+# Create Whiptail checklist options
+declare -a options=()
+while IFS= read -r -d $'\0' script; do
+    script_name=$(basename "$script")
+    [[ "$script_name" == "base.sh" ]] && continue  # Skip base.sh
+    
+    # Extract second line and clean it (remove # and trim spaces)
+    description=$(head -n 2 "$script" | tail -n 1 | sed 's/^# *//; s/ *$//')
+    
+    # Fallback if description is empty
+    [[ -z "$description" ]] && description="No description available"
+    
+    options+=("$script_name" "$description" off)
+done < <(find "$script_directory" -maxdepth 1 -type f -name "*.sh" -print0 | sort -z)
+
+
+while true; do
+    selected_options=$(whiptail --title "Select Scripts to Run" --checklist \
+    "Choose options to install or configure\nNOTE: 'SPACEBAR' to select & 'TAB' key to change selection" 28 85 20 \
+    "${options[@]}" 3>&1 1>&2 2>&3)
+
+   # Check if the user pressed Cancel (exit status 1)
+    if [ $? -ne 0 ]; then
+        echo -e "\n"
+        echo "${INFO}    You cancelled the selection. ${YELLOW}Goodbye!${RESET}" | tee -a "$LOG"
+        exit 0  # Exit the script if Cancel is pressed
+    fi
+    # If no option was selected, notify and restart the selection
+    if [ -z "$selected_options" ]; then
+        whiptail --title "Warning" --msgbox "No options were selected. Please select at least one option." 10 60
+        continue  # Return to selection if no options selected
+    fi
+    # Strip the quotes and trim spaces if necessary (sanitize the input)
+    selected_options=$(echo "$selected_options" | tr -d '"' | tr -s ' ')
+    IFS=' ' read -r -a selected_array <<< "$selected_options"
+    # Prepare the confirmation message
+    confirm_message="You have selected the following options:\n\n"
+    for option in "${selected_array[@]}"; do
+        confirm_message+=" - $selected_array\n"
     done
-}
+    confirm_message+="\nAre you happy with these choices?"
 
-install_yay() {
-    echo ":: Installing yay..."
-    execute_command sudo pacman -Sy
-    execute_command sudo pacman -S --needed --noconfirm base-devel git
-    execute_command git clone https://aur.archlinux.org/yay.git /tmp/yay
-    cd /tmp/yay
-    execute_command makepkg -si --needed --noconfirm
-}
-install_packages() {
-    echo ":: Installing packages"
-    sleep 1
-    execute_command sudo pacman -Sy
-    execute_command sudo pacman -S --needed --noconfirm - < $dotfiles_dir/packages_main.txt
-}
+    # Confirmation prompt
+    if ! whiptail --title "Confirm Your Choices" --yesno "$(printf "%s" "$confirm_message")" 25 80; then
+        echo -e "\n"
+        echo "${SKY_BLUE}You're not happy${RESET}. ${YELLOW}Returning to options...${RESET}" | tee -a "$LOG"
+        continue
+    fi
 
-install_aur() {
-    echo ":: Installing aur packages"
-    sleep 1
-    execute_command yay -Sy
-    execute_command yay -S --needed --noconfirm - < $dotfiles_dir/packages_aur.txt
-}
+    echo "${OK}      You confirmed your choices. Proceeding with ${SKY_BLUE}Dotfiles Installation...${RESET}" | tee -a "$LOG"
+    break
+done
 
-install_themes() {
-    echo ":: Installing Themes (Icon, Mouse, and SDDM)"
-    sleep 1
-    execute_command mkdir $HOME/.icons/
-    execute_command cp -an $dotfiles_dir/themes/.icons/. $HOME/.icons/
-    execute_command sudo mkdir -p /usr/share/sddm/themes
-    execute_command sudo cp -an $dotfiles_dir/themes/sddm/. /usr/share/sddm/themes
-    execute_command sudo mkdir -p /etc/sddm.conf.d
-    execute_command sudo cp -an /etc/sddm.conf.d/sddm.conf /etc/sddm.conf.d/sddm.conf.bak
-    execute_command sudo cp -an /usr/lib/sddm/sddm.conf.d/default.conf /etc/sddm.conf.d/sddm.conf
-    execute_command sudo sed -i "s|.*Current=.*|Current=eucalyptus-drop|" /etc/sddm.conf.d/sddm.conf
-    execute_command sudo ln -sf /etc/sddm.conf.d/sddm.conf /etc/sddm.conf
-    execute_command gsettings set org.gnome.desktop.interface icon-theme "candy-icons-modified"
-    execute_command gsettings set org.gnome.desktop.interface cursor-theme "Sweet-cursors"
-    execute_command sudo cp -an $dotfiles_dir/themes/grub/. /usr/share/grub/themes
-    execute_command sudo cp -an /etc/default/grub /etc/default/grub.bak
-    execute_command sudo sed -i "s|.*GRUB_THEME=.*|GRUB_THEME=\"/usr/share/grub/themes/Elegant-wave-float-right-dark/theme.txt\"|" /etc/default/grub
-    execute_command sudo grub-mkconfig -o /boot/grub/grub.cfg
-    execute_command sudo systemctl enable --now sddm
-}
+# Run selected scripts
+IFS=$'\n' read -ra scripts_to_run <<< "${selected_options//\"/}"
+for script in "${scripts_to_run[@]}"; do
+    echo "${INFO}    Running ${SKY_BLUE}${script}${RESET}" | tee -a "$LOG"
+    execute_script "$script"
+done
 
-install_dotfiles() {
-    execute_command ln -s -f $HOME/dotfiles/wallpaper $HOME/wallpaper
-    execute_command ln -s -f $HOME/dotfiles/.config/* $HOME/.config/
-}
-
-sudo pacman -Sy --needed --noconfirm gum
-mode=$(gum choose "Full Installation" "Main Installation" "AUR Installation" "Theme Installation")
-case $mode in
-    "Full Installation")
-        install_yay
-        install_packages
-        install_aur
-        install_dotfiles 
-        install_themes ;;
-    "Main Installation")
-        install_packages ;;
-    "AUR Installation")
-        install_yay
-        install_aur ;;
-    "Theme Installation")
-        install_dotfiles
-        install_themes ;;
-esac
+printf "${OK}      Dotfiles Installation Completed..!"
+printf "\n%.0s" {1..2}

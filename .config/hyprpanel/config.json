@@ -510,7 +510,7 @@
   "theme.bar.location": "top",
   "theme.bar.buttons.modules.netstat.enableBorder": true,
   "bar.customModules.netstat.icon": "󰖟 ",
-  "bar.customModules.netstat.labelType": "in",
+  "bar.customModules.netstat.labelType": "full",
   "bar.customModules.netstat.leftClick": "menu:network",
   "bar.customModules.netstat.rateUnit": "auto",
   "bar.workspaces.reverse_scroll": true,

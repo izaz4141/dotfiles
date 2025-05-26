@@ -5,4 +5,9 @@ test.sh
 spell/
 lazy-lock.json
 
+*.env
+**/cache
+*.cache
+**/logs
 *.log
+*History

@@ -13,22 +13,21 @@ if status is-interactive
 end
 
 # DATAPATH for MCNP cross-section data
-export DATAPATH="$HOME/MCNP/MCNP_DATA"
-export OPENMC_CROSS_SECTIONS="$HOME/Documents/OpenMC/endfb71/cross_sections.xml"
-export PATH="$HOME/Downloads/bin/:/usr/lib/ccache/bin/:$PATH"
+export DATAPATH="/home/glicole/MCNP/MCNP_DATA"
+export OPENMC_CROSS_SECTIONS="/home/glicole/Documents/OpenMC/endfb71/cross_sections.xml"
 
 #######################################################
 # Init Module
 #######################################################
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if test -f $HOME/miniforge3/bin/conda
-    eval $HOME/miniforge3/bin/conda "shell.fish" "hook" $argv | source
+if test -f /home/glicole/miniforge3/bin/conda
+    eval /home/glicole/miniforge3/bin/conda "shell.fish" "hook" $argv | source
 else
-    if test -f "$HOME/miniforge3/etc/fish/conf.d/conda.fish"
-        . "$HOME/miniforge3/etc/fish/conf.d/conda.fish"
+    if test -f "/home/glicole/miniforge3/etc/fish/conf.d/conda.fish"
+        . "/home/glicole/miniforge3/etc/fish/conf.d/conda.fish"
     else
-        set -x PATH "$HOME/miniforge3/bin" $PATH
+        set -x PATH "/home/glicole/miniforge3/bin" $PATH
     end
 end
 # <<< conda initialize <<<
@@ -75,16 +74,17 @@ alias freshclam='sudo freshclam'
 
 # Change directory aliases
 alias home='z ~'
-alias '..'='z ..'
-alias '...'='z ../..'
-alias '....'='z ../../..'
-alias '.....'='z ../../../..'
+alias cd..='z ..'
+alias ..='z ..'
+alias ...='z ../..'
+alias ....='z ../../..'
+alias .....='z ../../../..'
 
 # cd into the old directory
 alias bd='z "$OLDPWD"'
 
 # Remove a directory and all files
-alias rmd='rm  --recursive --verbose '
+alias rmd='rm  --recursive --force --verbose '
 
 # Alias's for multiple directory listing commands
 alias la='ls -Alh'                # show hidden files
@@ -178,8 +178,8 @@ alias matrix='cmatrix'
 alias wifi='nmtui'
 alias winclass="xprop | grep 'CLASS'"
 alias dot="z ~/dotfiles"
+alias cleanup='~/.config/ml4w/scripts/cleanup.sh'
 alias zj='zellij'
-alias py='python'
 
 # -----------------------------------------------------
 # ML4W Apps
@@ -222,7 +222,6 @@ alias onedrive_pull='~/.config/ml4w/scripts/onedrive.sh --pull'
 alias onedrive_sync='~/.config/ml4w/scripts/onedrive.sh --sync'
 alias package_main='yay -Qqen > ~/dotfiles/packages_main.txt'
 alias package_aur='yay -Qqem > ~/dotfiles/packages_aur.txt'
-alias cleanup='~/.config/ml4w/scripts/cleanup.sh'
 
 # -----------------------------------------------------
 # VIRTUAL MACHINE
@@ -248,6 +247,8 @@ alias setkb='setxkbmap de;echo "Keyboard set back to de."'
 # Qtile
 alias res1='xrandr --output DisplayPort-0 --mode 2560x1440 --rate 120'
 alias res2='xrandr --output DisplayPort-0 --mode 1920x1080 --rate 120'
+
+export PATH="$HOME/Downloads/bin/:/usr/lib/ccache/bin/:$PATH"
 
 # -----------------------------------------------------
 # DEVELOPMENT
@@ -325,7 +326,7 @@ function convert_audio --description 'Convert to audio with metadata and cover a
         # Convert with cover art
         ffmpeg -i "$input" -i "$extracted_cover" \
             -map 0:a -map 1:v \
-            -c:a aac \
+            -c:a copy \
             -c:v copy \
             -disposition:v attached_pic \
             -map_metadata 0 \
@@ -334,7 +335,7 @@ function convert_audio --description 'Convert to audio with metadata and cover a
     else
         # Convert without cover art
         ffmpeg -i "$input" \
-            -c:a aac -b:a 256k \
+            -c:a copy -b:a 256k \
             -map_metadata 0 \
             "$output"
         echo "Converted without cover art: $output"
