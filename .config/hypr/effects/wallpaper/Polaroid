@@ -1,0 +1,1 @@
+magick $wallpaper_current -polaroid 0 $wallpaper_output

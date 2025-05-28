@@ -1,0 +1,22 @@
+/* ---- 💫 https://github.com/JaKooLit 💫 ---- */
+/* Rofi Config for Google Search */
+
+@import "~/.config/rofi/config.rasi"  
+
+/* ---- Window ---- */
+window {
+	width: 40%;
+	height: inherit;
+    location: north;
+    y-offset: 20px;
+    children: [ "inputbar" ];
+}
+
+/* ---- Entry ---- */ 
+entry {
+    enabled:                    true;
+	expand:                       true;
+	placeholder:                  "Input...";
+	// horizontal-align: 0.5;
+	border-radius: inherit;
+}

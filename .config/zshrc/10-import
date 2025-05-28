@@ -1,0 +1,10 @@
+# -----------------------------------------------------
+# INIT
+# -----------------------------------------------------
+# Import Bash Config
+for f in ~/.config/bashrc/*; do 
+    if [[ ! -d "$f" && "$f" != "$HOME/.config/bashrc/20-customization" ]] ;then
+        c=`echo "$f" | sed -e "s=.config/bashrc=.config/bashrc/custom="`
+        [[ -f "$c" ]] && source "$c" || source "$f"
+    fi
+done

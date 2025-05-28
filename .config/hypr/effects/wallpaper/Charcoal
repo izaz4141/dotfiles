@@ -1,0 +1,1 @@
+magick $wallpaper -charcoal 0x5 $used_wallpaper

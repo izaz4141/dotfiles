@@ -1,0 +1,1 @@
+magick $wallpaper -posterize 4 $used_wallpaper

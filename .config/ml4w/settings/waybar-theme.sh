@@ -1,1 +1,1 @@
-/ml4w;/ml4w/colored
+/ml4w-modern;/ml4w-modern/light

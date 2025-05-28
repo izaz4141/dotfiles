@@ -1,0 +1,1 @@
+magick $wallpaper -vignette 0x3 $used_wallpaper

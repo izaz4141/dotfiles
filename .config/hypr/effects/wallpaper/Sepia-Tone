@@ -1,0 +1,1 @@
+magick $wallpaper -sepia-tone 65% $used_wallpaper

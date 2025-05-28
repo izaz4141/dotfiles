@@ -1,0 +1,1 @@
+magick $wallpaper -gravity Center -extent 1:1 $used_wallpaper

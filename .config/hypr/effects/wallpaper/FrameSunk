@@ -1,0 +1,1 @@
+magick $wallpaper -raise 150 $used_wallpaper

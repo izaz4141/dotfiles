@@ -1,0 +1,1 @@
+magick $wallpaper -paint 4 $used_wallpaper

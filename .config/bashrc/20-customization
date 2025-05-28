@@ -6,11 +6,10 @@ POSH=agnoster
 # -----------------------------------------------------
 # Prompt
 # -----------------------------------------------------
-# eval "$(oh-my-posh init bash --config $HOME/.config/ohmyposh/zen.toml)"
 eval "$(starship init bash)"
 eval "$(zoxide init bash)"
 
 # -----------------------------------------------------
 # Pywal
 # -----------------------------------------------------
-cat ~/.cache/wal/sequences
+cat ~/.cache/wallust/sequences

@@ -34,8 +34,8 @@ configuration {
 /* ---- Load font ---- */
 @import "~/.config/ml4w/settings/rofi-font.rasi"
 
-/* ---- Load pywal colors (custom wal template) ---- */
-@import "~/.cache/wal/colors-rofi-pywal"
+/* ---- Load colors ---- */
+@import "./colors.rasi"
 
 /* ---- Load wallpaper ---- */
 @import "~/.config/ml4w/cache/current_wallpaper.rasi"
@@ -51,9 +51,9 @@ window {
     spacing:                      0px;
     padding:                      0px;
     margin:                       0px; 
-    color:                        #FFFFFF;
+    color:                        @primary;
     border:                       @border-width;
-    border-color:                 #FFFFFF;
+    border-color:                 @tertiary;
     cursor:                       "default";
     transparency:                 "real";
     location:                     center;
@@ -99,11 +99,11 @@ dummy {
 /* ---- Inputbar ---- */
 inputbar {
     enabled:                      true;
-    text-color:                   @foreground;
+    text-color:                   @primary;
     spacing:                      10px;
     padding:                      15px;
     border-radius:                10px;
-    border-color:                 @foreground;
+    border-color:                 @primary;
     background-color:             @background;
     children:                     [ "textbox-prompt-colon", "entry" ];
 }
@@ -131,7 +131,7 @@ mode-switcher{
     enabled:                      true;
     spacing:                      20px;
     background-color:             transparent;
-    text-color:                   @foreground;
+    text-color:                   @primary;
 }
 
 button {
@@ -144,8 +144,8 @@ button {
 }
 
 button selected {
-    background-color:             @color11;
-    text-color:                   @foreground;
+    background-color:             @primary-container;
+    text-color:                   @primary;
 }
 
 /* ---- Listview ---- */
@@ -175,52 +175,53 @@ element {
     cursor:                       pointer;
     background-color:             @background;
     border-radius:                10px;
-    border:                       @border-width;
+    border-color:                 @secondary;
+    border:                       2px;
 }
 
 element normal.normal {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @primary;
 }
 
 element normal.urgent {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @primary;
 }
 
 element normal.active {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @primary;
 }
 
 element selected.normal {
-    background-color:            @color11;
-    text-color:                  @foreground;
+    background-color:            @primary-container;
+    text-color:                  @primary;
 }
 
 element selected.urgent {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @primary;
 }
 
 element selected.active {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @primary;
 }
 
 element alternate.normal {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @primary;
 }
 
 element alternate.urgent {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @primary;
 }
 
 element alternate.active {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @primary;
 }
 
 element-icon {
@@ -253,7 +254,7 @@ textbox {
     margin:                      0px;
     border-radius:               0px;
     background-color:            @background;
-    text-color:                  @foreground;
+    text-color:                  @primary;
     vertical-align:              0.5;
     horizontal-align:            0.0;
 }
@@ -262,5 +263,5 @@ error-message {
     padding:                     15px;
     border-radius:               20px;
     background-color:            @background;
-    text-color:                  @foreground;
+    text-color:                  @primary;
 }
