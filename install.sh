@@ -122,7 +122,7 @@ while true; do
     "Choose options to install or configure\nNOTE: 'SPACEBAR' to select & 'TAB' key to change selection" 28 85 20 \
     "${options[@]}" 3>&1 1>&2 2>&3)
 
-   # Check if the user pressed Cancel (exit status 1)
+    # Check if the user pressed Cancel (exit status 1)
     if [ $? -ne 0 ]; then
         echo -e "\n"
         echo "${INFO}    You cancelled the selection. ${YELLOW}Goodbye!${RESET}" | tee -a "$LOG"

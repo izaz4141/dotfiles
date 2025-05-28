@@ -13,7 +13,7 @@ LOG="Install-Logs/install-$(date +%d-%H%M%S)_packages.log"
 
 # Source the global functions script
 if ! source "$SCRIPT_DIR/base.sh"; then
-  echo "Failed to source base.sh"
+  echo "${ERROR} Failed to source ${ORANGE}base.sh\n${RESET}" | tee -a "$LOG"
   exit 1
 fi
 

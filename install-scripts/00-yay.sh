@@ -13,36 +13,37 @@ echo $SCRIPT_DIR
 PARENT_DIR="$SCRIPT_DIR/.."
 cd "$PARENT_DIR" || { echo "${ERROR} Failed to change directory to $PARENT_DIR"; exit 1; }
 
+# Set the name of the log file to include the current date and time
+LOG="$PARENT_DIR/Install-Logs/install-$(date +%d-%H%M%S)_yay.log"
+
 # Source the global functions script
 if ! source "$SCRIPT_DIR/base.sh"; then
-  echo "Failed to source base.sh"
+  echo "${ERROR} Failed to source ${ORANGE}base.sh\n${RESET}" | tee -a "$LOG"
   exit 1
 fi
 
-# Set the name of the log file to include the current date and time
-LOG="$PARENT_DIR/Install-Logs/install-$(date +%d-%H%M%S)_yay.log"
 
 # Check for AUR helper and install if not found
 ISAUR=$(command -v yay || command -v paru)
 if [ -n "$ISAUR" ]; then
-  printf "\n%s - ${SKY_BLUE}AUR helper${RESET} already installed, moving on.\n" "${OK}"
+  printf "\n%s - ${SKY_BLUE}AUR helper${RESET} already installed, moving on.\n" "${OK}" | tee -a "$LOG"
 else
-  printf "\n%s - Installing ${SKY_BLUE}$pkg${RESET} from AUR\n" "${NOTE}"
+  printf "\n%s - Installing ${SKY_BLUE}$pkg${RESET} from AUR\n" "${NOTE}" | tee -a "$LOG"
 
 # Check if directory exists and remove it
 if [ -d "$pkg" ]; then
     rm -rf "$pkg"
 fi
-  git clone https://aur.archlinux.org/$pkg.git $tmpdir || { printf "%s - Failed to clone ${YELLOW}$pkg${RESET} from AUR\n" "${ERROR}"; exit 1; }
+  git clone https://aur.archlinux.org/$pkg.git $tmpdir || { printf "%s - Failed to clone ${YELLOW}$pkg${RESET} from AUR\n" "${ERROR}" | tee -a "$LOG"; exit 1; }
   cd $tmpdir || { printf "%s - Failed to enter $tmpdir directory\n" "${ERROR}"; exit 1; }
-  makepkg -si --noconfirm 2>&1 | tee -a "$LOG" || { printf "%s - Failed to install ${YELLOW}$pkg${RESET} from AUR\n" "${ERROR}"; exit 1; }
+  makepkg -si --noconfirm 2>&1 | tee -a "$LOG" || { printf "%s - Failed to install ${YELLOW}$pkg${RESET} from AUR\n" "${ERROR}" | tee -a "$LOG"; exit 1; }
 
 fi
 
 # Update system before proceeding
-printf "\n%s - Performing a full system update to avoid issues.... \n" "${NOTE}"
+printf "\n%s - Performing a full system update to avoid issues.... \n" "${NOTE}" | tee -a "$LOG"
 ISAUR=$(command -v yay || command -v paru)
 
-$ISAUR -Syu --noconfirm 2>&1 | tee -a "$LOG" || { printf "%s - Failed to update system\n" "${ERROR}"; exit 1; }
+$ISAUR -Syu --noconfirm 2>&1 | tee -a "$LOG" || { printf "%s - Failed to update system\n" "${ERROR}" | tee -a "$LOG"; exit 1; }
 
 printf "\n%.0s" {1..2}
