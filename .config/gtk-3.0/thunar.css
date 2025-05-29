@@ -1,0 +1,24 @@
+
+.thunar.background,
+.thunar.background>grid>toolbar,
+.thunar.background .view,
+.thunar.background .view>header>button {
+    background: @window_bg_color;
+    color: @accent_color;
+}
+
+.thunar.background .view>header>button {
+    border-color: @accent_color;
+}
+
+.thunar.background .path-bar-button {
+    background: @window_bg_color;
+    border-color: @accent_color;
+    border-style: groove;
+}
+.thunar.background .path-bar-button.location-button.toggle {
+    background: alpha(@accent_fg_color, .6);
+}
+.thunar.background .path-bar-button.location-button.toggle:hover {
+    background: @accent_fg_color;
+}
