@@ -134,6 +134,7 @@ alias winclass="xprop | grep 'CLASS'"
 alias dot="z ~/dotfiles"
 alias cleanup='~/.config/ml4w/scripts/cleanup.sh'
 alias zj='zellij'
+alias py='python '
 
 # -----------------------------------------------------
 # ML4W Apps
@@ -204,3 +205,8 @@ export PATH="$HOME/Downloads/bin/:/usr/lib/ccache/bin/:$PATH"
 # DEVELOPMENT
 # -----------------------------------------------------
 alias pamcan=pacman
+
+# -----------------------------------------------------
+# SSH ALIAS
+# -----------------------------------------------------
+alias stella.local='ssh 192.168.100.69'

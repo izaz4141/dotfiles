@@ -1,3 +1,4 @@
+alacritty
 alsa-ucm-conf
 amd-ucode
 autoconf-archive
@@ -30,7 +31,6 @@ figlet
 filezilla
 fish
 flatpak
-foot
 fuse2
 fzf
 gamemode
@@ -44,6 +44,8 @@ gtk4
 gum
 gvfs
 gvfs-mtp
+htop
+hypridle
 hyprlock
 hyprpicker
 imagemagick
@@ -53,8 +55,8 @@ jq
 jre-openjdk
 kate
 kio5
-kitty
 krita
+kvantum
 lib32-vulkan-radeon
 libadwaita
 libgtop
@@ -88,6 +90,8 @@ pipewire-pulse
 playerctl
 polkit-gnome
 power-profiles-daemon
+pyside6
+pyside6-tools
 python-gobject
 python-pip
 qt5-graphicaleffects
@@ -95,11 +99,13 @@ qt5-quickcontrols2
 qt5-svg
 qt5-tools
 qt6ct
+qtcreator
 rclone
 ripgrep
 rofi-wayland
 rsync
 rust
+rust-src
 sddm
 slurp
 snap-pac
@@ -127,7 +133,9 @@ xarchiver
 xclip
 xdg-desktop-portal-gtk
 yazi
+yt-dlp
 zellij
+zip
 zoxide
 zram-generator
 zsh

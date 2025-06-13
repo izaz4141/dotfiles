@@ -1,24 +1,73 @@
 
+entry {
+    background: @surface_dim;
+    color: @primary_fixed_dim
+}
+
 .thunar.background,
-.thunar.background>grid>toolbar,
-.thunar.background .view,
-.thunar.background .view>header>button {
-    background: @window_bg_color;
-    color: @accent_color;
+.thunar toolbar,
+.thunar .view,
+.thunar .view button {
+    background: @surface_dim;
+    color: @primary_fixed_dim;
 }
 
-.thunar.background .view>header>button {
-    border-color: @accent_color;
+.thunar .shortcuts-pane .view:hover  {
+    background: alpha(@on_primary_fixed, 0.5);
+    border: 1px solid @primary_fixed_dim;
+    border-radius: 6px;
+}
+.thunar .shortcuts-pane .view:selected  {
+    background: @on_primary_fixed;
+}
+.thunar toolbar button:hover,
+.thunar .view button:hover,
+.thunar .standard-view .view:hover  {
+    background: alpha(@on_primary_fixed, 0.5);
 }
 
-.thunar.background .path-bar-button {
-    background: @window_bg_color;
-    border-color: @accent_color;
+.thunar .path-bar-button {
+    background: @surface_dim;
+    border-color: @primary_fixed_dim;
     border-style: groove;
 }
-.thunar.background .path-bar-button.location-button.toggle {
-    background: alpha(@accent_fg_color, .6);
+.thunar .path-bar-button.location-button.toggle {
+    background: alpha(@on_primary_fixed, .4);
 }
-.thunar.background .path-bar-button.location-button.toggle:hover {
-    background: @accent_fg_color;
+.thunar .path-bar-button.location-button.toggle:hover {
+    background: @on_primary_fixed;
+}
+
+.thunar .view button {
+    border-color: @primary_fixed_dim;
+}
+
+statusbar,
+.thunar toolbar button {
+    color: @tertiary_fixed_dim;
+}
+
+.thunar .shortcuts-pane treeview:selected {
+    font-weight:bold;
+}
+
+dialog,
+dialog header {
+    background: @surface_dim;
+}
+dialog header label {
+    color: @primary_fixed_dim;
+    font-weight: bold;
+}
+dialog menu,
+dialog stack {
+    color: @tertiary_fixed_dim;
+    background: @surface_bright;
+    border-radius: 6px
+}
+dialog button {
+    color: @primary_fixed_dim;
+    font-weight: bold;
+    background: @surface_bright;
+    margin: 6px 6px;
 }

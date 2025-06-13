@@ -36,8 +36,7 @@ if [ -f ~/.bashrc_custom ] ;then
     source ~/.bashrc_custom
 fi
 
-[ -f /opt/miniforge/etc/profile.d/conda.sh ] && source /opt/miniforge/etc/profile.d/conda.sh
-
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH=$BUN_INSTALL/bin:$PATH
+

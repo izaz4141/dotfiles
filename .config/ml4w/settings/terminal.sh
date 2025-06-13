@@ -1,1 +1,1 @@
-foot
+alacritty

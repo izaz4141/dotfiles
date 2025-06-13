@@ -1,11 +1,18 @@
 [Icon Theme]
-Name=candy-icons
+Name=candy-icons-modified
 Comment=Sweet gradient icons.
 Inherits=breeze-dark,Adwaita,hicolor
 FollowsColorScheme=true
 
 # Directory list
-Directories=places/16,places/48,apps/scalable,devices/scalable,preferences/scalable,mimetypes/scalable,status/scalable
+Directories=actions/scalable,places/16,places/48,apps/scalable,devices/scalable,preferences/scalable,mimetypes/scalable,status/scalable
+
+[actions/scalable]
+Context=Actions
+Size=22
+MinSize=8
+MaxSize=192
+Type=Scalable
 
 [apps/scalable]
 Size=96
