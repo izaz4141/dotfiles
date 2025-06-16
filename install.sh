@@ -2,6 +2,16 @@
 
 clear
 
+keep_sudo_alive() {
+    while true; do
+        sudo -v # Refreshes the sudo timestamp
+        sleep 4m # Sleep for slightly less than your sudo timeout 
+    done
+}
+# Start the keep-alive function in the background
+keep_sudo_alive &
+SUDO_PID=$! # Get the PID of the background process
+
 # Set some colors for output messages
 OK="$(tput setaf 2)[OK]$(tput sgr0)"
 ERROR="$(tput setaf 1)[ERROR]$(tput sgr0)"
@@ -135,11 +145,11 @@ while true; do
     fi
     # Strip the quotes and trim spaces if necessary (sanitize the input)
     selected_options=$(echo "$selected_options" | tr -d '"' | tr -s ' ')
-    IFS=' ' read -r -a selected_array <<< "$selected_options"
+    IFS=' ' read -ra selected_array <<< "$selected_options"
     # Prepare the confirmation message
     confirm_message="You have selected the following options:\n\n"
     for option in "${selected_array[@]}"; do
-        confirm_message+=" - $selected_array\n"
+        confirm_message+=" - $option\n"
     done
     confirm_message+="\nAre you happy with these choices?"
 
@@ -155,11 +165,24 @@ while true; do
 done
 
 # Run selected scripts
-IFS=$'\n' read -ra scripts_to_run <<< "${selected_options//\"/}"
-for script in "${scripts_to_run[@]}"; do
+for script in "${selected_array[@]}"; do
     echo "${INFO}    Running ${SKY_BLUE}${script}${RESET}" | tee -a "$LOG"
     execute_script "$script"
+    script_exit_code=$?
+    if [ "$script_exit_code" -eq 0 ]; then
+        printf "${OK}      ${script} Execution Completed..!\n" | tee -a "$LOG"
+    else
+        printf "${ERROR}   ${script} Execution ${WARNING}Failed${RESET}..!\n" | tee -a "$LOG"
+    fi
+    printf "\n%.0s" {1..2}
 done
 
-printf "${OK}      Dotfiles Installation Completed..!"
+# Kill the background keep-alive process when done
+kill "$SUDO_PID"
+
+if [ "$script_exit_code" -eq 0 ]; then
+    printf "${OK}      Dotfiles Installation Completed..!" | tee -a "$LOG"
+else
+    printf "${ERROR}   Dotfiles Installation ${WARNING}Failed${RESET}..!" | tee -a "$LOG"
+fi
 printf "\n%.0s" {1..2}
