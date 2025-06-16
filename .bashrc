@@ -36,7 +36,4 @@ if [ -f ~/.bashrc_custom ] ;then
     source ~/.bashrc_custom
 fi
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH=$BUN_INSTALL/bin:$PATH
 

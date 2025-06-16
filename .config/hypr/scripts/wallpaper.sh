@@ -41,7 +41,7 @@ fi
 
 # Create folder with generated versions of wallpaper if not exists
 if [ ! -d $generatedversions ]; then
-    mkdir $generatedversions
+    mkdir -p $generatedversions
 fi
 
 # -----------------------------------------------------
