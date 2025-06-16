@@ -1,19 +1,18 @@
 #!/bin/bash
 # Add extra spices to pacman
+LOG="Install-Logs/install-$(date +%d-%H%M%S)-pacman.log"
 
 ## WARNING: DO NOT EDIT BEYOND THIS LINE IF YOU DON'T KNOW WHAT YOU ARE DOING! ##
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Change the working directory to the parent directory of the script
 PARENT_DIR="$SCRIPT_DIR/.."
-cd "$PARENT_DIR" || { echo "${ERROR} Failed to change directory to $PARENT_DIR"; exit 1; }
+cd "$PARENT_DIR" || { echo "[ERROR] Failed to change directory to $PARENT_DIR" | tee -a "$LOG"; exit 1; }
 
-# Set the name of the log file to include the current date and time
-LOG="Install-Logs/install-$(date +%d-%H%M%S)_pacman.log"
 
 # Source the global functions script
 if ! source "$SCRIPT_DIR/base.sh"; then
-  echo "${ERROR} Failed to source ${ORANGE}base.sh\n${RESET}" | tee -a "$LOG"
+  echo "[ERROR] Failed to source base.sh\n" | tee -a "$LOG"
   exit 1
 fi
 
@@ -55,4 +54,5 @@ echo -e "${CAT} ${MAGENTA}Pacman.conf${RESET} spicing up completed ${RESET}" 2>&
 printf "\n%s - ${SKY_BLUE}Synchronizing Pacman Repo${RESET}\n" "${INFO}" | tee -a "$LOG"
 sudo pacman -Sy
 
-printf "\n%.0s" {1..2}
+printf "${OK} Finished configuring ${SKYBLUE}Pacman${RESET}\n" | tee -a "$LOG"
+printf "\n%.0s" {1..1}

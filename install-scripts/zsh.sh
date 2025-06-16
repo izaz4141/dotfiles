@@ -11,20 +11,19 @@ zsh_pkg=(
 zsh_pkg2=(
   fzf
 )
+LOG="Install-Logs/install-$(date +%d-%H%M%S)-zsh.log"
 
 ## WARNING: DO NOT EDIT BEYOND THIS LINE IF YOU DON'T KNOW WHAT YOU ARE DOING! ##
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Change the working directory to the parent directory of the script
 PARENT_DIR="$SCRIPT_DIR/.."
-cd "$PARENT_DIR" || { echo "${ERROR} Failed to change directory to $PARENT_DIR"; exit 1; }
+cd "$PARENT_DIR" || { echo "[ERROR] Failed to change directory to $PARENT_DIR" | tee -a "$LOG"; exit 1; }
 
-# Set the name of the log file to include the current date and time
-LOG="Install-Logs/install-$(date +%d-%H%M%S)_zsh.log"
 
 # Source the global functions script
 if ! source "$SCRIPT_DIR/base.sh"; then
-  echo "${ERROR} Failed to source ${ORANGE}base.sh\n${RESET}" | tee -a "$LOG"
+  echo "[ERROR] Failed to source base.sh\n" | tee -a "$LOG"
   exit 1
 fi
 
@@ -40,7 +39,7 @@ done
 
 # Check if the zsh-completions directory exists
 if [ -d "zsh-completions" ]; then
-    rm -rf zsh-completions
+  rm -rf zsh-completions
 fi
 
 # Install Oh My Zsh, plugins, and set zsh as default shell
@@ -54,24 +53,24 @@ if command -v zsh >/dev/null; then
 
   # Check if the directories exist before cloning the repositories
   if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-      git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
   else
-      echo "${INFO} Directory zsh-autosuggestions already exists. Cloning Skipped." 2>&1 | tee -a "$LOG"
+    echo "${INFO} Directory zsh-autosuggestions already exists. Cloning Skipped." 2>&1 | tee -a "$LOG"
   fi
 
   if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
-      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
   else
-      echo "${INFO} Directory zsh-syntax-highlighting already exists. Cloning Skipped." 2>&1 | tee -a "$LOG"
+    echo "${INFO} Directory zsh-syntax-highlighting already exists. Cloning Skipped." 2>&1 | tee -a "$LOG"
   fi
 
   # Check if ~/.zshrc and .zprofile exists, create a backup, and copy the new configuration
   if [ -f "$HOME/.zshrc" ]; then
-      mv -b "$HOME/.zshrc" "$HOME/.zshrc.bak" || true
+    mv -b "$HOME/.zshrc" "$HOME/.zshrc.bak" || true
   fi
 
   # Copying the preconfigured zsh themes and profile
-  ln -sf .zshrc $HOME/.zshrc
+  ln -sf $PARENT_DIR/.zshrc $HOME/.zshrc
 
   # Check if the current shell is zsh
   current_shell=$(basename "$SHELL")
@@ -100,7 +99,8 @@ done
 
 # copy additional oh-my-zsh themes from assets
 if [ -d "$HOME/.oh-my-zsh/themes" ]; then
-    cp -r assets/zsh/* ~/.oh-my-zsh/themes >> "$LOG" 2>&1
+  cp -r assets/zsh/* ~/.oh-my-zsh/themes >> "$LOG" 2>&1
 fi
 
-printf "\n%.0s" {1..2}
+printf "${OK} Finished configuring ${SKYBLUE}ZSH${RESET}\n" | tee -a "$LOG"
+printf "\n%.0s" {1..1}

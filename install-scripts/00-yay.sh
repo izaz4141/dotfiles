@@ -4,46 +4,44 @@
 
 pkg="yay"
 tmpdir="/tmp/yay"
+LOG="$PARENT_DIR/Install-Logs/install-$(date +%d-%H%M%S)-yay.log"
 
 
 ## WARNING: DO NOT EDIT BEYOND THIS LINE IF YOU DON'T KNOW WHAT YOU ARE DOING! ##
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-echo $SCRIPT_DIR
 # Change the working directory to the parent directory of the script
 PARENT_DIR="$SCRIPT_DIR/.."
-cd "$PARENT_DIR" || { echo "${ERROR} Failed to change directory to $PARENT_DIR"; exit 1; }
+cd "$PARENT_DIR" || { echo "[ERROR] Failed to change directory to $PARENT_DIR" | tee -a "$LOG"; exit 1; }
 
-# Set the name of the log file to include the current date and time
-LOG="$PARENT_DIR/Install-Logs/install-$(date +%d-%H%M%S)_yay.log"
 
 # Source the global functions script
 if ! source "$SCRIPT_DIR/base.sh"; then
-  echo "${ERROR} Failed to source ${ORANGE}base.sh\n${RESET}" | tee -a "$LOG"
+  echo "[ERROR] Failed to source base.sh" 
   exit 1
 fi
 
 
+
+
 # Check for AUR helper and install if not found
-ISAUR=$(command -v yay || command -v paru)
+ISAUR=$(check_aur_helper)
+
 if [ -n "$ISAUR" ]; then
   printf "\n%s - ${SKY_BLUE}AUR helper${RESET} already installed, moving on.\n" "${OK}" | tee -a "$LOG"
 else
   printf "\n%s - Installing ${SKY_BLUE}$pkg${RESET} from AUR\n" "${NOTE}" | tee -a "$LOG"
 
-# Check if directory exists and remove it
-if [ -d "$pkg" ]; then
-    rm -rf "$pkg"
-fi
+  # Check if directory exists and remove it
+  if [ -d "$tmpdir" ]; then
+      rm -rf "$tmpdir"
+  fi
   git clone https://aur.archlinux.org/$pkg.git $tmpdir || { printf "%s - Failed to clone ${YELLOW}$pkg${RESET} from AUR\n" "${ERROR}" | tee -a "$LOG"; exit 1; }
   cd $tmpdir || { printf "%s - Failed to enter $tmpdir directory\n" "${ERROR}"; exit 1; }
   makepkg -si --noconfirm 2>&1 | tee -a "$LOG" || { printf "%s - Failed to install ${YELLOW}$pkg${RESET} from AUR\n" "${ERROR}" | tee -a "$LOG"; exit 1; }
-
+  $pkg -Y --gendb
+  $pkg -Syu --devel  --noconfirm
+  $pkg -Y --devel --save
 fi
 
-# Update system before proceeding
-printf "\n%s - Performing a full system update to avoid issues.... \n" "${NOTE}" | tee -a "$LOG"
-ISAUR=$(command -v yay || command -v paru)
-
-$ISAUR -Syu --noconfirm 2>&1 | tee -a "$LOG" || { printf "%s - Failed to update system\n" "${ERROR}" | tee -a "$LOG"; exit 1; }
-
-printf "\n%.0s" {1..2}
+printf "${OK} Finished installing ${SKYBLUE}Yay${RESET}\n" | tee -a "$LOG"
+printf "\n%.0s" {1..1}

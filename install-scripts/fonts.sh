@@ -1,19 +1,17 @@
 #!/bin/bash
 # Add extra spices to pacman
+LOG="Install-Logs/install-$(date +%d-%H%M%S)-fonts.log"
 
 ## WARNING: DO NOT EDIT BEYOND THIS LINE IF YOU DON'T KNOW WHAT YOU ARE DOING! ##
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Change the working directory to the parent directory of the script
 PARENT_DIR="$SCRIPT_DIR/.."
-cd "$PARENT_DIR" || { echo "${ERROR} Failed to change directory to $PARENT_DIR"; exit 1; }
-
-# Set the name of the log file to include the current date and time
-LOG="Install-Logs/install-$(date +%d-%H%M%S)_fonts.log"
+cd "$PARENT_DIR" || { echo "[ERROR] Failed to change directory to $PARENT_DIR" | tee -a "$LOG"; exit 1; }
 
 # Source the global functions script
 if ! source "$SCRIPT_DIR/base.sh"; then
-  echo "${ERROR} Failed to source ${ORANGE}base.sh\n${RESET}" | tee -a "$LOG"
+  echo "[ERROR] Failed to source base.sh\n" | tee -a "$LOG"
   exit 1
 fi
 
@@ -78,3 +76,13 @@ for font in "${selected_array[@]}"; do
 done
 
 cp -an "assets/fonts/." "$FONT_DIR/" || { printf "%s - Failed to install ${YELLOW}FONT${RESET}\n" "${ERROR}" | tee -a "$LOG"; exit 1; }
+
+for font in "${selected_array[@]}"; do
+  if [[ ! -d "assets/fonts/${font}" ]]; then
+    echo "${INFO}    Removing ${SKY_BLUE}${font}${RESET} from Repository" | tee -a "$LOG"
+    rm -r "assets/fonts/${font}"
+  fi
+done
+
+printf "${OK}      Succesfully Installed ${SKY_BLUE}FONTS${RESET}!" | tee -a "$LOG"
+printf "\n%.0s" {1..1}
