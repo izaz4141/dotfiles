@@ -83,7 +83,7 @@
 },
 
 "bluetooth": {
-	"format": " ",
+	"format": "",
 	"format-disabled": "󰂳",
 	"format-connected": "󰂱 {num_connections}",
 	"tooltip-format": " {device_alias}",
