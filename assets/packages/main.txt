@@ -5,6 +5,7 @@ base-devel
 bash-completion
 bat
 bc
+bitwarden
 blueman
 breeze
 brightnessctl
@@ -35,6 +36,7 @@ gamemode
 git
 github-cli
 gnome-bluetooth-3.0
+gnome-calculator
 grim
 grub
 grub-btrfs
@@ -108,6 +110,7 @@ snap-pac
 sof-firmware
 starship
 steam
+swappy
 swaync
 swww
 tealdeer
@@ -128,6 +131,7 @@ xclip
 xdg-desktop-portal-gtk
 yazi
 yt-dlp
+zed
 zellij
 zip
 zoxide

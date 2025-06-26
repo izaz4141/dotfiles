@@ -214,12 +214,25 @@ run_cmd() {
 }
 
 # Actions
-chosen="$(run_rofi)"
-case ${chosen} in
-    $option_1)
-        run_cmd --opt1
+case $1 in
+    immediate_copy)
+        grim -t png | wl-copy
         ;;
-    $option_2)
-        run_cmd --opt2
+    immediate_selection)
+        grim -t png -g "$(slurp)" - | swappy -f - -o "${screenshot_folder}/$NAME"
+        if [ -f "${screenshot_folder}/$NAME" ]; then
+            notify-send "Saved a screenshot!" "${screenshot_folder}/$NAME"
+        fi
         ;;
+    custom)
+        chosen="$(run_rofi)"
+        case ${chosen} in
+            $option_1)
+                run_cmd --opt1
+                ;;
+            $option_2)
+                run_cmd --opt2
+                ;;
+        esac
 esac
+
