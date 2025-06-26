@@ -7,18 +7,18 @@ FollowsColorScheme=true
 # Directory list
 Directories=actions/scalable,places/16,places/48,apps/scalable,devices/scalable,preferences/scalable,mimetypes/scalable,status/scalable
 
-[actions/scalable]
-Context=Actions
-Size=22
-MinSize=8
-MaxSize=192
-Type=Scalable
-
 [apps/scalable]
 Size=96
 Context=Applications
 MinSize=8
 MaxSize=512
+Type=Scalable
+
+[actions/scalable]
+Context=Actions
+Size=22
+MinSize=8
+MaxSize=192
 Type=Scalable
 
 [devices/scalable]

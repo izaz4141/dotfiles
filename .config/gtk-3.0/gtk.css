@@ -1,5 +1,5 @@
-@import 'colors.css';
-@import 'thunar.css';
+/*@import 'colors.css';
+@import 'thunar.css';*/
 
 @define-color accent_color @primary_fixed_dim;
 @define-color accent_fg_color @on_primary_fixed;
