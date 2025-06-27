@@ -90,7 +90,7 @@
 "custom/playerctl": {
 	"format": "<span>{}</span>",
 	"return-type": "json",
-	"max-length": 35,
+	"max-length": 30,
 	"exec": "$HOME/.config/ml4w/scripts/waybar-playerctl.sh",
 	"interval": 1,
 	"on-click": "$HOME/.config/ml4w/scripts/media-notify.sh play_pause",
