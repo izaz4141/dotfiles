@@ -1,3 +1,4 @@
+bluetuith-bin
 btrfs-assistant
 downgrade
 freedownloadmanager

@@ -87,7 +87,7 @@
         },
         {
           "label": " ",
-          "command": "sh -c ~/.config/hypr/scripts/screenshot.sh"
+          "command": "sh -c `~/.config/hypr/scripts/screenshot.sh custom`"
         },
         {
           "label": " ",

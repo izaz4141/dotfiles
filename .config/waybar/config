@@ -41,6 +41,7 @@
 
 "modules-right": [
 	"tray",
+	"custom/separator#dot-line",
 	"network",
 	"bluetooth",
 	"custom/separator#dot-line",

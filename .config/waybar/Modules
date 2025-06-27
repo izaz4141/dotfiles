@@ -90,7 +90,8 @@
 	"tooltip-format-connected": "{device_enumerate}",
 	"tooltip-format-enumerate-connected": " {device_alias} 󰂄{device_battery_percentage}%",
 	"tooltip": true,
-	"on-click": "blueman-manager",
+	"on-click": "$HOME/.config/ml4w/settings/bluetoothmanager.sh",
+	"on-click-right": "blueman-manager",
 },
 
 "clock": {
@@ -275,8 +276,8 @@
 	"format-icons": [
 		"󰤯", "󰤟", "󰤢", "󰤥", "󰤨"
 	],
-	"on-click": "~/.config/ml4w/settings/networkmanager.sh",
-	"on-click-right": "~/.config/ml4w/scripts/nm-applet.sh toggle",
+	"on-click": "$HOME/.config/ml4w/settings/networkmanager.sh",
+	"on-click-right": "$HOME/.config/ml4w/scripts/nm-applet.sh toggle",
 },
 
 "network#speed": {
