@@ -120,7 +120,7 @@ type_screenshot_run() {
         option_type_screenshot=screen
         ${1}
     elif [[ "$selected_type_screenshot" == "$option_capture_2" ]]; then
-        option_type_screenshot=output
+        option_type_screenshot=active
         ${1}
     elif [[ "$selected_type_screenshot" == "$option_capture_3" ]]; then
         option_type_screenshot=area
@@ -214,9 +214,9 @@ run_cmd() {
 }
 
 # Actions
-case $1 in
+case "$1" in
     immediate_copy)
-        grim -t png | wl-copy
+        grim -t png - | swappy -f -
         ;;
     immediate_selection)
         grim -t png -g "$(slurp)" - | swappy -f - -o "${screenshot_folder}/$NAME"
