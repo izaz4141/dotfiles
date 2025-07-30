@@ -4,7 +4,7 @@
 volume_step=3
 brightness_step=5
 max_volume=100
-notification_timeout=1000
+notification_timeout=5000
 download_album_art=true
 show_album_art=true
 show_music_in_volume_indicator=true
@@ -34,7 +34,8 @@ function get_brightness {
 		LIGHT=${BNESS%.*}
 	else
 		BNESS=`brightnessctl g`
-		PERC="$(($BNESS*100/255))"
+        BNMAX=`brightnessctl m`
+		PERC=$(echo "scale=2; $BNESS / $BNMAX * 100" | bc)
 		LIGHT=${PERC%.*}
 	fi
 
@@ -42,8 +43,7 @@ function get_brightness {
 }
 
 # Returns a mute icon, a volume-low icon, or a volume-high icon, depending on the volume
-function get_volume_icon {
-    volume=$(get_volume)
+get_volume_icon() {
     mute=$(get_mute)
     if [ "$volume" -eq 0 ] || [ "$mute" == "yes" ] ; then
         volume_icon=""
@@ -60,7 +60,6 @@ function get_volume_icon {
     fi
 }
 function get_mic_icon {
-    volume=$(get_mic_volume)
     mute=$(get_mic_mute)
     if [ "$volume" -eq 0 ] || [ "$mute" == "yes" ] ; then
         volume_icon="󰍭"
@@ -71,7 +70,6 @@ function get_mic_icon {
 
 # Always returns the same icon - I couldn't get the brightness-low icon to work with fontawesome
 function get_brightness_icon {
-    brightness=$(get_brightness)
     if [ "$brightness" -lt 21 ] ; then
         brightness_image=file://$HOME/dotfiles/assets/icons/brightness-20.png
     elif [ "$brightness" -lt 41 ]; then
@@ -117,8 +115,6 @@ function get_album_art {
 # Displays a volume notification
 function show_volume_notif {
     volume=$(get_volume)
-    get_volume_icon
-
     if [[ $show_music_in_volume_indicator == "true" && \
         $show_album_art == "true" ]] && \
         ! playerctl status 2>&1 | grep -q "No players found"; then
@@ -127,6 +123,7 @@ function show_volume_notif {
         get_album_art
         notify-send -r 1 -t $notification_timeout -h int:value:$volume -i "$album_art" "$volume_icon     $volume%" "$current_song"
     else
+        get_volume_icon
         notify-send -r 1 -t $notification_timeout -h int:value:$volume -i "$volume_image" "$volume%"
     fi
 }
@@ -161,8 +158,8 @@ function show_brightness_notif {
 case $1 in
     volume_up)
     # Unmutes and increases volume, then displays the notification
-    pactl set-sink-mute @DEFAULT_SINK@ 0
     volume=$(get_volume)
+    pactl set-sink-mute @DEFAULT_SINK@ 0
     if [ $(( "$volume" + "$volume_step" )) -gt $max_volume ]; then
         pactl set-sink-volume @DEFAULT_SINK@ $max_volume%
     else
@@ -190,8 +187,8 @@ case $1 in
 
     mic_up)
     # Unmutes and increases microphone volume, then displays the notification
-    pactl set-source-mute @DEFAULT_SOURCE@ 0
     volume=$(get_mic_volume)
+    pactl set-source-mute @DEFAULT_SOURCE@ 0
     if [ $(( "$volume" + "$volume_step" )) -gt $max_volume ]; then
         pactl set-source-volume @DEFAULT_SOURCE@ $max_volume%
     else

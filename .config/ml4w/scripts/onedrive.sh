@@ -17,9 +17,23 @@ sync_to_cloud() {
     notify-send "OneDrive connected" "Successfully synced local to OneDrive"
 }
 
-if [[ "$1" == "--pull" ]]; then
-    pull_from_cloud
+mount_from_cloud() {
+    rclone mount onedrive:Documents ~/Documents/OneDrive --vfs-cache-mode writes &
+    notify-send "OneDrive mounted" "Successfully mounted OneDrive to virtual local filesystem"
+}
 
-elif [[ "$1" == "--sync" ]]; then
-    sync_to_cloud
-fi
+
+case $1 in
+    --pull)
+        pull_from_cloud
+    ;;
+    --sync)
+        sync_to_cloud
+    ;;
+    --mount)
+        mount_from_cloud
+    ;;
+    *)
+        echo "Valid flags are --pull, --sync, and --mount"
+    ;;
+esac

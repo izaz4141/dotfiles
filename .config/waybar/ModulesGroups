@@ -53,6 +53,18 @@
 		"battery",
 	]
 },
+"group/network": {
+	"orientation": "inherit",
+	"drawer": {
+		"transition-duration": 500,
+		"children-class": "network",
+		"transition-left-to-right": true
+        },
+	"modules": [
+		"network",
+		"network#speed",
+	]
+},
 "group/audio": {
 	"orientation": "inherit",
 	"drawer": {
@@ -97,11 +109,11 @@
 	"orientation": "inherit",
 	"drawer": {
 		"transition-duration": 500,
-		"children-class": "custom/swaync",
+		"children-class": "custom/dunst",
 		"transition-left-to-right": false
         },
 	"modules": [
-		"custom/swaync",
+		"custom/dunst",
 		"custom/updater",
 	]
 },

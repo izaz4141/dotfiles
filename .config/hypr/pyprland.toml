@@ -1,0 +1,14 @@
+[pyprland]
+plugins = ["scratchpads"]
+
+[pyprland.variables]
+term = "foot"
+term_classed = "foot -a"
+
+[scratchpads.term]
+animation = "fromBottom"
+command = "foot -a dropTerm"
+class = "dropTerm"
+size = "80% 60%"
+max_size = "90% 80%"
+margin = 0

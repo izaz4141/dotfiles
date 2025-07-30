@@ -34,3 +34,12 @@ done
 if [ -f ~/.zshrc_custom ] ;then
     source ~/.zshrc_custom
 fi
+
+# FVM
+export PATH="/home/glicole/.fvm_flutter/bin:$PATH"
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/glicole/.dart-cli-completion/zsh-config.zsh ]] && . /home/glicole/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+

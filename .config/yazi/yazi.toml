@@ -1,0 +1,18 @@
+[mgr]
+sort_by = "natural"
+sort_dir_first = true
+linemode = "size"
+
+[opener]
+play = [
+	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+	{ run = '"C:\Program Files\mpv.exe" %*', orphan = true, for = "windows" }
+]
+edit = [
+	{ run = '$EDITOR "$@"', block = true, for = "unix" },
+	{ run = "%EDITOR% %*",  block = true, for = "windows" },
+]
+open = [
+	{ run = 'xdg-open "$@"', desc = "Open" },
+]
+

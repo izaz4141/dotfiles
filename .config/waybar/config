@@ -17,9 +17,10 @@
 "spacing": 3,
 "fixed-center": true,
 "ipc": true,
-"margin-top": 3,
-"margin-left": 8,
-"margin-right": 8,
+"margin-top": 2,
+"margin-bottom": 2,
+"margin-left": 1,
+"margin-right": 1,
 
 "modules-left": [
 	"custom/separator#blank",
@@ -41,8 +42,7 @@
 
 "modules-right": [
 	"tray",
-	"custom/separator#dot-line",
-	"network",
+	"group/network",
 	"bluetooth",
 	"custom/separator#dot-line",
 	"battery",

@@ -2,7 +2,7 @@
 /* Catppuccin Mocha */
 
 * {
-	font-family: "JetBrainsMono Nerd Font";
+	font-family: "DepartureMono Nerd Font Propo";
 	font-weight: bold;
 	min-height: 0;
 	/* set font-size to 100% if font scaling is set to 1.00 using nwg-look */
@@ -133,6 +133,7 @@ window#waybar.empty #window {
 #custom-settings,
 #custom-spotify,
 #custom-swaync,
+#custom-dunst,
 #custom-tty,
 #custom-updater,
 #custom-weather,

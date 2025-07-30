@@ -17,7 +17,7 @@
 	"format-critical": "{temperatureC}°C {icon}",
 	"format": "{temperatureC}°C {icon}",
 	"format-icons": [
-		"󰈸 "
+		"󰈸"
 	],
 },
 
@@ -27,13 +27,13 @@
 	"rotate": 0,
 	"format": "{icon} {percent}%",
 	"format-icons": [
-		" ",
-		" ",
-		" ",
-		"󰃝 ",
-		"󰃞 ",
-		"󰃟 ",
-		"󰃠 "
+		"",
+		"",
+		"",
+		"󰃝",
+		"󰃞",
+		"󰃟",
+		"󰃠"
 	],
 	// "format": "{icon}",
 	//"format-icons": ["","","","","","","","","","","","","","",""],
@@ -51,7 +51,7 @@
 "backlight#2": {
   "device": "intel_backlight",
   "format": "{icon} {percent}%",
-  "format-icons": [" ", " "]
+  "format-icons": ["", ""]
 },
 
 "battery": {
@@ -68,13 +68,13 @@
 		"critical": 15
 	},
 	"format": "{icon} {capacity}%",
-	"format-charging": "  {capacity}%",
-	"format-plugged": "󱘖  {capacity}%",
+	"format-charging": " {capacity}%",
+	"format-plugged": "󱘖 {capacity}%",
 	"format-alt-click": "click",
 	"format-full": "{icon} Full",
 	"format-alt": "{icon} {time}",
 	"format-icons": [
-		"󰂎 ", "󰁺 ", "󰁻 ", "󰁼 ", "󰁽 ", "󰁾 ", "󰁿 ", "󰂀 ", "󰂁 ", "󰂂 ", "󰁹 "
+		"󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"
 	],
 	"format-time": "{H}h {M}min",
 	"tooltip": true,
@@ -98,7 +98,7 @@
 	"interval": 30,
     "format": "{:%I:%M %p} ", // AM PM format
     // "format": " {:%H:%M}", // 24H
-	"format-alt": "{:%H:%M    %Y, %d %B, %A} ",
+	"format-alt": "{:%H:%M  %Y, %d %B, %A} ",
 	"tooltip-format": "<tt><small>{calendar}</small></tt>",
 	"calendar": {
 		"mode": "year",
@@ -125,7 +125,7 @@
 
 "clock#2": {
     //"format": " {:%I:%M %p}", // AM PM format
-    "format": "  {:%H:%M}", // 24H
+    "format": " {:%H:%M}", // 24H
     "format-alt": "{:%A  |  %H:%M  |  %e %B}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
 },
@@ -206,8 +206,8 @@
 	"tooltip-format-deactivated": "Idle_inhibitor not active",
 	"format": "{icon}",
 	"format-icons": {
-		"activated": " ",
-		"deactivated": " ",
+		"activated": "",
+		"deactivated": "",
 	},
 },
 
@@ -265,12 +265,12 @@
 "network": {
 	"format": "{ifname}",
 	"format-wifi": "{icon}",
-	"format-ethernet": "󰌘 ",
-	"format-disconnected": "󰌙 ",
-	"tooltip-format": "  {bandwidthUpBits}   {bandwidthDownBits}",
+	"format-ethernet": "󰌘",
+	"format-disconnected": "󰌙",
+	"tooltip-format": "{ipaddr}",
 	"format-linked": "󰈁 {ifname} (No IP)",
-	"tooltip-format-wifi": "  {bandwidthUpBits}   {bandwidthDownBits}",
-	"tooltip-format-ethernet": "  {bandwidthUpBits}   {bandwidthDownBits}",
+	"tooltip-format-wifi": "{essid} {icon} {signalStrength}%",
+	"tooltip-format-ethernet": "{ifname} 󰌘",
 	"tooltip-format-disconnected": "󰌙 Disconnected",
 	"max-length": 30,
 	"format-icons": [
@@ -283,9 +283,9 @@
 "network#speed": {
 	"interval": 5,
 	"format": "{ifname}",
-	"format-wifi": "{icon}  {bandwidthDownBytes}",
-	"format-ethernet": "󰌘  {bandwidthDownBytes}",
-	"format-disconnected": "󰌙",
+	"format-wifi": " {bandwidthDownBytes}",
+	"format-ethernet": " {bandwidthDownBytes}",
+	"format-disconnected": "",
 	"tooltip-format": "{ipaddr}",
 	"format-linked": "󰈁 {ifname} (No IP)",
 	"tooltip-format-wifi": "{essid} {icon} {signalStrength}%",
@@ -313,17 +313,17 @@
 
 "pulseaudio": {
 	"format": "{icon} {volume}%",
-	"format-bluetooth": "{icon} 󰂰  {volume}%",
-	"format-muted": "󰖁 ",
+	"format-bluetooth": "{icon} 󰂰 {volume}%",
+	"format-muted": "󰖁",
 	"format-icons": {
-		"headphone": " ",
-		"hands-free": " ",
-		"headset": " ",
-		"phone": " ",
-		"portable": " ",
-		"car": " ",
+		"headphone": "",
+		"hands-free": "",
+		"headset": "",
+		"phone": "",
+		"portable": "",
+		"car": "",
 		"default": [
-			" ", " ", "󰕾 ",  " "
+			"", "", "󰕾",  ""
 		],
 		"ignored-sinks": [
 			"Easy Effects Sink"
@@ -383,7 +383,7 @@
 	"on-scroll-up": "~/.config/ml4w/scripts/media-notify volume_up",
 	"on-scroll-down": "~/.config/ml4w/scripts/media-notify volume_down",
 	"format-icons": [
-		" ", " ", "󰕾 ", " "
+		"", "", "󰕾", ""
 	],
 },
 

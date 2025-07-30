@@ -1,1 +1,1 @@
-librewolf
+zen-browser

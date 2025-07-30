@@ -12,6 +12,7 @@ onlyoffice-bin
 pacseek
 photoqt-bin
 pipes-rs
+pyprland
 python-screeninfo
 rustdesk-bin
 smile
@@ -22,5 +23,7 @@ vscodium-bin
 wallust
 waypaper
 wlogout
+yay
+yay-debug
 youtube-music-bin
 zotero-bin

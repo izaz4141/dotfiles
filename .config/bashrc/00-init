@@ -7,4 +7,4 @@ alias sudo='sudo '
 # Exports
 # -----------------------------------------------------
 export EDITOR=nvim
-export PATH="$HOME/Downloads/bin/:/usr/lib/ccache/bin/:$PATH"
+export PATH="$HOME/Downloads/bin/:$HOME/.cargo/bin/:/usr/lib/ccache/bin/:$PATH"

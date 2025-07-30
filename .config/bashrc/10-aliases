@@ -24,15 +24,16 @@ alias cls='clear'
 alias apt-get='sudo apt-get'
 alias multitail='multitail --no-repeat -c'
 alias freshclam='sudo freshclam'
+alias bm='bluetuith'
 
 
 # Change directory aliases
-alias home='z ~'
-alias cd..='z ..'
-alias ..='z ..'
-alias ...='z ../..'
-alias ....='z ../../..'
-alias .....='z ../../../..'
+alias home='cd ~'
+alias cd..='cd ..'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
 # cd into the old directory
 alias bd='z "$OLDPWD"'
@@ -134,7 +135,8 @@ alias winclass="xprop | grep 'CLASS'"
 alias dot="z ~/dotfiles"
 alias cleanup='~/.config/ml4w/scripts/cleanup.sh'
 alias zj='zellij'
-alias py='python '
+alias py='python'
+alias cpp='rsync -ah --info=progress2'
 
 # -----------------------------------------------------
 # ML4W Apps
@@ -169,8 +171,7 @@ alias gcredential="git config credential.helper store"
 # SCRIPTS
 # -----------------------------------------------------
 alias ascii='~/.config/ml4w/scripts/figlet.sh'
-alias onedrive_pull='~/.config/ml4w/scripts/onedrive.sh --pull'
-alias onedrive_sync='~/.config/ml4w/scripts/onedrive.sh --sync'
+alias onedrive='~/.config/ml4w/scripts/onedrive.sh'
 alias package_main='yay -Qqen > ~/dotfiles/assets/packages/main.txt'
 alias package_aur='yay -Qqem > ~/dotfiles/assets/packages/aur.txt'
 
@@ -210,3 +211,9 @@ alias pamcan=pacman
 # SSH ALIAS
 # -----------------------------------------------------
 alias stella.local='ssh 192.168.100.69'
+
+# -----------------------------------------------------
+# SERVER BLANK
+# -----------------------------------------------------
+alias tty1.blank="sudo sh -c 'TERM=linux setterm --blank force </dev/tty1' "
+alias tty1.poke="sudo sh -c 'TERM=linux setterm --blank poke </dev/tty1' "

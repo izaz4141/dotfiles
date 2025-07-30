@@ -21,9 +21,12 @@ mkdir -p "$FONT_DIR"
 
 font_options=(
   "DaddyTimeMono" "A monospaced font for programmers and other terminal groupies" off
+  "DepartureMono" "A monospaced pixel font with a lo-fi, techy vibe" off
   "FiraCode" "Programming ligatures, extension of Fira Mono font, enlarged operators" on
-  "IosevkaTerm" "A narrower variant focusing terminal uses: Arrows and geometric symbols will be narrow to follow typical terminal usages" on
+  "IosevkaTermSlab" "A narrower variant with slab serifs focusing terminal uses: Arrows and geometric symbols will be narrow to follow typical terminal usage" on
   "JetBrainsMono" "JetBrains officially created font for developers" on
+  "Monofur" "Dotted zeros, slightly exaggerated curvy characters, compact characters" off
+  "Terminus" "Squarish characters that are slightly askew" off
 )
 
 while true; do
