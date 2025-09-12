@@ -1,6 +1,6 @@
-bluetuith-bin
 btrfs-assistant
 downgrade
+fladder-bin
 freedownloadmanager
 grimblast-git
 hyprshade
@@ -10,7 +10,6 @@ mpvpaper
 multitail
 onlyoffice-bin
 pacseek
-photoqt-bin
 pipes-rs
 pyprland
 python-screeninfo

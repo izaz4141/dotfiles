@@ -115,6 +115,7 @@
 	"modules": [
 		"custom/dunst",
 		"custom/updater",
+		"idle_inhibitor",
 	]
 },
 
