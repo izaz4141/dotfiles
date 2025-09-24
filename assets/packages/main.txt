@@ -1,3 +1,4 @@
+7zip
 amd-ucode
 android-tools
 autoconf-archive
@@ -10,6 +11,7 @@ blueman
 breeze
 brightnessctl
 btop
+btrfs-assistant
 btrfs-progs
 cava
 clamav
@@ -21,7 +23,6 @@ dart-sass
 dialog
 dosfstools
 dotnet-sdk
-dunst
 efibootmgr
 extra-cmake-modules
 eza
@@ -77,11 +78,13 @@ man-db
 mangohud
 mercurial
 mesa-demos
+mission-center
 mtools
 mtpfs
 nano
 ncdu
 neovim
+net-tools
 network-manager-applet
 networkmanager
 noto-fonts-cjk
@@ -120,6 +123,7 @@ sqlitebrowser
 starship
 steam
 swappy
+swaync
 swww
 tailscale
 tealdeer
@@ -136,6 +140,7 @@ vulkan-tools
 waybar
 wget
 wireplumber
+xan
 xarchiver
 xclip
 xdg-desktop-portal-gtk

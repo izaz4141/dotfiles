@@ -1,8 +1,8 @@
-btrfs-assistant
 downgrade
 fladder-bin
 freedownloadmanager
 grimblast-git
+hardinfo2
 hyprshade
 librewolf-bin
 matugen-bin

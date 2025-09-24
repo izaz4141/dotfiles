@@ -109,11 +109,11 @@
 	"orientation": "inherit",
 	"drawer": {
 		"transition-duration": 500,
-		"children-class": "custom/dunst",
+		"children-class": "custom/swaync",
 		"transition-left-to-right": false
         },
 	"modules": [
-		"custom/dunst",
+		"custom/swaync",
 		"custom/updater",
 		"idle_inhibitor",
 	]
