@@ -30,7 +30,6 @@ fastfetch
 fd
 ffmpegthumbnailer
 figlet
-filezilla
 fish
 flameshot
 flatpak
@@ -62,7 +61,6 @@ jq
 jre-openjdk
 jujutsu
 kate
-kdeconnect
 kio5
 krita
 kvantum

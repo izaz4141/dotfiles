@@ -5,6 +5,7 @@ grimblast-git
 hardinfo2
 hyprshade
 librewolf-bin
+localsend-bin
 matugen-bin
 mpvpaper
 multitail
