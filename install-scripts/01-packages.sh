@@ -19,7 +19,7 @@ fi
 
 while IFS= read -r PACKAGE; do
     [[ -z "$PACKAGE" ]] && continue  # Skip empty lines
-    install_package_pacman "$PACKAGE" "$LOG"
+    install_package "$PACKAGE" "$LOG"
 done < "$PACKAGE_FILE"
 
 printf "${OK} Finished installing ${SKYBLUE}Packages${RESET}\n" | tee -a "$LOG"

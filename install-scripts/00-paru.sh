@@ -1,10 +1,10 @@
 #!/bin/bash
-# Install YAY Aur Helper
-# NOTE: If paru is already installed, yay will not be installed #
+# Install Paru Aur Helper
+# NOTE: If yay is already installed, paru will not be installed #
 
-pkg="yay"
-tmpdir="/tmp/yay"
-LOG="$PARENT_DIR/Install-Logs/install-$(date +%d-%H%M%S)-yay.log"
+pkg="paru"
+tmpdir="/tmp/paru"
+LOG="$PARENT_DIR/Install-Logs/install-$(date +%d-%H%M%S)-paru.log"
 
 
 ## WARNING: DO NOT EDIT BEYOND THIS LINE IF YOU DON'T KNOW WHAT YOU ARE DOING! ##
@@ -21,8 +21,6 @@ if ! source "$SCRIPT_DIR/base.sh"; then
 fi
 
 
-
-
 # Check for AUR helper and install if not found
 ISAUR=$(check_aur_helper)
 
@@ -30,18 +28,16 @@ if [ -n "$ISAUR" ]; then
   printf "\n%s - ${SKY_BLUE}AUR helper${RESET} already installed, moving on.\n" "${OK}" | tee -a "$LOG"
 else
   printf "\n%s - Installing ${SKY_BLUE}$pkg${RESET} from AUR\n" "${NOTE}" | tee -a "$LOG"
-
   # Check if directory exists and remove it
   if [ -d "$tmpdir" ]; then
-      rm -rf "$tmpdir"
+    rm -rf "$tmpdir"
   fi
-  git clone https://aur.archlinux.org/$pkg.git $tmpdir || { printf "%s - Failed to clone ${YELLOW}$pkg${RESET} from AUR\n" "${ERROR}" | tee -a "$LOG"; exit 1; }
-  cd $tmpdir || { printf "%s - Failed to enter $tmpdir directory\n" "${ERROR}"; exit 1; }
+  sudo pacman -S --needed --noconfirm base-devel
+  git clone https://aur.archlinux.org/paru.git $tmpdir || { printf "%s - Failed to clone ${YELLOW}$pkg${RESET} from AUR\n" "${ERROR}" | tee -a "$LOG"; exit 1; }
+  cd $tmpdir
   makepkg -si --noconfirm 2>&1 | tee -a "$LOG" || { printf "%s - Failed to install ${YELLOW}$pkg${RESET} from AUR\n" "${ERROR}" | tee -a "$LOG"; exit 1; }
-  $pkg -Y --gendb
-  $pkg -Syu --devel  --noconfirm
-  $pkg -Y --devel --save
+  $pkg --gendb
 fi
 
-printf "${OK} Finished installing ${SKYBLUE}YAY${RESET}\n" | tee -a "$LOG"
+printf "${OK} Finished installing ${SKYBLUE}Yay${RESET}\n" | tee -a "$LOG"
 printf "\n%.0s" {1..1}
