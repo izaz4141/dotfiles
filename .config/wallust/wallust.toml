@@ -28,7 +28,7 @@ threshold = 14
 #  * softdark16  - softdark with 16 color variation
 #  * softlight   - Light with soft pastel colors, counterpart of `harddark`
 #  * softlight16 - softlight with 16 color variation
-palette = "softdark16"
+palette = "dark16"
 
 [templates]
 kitty.template = 'kitty-colors.conf'

@@ -8,3 +8,12 @@ alias sudo='sudo '
 # -----------------------------------------------------
 export EDITOR=nvim
 export PATH="$HOME/Downloads/bin/:$HOME/.cargo/bin/:/usr/lib/ccache/bin/:$PATH"
+export TS_NO_LOGS_NO_SUPPORT=true
+
+if command -v yay >/dev/null 2>&1; then
+    export AUR="yay"
+elif command -v paru >/dev/null 2>&1; then
+    export AUR="paru"
+fi
+
+

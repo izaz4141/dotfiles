@@ -18,6 +18,14 @@ export OPENMC_CROSS_SECTIONS="/home/glicole/Documents/OpenMC/endfb71/cross_secti
 
 export EDITOR=nvim
 export VISUAL=nvim
+export TS_NO_LOGS_NO_SUPPORT=true
+
+if type -q yay
+    set -x AUR yay
+else if type -q paru
+    set -x AUR paru
+end
+
 #######################################################
 # Init Module
 #######################################################

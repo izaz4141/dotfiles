@@ -8,12 +8,11 @@
 
 sleep 1
 clear
-aur_helper="$(cat ~/.config/ml4w/settings/aur.sh)"
 figlet -f smslant "Updates"
 echo
 _isInstalledAUR() {
     package="$1";
-    check="$($aur_helper -Qs --color always "${package}" | grep "local" | grep "${package} ")";
+    check="$($AUR -Qs --color always "${package}" | grep "local" | grep "${package} ")";
     if [ -n "${check}" ] ; then
         echo 0; #'0' means 'true' in Bash
         return; #true
@@ -56,7 +55,7 @@ if [[ $(_isInstalledAUR "timeshift") == "0" ]] ;then
     echo
 fi
 
-$aur_helper
+$AUR
 
 if [[ $(_isInstalledAUR "flatpak") == "0" ]] ;then
     flatpak upgrade

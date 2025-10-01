@@ -172,8 +172,8 @@ alias gcredential="git config credential.helper store"
 # -----------------------------------------------------
 alias ascii='~/.config/ml4w/scripts/figlet.sh'
 alias onedrive='~/.config/ml4w/scripts/onedrive.sh'
-alias package_main='yay -Qqen > ~/dotfiles/assets/packages/main.txt'
-alias package_aur='yay -Qqem > ~/dotfiles/assets/packages/aur.txt'
+alias package_main='$AUR -Qqen > ~/dotfiles/assets/packages/main.txt'
+alias package_aur='$AUR -Qqem > ~/dotfiles/assets/packages/aur.txt'
 
 # -----------------------------------------------------
 # VIRTUAL MACHINE
