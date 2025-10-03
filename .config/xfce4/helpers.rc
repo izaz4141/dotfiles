@@ -1,4 +1,4 @@
 FileManager=Thunar
-TerminalEmulator=alacritty
+TerminalEmulator=foot
 WebBrowser=librewolf
 #MailReader=evolution
