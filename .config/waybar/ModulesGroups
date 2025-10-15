@@ -109,11 +109,11 @@
 	"orientation": "inherit",
 	"drawer": {
 		"transition-duration": 500,
-		"children-class": "custom/swaync",
+		"children-class": "custom/qsnotif",
 		"transition-left-to-right": false
         },
 	"modules": [
-		"custom/swaync",
+		"custom/qsnotif",
 		"custom/updater",
 		"idle_inhibitor",
 	]

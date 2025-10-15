@@ -165,7 +165,7 @@ case $1 in
     else
         pactl set-sink-volume @DEFAULT_SINK@ +$volume_step%
     fi
-    show_volume_notif
+#     show_volume_notif
     ;;
 
     volume_down)
@@ -176,13 +176,13 @@ case $1 in
     else
         pactl set-sink-volume @DEFAULT_SINK@ -$volume_step%
     fi
-    show_volume_notif
+#     show_volume_notif
     ;;
 
     volume_mute)
     # Toggles mute and displays the notification
     pactl set-sink-mute @DEFAULT_SINK@ toggle
-    show_volume_notif
+#     show_volume_notif
     ;;
 
     mic_up)
@@ -194,7 +194,7 @@ case $1 in
     else
         pactl set-source-volume @DEFAULT_SOURCE@ +$volume_step%
     fi
-    show_mic_notif
+#     show_mic_notif
     ;;
 
     mic_down)
@@ -205,25 +205,27 @@ case $1 in
     else
         pactl set-source-volume @DEFAULT_SOURCE@ -$volume_step%
     fi
-    show_mic_notif
+#     show_mic_notif
     ;;
 
     mic_mute)
     # Toggles mute and displays the notification
     pactl set-source-mute @DEFAULT_SOURCE@ toggle
-    show_mic_notif
+#     show_mic_notif
     ;;
 
     brightness_up)
     # Increases brightness and displays the notification
-    brightnessctl -q s +$brightness_step%
-    show_brightness_notif
+    # brightnessctl -q s +$brightness_step%
+    qs ipc call brightness incrementDefault $brightness_step
+#     show_brightness_notif
     ;;
 
     brightness_down)
     # Decreases brightness and displays the notification
-    brightnessctl -q s $brightness_step%-
-    show_brightness_notif
+    # brightnessctl -q s $brightness_step%-
+    qs ipc call brightness decrementDefault $brightness_step
+#     show_brightness_notif
     ;;
 
     next_track)

@@ -45,3 +45,6 @@ output_path = '~/.config/nwg-dock-hyprland/colors.css'
 input_path = '~/.config/matugen/templates/sequences'
 output_path = '~/.cache/wal/sequences'
 
+[templates.dank]
+input_path = '~/.config/matugen/templates/dank.json'
+output_path = '~/.cache/quickshell/dankshell/dms-colors.json'

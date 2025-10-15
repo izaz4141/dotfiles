@@ -182,11 +182,6 @@ alias package_aur='$AUR -Qqem > ~/dotfiles/assets/packages/aur.txt'
 # alias lg='~/dotfiles/scripts/looking-glass.sh'
 
 # -----------------------------------------------------
-# EDIT NOTES
-# -----------------------------------------------------
-alias notes='$EDITOR ~/notes.txt'
-
-# -----------------------------------------------------
 # SYSTEM
 # -----------------------------------------------------
 alias update-grub='sudo grub-mkconfig -o /boot/grub/grub.cfg'
@@ -206,6 +201,8 @@ export PATH="$HOME/Downloads/bin/:/usr/lib/ccache/bin/:$PATH"
 # DEVELOPMENT
 # -----------------------------------------------------
 alias pamcan=pacman
+alias yay="$AUR "
+alias paru="$AUR "
 
 # -----------------------------------------------------
 # SSH ALIAS

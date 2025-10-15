@@ -159,6 +159,22 @@
     "escape": true
 },
 
+"custom/qsnotif": {
+    "format": "{} {icon}",
+    "format-icons": {
+        "notification": "<span foreground='red'><sup></sup></span>",
+        "none": "",
+        "dnd-notification": "<span foreground='red'><sup></sup></span>",
+        "dnd-none": ""
+    },
+    "return-type": "json",
+    "exec": "qs ipc call notifications json",
+	"interval": 5,
+    "on-click": "qs ipc call notifications toggle",
+    "on-click-right": "qs ipc call notifications dnd",
+    "escape": true
+},
+
 // NOTE:! This is mainly for Arch and Arch Based Distros  depend: pacman-contrib
 // Other Distro dont have notifications but can use to check for update for any other distro
 "custom/updater": {
