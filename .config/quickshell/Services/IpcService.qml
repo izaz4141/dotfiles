@@ -3,6 +3,7 @@ import Quickshell.Io
 import Quickshell.Hyprland
 
 import qs.Common
+import qs.Services
 
 Singleton {
     id: root
@@ -27,7 +28,7 @@ Singleton {
                 return
             }
             
-            const screen = ScreenUtils.focusedScreen()
+            const screen = HyprService.focusedScreen()
             controlCenterLoader.item.triggerScreen = screen
             controlCenterLoader.item.toggle()
             if (controlCenterLoader.item.shouldBeVisible && NetworkService.wifiEnabled) {

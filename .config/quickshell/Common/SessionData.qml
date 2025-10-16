@@ -74,6 +74,10 @@ Singleton {
     property var recentColors: []
     property bool showThirdPartyPlugins: false
 
+    // Keyboard state
+    property bool capsLock
+    property bool numLock
+
 
     Component.onCompleted: {
         if (!isGreeterMode) {

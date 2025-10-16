@@ -58,7 +58,6 @@ RowLayout {
                         break
                 }
             }
-            KeyNavigation.left: parent.children[index-1]
 
             states: [
                 State {

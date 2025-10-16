@@ -33,8 +33,8 @@ DankModal {
     }
 
     objectName: "settingsModal"
-    width: ScreenUtils.focusedScreen().width * 0.75
-    height: ScreenUtils.focusedScreen().height * 0.9
+    width: HyprService.focusedScreen().width * 0.75
+    height: HyprService.focusedScreen().height * 0.9
     visible: false
     onBackgroundClicked: () => {
         return hide();

@@ -48,6 +48,7 @@ Item {
         if (CompositorService.isHyprland) {
             updateHyprlandLayout()
             hyprlandLayoutUpdateTimer.start()
+            HyprService.keyboardRestart()
         }
     }
     onDemoModeChanged: {
@@ -107,6 +108,16 @@ Item {
         running: false
         repeat: true
         onTriggered: updateHyprlandLayout()
+    }
+
+    Timer {
+        id: focusTimer
+        interval: 100
+        repeat: false
+        onTriggered: {
+            if (passwordField && passwordField.forceActiveFocus)
+                passwordField.forceActiveFocus()
+        }
     }
 
     Loader {
@@ -228,7 +239,7 @@ Item {
                 DankCircularImage {
                     Layout.preferredWidth: 180
                     Layout.preferredHeight: 180
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.alignment: Qt.AlignHCenter
                     borderWidth: 20
                     imageSource: {
                         if (PortalService.profileImage === "") {
@@ -312,6 +323,11 @@ Item {
                                                 event.accepted = true
                                                 return
                                             }
+
+                                            if (event.key == Qt.Key_CapsLock) {
+                                                SessionData.capsLock = !SessionData.capsLock
+                                                event.accepted = true
+                                            }
                                         }
 
                         Component.onCompleted: {
@@ -328,21 +344,23 @@ Item {
 
                         onActiveFocusChanged: {
                             if (!activeFocus && !demoMode && visible && passwordField) {
-                                Qt.callLater(() => {
-                                    if (passwordField && passwordField.forceActiveFocus) {
-                                        passwordField.forceActiveFocus()
-                                    }
-                                })
+                                // Qt.callLater(() => {
+                                //     if (passwordField && passwordField.forceActiveFocus) {
+                                //         passwordField.forceActiveFocus()
+                                //     }
+                                // })
+                                focusTimer.restart()
                             }
                         }
 
                         onEnabledChanged: {
-                            if (enabled && !demoMode && visible && passwordField && !powerMenu.isVisible) {
-                                Qt.callLater(() => {
-                                    if (passwordField && passwordField.forceActiveFocus) {
-                                        passwordField.forceActiveFocus()
-                                    }
-                                })
+                            if (enabled && !demoMode && visible && passwordField) {
+                                // Qt.callLater(() => {
+                                //     if (passwordField && passwordField.forceActiveFocus) {
+                                //         passwordField.forceActiveFocus()
+                                //     }
+                                // })
+                                focusTimer.restart()
                             }
                         }
                     }
@@ -569,23 +587,27 @@ Item {
 
             StyledText {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 20
                 text: {
+                    var textContent = ""
+                    if (SessionData.capsLock === true) {
+                        textContent += "CAPSLOCK is ON"
+                    }
+                    if (textContent !== "" && root.pamState !== "") {textContent += "\n"} 
                     if (root.pamState === "error") {
-                        return "Authentication error - try again"
+                        textContent += "Authentication error - try again"
                     }
                     if (root.pamState === "max") {
-                        return "Too many attempts - locked out"
+                        textContent += "Too many attempts - locked out"
                     }
                     if (root.pamState === "fail") {
-                        return "Incorrect password - try again"
+                        textContent += "Incorrect password - try again"
                     }
-                    return ""
+                    return textContent
                 }
                 color: Theme.error
                 font.pixelSize: Theme.fontSizeSmall
                 horizontalAlignment: Text.AlignHCenter
-                opacity: root.pamState !== "" ? 1 : 0
+                opacity: root.pamState !== "" ? 1 : SessionData.capsLock === true ? 1 : 0
 
                 Behavior on opacity {
                     NumberAnimation {
