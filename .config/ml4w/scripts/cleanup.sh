@@ -13,7 +13,7 @@ $AUR -Scc
 echo "Space saved: $aur_cache_space_used"
 
 echo "Removing orphan packages"
-$AUR -Qdtq | yay -Rns -
+$AUR -Qdtq | $AUR -Rns -
 
 # echo "Clearing ~/.cache"
 # home_cache_used="$(du -sh ~/.cache)"
