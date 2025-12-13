@@ -1,10 +1,13 @@
+appimagelauncher
 fladder-bin
 hardinfo2
 hyprshade
 localsend-bin
+masterpdfeditor
 matugen-bin
 mpvpaper
 multitail
+opencode-bin
 pacseek
 pipes-rs
 pyprland

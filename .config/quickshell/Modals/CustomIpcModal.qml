@@ -3,10 +3,12 @@ import Quickshell.Io
 import Quickshell.Hyprland
 
 import qs.Common
+import qs.Modals.Common
 import qs.Services
 
-Singleton {
-    id: root
+DankModal {
+    id: customIpc
+    
     IpcHandler {
         target: "dash"
 

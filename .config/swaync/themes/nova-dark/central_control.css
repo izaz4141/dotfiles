@@ -59,15 +59,21 @@
   color: @text;
   border-radius: 12px;
   margin: 10px;
-  padding: 4px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
 }
 
 .control-center .notification-row .notification-background .notification > *:last-child > * .notification-action:hover {
   background: @selected;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .control-center .notification-row .notification-background .notification > *:last-child > * .notification-action:active {
   background-color: @selected;
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .control-center .notification-row .notification-background .notification .notification-content .time {

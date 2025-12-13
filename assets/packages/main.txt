@@ -1,3 +1,5 @@
+7zip
+alacritty
 amd-ucode
 android-tools
 autoconf-archive
@@ -44,10 +46,12 @@ flatpak
 foot
 freedownloadmanager
 fuse2
+fvm
 fzf
 gamemode
 gammastep
 gdb
+ghostscript
 git
 github-cli
 gnome-bluetooth-3.0
@@ -64,6 +68,7 @@ gvfs
 gvfs-mtp
 htop
 hypridle
+hyprlock
 hyprpicker
 imagemagick
 inkscape
@@ -71,7 +76,6 @@ intltool
 joplin-desktop
 jq
 jre-openjdk
-kate
 khal
 kio5
 krita
@@ -102,9 +106,11 @@ ntfs-3g
 nwg-icon-picker
 nwg-look
 octopi
+onlyoffice-bin
 os-prober
 otf-font-awesome
 partitionmanager
+paru
 pavucontrol
 pipewire
 pipewire-alsa
@@ -161,6 +167,7 @@ xclip
 xdg-desktop-portal-gtk
 yazi
 yt-dlp
+zed
 zellij
 zoxide
 zram-generator

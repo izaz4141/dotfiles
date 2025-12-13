@@ -15,187 +15,208 @@ import qs.Modules.Notifications.Popup
 import qs.Modules.Notifications.Center
 import qs.Modules.DankDash
 import qs.Modules.ControlCenter
-import qs.Modules.Lock
+// import qs.Modules.Lock
 
 ShellRoot {
-    id: shellRoot
-
-    Variants {
-        model: SettingsData.getFilteredScreens("osd")
-
-        delegate: VolumeOSD {
-            modelData: item
-        }
-    }
-
-    Variants {
-        model: SettingsData.getFilteredScreens("osd")
-
-        delegate: MicVolumeOSD {
-            modelData: item
-        }
-    }
-
-    Variants {
-        model: SettingsData.getFilteredScreens("osd")
-
-        delegate: BrightnessOSD {
-            modelData: item
-        }
-    }
-
-    Variants {
-        model: SettingsData.getFilteredScreens("notifications")
-
-        delegate: NotificationPopupManager {
-            modelData: item
-        }
-    }
-    LazyLoader {
-        id: notificationCenterLoader
-
-        active: false
-
-        NotificationCenterPopout {
-            id: notificationCenter
-
-            Component.onCompleted: {
-                PopoutService.notificationCenterPopout = notificationCenter
-            }
-        }
-    }
-    NotificationModal {
-        id: notificationModal
-
-        Component.onCompleted: {
-            PopoutService.notificationModal = notificationModal
-        }
-    }
+    id: entrypoint
 
     Loader {
-        id: dankDashPopoutLoader
+        id: shellLoader
+        active: true
+        asynchronous: false
+        sourceComponent: Item {
+            id: root
 
-        active: false
-        asynchronous: true
+            // Component.onCompleted: {
+            //     // Force load Lock component to be ready for suspend signals.
+            //     var lock = lockLoader.item
+            // }
 
-        sourceComponent: Component {
-            DankDashPopout {
-                id: dankDashPopout
+            Variants {
+                model: SettingsData.getFilteredScreens("osd")
 
-                Component.onCompleted: {
-                    PopoutService.dankDashPopout = dankDashPopout
+                delegate: VolumeOSD {
+                    modelData: item
                 }
             }
-        }
-    }
 
-    LazyLoader {
-        id: lockLoader
-        active: false
+            Variants {
+                model: SettingsData.getFilteredScreens("osd")
 
-        Lock {
-            id: lock
-            anchors.fill: parent
+                delegate: MicVolumeOSD {
+                    modelData: item
+                }
+            }
 
-            Component.onCompleted: {
-                IdleService.lockComponent = lock
+            Variants {
+                model: SettingsData.getFilteredScreens("osd")
+
+                delegate: BrightnessOSD {
+                    modelData: item
+                }
+            }
+
+            Variants {
+                model: SettingsData.getFilteredScreens("notifications")
+
+                delegate: NotificationPopupManager {
+                    modelData: item
+                }
+            }
+            LazyLoader {
+                id: notificationCenterLoader
+
+                active: false
+
+                NotificationCenterPopout {
+                    id: notificationCenter
+
+                    Component.onCompleted: {
+                        PopoutService.notificationCenterPopout = notificationCenter
+                    }
+
+                    Component.onDestruction: {
+                        if (PopoutService.notificationCenterPopout === notificationCenter) {
+                            PopoutService.notificationCenterPopout = null
+                        }
+                    }
+                }
+            }
+            NotificationModal {
+                id: notificationModal
+
+                Component.onCompleted: {
+                    PopoutService.notificationModal = notificationModal
+                }
+            }
+
+            Loader {
+                id: dankDashPopoutLoader
+
+                active: false
+                asynchronous: true
+
+                sourceComponent: Component {
+                    DankDashPopout {
+                        id: dankDashPopout
+
+                        Component.onCompleted: {
+                            PopoutService.dankDashPopout = dankDashPopout
+                        }
+
+                        Component.onDestruction: {
+                            if (PopoutService.dankDashPopout === dankDashPopout) {
+                                PopoutService.dankDashPopout = null
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            LazyLoader {
+                id: controlCenterLoader
+
+                active: false
+
+                property var modalRef: colorPickerModal
+                property LazyLoader powerModalLoaderRef: powerMenuModalLoader
+
+                ControlCenterPopout {
+                    id: controlCenterPopout
+                    colorPickerModal: controlCenterLoader.modalRef
+                    powerMenuModalLoader: controlCenterLoader.powerModalLoaderRef
+
+                    onLockRequested: {
+                        lockLoader.item.activate()
+                    }
+
+                    Component.onCompleted: {
+                        PopoutService.controlCenterPopout = controlCenterPopout
+                    }
+
+                    Component.onDestruction: {
+                        if (PopoutService.controlCenterPopout === controlCenterPopout) {
+                            PopoutService.controlCenterPopout = null
+                        }
+                    }
+                }
+            }
+            LazyLoader {
+                id: powerMenuModalLoader
+
+                active: false
+
+                PowerMenuModal {
+                    id: powerMenuModal
+
+                    onPowerActionRequested: (action, title, message) => {
+                        powerConfirmModalLoader.active = true
+                        if (powerConfirmModalLoader.item) {
+                            powerConfirmModalLoader.item.confirmButtonColor = action === "poweroff" ? Theme.error : action === "reboot" ? Theme.warning : Theme.primary
+                            powerConfirmModalLoader.item.show(title, message, function () {
+                                switch (action) {
+                                case "logout":
+                                    SessionService.logout()
+                                    break
+                                case "suspend":
+                                    SessionService.suspend()
+                                    break
+                                case "hibernate":
+                                    SessionService.hibernate()
+                                    break
+                                case "reboot":
+                                    SessionService.reboot()
+                                    break
+                                case "poweroff":
+                                    SessionService.poweroff()
+                                    break
+                                }
+                            }, function () {})
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        PopoutService.powerMenuModal = powerMenuModal
+                    }
+
+                    Component.onDestruction: {
+                        if (PopoutService.powerMenuModal === powerMenuModal) {
+                            PopoutService.powerMenuModal = null
+                        }
+                    }
+                }
+            }
+            LazyLoader {
+                id: powerConfirmModalLoader
+
+                active: false
+
+                ConfirmModal {
+                    id: powerConfirmModal
+                }
+            }
+
+            SettingsModal {
+                id: settingsModal
+
+                Component.onCompleted: {
+                    PopoutService.settingsModal = settingsModal
+                }
+            }
+
+            DankColorPickerModal {
+                id: colorPickerModal
+
+                Component.onCompleted: {
+                    PopoutService.colorPickerModal = colorPickerModal
+                }
+            }
+
+            CustomIpcModal {
+                id: customIpcModal
             }
         }
     }
-    Timer {
-        id: lockInitTimer
-        interval: 100
-        running: true
-        repeat: false
-        onTriggered: lockLoader.active = true
-    }
 
-    LazyLoader {
-      id: controlCenterLoader
-
-      active: false
-
-      property var modalRef: colorPickerModal
-      property LazyLoader powerModalLoaderRef: powerMenuModalLoader
-
-      ControlCenterPopout {
-          id: controlCenterPopout
-          colorPickerModal: controlCenterLoader.modalRef
-          powerMenuModalLoader: controlCenterLoader.powerModalLoaderRef
-
-          onLockRequested: {
-              lockLoader.item.activate()
-          }
-
-          Component.onCompleted: {
-              PopoutService.controlCenterPopout = controlCenterPopout
-          }
-      }
-    }
-    LazyLoader {
-      id: powerMenuModalLoader
-
-      active: false
-
-      PowerMenuModal {
-            id: powerMenuModal
-
-            onPowerActionRequested: (action, title, message) => {
-                                        powerConfirmModalLoader.active = true
-                                        if (powerConfirmModalLoader.item) {
-                                            powerConfirmModalLoader.item.confirmButtonColor = action === "poweroff" ? Theme.error : action === "reboot" ? Theme.warning : Theme.primary
-                                            powerConfirmModalLoader.item.show(title, message, function () {
-                                                switch (action) {
-                                                case "logout":
-                                                    SessionService.logout()
-                                                    break
-                                                case "suspend":
-                                                    SessionService.suspend()
-                                                    break
-                                                case "hibernate":
-                                                    SessionService.hibernate()
-                                                    break
-                                                case "reboot":
-                                                    SessionService.reboot()
-                                                    break
-                                                case "poweroff":
-                                                    SessionService.poweroff()
-                                                    break
-                                                }
-                                            }, function () {})
-                                        }
-                                    }
-
-            Component.onCompleted: {
-                PopoutService.powerMenuModal = powerMenuModal
-            }
-        }
-    }
-    LazyLoader {
-        id: powerConfirmModalLoader
-
-        active: false
-
-        ConfirmModal {
-            id: powerConfirmModal
-        }
-    }
-
-    SettingsModal {
-        id: settingsModal
-
-        Component.onCompleted: {
-            PopoutService.settingsModal = settingsModal
-        }
-    }
-
-    DankColorPickerModal {
-        id: colorPickerModal
-
-        Component.onCompleted: {
-            PopoutService.colorPickerModal = colorPickerModal
-        }
-    }
-
-    IpcService {}
 }

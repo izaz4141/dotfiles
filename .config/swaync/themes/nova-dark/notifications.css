@@ -55,19 +55,26 @@
 
 .floating-notifications.background .notification-row .notification-background .notification > *:last-child > * .notification-action {
   border-radius: 8px;
-  background-color: @background-prime ;
+  background-color: @background-prime;
   margin: 6px;
-  border: 1px solid transparent;
+  padding: 8px 12px;
+  border: 1px solid @selected;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
 }
 
 .floating-notifications.background .notification-row .notification-background .notification > *:last-child > * .notification-action:hover {
   background-color: @hover;
   border: 1px solid @selected;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .floating-notifications.background .notification-row .notification-background .notification > *:last-child > * .notification-action:active {
   background-color: @selected;
   color: @background;
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .image {

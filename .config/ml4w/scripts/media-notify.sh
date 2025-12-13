@@ -165,7 +165,7 @@ case $1 in
     else
         pactl set-sink-volume @DEFAULT_SINK@ +$volume_step%
     fi
-#     show_volume_notif
+    # show_volume_notif
     ;;
 
     volume_down)
@@ -176,7 +176,7 @@ case $1 in
     else
         pactl set-sink-volume @DEFAULT_SINK@ -$volume_step%
     fi
-#     show_volume_notif
+    # show_volume_notif
     ;;
 
     volume_mute)

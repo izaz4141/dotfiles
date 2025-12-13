@@ -203,6 +203,8 @@ export PATH="$HOME/Downloads/bin/:/usr/lib/ccache/bin/:$PATH"
 alias pamcan=pacman
 alias yay="$AUR "
 alias paru="$AUR "
+alias flutter="fvm flutter "
+alias dart="fvm dart "
 
 # -----------------------------------------------------
 # SSH ALIAS

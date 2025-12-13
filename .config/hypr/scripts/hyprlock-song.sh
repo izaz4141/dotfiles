@@ -95,7 +95,7 @@ for PLAYER in $PLAYERS; do
         FINAL_TITLE=$(truncate_title "$FULL_ARTIST_CANDIDATE" "$FULL_TITLE_CANDIDATE" "$COMBINED_CHAR_LIMIT")
         
         FINAL_ARTIST="$FULL_ARTIST_CANDIDATE"
-        FINAL_STATUS="PLAY"
+        FINAL_STATUS="play_arrow"
         FOUND_PLAYING=true
         break # Found a playing player, no need to check further.
     elif [ "$STATUS" = "Paused" ] && [ "$FOUND_PLAYING" = false ]; then
@@ -109,7 +109,7 @@ for PLAYER in $PLAYERS; do
         FINAL_TITLE=$(truncate_title "$FULL_ARTIST_CANDIDATE" "$FULL_TITLE_CANDIDATE" "$COMBINED_CHAR_LIMIT")
         
         FINAL_ARTIST="$FULL_ARTIST_CANDIDATE"
-        FINAL_STATUS="PAUSE"
+        FINAL_STATUS="pause"
         FOUND_PAUSED=true
         # Do NOT break here, as a 'Playing' player might still be found later in the loop
         # and should override a 'Paused' one.
