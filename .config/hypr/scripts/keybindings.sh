@@ -30,9 +30,13 @@ keybinds=$(awk -F'[=#]' '
 
         # Format the keybinding and associated command and prepare for output:
         # Concatenate the two keybinding keys (e.g., "Mod1" + "Return") and append the command
-        print kbarr[1] "  + " kbarr[2] "\r" $2
+        print kbarr[1] "  + " kbarr[2] " → " $2
     }
 ' "$config_file")
 
+monitor_height=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .height')
+menu_height=$((monitor_height * 40 / 100))
+
 sleep 0.2
+# walker --dmenu -p 'Keybindings' --width 800 --height "$menu_height" <<<"$keybinds"
 rofi -dmenu -i -markup -eh 2 -replace -p "Keybinds" -config ~/.config/rofi/config-compact.rasi <<<"$keybinds"

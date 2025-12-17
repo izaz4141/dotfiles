@@ -1,0 +1,10 @@
+[[entries]]
+default = true
+name = "XNG"
+url = "https://search.glicote.duckdns.org/search?q=%TERM%"
+
+[[entries]]
+default = false
+prefix = "g:"
+name = "Google"
+url = "https://www.google.com/search?q=%TERM%"

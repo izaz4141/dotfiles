@@ -1,0 +1,14 @@
+name = "other"
+name_pretty = "Other"
+icon = "applications-other"
+
+[[entries]]
+text = "Color Picker"
+icon = "color-picker"
+keywords = ["color", "picker", "hypr"]
+actions = { "cp_use" = "sleep 0.5 && wl-copy $(hyprpicker)" }
+
+[[entries]]
+text = "Zoom Toggle"
+icon = "zoom-in"
+actions = { "zoom_use" = "hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor -j | jq '(.float) | if . > 1 then 1 else 1.5 end')" }
