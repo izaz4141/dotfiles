@@ -6,6 +6,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Bluetooth
+import qs.Services
 
 Singleton {
     id: root
@@ -15,6 +16,16 @@ Singleton {
     readonly property bool enabled: (adapter && adapter.enabled) ?? false
     readonly property bool discovering: (adapter && adapter.discovering) ?? false
     readonly property var devices: adapter ? adapter.devices : null
+    readonly property bool enhancedPairingAvailable: DMSService.dmsAvailable && DMSService.apiVersion >= 9 && DMSService.capabilities.includes("bluetooth")
+    readonly property bool connected: {
+        if (!adapter || !adapter.devices) {
+            return false
+        }
+
+        let isConnected = false
+        adapter.devices.values.forEach(dev => { if (dev.connected) isConnected = true })
+        return isConnected
+    }
     readonly property var pairedDevices: {
         if (!adapter || !adapter.devices) {
             return []
@@ -38,20 +49,20 @@ Singleton {
         return devices.sort((a, b) => {
                                 const aName = a.name || a.deviceName || ""
                                 const bName = b.name || b.deviceName || ""
+                                const aAddr = a.address || ""
+                                const bAddr = b.address || ""
 
                                 const aHasRealName = aName.includes(" ") && aName.length > 3
                                 const bHasRealName = bName.includes(" ") && bName.length > 3
 
-                                if (aHasRealName && !bHasRealName) {
-                                    return -1
-                                }
-                                if (!aHasRealName && bHasRealName) {
-                                    return 1
+                                if (aHasRealName && !bHasRealName) return -1
+                                if (!aHasRealName && bHasRealName) return 1
+
+                                if (aHasRealName && bHasRealName) {
+                                    return aName.localeCompare(bName)
                                 }
 
-                                const aSignal = (a.signalStrength !== undefined && a.signalStrength > 0) ? a.signalStrength : 0
-                                const bSignal = (b.signalStrength !== undefined && b.signalStrength > 0) ? b.signalStrength : 0
-                                return bSignal - aSignal
+                                return aAddr.localeCompare(bAddr)
                             })
     }
 
@@ -164,11 +175,38 @@ Singleton {
         device.connect()
     }
 
+    function pairDevice(device, callback) {
+        if (!device) {
+            if (callback) callback({error: "Invalid device"})
+            return
+        }
+
+        // The DMS backend actually implements a bluez agent, so we can pair anything
+        if (enhancedPairingAvailable) {
+            const devicePath = getDevicePath(device)
+            DMSService.bluetoothPair(devicePath, callback)
+            return
+        }
+
+        // Quickshell does not implement a bluez agent, so we can try to pair but only with devices that don't require a passcode
+        device.trusted = true
+        device.connect()
+        if (callback) callback({success: true})
+    }
+
     function getCardName(device) {
         if (!device) {
             return ""
         }
         return `bluez_card.${device.address.replace(/:/g, "_")}`
+    }
+
+    function getDevicePath(device) {
+        if (!device || !device.address) {
+            return ""
+        }
+        const adapterPath = adapter ? "/org/bluez/hci0" : "/org/bluez/hci0"
+        return `${adapterPath}/dev_${device.address.replace(/:/g, "_")}`
     }
 
     function isAudioDevice(device) {

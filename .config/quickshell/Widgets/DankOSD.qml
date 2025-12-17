@@ -23,32 +23,32 @@ PanelWindow {
     signal osdHidden
 
     function show() {
-        closeTimer.stop()
-        shouldBeVisible = true
-        visible = true
-        hideTimer.restart()
-        osdShown()
+        closeTimer.stop();
+        shouldBeVisible = true;
+        visible = true;
+        hideTimer.restart();
+        osdShown();
     }
 
     function hide() {
-        shouldBeVisible = false
-        closeTimer.restart()
+        shouldBeVisible = false;
+        closeTimer.restart();
     }
 
     function updateHoverState() {
-        let isHovered = (enableMouseInteraction && mouseArea.containsMouse) || osdContainer.childHovered
+        let isHovered = (enableMouseInteraction && mouseArea.containsMouse) || osdContainer.childHovered;
         if (enableMouseInteraction) {
             if (isHovered) {
-                hideTimer.stop()
+                hideTimer.stop();
             } else if (shouldBeVisible) {
-                hideTimer.restart()
+                hideTimer.restart();
             }
         }
     }
 
     function setChildHovered(hovered) {
-        osdContainer.childHovered = hovered
-        updateHoverState()
+        osdContainer.childHovered = hovered;
+        updateHoverState();
     }
 
     screen: modelData
@@ -72,9 +72,9 @@ PanelWindow {
         repeat: false
         onTriggered: {
             if (!enableMouseInteraction || !mouseArea.containsMouse) {
-                hide()
+                hide();
             } else {
-                hideTimer.restart()
+                hideTimer.restart();
             }
         }
     }
@@ -84,8 +84,8 @@ PanelWindow {
         interval: animationDuration + 50
         onTriggered: {
             if (!shouldBeVisible) {
-                visible = false
-                osdHidden()
+                visible = false;
+                osdHidden();
             }
         }
     }
@@ -100,6 +100,15 @@ PanelWindow {
         anchors.bottom: undefined
         anchors.left: undefined
         anchors.right: undefined
+        color: Theme.withAlpha(Theme.surfaceContainer, osdContainer.popupSurfaceAlpha)
+        radius: Theme.cornerRadius
+        border.color: Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.08)
+        border.width: 1
+        opacity: shouldBeVisible ? 1 : 0
+        scale: shouldBeVisible ? 1 : 0.9
+        layer.enabled: true
+        z: -1
+
         Binding {
             target: osdContainer.anchors
             property: "bottom"
@@ -133,13 +142,6 @@ PanelWindow {
         anchors.bottomMargin: Theme.spacingM
         anchors.leftMargin: Theme.spacingM
         anchors.rightMargin: Theme.spacingM
-        color: Theme.popupBackground()
-        radius: Theme.cornerRadius
-        border.color: Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.08)
-        border.width: 1
-        opacity: shouldBeVisible ? 1 : 0
-        scale: shouldBeVisible ? 1 : 0.9
-        layer.enabled: true
 
         MouseArea {
             id: mouseArea

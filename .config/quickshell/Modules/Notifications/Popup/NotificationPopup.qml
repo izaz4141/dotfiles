@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
+import QtQuick.Shapes
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Widgets
@@ -12,7 +13,7 @@ import qs.Widgets
 PanelWindow {
     id: win
 
-    WlrLayershell.namespace: "quickshell:notification"
+    WlrLayershell.namespace: "dms:notification-popup"
 
     required property var notificationData
     required property string notificationId
@@ -21,7 +22,7 @@ PanelWindow {
     property bool exiting: false
     property bool _isDestroying: false
     property bool _finalized: false
-    readonly property string clearText: I18n.tr("Clear")
+    readonly property string clearText: I18n.tr("Dismiss")
 
     signal entered
     signal exitFinished
@@ -63,6 +64,20 @@ PanelWindow {
 
     visible: hasValidData
     WlrLayershell.layer: {
+        const envLayer = Quickshell.env("DMS_NOTIFICATION_LAYER")
+        if (envLayer) {
+            switch (envLayer) {
+            case "bottom":
+                return WlrLayershell.Bottom
+            case "overlay":
+                return WlrLayershell.Overlay
+            case "background":
+                return WlrLayershell.Background
+            case "top":
+                return WlrLayershell.Top
+            }
+        }
+
         if (!notificationData)
             return WlrLayershell.Top
 
@@ -122,141 +137,136 @@ PanelWindow {
         right: getRightMargin()
     }
 
+    function getBarInfo() {
+        if (!screen) return { topBar: 0, bottomBar: 0, leftBar: 0, rightBar: 0 }
+        return SettingsData.getAdjacentBarInfo(screen, SettingsData.notificationPopupPosition, {
+            id: "notification-popup",
+            screenPreferences: [screen.name],
+            autoHide: false
+        })
+    }
+
     function getTopMargin() {
         const popupPos = SettingsData.notificationPopupPosition
-        const barPos = SettingsData.dankBarPosition
         const isTop = isTopCenter || popupPos === SettingsData.Position.Top || popupPos === SettingsData.Position.Left
-
         if (!isTop) return 0
 
-        const effectiveBarThickness = Math.max(26 + SettingsData.dankBarInnerPadding * 0.6 + SettingsData.dankBarInnerPadding + 4, Theme.barHeight - 4 - (8 - SettingsData.dankBarInnerPadding))
-        const exclusiveZone = effectiveBarThickness + SettingsData.dankBarSpacing + SettingsData.dankBarBottomGap
-
-        let base = Theme.popupDistance
-        if (barPos === SettingsData.Position.Top) {
-            base = exclusiveZone
-        }
-
+        const barInfo = getBarInfo()
+        const base = barInfo.topBar > 0 ? barInfo.topBar : Theme.popupDistance
         return base + screenY
     }
 
     function getBottomMargin() {
         const popupPos = SettingsData.notificationPopupPosition
-        const barPos = SettingsData.dankBarPosition
         const isBottom = popupPos === SettingsData.Position.Bottom || popupPos === SettingsData.Position.Right
-
         if (!isBottom) return 0
 
-        const effectiveBarThickness = Math.max(26 + SettingsData.dankBarInnerPadding * 0.6 + SettingsData.dankBarInnerPadding + 4, Theme.barHeight - 4 - (8 - SettingsData.dankBarInnerPadding))
-        const exclusiveZone = effectiveBarThickness + SettingsData.dankBarSpacing + SettingsData.dankBarBottomGap
-
-        let base = Theme.popupDistance
-        if (barPos === SettingsData.Position.Bottom) {
-            base = exclusiveZone
-        }
-
+        const barInfo = getBarInfo()
+        const base = barInfo.bottomBar > 0 ? barInfo.bottomBar : Theme.popupDistance
         return base + screenY
     }
 
     function getLeftMargin() {
-        if (isTopCenter) {
-            return (screen.width - implicitWidth) / 2
-        }
+        if (isTopCenter) return (screen.width - implicitWidth) / 2
 
         const popupPos = SettingsData.notificationPopupPosition
-        const barPos = SettingsData.dankBarPosition
         const isLeft = popupPos === SettingsData.Position.Left || popupPos === SettingsData.Position.Bottom
-
         if (!isLeft) return 0
 
-        const effectiveBarThickness = Math.max(26 + SettingsData.dankBarInnerPadding * 0.6 + SettingsData.dankBarInnerPadding + 4, Theme.barHeight - 4 - (8 - SettingsData.dankBarInnerPadding))
-        const exclusiveZone = effectiveBarThickness + SettingsData.dankBarSpacing + SettingsData.dankBarBottomGap
-
-        if (barPos === SettingsData.Position.Left) {
-            return exclusiveZone
-        }
-
-        return Theme.popupDistance
+        const barInfo = getBarInfo()
+        return barInfo.leftBar > 0 ? barInfo.leftBar : Theme.popupDistance
     }
 
     function getRightMargin() {
         if (isTopCenter) return 0
 
         const popupPos = SettingsData.notificationPopupPosition
-        const barPos = SettingsData.dankBarPosition
         const isRight = popupPos === SettingsData.Position.Top || popupPos === SettingsData.Position.Right
-
         if (!isRight) return 0
 
-        const effectiveBarThickness = Math.max(26 + SettingsData.dankBarInnerPadding * 0.6 + SettingsData.dankBarInnerPadding + 4, Theme.barHeight - 4 - (8 - SettingsData.dankBarInnerPadding))
-        const exclusiveZone = effectiveBarThickness + SettingsData.dankBarSpacing + SettingsData.dankBarBottomGap
-
-        if (barPos === SettingsData.Position.Right) {
-            return exclusiveZone
-        }
-
-        return Theme.popupDistance
+        const barInfo = getBarInfo()
+        return barInfo.rightBar > 0 ? barInfo.rightBar : Theme.popupDistance
     }
+
+    readonly property real dpr: CompositorService.getScreenScale(win.screen)
+    readonly property real alignedWidth: Theme.px(implicitWidth, dpr)
+    readonly property real alignedHeight: Theme.px(implicitHeight, dpr)
 
     Item {
         id: content
 
-        anchors.fill: parent
+        x: Theme.snap((win.width - alignedWidth) / 2, dpr)
+        y: Theme.snap((win.height - alignedHeight) / 2, dpr)
+        width: alignedWidth
+        height: alignedHeight
         visible: win.hasValidData
-        layer.enabled: true
-        layer.smooth: true
 
-        Rectangle {
-            property var shadowLayers: [shadowLayer1, shadowLayer2, shadowLayer3]
+        property real shadowBlurPx: 10
+        property real shadowSpreadPx: 0
+        property real shadowBaseAlpha: 0.60
+        readonly property real popupSurfaceAlpha: SettingsData.popupTransparency
+        readonly property real effectiveShadowAlpha: Math.max(0, Math.min(1, shadowBaseAlpha * popupSurfaceAlpha))
 
+        Item {
+            id: bgShadowLayer
             anchors.fill: parent
-            anchors.margins: 4
-            radius: Theme.cornerRadius
-            color: Theme.popupBackground()
-            border.color: notificationData && notificationData.urgency === NotificationUrgency.Critical ? Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.3) : Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.08)
-            border.width: notificationData && notificationData.urgency === NotificationUrgency.Critical ? 2 : 0
-            clip: true
+            anchors.margins: Theme.snap(4, win.dpr)
+            layer.enabled: true
+            layer.smooth: false
+            layer.textureSize: Qt.size(Math.round(width * win.dpr), Math.round(height * win.dpr))
+            layer.textureMirroring: ShaderEffectSource.MirrorVertically
 
-            Rectangle {
-                id: shadowLayer1
+            readonly property int blurMax: 64
 
+            layer.effect: MultiEffect {
+                id: shadowFx
+                autoPaddingEnabled: true
+                shadowEnabled: true
+                blurEnabled: false
+                maskEnabled: false
+                shadowBlur: Math.max(0, Math.min(1, content.shadowBlurPx / bgShadowLayer.blurMax))
+                shadowScale: 1 + (2 * content.shadowSpreadPx) / Math.max(1, Math.min(bgShadowLayer.width, bgShadowLayer.height))
+                shadowColor: {
+                    const baseColor = Theme.isLightMode ? Qt.rgba(0, 0, 0, 1) : Theme.surfaceContainerHighest
+                    return Theme.withAlpha(baseColor, content.effectiveShadowAlpha)
+                }
+            }
+
+            Shape {
+                id: backgroundShape
                 anchors.fill: parent
-                anchors.margins: -3
-                color: "transparent"
-                radius: parent.radius + 3
-                border.color: Qt.rgba(0, 0, 0, 0.05)
-                border.width: 1
-                z: -3
+                preferredRendererType: Shape.CurveRenderer
+
+                readonly property real radius: Theme.cornerRadius
+                readonly property color fillColor: Theme.withAlpha(Theme.surfaceContainer, Theme.popupTransparency)
+                readonly property color strokeColor: notificationData && notificationData.urgency === NotificationUrgency.Critical ? Theme.withAlpha(Theme.primary, 0.3) : Theme.withAlpha(Theme.outline, 0.08)
+                readonly property real strokeWidth: notificationData && notificationData.urgency === NotificationUrgency.Critical ? 2 : 0
+
+                ShapePath {
+                    fillColor: backgroundShape.fillColor
+                    strokeColor: backgroundShape.strokeColor
+                    strokeWidth: backgroundShape.strokeWidth
+
+                    startX: backgroundShape.radius
+                    startY: 0
+
+                    PathLine { x: backgroundShape.width - backgroundShape.radius; y: 0 }
+                    PathQuad { x: backgroundShape.width; y: backgroundShape.radius; controlX: backgroundShape.width; controlY: 0 }
+                    PathLine { x: backgroundShape.width; y: backgroundShape.height - backgroundShape.radius }
+                    PathQuad { x: backgroundShape.width - backgroundShape.radius; y: backgroundShape.height; controlX: backgroundShape.width; controlY: backgroundShape.height }
+                    PathLine { x: backgroundShape.radius; y: backgroundShape.height }
+                    PathQuad { x: 0; y: backgroundShape.height - backgroundShape.radius; controlX: 0; controlY: backgroundShape.height }
+                    PathLine { x: 0; y: backgroundShape.radius }
+                    PathQuad { x: backgroundShape.radius; y: 0; controlX: 0; controlY: 0 }
+                }
             }
 
             Rectangle {
-                id: shadowLayer2
-
                 anchors.fill: parent
-                anchors.margins: -2
-                color: "transparent"
-                radius: parent.radius + 2
-                border.color: Qt.rgba(0, 0, 0, 0.08)
-                border.width: 1
-                z: -2
-            }
-
-            Rectangle {
-                id: shadowLayer3
-
-                anchors.fill: parent
-                color: "transparent"
-                border.color: Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.12)
-                border.width: 1
-                radius: parent.radius
-                z: -1
-            }
-
-            Rectangle {
-                anchors.fill: parent
-                radius: parent.radius
+                radius: backgroundShape.radius
                 visible: notificationData && notificationData.urgency === NotificationUrgency.Critical
                 opacity: 1
+                clip: true
 
                 gradient: Gradient {
                     orientation: Gradient.Horizontal
@@ -277,6 +287,13 @@ PanelWindow {
                     }
                 }
             }
+        }
+
+        Item {
+            id: backgroundContainer
+            anchors.fill: parent
+            anchors.margins: Theme.snap(4, win.dpr)
+            clip: true
 
             Item {
                 id: notificationContent
@@ -512,7 +529,7 @@ PanelWindow {
 
                 anchors.fill: parent
                 hoverEnabled: true
-                acceptedButtons: Qt.LeftButton
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
                 propagateComposedEvents: true
                 z: -1
                 onEntered: {
@@ -523,9 +540,20 @@ PanelWindow {
                     if (notificationData && notificationData.popup && notificationData.timer)
                         notificationData.timer.restart()
                 }
-                onClicked: {
-                    if (notificationData && !win.exiting)
-                        notificationData.popup = false
+                onClicked: (mouse) => {
+                    if (!notificationData || win.exiting)
+                        return
+
+                    if (mouse.button === Qt.RightButton) {
+                        NotificationService.dismissNotification(notificationData)
+                    } else if (mouse.button === Qt.LeftButton) {
+                        if (notificationData.actions && notificationData.actions.length > 0) {
+                            notificationData.actions[0].invoke()
+                            NotificationService.dismissNotification(notificationData)
+                        } else {
+                            notificationData.popup = false
+                        }
+                    }
                 }
             }
         }

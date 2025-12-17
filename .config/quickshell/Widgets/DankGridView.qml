@@ -19,8 +19,8 @@ GridView {
     flickableDirection: Flickable.VerticalFlick
 
     onMovementStarted: {
-        vbar._scrollBarActive = true
-        vbar.hideTimer.stop()
+        vbar._scrollBarActive = true;
+        vbar.hideTimer.stop();
     }
     onMovementEnded: vbar.hideTimer.restart()
 
@@ -28,91 +28,115 @@ GridView {
         id: wheelHandler
 
         property real mouseWheelSpeed: 60
-        property real touchpadSpeed: 1.8
+        property real touchpadSpeed: 2.8
         property real momentumRetention: 0.92
         property real lastWheelTime: 0
         property real momentum: 0
         property var velocitySamples: []
+        property bool sessionUsedMouseWheel: false
 
         function startMomentum() {
-            isMomentumActive = true
-            momentumTimer.start()
+            isMomentumActive = true;
+            momentumTimer.start();
         }
 
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
         onWheel: event => {
-                     vbar._scrollBarActive = true
-                     vbar.hideTimer.restart()
+            vbar._scrollBarActive = true;
+            vbar.hideTimer.restart();
 
-                     const currentTime = Date.now()
-                     const timeDelta = currentTime - lastWheelTime
-                     lastWheelTime = currentTime
+            const currentTime = Date.now();
+            const timeDelta = currentTime - lastWheelTime;
+            lastWheelTime = currentTime;
 
-                     const deltaY = event.angleDelta.y
-                     const isMouseWheel = Math.abs(deltaY) >= 120 && (Math.abs(deltaY) % 120) === 0
+            const hasPixel = event.pixelDelta && event.pixelDelta.y !== 0;
+            const deltaY = event.angleDelta.y;
+            const isTraditionalMouse = !hasPixel && Math.abs(deltaY) >= 120 && (Math.abs(deltaY) % 120) === 0;
+            const isHighDpiMouse = !hasPixel && !isTraditionalMouse && deltaY !== 0;
+            const isTouchpad = hasPixel;
 
-                     if (isMouseWheel) {
-                         momentumTimer.stop()
-                         isMomentumActive = false
-                         velocitySamples = []
-                         momentum = 0
+            if (isTraditionalMouse) {
+                sessionUsedMouseWheel = true;
+                momentumTimer.stop();
+                isMomentumActive = false;
+                velocitySamples = [];
+                momentum = 0;
+                momentumVelocity = 0;
 
-                         const lines = Math.floor(Math.abs(deltaY) / 120)
-                         const scrollAmount = (deltaY > 0 ? -lines : lines) * cellHeight * 0.35
-                         let newY = contentY + scrollAmount
-                         newY = Math.max(0, Math.min(contentHeight - height, newY))
+                const lines = Math.round(Math.abs(deltaY) / 120);
+                const scrollAmount = (deltaY > 0 ? -lines : lines) * cellHeight * 0.35;
+                let newY = contentY + scrollAmount;
+                newY = Math.max(0, Math.min(contentHeight - height, newY));
 
-                         if (flicking) {
-                             cancelFlick()
-                         }
+                if (flicking) {
+                    cancelFlick();
+                }
 
-                         contentY = newY
-                     } else {
-                         momentumTimer.stop()
-                         isMomentumActive = false
+                contentY = newY;
+            } else if (isHighDpiMouse) {
+                sessionUsedMouseWheel = true;
+                momentumTimer.stop();
+                isMomentumActive = false;
+                velocitySamples = [];
+                momentum = 0;
+                momentumVelocity = 0;
 
-                         let delta = event.pixelDelta.y !== 0 ? event.pixelDelta.y * touchpadSpeed : event.angleDelta.y / 120 * cellHeight * 1.2
+                let delta = deltaY / 120 * cellHeight * 1.2;
+                let newY = contentY - delta;
+                newY = Math.max(0, Math.min(contentHeight - height, newY));
 
-                         velocitySamples.push({
-                                                  "delta": delta,
-                                                  "time": currentTime
-                                              })
-                         velocitySamples = velocitySamples.filter(s => currentTime - s.time < 100)
+                if (flicking) {
+                    cancelFlick();
+                }
 
-                         if (velocitySamples.length > 1) {
-                             const totalDelta = velocitySamples.reduce((sum, s) => sum + s.delta, 0)
-                             const timeSpan = currentTime - velocitySamples[0].time
-                             if (timeSpan > 0) {
-                                 momentumVelocity = Math.max(-maxMomentumVelocity, Math.min(maxMomentumVelocity, totalDelta / timeSpan * 1000))
-                             }
-                         }
+                contentY = newY;
+            } else if (isTouchpad) {
+                sessionUsedMouseWheel = false;
+                momentumTimer.stop();
+                isMomentumActive = false;
 
-                         if (event.pixelDelta.y !== 0 && timeDelta < 50) {
-                             momentum = momentum * momentumRetention + delta * 0.15
-                             delta += momentum
-                         } else {
-                             momentum = 0
-                         }
+                let delta = event.pixelDelta.y * touchpadSpeed;
 
-                         let newY = contentY - delta
-                         newY = Math.max(0, Math.min(contentHeight - height, newY))
+                velocitySamples.push({
+                    "delta": delta,
+                    "time": currentTime
+                });
+                velocitySamples = velocitySamples.filter(s => currentTime - s.time < 100);
 
-                         if (flicking) {
-                             cancelFlick()
-                         }
+                if (velocitySamples.length > 1) {
+                    const totalDelta = velocitySamples.reduce((sum, s) => sum + s.delta, 0);
+                    const timeSpan = currentTime - velocitySamples[0].time;
+                    if (timeSpan > 0) {
+                        momentumVelocity = Math.max(-maxMomentumVelocity, Math.min(maxMomentumVelocity, totalDelta / timeSpan * 1000));
+                    }
+                }
 
-                         contentY = newY
-                     }
+                if (timeDelta < 50) {
+                    momentum = momentum * momentumRetention + delta * 0.15;
+                    delta += momentum;
+                } else {
+                    momentum = 0;
+                }
 
-                     event.accepted = true
-                 }
+                let newY = contentY - delta;
+                newY = Math.max(0, Math.min(contentHeight - height, newY));
+
+                if (flicking) {
+                    cancelFlick();
+                }
+
+                contentY = newY;
+            }
+
+            event.accepted = true;
+        }
         onActiveChanged: {
             if (!active) {
-                if (Math.abs(momentumVelocity) >= minMomentumVelocity) {
-                    startMomentum()
+                if (!sessionUsedMouseWheel && Math.abs(momentumVelocity) >= minMomentumVelocity) {
+                    startMomentum();
                 } else {
-                    velocitySamples = []
-                    momentumVelocity = 0
+                    velocitySamples = [];
+                    momentumVelocity = 0;
                 }
             }
         }
@@ -123,24 +147,24 @@ GridView {
         interval: 16
         repeat: true
         onTriggered: {
-            const newY = contentY - momentumVelocity * 0.016
-            const maxY = Math.max(0, contentHeight - height)
+            const newY = contentY - momentumVelocity * 0.016;
+            const maxY = Math.max(0, contentHeight - height);
 
             if (newY < 0 || newY > maxY) {
-                contentY = newY < 0 ? 0 : maxY
-                stop()
-                isMomentumActive = false
-                momentumVelocity = 0
-                return
+                contentY = newY < 0 ? 0 : maxY;
+                stop();
+                isMomentumActive = false;
+                momentumVelocity = 0;
+                return;
             }
 
-            contentY = newY
-            momentumVelocity *= friction
+            contentY = newY;
+            momentumVelocity *= friction;
 
             if (Math.abs(momentumVelocity) < 5) {
-                stop()
-                isMomentumActive = false
-                momentumVelocity = 0
+                stop();
+                isMomentumActive = false;
+                momentumVelocity = 0;
             }
         }
     }

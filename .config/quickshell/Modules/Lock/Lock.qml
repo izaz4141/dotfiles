@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -5,29 +7,64 @@ import Quickshell.Wayland
 import qs.Common
 import qs.Services
 
-Item {
+Scope {
     id: root
 
     property string sharedPasswordBuffer: ""
     property bool shouldLock: false
+    property bool processingExternalEvent: false
 
     Component.onCompleted: {
-        IdleService.lockComponent = root
+        IdleService.lockComponent = this;
+    }
+
+    function lock() {
+        if (SettingsData.customPowerActionLock && SettingsData.customPowerActionLock.length > 0) {
+            Quickshell.execDetached(["sh", "-c", SettingsData.customPowerActionLock]);
+            return;
+        }
+        if (!processingExternalEvent && SettingsData.loginctlLockIntegration && DMSService.isConnected) {
+            DMSService.lockSession(response => {
+                if (response.error) {
+                    console.warn("Lock: Failed to call loginctl.lock:", response.error);
+                    shouldLock = true;
+                }
+            });
+        } else {
+            shouldLock = true;
+        }
+    }
+
+    function unlock() {
+        if (!processingExternalEvent && SettingsData.loginctlLockIntegration && DMSService.isConnected) {
+            DMSService.unlockSession(response => {
+                if (response.error) {
+                    console.warn("Lock: Failed to call loginctl.unlock:", response.error);
+                    shouldLock = false;
+                }
+            });
+        } else {
+            shouldLock = false;
+        }
     }
 
     function activate() {
-        shouldLock = true
+        lock();
     }
 
     Connections {
         target: SessionService
 
         function onSessionLocked() {
-            shouldLock = true
+            processingExternalEvent = true;
+            shouldLock = true;
+            processingExternalEvent = false;
         }
 
         function onSessionUnlocked() {
-            shouldLock = false
+            processingExternalEvent = true;
+            shouldLock = false;
+            processingExternalEvent = false;
         }
     }
 
@@ -35,28 +72,42 @@ Item {
         target: IdleService
 
         function onLockRequested() {
-            shouldLock = true
+            lock();
         }
     }
 
     WlSessionLock {
         id: sessionLock
 
-        locked: root.shouldLock
+        locked: shouldLock
 
         WlSessionLockSurface {
-            color: "transparent"
+            id: lockSurface
+
+            property string currentScreenName: screen?.name ?? ""
+            property bool isActiveScreen: {
+                if (Quickshell.screens.length <= 1)
+                    return true;
+                if (SettingsData.lockScreenActiveMonitor === "all")
+                    return true;
+                return currentScreenName === SettingsData.lockScreenActiveMonitor;
+            }
+
+            color: isActiveScreen ? "transparent" : SettingsData.lockScreenInactiveColor
 
             LockSurface {
                 anchors.fill: parent
+                visible: lockSurface.isActiveScreen
                 lock: sessionLock
                 sharedPasswordBuffer: root.sharedPasswordBuffer
+                screenName: lockSurface.currentScreenName
+                isLocked: shouldLock
                 onUnlockRequested: {
-                    root.shouldLock = false
+                    root.unlock();
                 }
                 onPasswordChanged: newPassword => {
-                                       root.sharedPasswordBuffer = newPassword
-                                   }
+                    root.sharedPasswordBuffer = newPassword;
+                }
             }
         }
     }
@@ -69,15 +120,24 @@ Item {
         target: "lock"
 
         function lock() {
-            shouldLock = true
+            if (!root.processingExternalEvent && SettingsData.loginctlLockIntegration && DMSService.isConnected) {
+                DMSService.lockSession(response => {
+                    if (response.error) {
+                        console.warn("Lock: Failed to call loginctl.lock:", response.error);
+                        root.shouldLock = true;
+                    }
+                });
+            } else {
+                root.shouldLock = true;
+            }
         }
 
         function demo() {
-            demoWindow.showDemo()
+            demoWindow.showDemo();
         }
 
         function isLocked(): bool {
-            return sessionLock.locked
+            return sessionLock.locked;
         }
     }
 }

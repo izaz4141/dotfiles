@@ -133,7 +133,7 @@ Rectangle {
             }
 
             StyledText {
-                text: MoboService.distroName || "Linux"
+                text: DgopService.hostname || "DMS"
                 font.pixelSize: Theme.fontSizeMedium
                 color: Theme.surfaceVariantText
                 elide: Text.ElideRight

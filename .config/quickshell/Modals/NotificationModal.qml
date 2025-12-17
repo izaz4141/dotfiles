@@ -1,70 +1,78 @@
 import QtQuick
+import Quickshell.Hyprland
 import Quickshell.Io
 import qs.Common
 import qs.Modals.Common
 import qs.Modules.Notifications.Center
 import qs.Services
-import qs.Widgets
 
 DankModal {
     id: notificationModal
+
+    layerNamespace: "dms:notification-center-modal"
+
+    HyprlandFocusGrab {
+        windows: [notificationModal.contentWindow]
+        active: notificationModal.useHyprlandFocusGrab && notificationModal.shouldHaveFocus
+    }
 
     property bool notificationModalOpen: false
     property var notificationListRef: null
 
     function show() {
-        notificationModalOpen = true
-        NotificationService.onOverlayOpen()
-        open()
-        modalKeyboardController.reset()
+        notificationModalOpen = true;
+        NotificationService.onOverlayOpen();
+        open();
+        modalKeyboardController.reset();
         if (modalKeyboardController && notificationListRef) {
-            modalKeyboardController.listView = notificationListRef
-            modalKeyboardController.rebuildFlatNavigation()
-            
+            modalKeyboardController.listView = notificationListRef;
+            modalKeyboardController.rebuildFlatNavigation();
+
             Qt.callLater(() => {
-                modalKeyboardController.keyboardNavigationActive = true
-                modalKeyboardController.selectedFlatIndex = 0
-                modalKeyboardController.updateSelectedIdFromIndex()
+                modalKeyboardController.keyboardNavigationActive = true;
+                modalKeyboardController.selectedFlatIndex = 0;
+                modalKeyboardController.updateSelectedIdFromIndex();
                 if (notificationListRef) {
-                    notificationListRef.keyboardActive = true
-                    notificationListRef.currentIndex = 0
+                    notificationListRef.keyboardActive = true;
+                    notificationListRef.currentIndex = 0;
                 }
-                modalKeyboardController.selectionVersion++
-                modalKeyboardController.ensureVisible()
-            })
+                modalKeyboardController.selectionVersion++;
+                modalKeyboardController.ensureVisible();
+            });
         }
     }
 
     function hide() {
-        notificationModalOpen = false
-        NotificationService.onOverlayClose()
-        close()
-        modalKeyboardController.reset()
+        notificationModalOpen = false;
+        NotificationService.onOverlayClose();
+        close();
+        modalKeyboardController.reset();
     }
 
     function toggle() {
         if (shouldBeVisible) {
-            hide()
+            hide();
         } else {
-            show()
+            show();
         }
     }
 
-    width: 500
-    height: 700
+    modalWidth: 500
+    modalHeight: 700
+    backgroundColor: Theme.withAlpha(Theme.surfaceContainer, Theme.popupTransparency)
     visible: false
     onBackgroundClicked: hide()
     onOpened: () => {
         Qt.callLater(() => modalFocusScope.forceActiveFocus());
     }
-    onShouldBeVisibleChanged: (shouldBeVisible) => {
+    onShouldBeVisibleChanged: shouldBeVisible => {
         if (!shouldBeVisible) {
-            notificationModalOpen = false
-            modalKeyboardController.reset()
-            NotificationService.onOverlayClose()
+            notificationModalOpen = false;
+            modalKeyboardController.reset();
+            NotificationService.onOverlayClose();
         }
     }
-    modalFocusScope.Keys.onPressed: (event) => modalKeyboardController.handleKey(event)
+    modalFocusScope.Keys.onPressed: event => modalKeyboardController.handleKey(event)
 
     NotificationKeyboardController {
         id: modalKeyboardController
@@ -88,27 +96,6 @@ DankModal {
         function toggle(): string {
             notificationModal.toggle();
             return "NOTIFICATION_MODAL_TOGGLE_SUCCESS";
-        }
-
-        function json(): string {
-            const notifCount = NotificationService.notifications.length
-            const notifClass = SessionData.doNotDisturb
-                ? `dnd-${notifCount === 0 ? 'none' : 'notification'}`
-                : (notifCount === 0 ? 'none' : 'notification')
-
-            const data = {
-                text: String(notifCount),
-                alt: notifClass,
-                tooltip: "",
-                class: notifClass
-            }
-
-            const jsonStr = JSON.stringify(data).trim()
-            return jsonStr
-        }
-
-        function dnd() {
-            SessionData.setDoNotDisturb(!SessionData.doNotDisturb)
         }
 
         target: "notifications"
@@ -144,14 +131,13 @@ DankModal {
                     height: parent.height - y
                     keyboardController: modalKeyboardController
                     Component.onCompleted: {
-                        notificationModal.notificationListRef = notificationList
+                        notificationModal.notificationListRef = notificationList;
                         if (modalKeyboardController) {
-                            modalKeyboardController.listView = notificationList
-                            modalKeyboardController.rebuildFlatNavigation()
+                            modalKeyboardController.listView = notificationList;
+                            modalKeyboardController.rebuildFlatNavigation();
                         }
                     }
                 }
-
             }
 
             NotificationKeyboardHints {
@@ -163,9 +149,6 @@ DankModal {
                 anchors.margins: Theme.spacingL
                 showHints: modalKeyboardController.showKeyboardHints
             }
-
         }
-
     }
-
 }

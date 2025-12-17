@@ -6,6 +6,8 @@ import qs.Common
 PanelWindow {
     id: root
 
+    WlrLayershell.namespace: "dms:tooltip"
+
     property string text: ""
     property real targetX: 0
     property real targetY: 0
@@ -48,19 +50,28 @@ PanelWindow {
 
     margins {
         left: {
-            if (alignLeft) return Math.round(targetX)
-            if (alignRight) return Math.round(targetX - implicitWidth)
-            return Math.round(targetX - implicitWidth / 2)
+            const screenWidth = targetScreen?.width ?? Screen.width
+            if (alignLeft) {
+                return Math.round(Math.max(Theme.spacingS, Math.min(screenWidth - implicitWidth - Theme.spacingS, targetX)))
+            } else if (alignRight) {
+                return Math.round(Math.max(Theme.spacingS, Math.min(screenWidth - implicitWidth - Theme.spacingS, targetX - implicitWidth)))
+            } else {
+                return Math.round(Math.max(Theme.spacingS, Math.min(screenWidth - implicitWidth - Theme.spacingS, targetX - implicitWidth / 2)))
+            }
         }
         top: {
-            if (alignLeft || alignRight) return Math.round(targetY - implicitHeight / 2)
-            return Math.round(targetY)
+            const screenHeight = targetScreen?.height ?? Screen.height
+            if (alignLeft || alignRight) {
+                return Math.round(Math.max(Theme.spacingS, Math.min(screenHeight - implicitHeight - Theme.spacingS, targetY - implicitHeight / 2)))
+            } else {
+                return Math.round(Math.max(Theme.spacingS, Math.min(screenHeight - implicitHeight - Theme.spacingS, targetY)))
+            }
         }
     }
 
     Rectangle {
         anchors.fill: parent
-        color: Theme.surfaceContainerHigh
+        color: Theme.withAlpha(Theme.surfaceContainerHigh, Theme.popupTransparency)
         radius: Theme.cornerRadius
         border.width: 1
         border.color: Theme.outlineMedium

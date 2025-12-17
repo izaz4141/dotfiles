@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import qs.Common
 import qs.Widgets
 
@@ -64,7 +65,9 @@ Flow {
 
     Repeater {
         id: repeater
-        model: root.model
+        model: ScriptModel {
+            values: root.model
+        }
 
         delegate: Rectangle {
             id: segment

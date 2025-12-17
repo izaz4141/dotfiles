@@ -23,7 +23,6 @@ Singleton {
 
             if ((node.type & PwNodeType.AudioInStream) === PwNodeType.AudioInStream) {
                 if (!looksLikeSystemVirtualMic(node)) {
-                    console.log(node.audio)
                     if (node.audio && node.audio.muted) {
                         return false
                     }
@@ -35,7 +34,7 @@ Singleton {
     }
 
     PwObjectTracker {
-        objects: Pipewire.nodes.values.filter(node => node.audio && !node.isStream)
+        objects: Pipewire.nodes.values.filter(node => !node.isStream)
     }
 
     readonly property bool cameraActive: {
@@ -48,7 +47,7 @@ Singleton {
             if (!node || !node.ready) {
                 continue
             }
-
+            
             if (node.properties && node.properties["media.class"] === "Stream/Input/Video") {
                 if (node.properties["stream.is-live"] === "true") {
                     return true

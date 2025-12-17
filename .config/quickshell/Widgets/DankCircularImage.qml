@@ -12,12 +12,11 @@ Rectangle {
     property string fallbackText: ""
     property bool hasImage: imageSource !== ""
     property alias imageStatus: internalImage.status
-    property real borderWidth: 0
 
     radius: width / 2
     color: Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.1)
-    border.color: borderWidth !== 0 ? Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.6) : "transparent"
-    border.width: borderWidth
+    border.color: "transparent"
+    border.width: 0
 
     Image {
         id: internalImage

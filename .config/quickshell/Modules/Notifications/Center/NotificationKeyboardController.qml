@@ -28,7 +28,7 @@ QtObject {
         const nav = []
         const groups = NotificationService.groupedNotifications
 
-        for (let i = 0; i < groups.length; i++) {
+        for (var i = 0; i < groups.length; i++) {
             const group = groups[i]
             const isExpanded = NotificationService.expandedGroups[group.key] || false
 
@@ -42,7 +42,8 @@ QtObject {
 
             if (isExpanded) {
                 const notifications = group.notifications || []
-                for (let j = 0; j < notifications.length; j++) {
+                const maxNotifications = Math.min(notifications.length, 10)
+                for (var j = 0; j < maxNotifications; j++) {
                     const notifId = String(notifications[j] && notifications[j].notification && notifications[j].notification.id ? notifications[j].notification.id : "")
                     nav.push({
                                  "type": "notification",
@@ -65,7 +66,7 @@ QtObject {
             return
         }
 
-        for (let i = 0; i < flatNavigation.length; i++) {
+        for (var i = 0; i < flatNavigation.length; i++) {
             const item = flatNavigation[i]
 
             if (selectedItemType === "group" && item.type === "group" && item.groupKey === selectedGroupKey) {
@@ -81,7 +82,7 @@ QtObject {
 
         // If not found, try to find the same group but select the group header instead
         if (selectedItemType === "notification") {
-            for (let j = 0; j < flatNavigation.length; j++) {
+            for (var j = 0; j < flatNavigation.length; j++) {
                 const groupItem = flatNavigation[j]
                 if (groupItem.type === "group" && groupItem.groupKey === selectedGroupKey) {
                     selectedFlatIndex = j
@@ -195,7 +196,7 @@ QtObject {
         // Smart selection after toggle
         if (!wasExpanded) {
             // Just expanded - move to first notification in the group
-            for (let i = 0; i < flatNavigation.length; i++) {
+            for (var i = 0; i < flatNavigation.length; i++) {
                 if (flatNavigation[i].type === "notification" && flatNavigation[i].groupIndex === groupIndex) {
                     selectedFlatIndex = i
                     break
@@ -203,7 +204,7 @@ QtObject {
             }
         } else {
             // Just collapsed - stay on the group header
-            for (let i = 0; i < flatNavigation.length; i++) {
+            for (var i = 0; i < flatNavigation.length; i++) {
                 if (flatNavigation[i].type === "group" && flatNavigation[i].groupIndex === groupIndex) {
                     selectedFlatIndex = i
                     break
@@ -319,6 +320,23 @@ QtObject {
         }
     }
 
+    function findRepeater(parent) {
+        if (!parent || !parent.children) {
+            return null
+        }
+        for (var i = 0; i < parent.children.length; i++) {
+            const child = parent.children[i]
+            if (child.objectName === "notificationRepeater") {
+                return child
+            }
+            const found = findRepeater(child)
+            if (found) {
+                return found
+            }
+        }
+        return null
+    }
+
     function ensureVisible() {
         if (flatNavigation.length === 0 || selectedFlatIndex >= flatNavigation.length || !listView)
             return
@@ -326,17 +344,34 @@ QtObject {
         const currentItem = flatNavigation[selectedFlatIndex]
 
         if (keyboardNavigationActive && currentItem && currentItem.groupIndex >= 0) {
-            // Always center the selected item for better visibility
-            // This ensures the selected item stays in view even when new notifications arrive
             if (currentItem.type === "notification") {
-                // For individual notifications, center on the group but bias towards the notification
-                listView.positionViewAtIndex(currentItem.groupIndex, ListView.Center)
+                const groupDelegate = listView.itemAtIndex(currentItem.groupIndex)
+                if (groupDelegate && groupDelegate.children && groupDelegate.children.length > 0) {
+                    const notificationCard = groupDelegate.children[0]
+                    const repeater = findRepeater(notificationCard)
+
+                    if (repeater && currentItem.notificationIndex < repeater.count) {
+                        const notificationItem = repeater.itemAt(currentItem.notificationIndex)
+                        if (notificationItem) {
+                            const itemPos = notificationItem.mapToItem(listView.contentItem, 0, 0)
+                            const itemY = itemPos.y
+                            const itemHeight = notificationItem.height
+
+                            const viewportTop = listView.contentY
+                            const viewportBottom = listView.contentY + listView.height
+
+                            if (itemY < viewportTop) {
+                                listView.contentY = itemY - 20
+                            } else if (itemY + itemHeight > viewportBottom) {
+                                listView.contentY = itemY + itemHeight - listView.height + 20
+                            }
+                        }
+                    }
+                }
             } else {
-                // For group headers, center on the group
-                listView.positionViewAtIndex(currentItem.groupIndex, ListView.Center)
+                listView.positionViewAtIndex(currentItem.groupIndex, ListView.Contain)
             }
 
-            // Force immediate update
             listView.forceLayout()
         }
     }

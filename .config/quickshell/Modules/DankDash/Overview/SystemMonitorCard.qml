@@ -8,10 +8,10 @@ Card {
     id: root
 
     Component.onCompleted: {
-        MoboService.refCount++
+        DgopService.addRef(["cpu", "memory", "system"])
     }
     Component.onDestruction: {
-        MoboService.refCount--
+        DgopService.removeRef(["cpu", "memory", "system"])
     }
 
     Row {
@@ -34,13 +34,13 @@ Card {
 
                 Rectangle {
                     width: parent.width
-                    height: parent.height * Math.min((MoboService.cpuPerc * 100 || 6) / 100, 1)
+                    height: parent.height * Math.min((DgopService.cpuUsage || 6) / 100, 1)
                     radius: parent.radius
                     anchors.bottom: parent.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: {
-                        if (MoboService.cpuPerc * 100 > 80) return Theme.error
-                        if (MoboService.cpuPerc * 100 > 60) return Theme.warning
+                        if (DgopService.cpuUsage > 80) return Theme.error
+                        if (DgopService.cpuUsage > 60) return Theme.warning
                         return Theme.primary
                     }
 
@@ -63,8 +63,8 @@ Card {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     color: {
-                        if (MoboService.cpuPerc * 100 > 80) return Theme.error
-                        if (MoboService.cpuPerc * 100 > 60) return Theme.warning
+                        if (DgopService.cpuUsage > 80) return Theme.error
+                        if (DgopService.cpuUsage > 60) return Theme.warning
                         return Theme.primary
                     }
                 }
@@ -86,13 +86,13 @@ Card {
 
                 Rectangle {
                     width: parent.width
-                    height: parent.height * Math.min(Math.max((MoboService.gpuTemp || 20) / 100, 0), 1)
+                    height: parent.height * Math.min(Math.max((DgopService.cpuTemperature || 40) / 100, 0), 1)
                     radius: parent.radius
                     anchors.bottom: parent.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: {
-                        if (MoboService.gpuTemp > 85) return Theme.error
-                        if (MoboService.gpuTemp > 69) return Theme.warning
+                        if (DgopService.cpuTemperature > 85) return Theme.error
+                        if (DgopService.cpuTemperature > 69) return Theme.warning
                         return Theme.primary
                     }
 
@@ -115,8 +115,8 @@ Card {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     color: {
-                        if (MoboService.gpuTemp > 85) return Theme.error
-                        if (MoboService.gpuTemp > 69) return Theme.warning
+                        if (DgopService.cpuTemperature > 85) return Theme.error
+                        if (DgopService.cpuTemperature > 69) return Theme.warning
                         return Theme.primary
                     }
                 }
@@ -138,13 +138,13 @@ Card {
 
                 Rectangle {
                     width: parent.width
-                    height: parent.height * Math.min((MoboService.memPerc * 100 || 42) / 100, 1)
+                    height: parent.height * Math.min((DgopService.memoryUsage || 42) / 100, 1)
                     radius: parent.radius
                     anchors.bottom: parent.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: {
-                        if (MoboService.memPerc * 100 > 90) return Theme.error
-                        if (MoboService.memPerc * 100 > 75) return Theme.warning
+                        if (DgopService.memoryUsage > 90) return Theme.error
+                        if (DgopService.memoryUsage > 75) return Theme.warning
                         return Theme.primary
                     }
 
@@ -167,8 +167,8 @@ Card {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     color: {
-                        if (MoboService.memPerc * 100 > 90) return Theme.error
-                        if (MoboService.memPerc * 100 > 75) return Theme.warning
+                        if (DgopService.memoryUsage > 90) return Theme.error
+                        if (DgopService.memoryUsage > 75) return Theme.warning
                         return Theme.primary
                     }
                 }

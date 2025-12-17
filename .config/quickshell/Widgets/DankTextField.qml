@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 import qs.Common
 import qs.Widgets
 
@@ -13,7 +12,7 @@ StyledRect {
 
     onActiveFocusChanged: {
         if (activeFocus) {
-            textInput.forceActiveFocus()
+            textInput.forceActiveFocus();
         }
     }
 
@@ -30,9 +29,9 @@ StyledRect {
     property color leftIconColor: Theme.surfaceVariantText
     property color leftIconFocusedColor: Theme.primary
     property bool showClearButton: false
-    property color backgroundColor: Qt.rgba(Theme.surfaceContainer.r, Theme.surfaceContainer.g, Theme.surfaceContainer.b, 0.9)
+    property color backgroundColor: Theme.withAlpha(Theme.surfaceContainerHigh, Theme.popupTransparency)
     property color focusedBorderColor: Theme.primary
-    property color normalBorderColor: Theme.outlineStrong
+    property color normalBorderColor: Theme.outlineMedium
     property color placeholderColor: Theme.outlineButton
     property int borderWidth: 1
     property int focusedBorderWidth: 2
@@ -53,26 +52,26 @@ StyledRect {
     signal focusStateChanged(bool hasFocus)
 
     function getActiveFocus() {
-        return textInput.activeFocus
+        return textInput.activeFocus;
     }
     function setFocus(value) {
-        textInput.focus = value
+        textInput.focus = value;
     }
     function forceActiveFocus() {
-        textInput.forceActiveFocus()
+        textInput.forceActiveFocus();
     }
     function selectAll() {
-        textInput.selectAll()
+        textInput.selectAll();
     }
     function clear() {
-        textInput.clear()
+        textInput.clear();
     }
     function insertText(str) {
-        textInput.insert(textInput.cursorPosition, str)
+        textInput.insert(textInput.cursorPosition, str);
     }
 
     width: 200
-    height: 48
+    height: Math.round(Theme.fontSizeMedium * 3.4)
     radius: cornerRadius
     color: backgroundColor
     border.color: textInput.activeFocus ? focusedBorderColor : normalBorderColor
@@ -112,30 +111,30 @@ StyledRect {
         onActiveFocusChanged: root.focusStateChanged(activeFocus)
         Keys.forwardTo: root.keyForwardTargets
         Keys.onLeftPressed: event => {
-                                if (root.ignoreLeftRightKeys) {
-                                    event.accepted = true
-                                } else {
-                                    // Allow normal TextInput cursor movement
-                                    event.accepted = false
-                                }
-                            }
+            if (root.ignoreLeftRightKeys) {
+                event.accepted = true;
+            } else {
+                // Allow normal TextInput cursor movement
+                event.accepted = false;
+            }
+        }
         Keys.onRightPressed: event => {
-                                 if (root.ignoreLeftRightKeys) {
-                                     event.accepted = true
-                                 } else {
-                                     event.accepted = false
-                                 }
-                             }
+            if (root.ignoreLeftRightKeys) {
+                event.accepted = true;
+            } else {
+                event.accepted = false;
+            }
+        }
         Keys.onPressed: event => {
-                            if (root.ignoreTabKeys && (event.key === Qt.Key_Tab || event.key === Qt.Key_Backtab)) {
-                                event.accepted = false
-                                for (var i = 0; i < root.keyForwardTargets.length; i++) {
-                                    if (root.keyForwardTargets[i]) {
-                                        root.keyForwardTargets[i].Keys.pressed(event)
-                                    }
-                                }
-                            }
-                        }
+            if (root.ignoreTabKeys && (event.key === Qt.Key_Tab || event.key === Qt.Key_Backtab)) {
+                event.accepted = false;
+                for (var i = 0; i < root.keyForwardTargets.length; i++) {
+                    if (root.keyForwardTargets[i]) {
+                        root.keyForwardTargets[i].Keys.pressed(event);
+                    }
+                }
+            }
+        }
 
         MouseArea {
             anchors.fill: parent
@@ -171,7 +170,7 @@ StyledRect {
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: {
-                textInput.text = ""
+                textInput.text = "";
             }
         }
     }

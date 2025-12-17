@@ -34,7 +34,6 @@ Rectangle {
     }
     radius: Theme.cornerRadius
 
-
     Behavior on border.color {
         ColorAnimation {
             duration: Theme.shortDuration
@@ -49,7 +48,7 @@ Rectangle {
         if (keyboardNavigationActive && expanded && selectedNotificationIndex >= 0) {
             return Theme.primaryHoverLight
         }
-        return Theme.surfaceContainerHigh
+        return Theme.withAlpha(Theme.surfaceContainerHigh, Theme.popupTransparency)
     }
     border.color: {
         if (isGroupSelected && keyboardNavigationActive) {
@@ -266,6 +265,7 @@ Rectangle {
 
     Column {
         id: expandedContent
+        objectName: "expandedContent"
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -321,7 +321,11 @@ Rectangle {
             spacing: 16
 
             Repeater {
-                model: notificationGroup?.notifications?.slice(0, 10) || []
+                id: notificationRepeater
+                objectName: "notificationRepeater"
+                model: ScriptModel {
+                    values: notificationGroup?.notifications?.slice(0, 10) || []
+                }
 
                 delegate: Rectangle {
                     required property var modelData
@@ -342,10 +346,9 @@ Rectangle {
                         return baseHeight
                     }
                     radius: Theme.cornerRadius
-                    color: isSelected ? Theme.primaryPressed : Theme.surfaceContainerHigh
+                    color: isSelected ? Theme.primaryPressed : Theme.withAlpha(Theme.surfaceContainerHigh, Theme.popupTransparency)
                     border.color: isSelected ? Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.4) : Qt.rgba(Theme.outline.r, Theme.outline.g, Theme.outline.b, 0.05)
                     border.width: isSelected ? 1 : 1
-
 
                     Behavior on border.color {
                         ColorAnimation {
@@ -537,7 +540,7 @@ Rectangle {
 
                                         StyledText {
                                             id: clearText
-                                            text: I18n.tr("Clear")
+                                            text: I18n.tr("Dismiss")
                                             color: parent.isHovered ? Theme.primary : Theme.surfaceVariantText
                                             font.pixelSize: Theme.fontSizeSmall
                                             font.weight: Font.Medium
@@ -630,7 +633,7 @@ Rectangle {
 
         StyledText {
             id: clearText
-            text: I18n.tr("Clear")
+            text: I18n.tr("Dismiss")
             color: clearButton.isHovered ? Theme.primary : Theme.surfaceVariantText
             font.pixelSize: Theme.fontSizeSmall
             font.weight: Font.Medium

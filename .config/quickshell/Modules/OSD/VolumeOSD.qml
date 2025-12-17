@@ -19,13 +19,13 @@ DankOSD {
 
         function onVolumeChanged() {
             if (!AudioService.suppressOSD) {
-                root.show()
+                root.show();
             }
         }
 
         function onMutedChanged() {
             if (!AudioService.suppressOSD) {
-                root.show()
+                root.show();
             }
         }
     }
@@ -35,13 +35,14 @@ DankOSD {
 
         function onSinkChanged() {
             if (root.shouldBeVisible) {
-                root.show()
+                root.show();
             }
         }
     }
     property string volumeIcon: {
         const audio = AudioService.sink?.audio;
-        if (!audio) return Quickshell.iconPath("audio-volume-muted-symbolic");
+        if (!audio)
+            return Quickshell.iconPath("audio-volume-muted-symbolic");
 
         if (audio.muted) {
             return Quickshell.iconPath("audio-volume-muted-symbolic");
@@ -92,10 +93,10 @@ DankOSD {
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        AudioService.toggleMute()
+                        AudioService.toggleMute();
                     }
                     onContainsMouseChanged: {
-                        setChildHovered(containsMouse || volumeSlider.containsMouse)
+                        setChildHovered(containsMouse || volumeSlider.containsMouse);
                     }
                 }
             }
@@ -121,20 +122,20 @@ DankOSD {
 
                 Component.onCompleted: {
                     if (AudioService.sink && AudioService.sink.audio) {
-                        value = Math.min(100, Math.round(AudioService.sink.audio.volume * 100))
+                        value = Math.min(100, Math.round(AudioService.sink.audio.volume * 100));
                     }
                 }
 
                 onSliderValueChanged: newValue => {
-                                          if (AudioService.sink && AudioService.sink.audio) {
-                                              AudioService.suppressOSD = true
-                                              AudioService.sink.audio.volume = newValue / 100
-                                              AudioService.suppressOSD = false
-                                          }
-                                      }
+                    if (AudioService.sink && AudioService.sink.audio) {
+                        AudioService.suppressOSD = true;
+                        AudioService.sink.audio.volume = newValue / 100;
+                        AudioService.suppressOSD = false;
+                    }
+                }
 
                 onContainsMouseChanged: {
-                    setChildHovered(containsMouse || muteButton.containsMouse)
+                    setChildHovered(containsMouse || muteButton.containsMouse);
                 }
 
                 Connections {
@@ -142,7 +143,7 @@ DankOSD {
 
                     function onVolumeChanged() {
                         if (volumeSlider && !volumeSlider.pressed) {
-                            volumeSlider.value = Math.min(100, Math.round(AudioService.sink.audio.volume * 100))
+                            volumeSlider.value = Math.min(100, Math.round(AudioService.sink.audio.volume * 100));
                         }
                     }
                 }
@@ -153,16 +154,15 @@ DankOSD {
                 anchors.verticalCenter: parent.verticalCenter
                 text: volumeSlider.actualVolumePercent
                 width: Theme.IconSize
-                
             }
         }
     }
 
     onOsdShown: {
         if (AudioService.sink && AudioService.sink.audio && contentLoader.item) {
-            const slider = contentLoader.item.children[0].children[1]
+            const slider = contentLoader.item.children[0].children[1];
             if (slider) {
-                slider.value = Math.min(100, Math.round(AudioService.sink.audio.volume * 100))
+                slider.value = Math.min(100, Math.round(AudioService.sink.audio.volume * 100));
             }
         }
     }
