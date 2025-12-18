@@ -229,11 +229,11 @@ waveform = 0
 # You can define as many as 8 different colors. They range from bottom to top of screen
 gradient = 1
 ; gradient_count = 3
-gradient_color_1 = '#335E62'
-gradient_color_2 = '#943F4E'
-gradient_color_3 = '#A3414E'
-gradient_color_4 = '#638D85'
-gradient_color_5 = '#AE8C75'
+gradient_color_1 = '#957C71'
+gradient_color_2 = '#947F71'
+gradient_color_3 = '#AA807B'
+gradient_color_4 = '#AB9482'
+gradient_color_5 = '#B29C8B'
 # gradient_color_6 = '#E1E4C0'
 # gradient_color_7 = '#cc5933'
 # gradient_color_8 = '#cc3333'

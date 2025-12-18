@@ -1,1 +1,1 @@
-smile
+walker -m symbols

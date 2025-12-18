@@ -67,8 +67,6 @@ gum
 gvfs
 gvfs-mtp
 htop
-hypridle
-hyprlock
 hyprpicker
 imagemagick
 inkscape
@@ -82,6 +80,7 @@ krita
 kvantum
 lazygit
 libgtop
+libindicator
 libpulse
 libreoffice-fresh
 librewolf-bin
@@ -131,7 +130,6 @@ qt6ct
 quickshell
 rclone
 ripgrep
-rofi
 rsync
 sddm
 slurp
@@ -156,11 +154,9 @@ unzip
 vdirsyncer
 vesktop-bin
 vulkan-tools
-waybar
 waypaper
 wget
 wireplumber
-wlogout
 xan
 xarchiver
 xclip
