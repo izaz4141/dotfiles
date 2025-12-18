@@ -7,6 +7,7 @@ import qs.Modals.Settings
 import qs.Modals.Spotlight
 import qs.Modules
 import qs.Modules.AppDrawer
+import qs.Modules.Cheatsheet
 import qs.Modules.DankDash
 import qs.Modules.ControlCenter
 import qs.Modules.Dock
@@ -653,6 +654,21 @@ Item {
         }
     }
 
+    LazyLoader {
+        id: cheatsheetLoader
+
+        active: false
+
+        Cheatsheet {
+            id: cheatsheet
+            onClosed: cheatsheetLoader.active = false
+
+            Component.onCompleted: {
+                // PopoutService.cheatsheet = cheatsheet; // If PopoutService needs it
+            }
+        }
+    }
+
     DMSShellIPC {
         powerMenuModalLoader: powerMenuModalLoader
         processListModalLoader: processListModalLoader
@@ -662,6 +678,7 @@ Item {
         hyprKeybindsModalLoader: hyprKeybindsModalLoader
         dankBarRepeater: dankBarRepeater
         hyprlandOverviewLoader: hyprlandOverviewLoader
+        cheatsheetLoader: cheatsheetLoader
     }
 
     Variants {

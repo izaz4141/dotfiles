@@ -15,6 +15,7 @@ Item {
     required property var hyprKeybindsModalLoader
     required property var dankBarRepeater
     required property var hyprlandOverviewLoader
+    required property var cheatsheetLoader
 
     function getFirstBar() {
         if (!root.dankBarRepeater || root.dankBarRepeater.count === 0)
@@ -399,6 +400,25 @@ Item {
         }
 
         target: "keybinds"
+    }
+
+    IpcHandler {
+        function toggle(): string {
+            root.cheatsheetLoader.active = !root.cheatsheetLoader.active;
+            return root.cheatsheetLoader.active ? "CHEATSHEET_OPEN_SUCCESS" : "CHEATSHEET_CLOSE_SUCCESS";
+        }
+
+        function close(): string {
+            root.cheatsheetLoader.active = false;
+            return "CHEATSHEET_CLOSE_SUCCESS";
+        }
+
+        function open(): string {
+            root.cheatsheetLoader.active = true;
+            return "CHEATSHEET_OPEN_SUCCESS";
+        }
+
+        target: "cheatsheet"
     }
 
     IpcHandler {
