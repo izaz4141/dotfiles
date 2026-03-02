@@ -1,4 +1,5 @@
 appimagelauncher
+ayugram-desktop-bin
 bottles
 elephant
 elephant-archlinuxpkgs
@@ -12,7 +13,6 @@ elephant-symbols
 elephant-unicode
 elephant-websearch
 fladder-bin
-hardinfo2
 hyprshade
 localsend-bin
 masterpdfeditor
@@ -26,7 +26,6 @@ rustdesk-bin
 snapper-rollback
 snapper-support
 vscodium-bin
-walker
 wallust
 youtube-music-bin
 zotero-bin

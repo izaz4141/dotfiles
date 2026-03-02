@@ -37,6 +37,7 @@ efibootmgr
 extra-cmake-modules
 eza
 fastfetch
+fcron
 fd
 ffmpegthumbnailer
 figlet
@@ -44,7 +45,6 @@ fish
 flameshot
 flatpak
 foot
-freedownloadmanager
 fuse2
 fvm
 fzf
@@ -58,6 +58,7 @@ gnome-bluetooth-3.0
 gnome-calculator
 gnome-font-viewer
 gnome-system-monitor
+gnome-text-editor
 grim
 grimblast-git
 grub
@@ -66,7 +67,9 @@ gst-plugin-pipewire
 gum
 gvfs
 gvfs-mtp
+hardinfo2
 htop
+hypridle
 hyprpicker
 imagemagick
 inkscape
@@ -83,8 +86,8 @@ libgtop
 libindicator
 libpulse
 libreoffice-fresh
-librewolf-bin
 linux
+linux-cachyos
 linux-firmware
 loupe
 lsd
@@ -120,7 +123,7 @@ plymouth
 polkit-gnome
 power-profiles-daemon
 proton-cachyos
-protonup-qt
+protonplus
 python-pip
 python-screeninfo
 qt5-graphicaleffects
@@ -154,6 +157,7 @@ unzip
 vdirsyncer
 vesktop-bin
 vulkan-tools
+walker
 waypaper
 wget
 wireplumber
@@ -165,5 +169,7 @@ yazi
 yt-dlp
 zed
 zellij
+zen-browser-bin
+zip
 zoxide
 zram-generator

@@ -1,9 +1,9 @@
 #!/bin/bash
-#    ___                    
+#    ___
 #   / _ \___ _    _____ ____
 #  / ___/ _ \ |/|/ / -_) __/
-# /_/   \___/__,__/\__/_/   
-#                           
+# /_/   \___/__,__/\__/_/
+#
 
 if [[ "$1" == "exit" ]]; then
     echo ":: Exit"
@@ -15,7 +15,7 @@ fi
 if [[ "$1" == "lock" ]]; then
   echo ":: Lock"
   sleep 0.5
-  hyprlock
+  qs ipc call lock lock
 fi
 
 if [[ "$1" == "reboot" ]]; then
