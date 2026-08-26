@@ -182,7 +182,7 @@ case $1 in
     volume_mute)
     # Toggles mute and displays the notification
     pactl set-sink-mute @DEFAULT_SINK@ toggle
-#     show_volume_notif
+    # show_volume_notif
     ;;
 
     mic_up)
@@ -194,7 +194,7 @@ case $1 in
     else
         pactl set-source-volume @DEFAULT_SOURCE@ +$volume_step%
     fi
-#     show_mic_notif
+    # show_mic_notif
     ;;
 
     mic_down)
@@ -205,27 +205,27 @@ case $1 in
     else
         pactl set-source-volume @DEFAULT_SOURCE@ -$volume_step%
     fi
-#     show_mic_notif
+    # show_mic_notif
     ;;
 
     mic_mute)
     # Toggles mute and displays the notification
     pactl set-source-mute @DEFAULT_SOURCE@ toggle
-#     show_mic_notif
+    # show_mic_notif
     ;;
 
     brightness_up)
     # Increases brightness and displays the notification
-    # brightnessctl -q s +$brightness_step%
-    qs ipc call brightness incrementDefault $brightness_step
-#     show_brightness_notif
+    brightnessctl -q s +$brightness_step%
+    # qs ipc call brightness incrementDefault $brightness_step
+    # show_brightness_notif
     ;;
 
     brightness_down)
     # Decreases brightness and displays the notification
-    # brightnessctl -q s $brightness_step%-
-    qs ipc call brightness decrementDefault $brightness_step
-#     show_brightness_notif
+    brightnessctl -q s $brightness_step%-
+    # qs ipc call brightness decrementDefault $brightness_step
+    # show_brightness_notif
     ;;
 
     next_track)
@@ -241,8 +241,8 @@ case $1 in
     ;;
 
     play_pause)
-    playerctl play-pause
-    show_music_notif
     # Pauses/resumes playback and displays the notification
+    playerctl play-pause
+    sleep 0.5 && show_music_notif
     ;;
 esac

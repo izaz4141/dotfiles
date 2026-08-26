@@ -1,1 +1,1 @@
-walker -m symbols
+rofimoji --selector-args="-theme ~/.config/rofi/config-emoji.rasi -kb-row-left Left -kb-row-right Right -kb-move-char-back Control+b -kb-move-char-forward Control+f" --hidden-descriptions -a clipboard 

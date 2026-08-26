@@ -49,7 +49,6 @@ output_path = '~/.cache/wal/sequences'
 input_path = '~/.config/matugen/templates/dank.json'
 output_path = '~/.cache/DankMaterialShell/dms-colors.json'
 
-
 [templates.walker]
 input_path = '~/.config/matugen/templates/colors.css'
 output_path = '~/.config/walker/themes/dynamic/colors.css'

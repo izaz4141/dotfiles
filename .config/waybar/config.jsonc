@@ -35,7 +35,9 @@
     "custom/separator#dot-line",
     "hyprland/workspaces#rw",
     "custom/separator#dot-line",
-    "clock"
+    "clock",
+    "custom/separator#dot-line",
+    "custom/swaync"
   ],
 
   "modules-right": [

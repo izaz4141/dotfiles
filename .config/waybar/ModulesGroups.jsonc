@@ -17,7 +17,8 @@
       "custom/light_dark",
       "custom/file_manager",
       "custom/tty",
-      "custom/browser"
+      "custom/browser",
+      "idle_inhibitor"
     ]
   },
   "group/motherboard": {

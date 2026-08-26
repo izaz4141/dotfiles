@@ -1,0 +1,92 @@
+configuration {
+    show-icons:                     false;
+    display-drun:                   "Emoji";
+}
+
+/* ---- Load font ---- */
+@import "~/.config/ml4w/settings/rofi-font.rasi"
+
+/* ---- Load colors ---- */
+@import "./colors.rasi"
+
+/* ---- Load wallpaper ---- */
+@import "~/.config/ml4w/cache/current_wallpaper.rasi"
+
+/* ---- Load border width ---- */
+@import "~/.config/ml4w/settings/rofi-border.rasi"
+
+* {
+    background-color:               @background; 
+    text-color:                     @primary;
+    font:                           "JetBrainsMono Nerd Font 12";
+}
+
+window {
+    width:                          450px;
+    height:                         500px;
+    border:                         @border-width;
+    border-color:                   @tertiary;
+    border-radius:                  10px;
+}
+
+mainbox {
+    children:                       [ inputbar, listview ];
+    padding:                        15px;
+}
+
+inputbar {
+    children:                       [ textbox-prompt-colon, entry ];
+    background-color:               @secondary-container;
+    text-color:                     @secondary;
+    border-radius:                  6px;
+    padding:                        10px;
+    margin:                         0px 0px 10px 0px;
+}
+
+textbox-prompt-colon {
+    enabled:                      true;
+    expand:                       false;
+    str:                          "";
+    padding:                      0px 10px 0px 0px;
+    background-color:             transparent;
+    text-color:                   inherit;
+}
+
+
+entry {
+    enabled:                      true;
+    background-color:             transparent;
+    text-color:                   inherit;
+    cursor:                       text;
+    placeholder:                  "Search";
+    placeholder-color:            inherit;
+}
+
+listview {
+    columns:                        6;
+    lines:                          6;
+    cycle:                          true;
+    dynamic:                        true;
+    layout:                         vertical;
+    scrollbar:                      false;
+    fixed-height:                   false;
+    spacing:                        5px;
+}
+
+element {
+    padding:                        0px 0px; 
+    border-radius:                  8px;
+}
+
+element selected {
+    background-color:               @primary-container;
+    text-color:                     @primary;
+}
+
+element-text {
+    background-color:               inherit;
+    text-color:                     inherit;
+    horizontal-align:               0.5;
+    vertical-align:                 0.0;
+    font:                           "JetBrainsMono Nerd Font 20"; 
+}

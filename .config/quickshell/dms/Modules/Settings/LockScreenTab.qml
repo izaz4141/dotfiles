@@ -1,0 +1,404 @@
+import QtQuick
+import Quickshell
+import qs.Common
+import qs.Modals.FileBrowser
+import qs.Services
+import qs.Widgets
+import qs.Modules.Settings.Widgets
+
+Item {
+    id: root
+
+    FileBrowserModal {
+        id: videoBrowserModal
+        browserTitle: I18n.tr("Select Video or Folder")
+        browserIcon: "movie"
+        browserType: "video"
+        showHiddenFiles: false
+        fileExtensions: ["*.mp4", "*.mkv", "*.webm", "*.mov", "*.avi", "*.m4v"]
+        onFileSelected: path => SettingsData.set("lockScreenVideoPath", path)
+    }
+
+    DankFlickable {
+        anchors.fill: parent
+        clip: true
+        contentHeight: mainColumn.height + Theme.spacingXL
+        contentWidth: width
+
+        Column {
+            id: mainColumn
+            topPadding: 4
+            width: Math.min(550, parent.width - Theme.spacingL * 2)
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: Theme.spacingXL
+
+            SettingsCard {
+                width: parent.width
+                iconName: "lock"
+                title: I18n.tr("Lock Screen layout")
+                settingKey: "lockLayout"
+
+                SettingsToggleRow {
+                    settingKey: "lockScreenShowPowerActions"
+                    tags: ["lock", "screen", "power", "actions", "shutdown", "reboot"]
+                    text: I18n.tr("Show Power Actions", "Enable power action icon on the lock screen window")
+                    checked: SettingsData.lockScreenShowPowerActions
+                    onToggled: checked => SettingsData.set("lockScreenShowPowerActions", checked)
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockScreenShowSystemIcons"
+                    tags: ["lock", "screen", "system", "icons", "status"]
+                    text: I18n.tr("Show System Icons", "Enable system status icons on the lock screen window")
+                    checked: SettingsData.lockScreenShowSystemIcons
+                    onToggled: checked => SettingsData.set("lockScreenShowSystemIcons", checked)
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockScreenShowTime"
+                    tags: ["lock", "screen", "time", "clock", "display"]
+                    text: I18n.tr("Show System Time", "Enable system time display on the lock screen window")
+                    checked: SettingsData.lockScreenShowTime
+                    onToggled: checked => SettingsData.set("lockScreenShowTime", checked)
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockScreenShowDate"
+                    tags: ["lock", "screen", "date", "calendar", "display"]
+                    text: I18n.tr("Show System Date", "Enable system date display on the lock screen window")
+                    checked: SettingsData.lockScreenShowDate
+                    onToggled: checked => SettingsData.set("lockScreenShowDate", checked)
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockScreenShowProfileImage"
+                    tags: ["lock", "screen", "profile", "image", "avatar", "picture"]
+                    text: I18n.tr("Show Profile Image", "Enable profile image display on the lock screen window")
+                    checked: SettingsData.lockScreenShowProfileImage
+                    onToggled: checked => SettingsData.set("lockScreenShowProfileImage", checked)
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockScreenShowPasswordField"
+                    tags: ["lock", "screen", "password", "field", "input", "visible"]
+                    text: I18n.tr("Show Password Field", "Enable password field display on the lock screen window")
+                    description: I18n.tr("If the field is hidden, it will appear as soon as a key is pressed.")
+                    checked: SettingsData.lockScreenShowPasswordField
+                    onToggled: checked => SettingsData.set("lockScreenShowPasswordField", checked)
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockScreenShowMediaPlayer"
+                    tags: ["lock", "screen", "media", "player", "music", "mpris"]
+                    text: I18n.tr("Show Media Player", "Enable media player controls on the lock screen window")
+                    checked: SettingsData.lockScreenShowMediaPlayer
+                    onToggled: checked => SettingsData.set("lockScreenShowMediaPlayer", checked)
+                }
+
+                SettingsDropdownRow {
+                    settingKey: "lockScreenNotificationMode"
+                    tags: ["lock", "screen", "notification", "notifications", "privacy"]
+                    text: I18n.tr("Notification Display", "lock screen notification privacy setting")
+                    description: I18n.tr("Control what notification information is shown on the lock screen", "lock screen notification privacy setting")
+                    options: [I18n.tr("Disabled", "lock screen notification mode option"), I18n.tr("Count Only", "lock screen notification mode option"), I18n.tr("App Names", "lock screen notification mode option"), I18n.tr("Full Content", "lock screen notification mode option")]
+                    currentValue: options[SettingsData.lockScreenNotificationMode] || options[0]
+                    onValueChanged: value => {
+                        const idx = options.indexOf(value);
+                        if (idx >= 0) {
+                            SettingsData.set("lockScreenNotificationMode", idx);
+                        }
+                    }
+                }
+            }
+
+            SettingsCard {
+                width: parent.width
+                iconName: "lock"
+                title: I18n.tr("Lock Screen behaviour")
+                settingKey: "lockBehavior"
+
+                StyledText {
+                    text: I18n.tr("loginctl not available - lock integration requires DMS socket connection")
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.warning
+                    visible: !SessionService.loginctlAvailable
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                }
+
+                SettingsToggleRow {
+                    settingKey: "loginctlLockIntegration"
+                    tags: ["lock", "screen", "loginctl", "dbus", "integration", "external"]
+                    text: I18n.tr("Enable loginctl lock integration")
+                    description: I18n.tr("Bind lock screen to dbus signals from loginctl. Disable if using an external lock screen")
+                    checked: SessionService.loginctlAvailable && SettingsData.loginctlLockIntegration
+                    enabled: SessionService.loginctlAvailable
+                    onToggled: checked => {
+                        if (!SessionService.loginctlAvailable)
+                            return;
+                        SettingsData.set("loginctlLockIntegration", checked);
+                    }
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockBeforeSuspend"
+                    tags: ["lock", "screen", "suspend", "sleep", "automatic"]
+                    text: I18n.tr("Lock before suspend")
+                    description: I18n.tr("Automatically lock the screen when the system prepares to suspend")
+                    checked: SettingsData.lockBeforeSuspend
+                    visible: SessionService.loginctlAvailable && SettingsData.loginctlLockIntegration
+                    onToggled: checked => SettingsData.set("lockBeforeSuspend", checked)
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockScreenPowerOffMonitorsOnLock"
+                    tags: ["lock", "screen", "monitor", "display", "dpms", "power"]
+                    text: I18n.tr("Power off monitors on lock")
+                    description: I18n.tr("Turn off all displays immediately when the lock screen activates")
+                    checked: SettingsData.lockScreenPowerOffMonitorsOnLock
+                    onToggled: checked => SettingsData.set("lockScreenPowerOffMonitorsOnLock", checked)
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockAtStartup"
+                    tags: ["lock", "screen", "startup", "start", "boot", "login", "automatic"]
+                    text: I18n.tr("Lock at startup")
+                    description: I18n.tr("Automatically lock the screen when DMS starts")
+                    checked: SettingsData.lockAtStartup
+                    onToggled: checked => SettingsData.set("lockAtStartup", checked)
+                }
+
+                SettingsToggleRow {
+                    settingKey: "enableFprint"
+                    tags: ["lock", "screen", "fingerprint", "authentication", "biometric", "fprint"]
+                    text: I18n.tr("Enable fingerprint authentication")
+                    description: SettingsData.fprintdAvailable ? I18n.tr("Use fingerprint reader for lock screen authentication (requires enrolled fingerprints)") : I18n.tr("Not enrolled", "fingerprint not detected status")
+                    descriptionColor: SettingsData.fprintdAvailable ? Theme.surfaceVariantText : Theme.warning
+                    checked: SettingsData.enableFprint
+                    enabled: SettingsData.fprintdAvailable
+                    onToggled: checked => SettingsData.set("enableFprint", checked)
+                }
+
+                SettingsToggleRow {
+                    settingKey: "enableU2f"
+                    tags: ["lock", "screen", "u2f", "yubikey", "security", "key", "fido", "authentication", "hardware"]
+                    text: I18n.tr("Enable security key authentication", "Enable FIDO2/U2F hardware security key for lock screen")
+                    description: SettingsData.u2fAvailable ? I18n.tr("Use a FIDO2/U2F security key (e.g. YubiKey) for lock screen authentication (requires enrolled keys)", "lock screen U2F security key setting") : I18n.tr("Not enrolled", "security key not detected status")
+                    descriptionColor: SettingsData.u2fAvailable ? Theme.surfaceVariantText : Theme.warning
+                    checked: SettingsData.enableU2f
+                    enabled: SettingsData.u2fAvailable
+                    onToggled: checked => SettingsData.set("enableU2f", checked)
+                }
+
+                SettingsDropdownRow {
+                    settingKey: "u2fMode"
+                    tags: ["lock", "screen", "u2f", "yubikey", "security", "key", "mode", "factor", "second"]
+                    text: I18n.tr("Security key mode", "lock screen U2F security key mode setting")
+                    description: I18n.tr("'Alternative' lets the key unlock on its own. 'Second factor' requires password or fingerprint first, then the key.", "lock screen U2F security key mode setting")
+                    visible: SettingsData.u2fAvailable && SettingsData.enableU2f
+                    options: [I18n.tr("Alternative (OR)", "U2F mode option: key works as standalone unlock method"), I18n.tr("Second Factor (AND)", "U2F mode option: key required after password or fingerprint")]
+                    currentValue: SettingsData.u2fMode === "and" ? I18n.tr("Second Factor (AND)", "U2F mode option: key required after password or fingerprint") : I18n.tr("Alternative (OR)", "U2F mode option: key works as standalone unlock method")
+                    onValueChanged: value => {
+                        if (value === I18n.tr("Second Factor (AND)", "U2F mode option: key required after password or fingerprint"))
+                            SettingsData.set("u2fMode", "and");
+                        else
+                            SettingsData.set("u2fMode", "or");
+                    }
+                }
+            }
+
+            SettingsCard {
+                width: parent.width
+                iconName: "movie"
+                title: I18n.tr("Video Screensaver")
+                settingKey: "videoScreensaver"
+
+                StyledText {
+                    visible: !MultimediaService.available
+                    text: I18n.tr("QtMultimedia is not available - video screensaver requires qt multimedia services")
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.warning
+                    width: parent.width
+                    wrapMode: Text.WordWrap
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockScreenVideoEnabled"
+                    tags: ["lock", "screen", "video", "screensaver", "animation", "movie"]
+                    text: I18n.tr("Enable Video Screensaver")
+                    description: I18n.tr("Play a video when the screen locks.")
+                    enabled: MultimediaService.available
+                    checked: SettingsData.lockScreenVideoEnabled
+                    onToggled: checked => SettingsData.set("lockScreenVideoEnabled", checked)
+                }
+
+                Column {
+                    width: parent.width
+                    spacing: Theme.spacingXS
+                    visible: SettingsData.lockScreenVideoEnabled && MultimediaService.available
+
+                    StyledText {
+                        text: I18n.tr("Video Path")
+                        font.pixelSize: Theme.fontSizeSmall
+                        color: Theme.surfaceVariantText
+                    }
+
+                    StyledText {
+                        text: I18n.tr("Path to a video file or folder containing videos")
+                        font.pixelSize: Theme.fontSizeXSmall
+                        color: Theme.outlineVariant
+                        wrapMode: Text.WordWrap
+                        width: parent.width
+                    }
+
+                    Row {
+                        width: parent.width
+                        spacing: Theme.spacingS
+
+                        DankTextField {
+                            id: videoPathField
+                            width: parent.width - browseVideoButton.width - Theme.spacingS
+                            placeholderText: I18n.tr("/path/to/videos")
+                            text: SettingsData.lockScreenVideoPath
+                            backgroundColor: Theme.surfaceContainerHighest
+                            onTextChanged: {
+                                if (text !== SettingsData.lockScreenVideoPath) {
+                                    SettingsData.set("lockScreenVideoPath", text);
+                                }
+                            }
+                        }
+
+                        DankButton {
+                            id: browseVideoButton
+                            text: I18n.tr("Browse")
+                            onClicked: videoBrowserModal.open()
+                        }
+                    }
+                }
+
+                SettingsToggleRow {
+                    settingKey: "lockScreenVideoCycling"
+                    tags: ["lock", "screen", "video", "screensaver", "cycling", "random", "shuffle"]
+                    text: I18n.tr("Automatic Cycling")
+                    description: I18n.tr("Pick a different random video each time from the same folder")
+                    visible: SettingsData.lockScreenVideoEnabled && MultimediaService.available
+                    enabled: MultimediaService.available
+                    checked: SettingsData.lockScreenVideoCycling
+                    onToggled: checked => SettingsData.set("lockScreenVideoCycling", checked)
+                }
+            }
+
+            SettingsCard {
+                width: parent.width
+                iconName: "monitor"
+                title: I18n.tr("Lock Screen Display")
+                settingKey: "lockDisplay"
+                visible: Quickshell.screens.length > 1
+
+                StyledText {
+                    text: I18n.tr("Choose which monitor shows the lock screen interface. Other monitors will display a solid color for OLED burn-in protection.")
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceVariantText
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                }
+
+                SettingsDropdownRow {
+                    id: lockScreenMonitorDropdown
+                    settingKey: "lockScreenActiveMonitor"
+                    tags: ["lock", "screen", "monitor", "display", "active"]
+                    text: I18n.tr("Active Lock Screen Monitor")
+                    options: {
+                        var opts = [I18n.tr("All Monitors")];
+                        var screens = Quickshell.screens;
+                        for (var i = 0; i < screens.length; i++) {
+                            opts.push(SettingsData.getScreenDisplayName(screens[i]));
+                        }
+                        return opts;
+                    }
+
+                    Component.onCompleted: {
+                        if (SettingsData.lockScreenActiveMonitor === "all") {
+                            currentValue = I18n.tr("All Monitors");
+                            return;
+                        }
+                        var screens = Quickshell.screens;
+                        for (var i = 0; i < screens.length; i++) {
+                            if (screens[i].name === SettingsData.lockScreenActiveMonitor) {
+                                currentValue = SettingsData.getScreenDisplayName(screens[i]);
+                                return;
+                            }
+                        }
+                        currentValue = I18n.tr("All Monitors");
+                    }
+
+                    onValueChanged: value => {
+                        if (value === I18n.tr("All Monitors")) {
+                            SettingsData.set("lockScreenActiveMonitor", "all");
+                            return;
+                        }
+                        var screens = Quickshell.screens;
+                        for (var i = 0; i < screens.length; i++) {
+                            if (SettingsData.getScreenDisplayName(screens[i]) === value) {
+                                SettingsData.set("lockScreenActiveMonitor", screens[i].name);
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                Row {
+                    width: parent.width
+                    spacing: Theme.spacingM
+                    visible: SettingsData.lockScreenActiveMonitor !== "all"
+
+                    Column {
+                        width: parent.width - inactiveColorPreview.width - Theme.spacingM
+                        spacing: Theme.spacingXS
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        StyledText {
+                            text: I18n.tr("Inactive Monitor Color")
+                            font.pixelSize: Theme.fontSizeMedium
+                            color: Theme.surfaceText
+                        }
+
+                        StyledText {
+                            text: I18n.tr("Color displayed on monitors without the lock screen")
+                            font.pixelSize: Theme.fontSizeSmall
+                            color: Theme.surfaceVariantText
+                            width: parent.width
+                            wrapMode: Text.Wrap
+                        }
+                    }
+
+                    Rectangle {
+                        id: inactiveColorPreview
+                        width: 48
+                        height: 48
+                        radius: Theme.cornerRadius
+                        color: SettingsData.lockScreenInactiveColor
+                        border.color: Theme.outline
+                        border.width: 1
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (!PopoutService.colorPickerModal)
+                                    return;
+                                PopoutService.colorPickerModal.selectedColor = SettingsData.lockScreenInactiveColor;
+                                PopoutService.colorPickerModal.pickerTitle = I18n.tr("Inactive Monitor Color");
+                                PopoutService.colorPickerModal.onColorSelectedCallback = function (selectedColor) {
+                                    SettingsData.set("lockScreenInactiveColor", selectedColor);
+                                };
+                                PopoutService.colorPickerModal.show();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

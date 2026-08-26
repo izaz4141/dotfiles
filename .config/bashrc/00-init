@@ -7,13 +7,13 @@ alias sudo='sudo '
 # Exports
 # -----------------------------------------------------
 export EDITOR=nvim
-export PATH="$HOME/Downloads/bin/:$HOME/.cargo/bin/:/usr/lib/ccache/bin/:$PATH"
+export PATH="$HOME/Downloads/bin/:$HOME/.cargo/bin/:/usr/lib/ccache/bin/:$HOME/.local/bin/:$PATH"
 export TS_NO_LOGS_NO_SUPPORT=true
+export QML_IMPORT_PATH=/usr/lib/qt6/qml
+export QML2_IMPORT_PATH=/usr/lib/qt6/qml
 
 if command -v yay >/dev/null 2>&1; then
     export AUR="yay"
 elif command -v paru >/dev/null 2>&1; then
     export AUR="paru"
 fi
-
-

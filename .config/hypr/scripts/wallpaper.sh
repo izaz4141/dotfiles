@@ -109,7 +109,7 @@ fi
 # -----------------------------------------------------
 
 echo ":: Execute matugen with $used_wallpaper"
-matugen image $used_wallpaper -m "dark"
+matugen image $used_wallpaper -m "dark" --source-color-index 0
 
 # -----------------------------------------------------
 # Execute wallust
@@ -130,9 +130,11 @@ fi
 # Reload Waybar
 # -----------------------------------------------------
 
-sleep 2
-killall waybar
-waybar &
+if type waybar >/dev/null 2>&1; then
+    sleep 2
+    killall waybar
+    waybar &
+fi
 
 # -----------------------------------------------------
 # Reload nwg-dock-hyprland
@@ -153,9 +155,12 @@ fi
 # -----------------------------------------------------
 # Update SwayNC
 # -----------------------------------------------------
-sleep 0.1
-swaync-client -rs
-swaync-client -R
+
+if type swaync-client >/dev/null 2>&1; then
+    sleep 0.1
+    swaync-client -rs
+    swaync-client -R
+fi
 
 # -----------------------------------------------------
 # Update Cava
