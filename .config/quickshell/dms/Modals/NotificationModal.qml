@@ -185,6 +185,7 @@ DankModal {
                 NotificationSettings {
                     id: notificationSettings
                     expanded: notificationHeader.showSettings
+                    maxHeight: Math.max(0, parent.height - notificationHeader.height - Theme.spacingM * 2 - Theme.spacingL * 2 - 160)
                 }
 
                 KeyboardNavigatedNotificationList {

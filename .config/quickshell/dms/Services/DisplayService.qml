@@ -10,6 +10,7 @@ import qs.Common
 Singleton {
     id: root
 
+    // ── Brightness properties ──
     property bool brightnessAvailable: devices.length > 0
     property var devices: []
     property var ddcDevices: []
@@ -25,25 +26,251 @@ Singleton {
         if (!deviceToUse) {
             return 50
         }
-
         return getDeviceBrightness(deviceToUse)
     }
     property int maxBrightness: 100
     property bool brightnessInitialized: false
 
+    // ── Gamma / night mode properties ──
+    property bool gammaControlAvailable: false
+    property bool nightModeActive: nightModeEnabled
+    property bool nightModeEnabled: false
+    property int gammaCurrentTemp: 0
+    property bool gammaIsDay: true
+    property string gammaSunriseTime: ""
+    property string gammaSunsetTime: ""
+    property string gammaNextTransition: ""
+    property bool automationAvailable: false
+    property bool geoclueAvailable: false
+    property bool geoclueAgentRunning: false
+    property bool isAutomaticNightTime: false
+
+    property int gradualFromTemp: 0
+    property int gradualToTemp: 0
+    property int gradualSteps: 0
+    property int gradualStepIndex: 0
+    property real gradualIntervalMs: 0
+
     signal brightnessChanged
     signal deviceSwitched
 
-    property bool nightModeActive: nightModeEnabled
+    // ── Sunrise / sunset calculation (NOAA algorithm) ──
 
-    property bool nightModeEnabled: false
-    property bool automationAvailable: false
-    property bool geoclueAvailable: false
-    property bool isAutomaticNightTime: false
+    function toJulianDay(year, month, day) {
+        if (month <= 2) {
+            year -= 1
+            month += 12
+        }
+        const A = Math.floor(year / 100)
+        const B = 2 - A + Math.floor(A / 4)
+        return Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + B - 1524.5
+    }
+
+    function toCentury(jd) {
+        return (jd - 2451545.0) / 36525.0
+    }
+
+    function sunMeanLongitude(T) {
+        return (280.46646 + T * (36000.76983 + 0.0003032 * T)) % 360
+    }
+
+    function sunMeanAnomaly(T) {
+        return 357.52911 + T * (35999.05029 - 0.0001537 * T)
+    }
+
+    function sunEquationOfCenter(T) {
+        const M = sunMeanAnomaly(T)
+        const Mrad = M * Math.PI / 180
+        return Math.sin(Mrad) * (1.914602 - T * (0.004817 + 0.000014 * T)) + Math.sin(2 * Mrad) * (0.019993 - 0.000101 * T) + Math.sin(3 * Mrad) * 0.000289
+    }
+
+    function sunApparentLongitude(T) {
+        const omega = 125.04 - 1934.136 * T
+        return sunMeanLongitude(T) + sunEquationOfCenter(T) - 0.00569 - 0.00478 * Math.sin(omega * Math.PI / 180)
+    }
+
+    function meanObliquityOfEcliptic(T) {
+        const seconds = 21.448 - T * (46.8150 + T * (0.00059 - T * 0.001813))
+        return 23.0 + (26.0 + seconds / 60.0) / 60.0
+    }
+
+    function obliquityCorrection(T) {
+        const omega = 125.04 - 1934.136 * T
+        return meanObliquityOfEcliptic(T) + 0.00256 * Math.cos(omega * Math.PI / 180)
+    }
+
+    function sunDeclination(T) {
+        const e = obliquityCorrection(T) * Math.PI / 180
+        const lambda = sunApparentLongitude(T) * Math.PI / 180
+        return Math.asin(Math.sin(e) * Math.sin(lambda)) * 180 / Math.PI
+    }
+
+    function equationOfTime(T) {
+        const epsilon = obliquityCorrection(T) * Math.PI / 180
+        const l0 = sunMeanLongitude(T) * Math.PI / 180
+        const m = sunMeanAnomaly(T) * Math.PI / 180
+        let y = Math.tan(epsilon / 2) * Math.tan(epsilon / 2)
+        let Etime = y * Math.sin(2 * l0) - 2 * 0.01671 * Math.sin(m) + 4 * 0.01671 * y * Math.sin(m) * Math.cos(2 * l0) - 0.5 * y * y * Math.sin(4 * l0) - 1.25 * 0.01671 * 0.01671 * Math.sin(2 * m)
+        return Etime * 180 / Math.PI * 4
+    }
+
+    function hourAngleSunrise(lat, declination) {
+        const latRad = lat * Math.PI / 180
+        const decRad = declination * Math.PI / 180
+        const cosHA = -Math.tan(latRad) * Math.tan(decRad)
+        if (cosHA < -1) return 180
+        if (cosHA > 1) return 0
+        return Math.acos(cosHA) * 180 / Math.PI
+    }
+
+    function calculateSunriseSunset(latitude, longitude) {
+        const now = new Date()
+        const year = now.getFullYear()
+        const month = now.getMonth() + 1
+        const day = now.getDate()
+
+        const jd = toJulianDay(year, month, day)
+        const T = toCentury(jd)
+
+        const declination = sunDeclination(T)
+        const eqTime = equationOfTime(T)
+        const HA = hourAngleSunrise(latitude, declination)
+
+        const noonUTC = 720 - 4 * longitude - eqTime
+        const sunriseUTC = noonUTC - HA * 4
+        const sunsetUTC = noonUTC + HA * 4
+
+        const tzOffset = -now.getTimezoneOffset() / 60
+
+        const sunriseDate = new Date((jd + sunriseUTC / 1440 - 0.5) * 86400000)
+        sunriseDate.setHours(sunriseDate.getHours() + tzOffset)
+
+        const sunsetDate = new Date((jd + sunsetUTC / 1440 - 0.5) * 86400000)
+        sunsetDate.setHours(sunsetDate.getHours() + tzOffset)
+
+        return {
+            "sunrise": sunriseDate.toISOString(),
+            "sunset": sunsetDate.toISOString()
+        }
+    }
+
+    function computeIsDaytime(latitude, longitude) {
+        if (!latitude && !longitude) return true
+
+        const now = new Date()
+        const year = now.getFullYear()
+        const month = now.getMonth() + 1
+        const day = now.getDate()
+
+        const jd = toJulianDay(year, month, day)
+        const T = toCentury(jd)
+        const declination = sunDeclination(T)
+        const eqTime = equationOfTime(T)
+
+        const noonUTC = 720 - 4 * longitude - eqTime
+        const HA = hourAngleSunrise(latitude, declination)
+
+        const sunriseUTC = noonUTC - HA * 4
+        const sunsetUTC = noonUTC + HA * 4
+
+        const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes()
+
+        return currentMinutes >= sunriseUTC && currentMinutes < sunsetUTC
+    }
+
+    function computeNextTransition(latitude, longitude) {
+        if (!latitude || !longitude) return ""
+
+        const now = new Date()
+        const times = calculateSunriseSunset(latitude, longitude)
+        const sunrise = new Date(times.sunrise)
+        const sunset = new Date(times.sunset)
+
+        if (now < sunrise) {
+            return sunrise.toISOString()
+        } else if (now < sunset) {
+            return sunset.toISOString()
+        } else {
+            const tomorrow = new Date(now)
+            tomorrow.setDate(tomorrow.getDate() + 1)
+            const tomorrowTimes = calculateSunriseSunset(latitude, longitude)
+            return new Date(tomorrowTimes.sunrise).toISOString()
+        }
+    }
+
+    // ── Gamma state update ──
+
+    function updateGammaState() {
+        if (!SessionData.nightModeEnabled || !SessionData.nightModeAutoEnabled) {
+            gammaCurrentTemp = SessionData.nightModeEnabled ? SessionData.nightModeTemperature : 0
+            gammaSunriseTime = ""
+            gammaSunsetTime = ""
+            gammaNextTransition = ""
+            if (!SessionData.nightModeEnabled) {
+                gammaIsDay = true
+            }
+            return
+        }
+
+        const mode = SessionData.nightModeAutoMode
+        if (mode === "location") {
+            const lat = SessionData.latitude
+            const lon = SessionData.longitude
+            if (lat !== 0.0 && lon !== 0.0) {
+                const times = calculateSunriseSunset(lat, lon)
+                gammaSunriseTime = times.sunrise
+                gammaSunsetTime = times.sunset
+                gammaIsDay = computeIsDaytime(lat, lon)
+                gammaNextTransition = computeNextTransition(lat, lon)
+            } else {
+                gammaIsDay = true
+                gammaSunriseTime = ""
+                gammaSunsetTime = ""
+                gammaNextTransition = ""
+            }
+        } else {
+            const currentTime = systemClock.hours * 60 + systemClock.minutes
+            const startMinutes = SessionData.nightModeStartHour * 60 + SessionData.nightModeStartMinute
+            const endMinutes = SessionData.nightModeEndHour * 60 + SessionData.nightModeEndMinute
+
+            let shouldBeNight = false
+            if (startMinutes > endMinutes) {
+                shouldBeNight = (currentTime >= startMinutes) || (currentTime < endMinutes)
+            } else {
+                shouldBeNight = (currentTime >= startMinutes) && (currentTime < endMinutes)
+            }
+
+            gammaIsDay = !shouldBeNight
+            gammaSunriseTime = ""
+            gammaSunsetTime = ""
+            gammaNextTransition = ""
+
+            const now = new Date()
+            const startDate = new Date(now)
+            startDate.setHours(SessionData.nightModeStartHour, SessionData.nightModeStartMinute, 0, 0)
+            const endDate = new Date(now)
+            endDate.setHours(SessionData.nightModeEndHour, SessionData.nightModeEndMinute, 0, 0)
+
+            if (shouldBeNight) {
+                gammaNextTransition = endDate < now ? new Date(endDate.getTime() + 86400000).toISOString() : endDate.toISOString()
+            } else {
+                gammaNextTransition = startDate < now ? new Date(startDate.getTime() + 86400000).toISOString() : startDate.toISOString()
+            }
+        }
+
+        gammaCurrentTemp = SessionData.nightModeEnabled ? (gammaIsDay ? SessionData.nightModeHighTemperature : SessionData.nightModeTemperature) : 0
+    }
+
+    // ── Brightness functions ──
 
     function buildGammastepCommand(gammastepArgs) {
         const commandStr = "pkill gammastep; " + ["gammastep"].concat(gammastepArgs).join(" ")
         return ["sh", "-c", commandStr]
+    }
+
+    function killGammastep() {
+        Quickshell.execDetached(["pkill", "-f", "gammastep"])
+        Quickshell.execDetached(["killall", "gammastep"])
     }
 
     function setBrightnessInternal(percentage, device) {
@@ -140,8 +367,8 @@ Singleton {
 
     function getDeviceBrightness(deviceName) {
         if (!deviceName) {
-            return
-        } 50
+            return 50
+        }
 
         const deviceInfo = getCurrentDeviceInfoByName(deviceName)
         if (!deviceInfo) {
@@ -204,6 +431,21 @@ Singleton {
         return null
     }
 
+    function updateDeviceBrightnessDisplay(deviceName) {
+        const deviceInfo = getCurrentDeviceInfoByName(deviceName)
+        if (!deviceInfo) {
+            return
+        }
+
+        if (deviceInfo.class === "ddc") {
+            ddcBrightnessGetProcess.command = ["ddcutil", "getvcp", "-d", String(deviceInfo.ddcDisplay), "10", "--brief"]
+            ddcBrightnessGetProcess.running = true
+        } else {
+            brightnessGetProcess.command = ["brightnessctl", "-m", "-d", deviceName, "get"]
+            brightnessGetProcess.running = true
+        }
+    }
+
     function processNextDdcInit() {
         if (ddcInitQueue.length === 0 || ddcInitialBrightnessProcess.running) {
             return
@@ -214,36 +456,37 @@ Singleton {
         ddcInitialBrightnessProcess.running = true
     }
 
-    // Night Mode Functions - Simplified
+    // ── Night mode functions ──
+
     function enableNightMode() {
         if (!automationAvailable) {
-            gammaStepTestProcess.running = true
+            gammastepCheckProcess.running = true
             return
         }
 
         nightModeEnabled = true
+        gammaControlAvailable = true
         SessionData.setNightModeEnabled(true)
 
-        // Apply immediately or start automation
         if (SessionData.nightModeAutoEnabled) {
             startAutomation()
         } else {
             applyNightModeDirectly()
         }
+
+        updateGammaState()
     }
 
     function disableNightMode() {
         nightModeEnabled = false
+        gammaCurrentTemp = 0
         SessionData.setNightModeEnabled(false)
         stopAutomation()
-        // Nuclear approach - kill ALL gammastep processes multiple times
-        Quickshell.execDetached(["pkill", "-f", "gammastep"])
-        Quickshell.execDetached(["pkill", "-9", "gammastep"])
-        Quickshell.execDetached(["killall", "gammastep"])
-        // Also stop all related processes
+        killGammastep()
         gammaStepProcess.running = false
         automationProcess.running = false
-        gammaStepTestProcess.running = false
+        gammastepCheckProcess.running = false
+        updateGammaState()
     }
 
     function toggleNightMode() {
@@ -256,13 +499,13 @@ Singleton {
 
     function applyNightModeDirectly() {
         const temperature = SessionData.nightModeTemperature || 4500
-        gammaStepProcess.command = buildGammastepCommand(["-m", "wayland", "-O", String(temperature)])
+        const dayTemp = SessionData.nightModeHighTemperature || 6500
+        gammaStepProcess.command = buildGammastepCommand(["-m", "wayland", "-t", `${dayTemp}:${temperature}`])
         gammaStepProcess.running = true
     }
 
     function resetToNormalMode() {
-        // Just kill gammastep to return to normal display temperature
-        Quickshell.execDetached(["pkill", "gammastep"])
+        killGammastep()
     }
 
     function startAutomation() {
@@ -285,11 +528,10 @@ Singleton {
     function stopAutomation() {
         automationProcess.running = false
         gammaStepProcess.running = false
+        gradualTransitionTimer.stop()
         isAutomaticNightTime = false
-        // Nuclear approach - kill ALL gammastep processes multiple times
-        Quickshell.execDetached(["pkill", "-f", "gammastep"])
-        Quickshell.execDetached(["pkill", "-9", "gammastep"])
-        Quickshell.execDetached(["killall", "gammastep"])
+        killGammastep()
+        killGeoclueAgent()
     }
 
     function startTimeBasedMode() {
@@ -298,21 +540,12 @@ Singleton {
 
     function startLocationBasedMode() {
         const temperature = SessionData.nightModeTemperature || 4500
-        const dayTemp = 6500
+        const dayTemp = SessionData.nightModeHighTemperature || 6500
 
-        if (SessionData.latitude !== 0.0 && SessionData.longitude !== 0.0) {
-            automationProcess.command = buildGammastepCommand(["-m", "wayland", "-l", `${SessionData.latitude.toFixed(6)}:${SessionData.longitude.toFixed(6)}`, "-t", `${dayTemp}:${temperature}`, "-v"])
-            automationProcess.running = true
-            return
-        }
+        startGeoclueAgent()
 
-        if (SessionData.nightModeLocationProvider === "geoclue2") {
-            automationProcess.command = buildGammastepCommand(["-m", "wayland", "-l", "geoclue2", "-t", `${dayTemp}:${temperature}`, "-v"])
-            automationProcess.running = true
-            return
-        }
-
-        console.warn("DisplayService: Location mode selected but no coordinates or geoclue provider set")
+        automationProcess.command = buildGammastepCommand(["-m", "wayland", "-t", `${dayTemp}:${temperature}`, "-v"])
+        automationProcess.running = true
     }
 
     function checkTimeBasedMode() {
@@ -335,12 +568,62 @@ Singleton {
 
         if (shouldBeNight !== isAutomaticNightTime) {
             isAutomaticNightTime = shouldBeNight
+            const steps = SessionData.nightModeSteps || 1
 
             if (shouldBeNight) {
-                applyNightModeDirectly()
+                const fromTemp = SessionData.nightModeHighTemperature || 6500
+                const toTemp = SessionData.nightModeTemperature || 4500
+                applyGradualTransition(fromTemp, toTemp, steps)
             } else {
-                resetToNormalMode()
+                const fromTemp = SessionData.nightModeTemperature || 4500
+                const toTemp = SessionData.nightModeHighTemperature || 6500
+                applyGradualTransition(fromTemp, toTemp, steps)
             }
+        }
+
+        updateGammaState()
+    }
+
+    function applyGradualTransition(fromTemp, toTemp, steps) {
+        gradualTransitionTimer.stop()
+
+        if (steps <= 1) {
+            gammaStepProcess.command = buildGammastepCommand(["-m", "wayland", "-t", `${SessionData.nightModeHighTemperature || 6500}:${toTemp}`])
+            gammaStepProcess.running = true
+            return
+        }
+
+        const startMinutes = SessionData.nightModeStartHour * 60 + SessionData.nightModeStartMinute
+        const endMinutes = SessionData.nightModeEndHour * 60 + SessionData.nightModeEndMinute
+        let periodMinutes
+        if (startMinutes > endMinutes)
+            periodMinutes = (24 * 60 - startMinutes) + endMinutes
+        else
+            periodMinutes = endMinutes - startMinutes
+        const periodMs = Math.max(periodMinutes * 60 * 1000, 60000)
+        const intervalMs = Math.floor(periodMs / steps)
+
+        gradualFromTemp = fromTemp
+        gradualToTemp = toTemp
+        gradualSteps = steps
+        gradualStepIndex = 0
+        gradualIntervalMs = intervalMs
+
+        applyTransitionStep()
+    }
+
+    function applyTransitionStep() {
+        const t = gradualSteps > 1 ? gradualStepIndex / (gradualSteps - 1) : 1
+        const temp = Math.round(gradualFromTemp + (gradualToTemp - gradualFromTemp) * t)
+
+        gammaStepProcess.command = buildGammastepCommand(["-m", "wayland", "-t", `${SessionData.nightModeHighTemperature || 6500}:${temp}`])
+        gammaStepProcess.running = true
+
+        gradualStepIndex++
+
+        if (gradualStepIndex < gradualSteps) {
+            gradualTransitionTimer.interval = Math.max(1000, gradualIntervalMs)
+            gradualTransitionTimer.start()
         }
     }
 
@@ -353,10 +636,10 @@ Singleton {
     }
 
     function evaluateNightMode() {
-        // Always stop all processes first to clean slate
         stopAutomation()
 
         if (!nightModeEnabled) {
+            updateGammaState()
             return
         }
 
@@ -370,7 +653,7 @@ Singleton {
     }
 
     function checkNightModeAvailability() {
-        gammastepAvailabilityProcess.running = true
+        gammastepCheckProcess.running = true
     }
 
     Timer {
@@ -386,7 +669,15 @@ Singleton {
                 applyNightModeDirectly()
             }
             nextAction = ""
+            updateGammaState()
         }
+    }
+
+    Timer {
+        id: gradualTransitionTimer
+        repeat: false
+        interval: 60000
+        onTriggered: applyTransitionStep()
     }
 
     Component.onCompleted: {
@@ -394,8 +685,8 @@ Singleton {
         refreshDevices()
         checkNightModeAvailability()
 
-        // Initialize night mode state from session
         nightModeEnabled = SessionData.nightModeEnabled
+        gammaControlAvailable = automationAvailable
     }
 
     Component.onDestruction: {
@@ -410,8 +701,13 @@ Singleton {
             if (nightModeEnabled && SessionData.nightModeAutoEnabled && SessionData.nightModeAutoMode === "time") {
                 checkTimeBasedMode()
             }
+            if (SessionData.nightModeEnabled && SessionData.nightModeAutoEnabled) {
+                updateGammaState()
+            }
         }
     }
+
+    // ── DDC detection ──
 
     Process {
         id: ddcDetectionProcess
@@ -462,21 +758,15 @@ Singleton {
                     ddcDevices = newDdcDevices
                     console.log("DisplayService: Found", ddcDevices.length, "DDC displays")
 
-                    // Queue initial brightness readings for DDC devices
                     ddcInitQueue = []
                     for (const device of ddcDevices) {
                         ddcInitQueue.push(device.ddcDisplay)
-                        // Mark DDC device as pending initialization
                         ddcPendingInit[device.name] = true
                     }
 
-                    // Start processing the queue
                     processNextDdcInit()
-
-                    // Refresh device list to include DDC devices
                     refreshDevicesInternal()
 
-                    // Retry setting last device now that DDC devices are available
                     const lastDevice = SessionData.lastBrightnessDevice || ""
                     if (lastDevice) {
                         const deviceExists = devices.some(d => d.name === lastDevice)
@@ -498,6 +788,8 @@ Singleton {
             }
         }
     }
+
+    // ── Brightnessctl device listing ──
 
     Process {
         id: deviceListProcess
@@ -530,14 +822,13 @@ Singleton {
                                         })
                     }
                 }
-                // Store brightnessctl devices separately
                 devices = newDevices
-
-                // Always refresh to combine with DDC devices and set up device selection
                 refreshDevicesInternal()
             }
         }
     }
+
+    // ── Brightness set/get processes ──
 
     Process {
         id: brightnessSetProcess
@@ -626,7 +917,6 @@ Singleton {
                     maxBrightness = max
                     const brightness = Math.round((current / max) * 100)
 
-                    // Update the device brightness cache
                     if (currentDevice) {
                         var newBrightness = Object.assign({}, deviceBrightness)
                         newBrightness[currentDevice] = brightness
@@ -656,7 +946,6 @@ Singleton {
                 if (!text.trim())
                 return
 
-                // Parse ddcutil getvcp output format: "VCP 10 C 50 100"
                 const parts = text.trim().split(" ")
                 if (parts.length >= 5) {
                     const current = parseInt(parts[3]) || 50
@@ -664,7 +953,6 @@ Singleton {
                     maxBrightness = max
                     const brightness = Math.round((current / max) * 100)
 
-                    // Update the device brightness cache
                     if (currentDevice) {
                         var newBrightness = Object.assign({}, deviceBrightness)
                         newBrightness[currentDevice] = brightness
@@ -679,17 +967,19 @@ Singleton {
         }
     }
 
+    // ── Gammastep detection ──
+
     Process {
-        id: gammastepAvailabilityProcess
+        id: gammastepCheckProcess
         command: ["which", "gammastep"]
         running: false
 
         onExited: function (exitCode) {
             automationAvailable = (exitCode === 0)
+            gammaControlAvailable = automationAvailable
             if (automationAvailable) {
                 detectLocationProviders()
 
-                // If night mode should be enabled on startup
                 if (nightModeEnabled && SessionData.nightModeAutoEnabled) {
                     startAutomation()
                 } else if (nightModeEnabled) {
@@ -698,6 +988,7 @@ Singleton {
             } else {
                 console.log("DisplayService: gammastep not available")
             }
+            updateGammaState()
         }
     }
 
@@ -712,27 +1003,33 @@ Singleton {
     }
 
     Process {
-        id: gammaStepTestProcess
-        command: ["which", "gammastep"]
+        id: geoclueAgentProcess
+        command: ["/usr/lib/geoclue-2.0/demos/agent"]
         running: false
 
         onExited: function (exitCode) {
-            if (exitCode === 0) {
-                automationAvailable = true
-                nightModeEnabled = true
-                SessionData.setNightModeEnabled(true)
-
-                if (SessionData.nightModeAutoEnabled) {
-                    startAutomation()
-                } else {
-                    applyNightModeDirectly()
-                }
-            } else {
-                console.warn("DisplayService: gammastep not found")
-                ToastService.showWarning("Night mode failed: gammastep not found")
-            }
+            geoclueAgentRunning = false
+            console.log("DisplayService: geoclue-agent exited with code:", exitCode)
         }
     }
+
+    function startGeoclueAgent() {
+        if (geoclueAgentRunning)
+            return
+        geoclueAgentProcess.running = true
+        geoclueAgentRunning = true
+        console.log("DisplayService: Started geoclue-agent")
+    }
+
+    function killGeoclueAgent() {
+        if (!geoclueAgentRunning)
+            return
+        Quickshell.execDetached(["pkill", "-f", "/usr/lib/geoclue-2.0/demos/agent"])
+        geoclueAgentRunning = false
+        console.log("DisplayService: Stopped geoclue-agent")
+    }
+
+    // ── Gamma execution processes ──
 
     Process {
         id: gammaStepProcess
@@ -742,24 +1039,24 @@ Singleton {
             if (nightModeEnabled && exitCode !== 0 && exitCode !== 15) {
                 console.warn("DisplayService: Night mode process failed:", exitCode)
             }
+            updateGammaState()
         }
     }
 
     Process {
         id: automationProcess
         running: false
-        property string processType: "automation"
 
         onExited: function (exitCode) {
             if (nightModeEnabled && SessionData.nightModeAutoEnabled && exitCode !== 0 && exitCode !== 15) {
                 console.warn("DisplayService: Night mode automation failed:", exitCode)
-                // Location mode failed
-                console.warn("DisplayService: Location-based night mode failed")
             }
+            updateGammaState()
         }
     }
 
-    // Session Data Connections
+    // ── Session data connections ──
+
     Connections {
         target: SessionData
 
@@ -786,8 +1083,17 @@ Singleton {
         function onNightModeEndMinuteChanged() {
             evaluateNightMode()
         }
-        function onNightModeTemperatureChanged() {
+        function onNightModeStepsChanged() {
             evaluateNightMode()
+        }
+        function onNightModeTemperatureChanged() {
+            updateGammaState()
+            if (nightModeEnabled && !SessionData.nightModeAutoEnabled) {
+                applyNightModeDirectly()
+            }
+        }
+        function onNightModeHighTemperatureChanged() {
+            updateGammaState()
         }
         function onLatitudeChanged() {
             evaluateNightMode()
@@ -800,7 +1106,8 @@ Singleton {
         }
     }
 
-    // IPC Handler for external control
+    // ── IPC handlers ──
+
     IpcHandler {
         function set(percentage: string, device: string): string {
             if (!root.brightnessAvailable) {
@@ -815,7 +1122,6 @@ Singleton {
             const clampedValue = Math.max(1, Math.min(100, value))
             const targetDevice = device || ""
 
-            // Ensure device exists if specified
             if (targetDevice && !root.devices.some(d => d.name === targetDevice)) {
                 return "Device not found: " + targetDevice
             }
@@ -837,11 +1143,10 @@ Singleton {
             if (!root.brightnessAvailable) {
                 return "Brightness control not available"
             }
-            
+
             const targetDevice = device || ""
             const actualDevice = targetDevice === "" ? root.getDefaultDevice() : targetDevice
 
-            // Ensure device exists
             if (actualDevice && !root.devices.some(d => d.name === actualDevice)) {
                 return "Device not found: " + actualDevice
             }
@@ -867,11 +1172,10 @@ Singleton {
             if (!root.brightnessAvailable) {
                 return "Brightness control not available"
             }
-            
+
             const targetDevice = device || ""
             const actualDevice = targetDevice === "" ? root.getDefaultDevice() : targetDevice
 
-            // Ensure device exists
             if (actualDevice && !root.devices.some(d => d.name === actualDevice)) {
                 return "Device not found: " + actualDevice
             }
@@ -892,15 +1196,15 @@ Singleton {
                 return "Brightness decreased to " + newLevel + "%"
             }
         }
+
         function incrementDefault(step: string): string {
             if (!root.brightnessAvailable) {
                 return "Brightness control not available"
             }
-            
+
             const targetDevice = lastIpcDevice === "" ? getDefaultDevice() : (lastIpcDevice || currentDevice)
             const actualDevice = targetDevice === "" ? root.getDefaultDevice() : targetDevice
 
-            // Ensure device exists
             if (actualDevice && !root.devices.some(d => d.name === actualDevice)) {
                 return "Device not found: " + actualDevice
             }
@@ -921,15 +1225,15 @@ Singleton {
                 return "Brightness increased to " + newLevel + "%"
             }
         }
+
         function decrementDefault(step: string): string {
             if (!root.brightnessAvailable) {
                 return "Brightness control not available"
             }
-            
+
             const targetDevice = lastIpcDevice === "" ? getDefaultDevice() : (lastIpcDevice || currentDevice)
             const actualDevice = targetDevice === "" ? root.getDefaultDevice() : targetDevice
 
-            // Ensure device exists
             if (actualDevice && !root.devices.some(d => d.name === actualDevice)) {
                 return "Device not found: " + actualDevice
             }
@@ -974,7 +1278,6 @@ Singleton {
         target: "brightness"
     }
 
-    // IPC Handler for night mode control
     IpcHandler {
         function toggle(): string {
             root.toggleNightMode()
@@ -1005,17 +1308,14 @@ Singleton {
                 return "Invalid temperature. Use a value between 2500 and 6000 (in steps of 500)"
             }
 
-            // Validate temperature is in valid range and steps
             if (temp < 2500 || temp > 6000) {
                 return "Temperature must be between 2500K and 6000K"
             }
 
-            // Round to nearest 500
             const rounded = Math.round(temp / 500) * 500
 
             SessionData.setNightModeTemperature(rounded)
 
-            // Restart night mode with new temperature if active
             if (root.nightModeEnabled) {
                 if (SessionData.nightModeAutoEnabled) {
                     root.startAutomation()

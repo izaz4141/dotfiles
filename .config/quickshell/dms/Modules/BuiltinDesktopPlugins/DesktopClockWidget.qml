@@ -79,8 +79,8 @@ Item {
 
     readonly property color handColor: accentColor
     readonly property color handColorDim: Theme.withAlpha(accentColor, 0.65)
-    readonly property color textColor: Theme.onSurface
-    readonly property color subtleTextColor: Theme.onSurfaceVariant
+    readonly property color textColor: Theme.surfaceText
+    readonly property color subtleTextColor: Theme.surfaceVariantText
     readonly property color backgroundColor: Theme.withAlpha(Theme.surface, root.transparency)
 
     readonly property bool showAnalogSeconds: isInstance ? (cfg.showAnalogSeconds ?? true) : SettingsData.desktopClockShowAnalogSeconds

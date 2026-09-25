@@ -1,17 +1,6 @@
-ayugram-desktop-bin
-fladder-bin
 hyprshade
-jellium-desktop-git
-localsend-bin
-matugen-bin
 multitail
 opencode-bin
 pipes-rs
-pyprland
 snapper-rollback
 snapper-support
-vscodium-bin
-wallust
-waypaper-git
-youtube-music-bin
-zotero-bin

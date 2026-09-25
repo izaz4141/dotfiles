@@ -296,6 +296,23 @@ Item {
                                     }
                                 }
                             }
+
+                            DankActionButton {
+                                buttonSize: 32
+                                iconName: "casino"
+                                iconSize: Theme.iconSizeSmall
+                                enabled: root.currentWallpaper && !root.currentWallpaper.startsWith("#") && !root.currentWallpaper.startsWith("we")
+                                opacity: enabled ? 1 : 0.5
+                                backgroundColor: Theme.surfaceContainerHigh
+                                iconColor: Theme.surfaceText
+                                onClicked: {
+                                    if (SessionData.perMonitorWallpaper) {
+                                        WallpaperCyclingService.randomWallpaper(selectedMonitorName);
+                                    } else {
+                                        WallpaperCyclingService.randomWallpaper();
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -351,6 +368,36 @@ Item {
                                 });
                             }
                         }
+                    }
+                }
+
+                Item {
+                    width: parent.width
+                    height: konachanButton.height
+
+                    DankButton {
+                        id: konachanButton
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: WallpaperCyclingService.konachanFetching ? I18n.tr("Fetching...", "konachan fetch status") : I18n.tr("Random: Konachan", "random konachan wallpaper button")
+                        iconName: WallpaperCyclingService.konachanFetching ? "hourglass_top" : "casino"
+                        iconSize: Theme.iconSizeSmall
+                        textSize: Theme.fontSizeSmall
+                        enabled: !WallpaperCyclingService.konachanFetching
+                        buttonHeight: 28
+                        horizontalPadding: Theme.spacingM
+                        backgroundColor: Theme.surfaceContainerHigh
+                        textColor: Theme.surfaceText
+                        onClicked: WallpaperCyclingService.fetchRandomKonachanWallpaper(SessionData.perMonitorWallpaper ? root.selectedMonitorName : "")
+                        onHoveredChanged: {
+                            if (hovered)
+                                konachanTooltip.show(I18n.tr("Random SFW anime wallpaper from Konachan.\nImage is saved to the current wallpaper folder.", "konachan button tooltip"), konachanButton, 0, 0, "bottom");
+                            else
+                                konachanTooltip.hide();
+                        }
+                    }
+
+                    DankTooltipV2 {
+                        id: konachanTooltip
                     }
                 }
 

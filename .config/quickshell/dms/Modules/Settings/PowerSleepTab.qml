@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import qs.Common
 import qs.Services
 import qs.Widgets
@@ -194,37 +195,81 @@ Item {
                     opacity: 0.15
                 }
 
+
+                // Brightness control on inactivity
                 SettingsDropdownRow {
-                    id: lockDropdown
-                    settingKey: "lockTimeout"
-                    tags: ["lock", "timeout", "idle", "automatic", "security"]
-                    text: I18n.tr("Automatically lock after")
-                    options: root.timeoutOptions
+                    id: brightnessTimeoutDropdown
+                    settingKey: "brightnessTimeout"
+                    tags: ["brightness", "timer", "inactivity", "monitor", "power"]
+                    property var timerOptions: [I18n.tr("Never"), I18n.tr("1 minute"), I18n.tr("2 minutes"), I18n.tr("3 minutes"), I18n.tr("5 minutes"), I18n.tr("10 minutes"), I18n.tr("15 minutes"), I18n.tr("20 minutes"), I18n.tr("30 minutes"), I18n.tr("1 hour"), I18n.tr("1 hour 30 minutes"), I18n.tr("2 hours"), I18n.tr("3 hours")]
+                    property var timerValues: [0, 60, 120, 180, 300, 600, 900, 1200, 1800, 3600, 5400, 7200, 10800]
+
+                    text: I18n.tr("Brightness lower after")
+                    options: timerOptions
+
+                    // Separate timers for AC and Battery modes
+                    visible: powerCategory.currentIndex >= 0
+                    enabled: powerCategory.currentIndex >= 0
 
                     Connections {
                         target: powerCategory
                         function onCurrentIndexChanged() {
-                            const currentTimeout = powerCategory.currentIndex === 0 ? SettingsData.acLockTimeout : SettingsData.batteryLockTimeout;
-                            lockDropdown.currentValue = root.timeoutOptions[root.getTimeoutIndex(currentTimeout)];
+                            const currentTimeout = powerCategory.currentIndex === 0 ? SettingsData.acBrightnessTimeout : SettingsData.batteryBrightnessTimeout;
+                            brightnessTimeoutDropdown.currentValue = root.timeoutOptions[root.getTimeoutIndex(currentTimeout)];
                         }
                     }
 
                     Component.onCompleted: {
-                        const currentTimeout = powerCategory.currentIndex === 0 ? SettingsData.acLockTimeout : SettingsData.batteryLockTimeout;
+                        const currentTimeout = powerCategory.currentIndex === 0 ? SettingsData.acBrightnessTimeout : SettingsData.batteryBrightnessTimeout;
                         currentValue = root.timeoutOptions[root.getTimeoutIndex(currentTimeout)];
                     }
 
                     onValueChanged: value => {
-                        const index = root.timeoutOptions.indexOf(value);
+                        const index = timerOptions.indexOf(value);
                         if (index < 0)
                             return;
-                        const timeout = root.timeoutValues[index];
+                        const timeout = timerValues[index];
                         if (powerCategory.currentIndex === 0) {
-                            SettingsData.set("acLockTimeout", timeout);
+                            SettingsData.set("acBrightnessTimeout", timeout);
                         } else {
-                            SettingsData.set("batteryLockTimeout", timeout);
+                            SettingsData.set("batteryBrightnessTimeout", timeout);
                         }
                     }
+                }
+
+                // Brightness level - fine adjustment (separate for AC and Battery modes)
+                SettingsSliderRow {
+                    id: brightnessLevelSlider
+                    settingKey: "brightnessLevel"
+                    tags: ["brightness", "level", "monitor", "power"]
+                    text: I18n.tr("Brightness level")
+                    visible: powerCategory.currentIndex >= 0
+                    enabled: powerCategory.currentIndex >= 0
+
+                    Connections {
+                        target: powerCategory
+                        function onCurrentIndexChanged() {
+                            const currentLevel = powerCategory.currentIndex === 0 ? SettingsData.acBrightnessLevel : SettingsData.batteryBrightnessLevel;
+                            brightnessLevelSlider.value = currentLevel;
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        const currentLevel = powerCategory.currentIndex === 0 ? SettingsData.acBrightnessLevel : SettingsData.batteryBrightnessLevel;
+                        value = currentLevel;
+                    }
+
+                    onValueChanged: value => {
+                        if (powerCategory.currentIndex === 0) {
+                            SettingsData.set("acBrightnessLevel", value);
+                        } else {
+                            SettingsData.set("batteryBrightnessLevel", value);
+                        }
+                    }
+
+                    minimum: 0
+                    maximum: 100
+                    step: 1
                 }
 
                 SettingsDropdownRow {
@@ -256,6 +301,39 @@ Item {
                             SettingsData.set("acMonitorTimeout", timeout);
                         } else {
                             SettingsData.set("batteryMonitorTimeout", timeout);
+                        }
+                    }
+                }
+
+                SettingsDropdownRow {
+                    id: lockDropdown
+                    settingKey: "lockTimeout"
+                    tags: ["lock", "timeout", "idle", "automatic", "security"]
+                    text: I18n.tr("Automatically lock after")
+                    options: root.timeoutOptions
+
+                    Connections {
+                        target: powerCategory
+                        function onCurrentIndexChanged() {
+                            const currentTimeout = powerCategory.currentIndex === 0 ? SettingsData.acLockTimeout : SettingsData.batteryLockTimeout;
+                            lockDropdown.currentValue = root.timeoutOptions[root.getTimeoutIndex(currentTimeout)];
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        const currentTimeout = powerCategory.currentIndex === 0 ? SettingsData.acLockTimeout : SettingsData.batteryLockTimeout;
+                        currentValue = root.timeoutOptions[root.getTimeoutIndex(currentTimeout)];
+                    }
+
+                    onValueChanged: value => {
+                        const index = root.timeoutOptions.indexOf(value);
+                        if (index < 0)
+                            return;
+                        const timeout = root.timeoutValues[index];
+                        if (powerCategory.currentIndex === 0) {
+                            SettingsData.set("acLockTimeout", timeout);
+                        } else {
+                            SettingsData.set("batteryLockTimeout", timeout);
                         }
                     }
                 }
@@ -339,11 +417,11 @@ Item {
                 }
 
                 StyledText {
-                    text: I18n.tr("Idle monitoring not supported - requires newer Quickshell version")
+                    text: I18n.tr("Idle management requires hypridle - not found in PATH")
                     font.pixelSize: Theme.fontSizeSmall
                     color: Theme.error
                     anchors.horizontalCenter: parent.horizontalCenter
-                    visible: !IdleService.idleMonitorAvailable
+                    visible: !IdleService.hypridleAvailable
                 }
             }
 

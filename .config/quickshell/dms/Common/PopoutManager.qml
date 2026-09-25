@@ -6,6 +6,7 @@ import QtQuick
 Singleton {
     id: root
 
+    property bool screenshotActive: false
     property var currentPopoutsByScreen: ({})
     property var currentPopoutTriggers: ({})
 

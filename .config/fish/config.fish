@@ -43,7 +43,7 @@ end
 # <<< conda initialize <<<
 starship init fish | source
 zoxide init fish | source
-cat ~/.cache/wallust/sequences
+tr -d '\n' < ~/.cache/matugen/sequences
 
 
 #######################################################
@@ -143,4 +143,3 @@ end
 
 
 fastfetch -c ~/.config/fastfetch/nadeko-chibi.jsonc
-

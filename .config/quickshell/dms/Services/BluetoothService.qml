@@ -6,7 +6,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Bluetooth
-import qs.Services
 
 Singleton {
     id: root
@@ -16,7 +15,8 @@ Singleton {
     readonly property bool enabled: (adapter && adapter.enabled) ?? false
     readonly property bool discovering: (adapter && adapter.discovering) ?? false
     readonly property var devices: adapter ? adapter.devices : null
-    readonly property bool enhancedPairingAvailable: DMSService.dmsAvailable && DMSService.apiVersion >= 9 && DMSService.capabilities.includes("bluetooth")
+    property bool bluetoothctlAvailable: false
+    property bool pairingInProgress: false
     readonly property bool connected: {
         if (!adapter || !adapter.devices) {
             return false
@@ -181,17 +181,50 @@ Singleton {
             return
         }
 
-        // The DMS backend actually implements a bluez agent, so we can pair anything
-        if (enhancedPairingAvailable) {
-            const devicePath = getDevicePath(device)
-            DMSService.bluetoothPair(devicePath, callback)
+        _currentPairAddress = device.address
+        _currentPairDeviceName = device.name || device.deviceName || ""
+        _pendingPairCallback = callback
+        pairingInProgress = true
+        _startBtctl()
+        btctlProcess.write("pair " + device.address + "\n")
+    }
+
+    function submitPairingInput(input) {
+        if (!btctlProcess.running) return
+        btctlProcess.write(input + "\n")
+    }
+
+    function cancelPairing() {
+        if (btctlProcess.running) {
+            btctlProcess.write("quit\n")
+        }
+        _finishPairing({error: "Cancelled"})
+    }
+
+    function removeDevice(device) {
+        if (device && typeof device.forget === "function") {
+            device.forget()
+        }
+    }
+
+    function _startBtctl() {
+        if (!bluetoothctlAvailable) {
+            _finishPairing({error: "bluetoothctl not available"})
             return
         }
+        if (!btctlProcess.running) {
+            btctlProcess.running = true
+        }
+    }
 
-        // Quickshell does not implement a bluez agent, so we can try to pair but only with devices that don't require a passcode
-        device.trusted = true
-        device.connect()
-        if (callback) callback({success: true})
+    function _finishPairing(result) {
+        if (_pendingPairCallback) {
+            _pendingPairCallback(result)
+            _pendingPairCallback = null
+        }
+        _currentPairAddress = ""
+        _currentPairDeviceName = ""
+        pairingInProgress = false
     }
 
     function getCardName(device) {
@@ -272,6 +305,22 @@ Singleton {
 
     property var deviceCodecs: ({})
 
+    property string _currentPairAddress: ""
+    property string _currentPairDeviceName: ""
+    property var _pendingPairCallback: null
+
+    signal pairingRequested(string deviceName, string requestType, int passkey)
+
+    onBluetoothctlAvailableChanged: {
+        if (!bluetoothctlAvailable && pairingInProgress) {
+            _finishPairing({error: "bluetoothctl not available"})
+        }
+    }
+
+    Component.onCompleted: {
+        btctlProbe.running = true
+    }
+
     function updateDeviceCodec(deviceAddress, codec) {
         deviceCodecs[deviceAddress] = codec
         deviceCodecsChanged()
@@ -332,6 +381,80 @@ Singleton {
         codecSwitchProcess.profile = profileName
         codecSwitchProcess.callback = callback
         codecSwitchProcess.running = true
+    }
+
+    Process {
+        id: btctlProbe
+
+        command: ["sh", "-c", "command -v bluetoothctl"]
+
+        onExited: exitCode => {
+            root.bluetoothctlAvailable = (exitCode === 0)
+        }
+    }
+
+    Process {
+        id: btctlProcess
+
+        command: ["bluetoothctl"]
+        stdinEnabled: true
+        running: false
+
+        stdout: SplitParser {
+            splitMarker: "\n"
+            onRead: data => {
+                const line = data.trim()
+                if (!line) return
+
+                const addr = root._currentPairAddress
+                if (!addr) return
+                if (!line.includes(addr)) return
+
+                if (line.includes("Enter PIN code")) {
+                    root.pairingRequested(root._currentPairDeviceName, "pin", 0)
+                    return
+                }
+
+                let passkeyMatch = line.match(/Confirm passkey (\d+)/)
+                if (passkeyMatch) {
+                    root.pairingRequested(root._currentPairDeviceName, "confirm", parseInt(passkeyMatch[1]))
+                    return
+                }
+
+                if (line.includes("Enter passkey")) {
+                    root.pairingRequested(root._currentPairDeviceName, "passkey", 0)
+                    return
+                }
+
+                let displayPasskeyMatch = line.match(/Passkey: (\d+)/)
+                if (displayPasskeyMatch) {
+                    root.pairingRequested(root._currentPairDeviceName, "display-passkey", parseInt(displayPasskeyMatch[1]))
+                    return
+                }
+
+                if (line.includes("Authorize service")) {
+                    root.pairingRequested(root._currentPairDeviceName, "authorize-service", 0)
+                    return
+                }
+
+                if (line.includes("Authorize") && line.includes("(yes/no)")) {
+                    root.pairingRequested(root._currentPairDeviceName, "authorize", 0)
+                    return
+                }
+
+                if (line.includes("Pairing successful")) {
+                    Qt.callLater(() => root._finishPairing({success: true}))
+                    return
+                }
+
+                if (line.includes("Failed to pair") || line.includes("org.bluez.Error")) {
+                    const errMatch = line.match(/(?:Failed to pair[:\s]+|org\.bluez\.Error\.[A-Za-z]+)/)
+                    const errMsg = errMatch ? errMatch[0] : line
+                    Qt.callLater(() => root._finishPairing({error: errMsg}))
+                    return
+                }
+            }
+        }
     }
 
     Process {

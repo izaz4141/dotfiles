@@ -12,9 +12,15 @@ ListView {
     property real savedY: 0
     property bool justChanged: false
     property bool isUserScrolling: false
+    property bool stickToBottom: false
     property real momentumVelocity: 0
     property bool isMomentumActive: false
     property real friction: Scroll.friction
+
+    function followContent() {
+        if (listView.stickToBottom)
+            listView.positionViewAtEnd();
+    }
 
     flickDeceleration: Scroll.flickDeceleration
     maximumFlickVelocity: Scroll.maximumFlickVelocity
@@ -39,6 +45,7 @@ ListView {
     }
 
     onContentYChanged: {
+        listView.stickToBottom = listView.atYEnd;
         if (!justChanged && isUserScrolling) {
             savedY = contentY;
         }

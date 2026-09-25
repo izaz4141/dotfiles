@@ -8,12 +8,59 @@ import qs.Widgets
 BasePill {
     id: root
 
+    property var widgetData: null
+
     property string selectedInterface: widgetData?.selectedInterface || "all"
     property int updateInterval: widgetData?.updateInterval || 1000
     property bool showIcon: widgetData?.showIcon !== false
     property bool showLabels: widgetData?.showLabels !== false
     property bool compactMode: widgetData?.compactMode || false
     property int unitPrecision: widgetData?.unitPrecision ?? 1
+    property int hideThreshold: widgetData?.hideThreshold ?? 0
+
+    readonly property bool aboveThreshold: {
+        const speeds = getCurrentSpeeds();
+        const thresholdBytes = hideThreshold * 1024;
+        return hideThreshold <= 0 || speeds.rx >= thresholdBytes || speeds.tx >= thresholdBytes;
+    }
+
+    opacity: aboveThreshold ? 1 : 0
+
+    states: [
+        State {
+            name: "hidden_horizontal"
+            when: !aboveThreshold && !isVerticalOrientation
+            PropertyChanges {
+                target: root
+                width: 0
+            }
+        },
+        State {
+            name: "hidden_vertical"
+            when: !aboveThreshold && isVerticalOrientation
+            PropertyChanges {
+                target: root
+                height: 0
+            }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            NumberAnimation {
+                properties: "width,height"
+                duration: Theme.shortDuration
+                easing.type: Theme.standardEasing
+            }
+        }
+    ]
+
+    Behavior on opacity {
+        NumberAnimation {
+            duration: Theme.shortDuration
+            easing.type: Theme.standardEasing
+        }
+    }
 
     function formatNetworkSpeed(bytesPerSec) {
         if (bytesPerSec < 1024) {
@@ -28,13 +75,9 @@ BasePill {
     }
 
     function getInterfaceSpeed(ifaceName) {
-        if (!NetworkSpeedService.networkInterfaces)
-            return { rx: 0, tx: 0 };
-
-        for (const iface of NetworkSpeedService.networkInterfaces) {
-            if (iface.name === ifaceName) {
-                return { rx: iface.rxBytes, tx: iface.txBytes };
-            }
+        const speeds = NetworkSpeedService.networkInterfaceSpeeds;
+        if (speeds && speeds[ifaceName]) {
+            return { rx: speeds[ifaceName].rxSpeed, tx: speeds[ifaceName].txSpeed };
         }
         return { rx: 0, tx: 0 };
     }
@@ -60,6 +103,19 @@ BasePill {
         NetworkSpeedService.removeRef(["network"]);
     }
 
+    function getNetworkIconName() {
+        if (NetworkService.wifiToggling)
+            return "sync";
+        switch (NetworkService.networkStatus) {
+        case "ethernet":
+            return "lan";
+        case "vpn":
+            return NetworkService.ethernetConnected ? "lan" : NetworkService.wifiSignalIcon;
+        default:
+            return NetworkService.wifiSignalIcon;
+        }
+    }
+
     content: Component {
         Item {
             implicitWidth: root.isVerticalOrientation ? (root.widgetThickness - root.horizontalPadding * 2) : contentRow.implicitWidth
@@ -72,7 +128,7 @@ BasePill {
                 visible: root.isVerticalOrientation
 
                 DankIcon {
-                    name: "network_check"
+                    name: root.getNetworkIconName()
                     size: Theme.barIconSize(root.barThickness, undefined, root.barConfig?.maximizeWidgetIcons, root.barConfig?.iconScale)
                     color: Theme.widgetTextColor
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -115,7 +171,7 @@ BasePill {
                 visible: !root.isVerticalOrientation
 
                 DankIcon {
-                    name: "network_check"
+                    name: root.getNetworkIconName()
                     size: Theme.barIconSize(root.barThickness, undefined, root.barConfig?.maximizeWidgetIcons, root.barConfig?.iconScale)
                     color: Theme.widgetTextColor
                     anchors.verticalCenter: parent.verticalCenter

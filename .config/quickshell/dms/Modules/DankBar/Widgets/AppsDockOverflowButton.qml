@@ -62,7 +62,7 @@ Item {
             text: `+${overflowCount}`
             font.pixelSize: Theme.fontSizeSmall
             font.weight: Font.Bold
-            color: Theme.onPrimary
+            color: Theme.primaryText
         }
     }
 

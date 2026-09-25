@@ -13,6 +13,7 @@ import "HyprlandParser.js" as Parser
 Item {
     id: root
     property var keybinds: ({ children: [] })
+    property string keybindsContent: ""
     property real spacing: 20
     property real titleSpacing: 7
     property real padding: 4
@@ -22,14 +23,31 @@ Item {
     // Process to read the config file
     Process {
         id: configReader
-        command: ["cat", Quickshell.env("HOME") + "/.config/hypr/conf/keybindings/default.conf"]
+        command: ["cat", Quickshell.env("HOME") + "/.config/hypr/hyprland/keybinds.lua"]
         running: true
-        
+
         stdout: StdioCollector {
             onStreamFinished: {
-                var parsed = Parser.parse(text);
-                root.keybinds = parsed;
+                root.keybindsContent = text;
+                root.tryParse();
             }
+        }
+    }
+
+    function tryParse() {
+        if (!keybindsContent)
+            return;
+        if (!HyprlandService.keybindVariablesReady) {
+            HyprlandService.refreshKeybindVariables();
+            return;
+        }
+        keybinds = Parser.parseKeybinds(HyprlandService.keybindVariablesMap, keybindsContent, HyprlandService.keybindVariables);
+    }
+
+    Connections {
+        target: HyprlandService
+        function onKeybindVariablesLoaded() {
+            root.tryParse();
         }
     }
 
@@ -126,7 +144,8 @@ Item {
             var matchingKeybinds = section.keybinds.filter(kb => 
                 kb.key.toLowerCase().includes(searchText.toLowerCase()) || 
                 kb.comment.toLowerCase().includes(searchText.toLowerCase()) ||
-                (kb.action && kb.action.toLowerCase().includes(searchText.toLowerCase()))
+                (kb.action && kb.action.toLowerCase().includes(searchText.toLowerCase())) ||
+                (kb.appDefault && kb.appDefault.toLowerCase().includes(searchText.toLowerCase()))
             );
             
             if (matchingKeybinds.length > 0) {
@@ -209,7 +228,7 @@ Item {
 
                                 GridLayout {
                                     id: keybindGrid
-                                    columns: 2
+                                    columns: !!(modelData && modelData.keybinds && modelData.keybinds.some(kb => !!kb.appDefault)) ? 3 : 2
                                     columnSpacing: 4
                                     rowSpacing: 4
 
@@ -217,6 +236,7 @@ Item {
                                         model: {
                                             var result = [];
                                             if (!modelData || !modelData.keybinds) return result;
+                                            var hasApp = modelData.keybinds.some(kb => !!kb.appDefault);
                                             
                                             for (var i = 0; i < modelData.keybinds.length; i++) {
                                                 const keybind = modelData.keybinds[i];
@@ -231,6 +251,19 @@ Item {
                                                     "type": "comment",
                                                     "comment": keybind.comment,
                                                 });
+                                                if (hasApp) {
+                                                    if (keybind.appVarName) {
+                                                        result.push({
+                                                            "type": "app",
+                                                            "value": keybind.appDefault,
+                                                            "appVarName": keybind.appVarName,
+                                                        });
+                                                    } else {
+                                                        result.push({
+                                                            "type": "spacer"
+                                                        });
+                                                    }
+                                                }
                                             }
                                             return result;
                                         }
@@ -242,7 +275,15 @@ Item {
                                             Loader {
                                                 id: keybindLoader
                                                 property var itemModel: modelData
-                                                sourceComponent: (modelData.type === "keys") ? keysComponent : commentComponent
+                                                sourceComponent: {
+                                                    if (modelData.type === "keys")
+                                                        return keysComponent;
+                                                    if (modelData.type === "app")
+                                                        return appComponent;
+                                                    if (modelData.type === "spacer")
+                                                        return spacerComponent;
+                                                    return commentComponent;
+                                                }
                                             }
 
                                             Component {
@@ -289,6 +330,47 @@ Item {
                                                         text: modelData.comment
                                                         color: Theme.surfaceText
                                                     }
+                                                }
+                                            }
+
+                                            Component {
+                                                id: appComponent
+                                                Item {
+                                                    id: appItem
+                                                    property var modelData: keybindLoader.itemModel
+                                                    implicitWidth: appField.width
+                                                    implicitHeight: appField.height
+
+                                                    DankTextField {
+                                                        id: appField
+                                                        width: 160
+                                                        height: Math.round(Theme.fontSizeMedium * 2)
+                                                        text: appItem.modelData.value
+                                                        placeholderText: I18n.tr("app...")
+                                                        font.pixelSize: Theme.fontSizeSmall
+                                                        maximumLength: 64
+                                                        backgroundColor: Theme.withAlpha(Theme.surfaceContainerHigh, Theme.popupTransparency)
+                                                        normalBorderColor: Theme.outlineMedium
+                                                        focusedBorderColor: Theme.primary
+                                                        onEditingFinished: {
+                                                            var newValue = text.trim();
+                                                            if (!newValue) {
+                                                                text = appItem.modelData.value;
+                                                                return;
+                                                            }
+                                                            if (newValue !== appItem.modelData.value)
+                                                                HyprlandService.updateAppDefault(appItem.modelData.appVarName, newValue);
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            Component {
+                                                id: spacerComponent
+                                                Item {
+                                                    implicitWidth: 160
+                                                    implicitHeight: appFieldHeightProxy
+                                                    property real appFieldHeightProxy: Math.round(Theme.fontSizeMedium * 2)
                                                 }
                                             }
                                         }

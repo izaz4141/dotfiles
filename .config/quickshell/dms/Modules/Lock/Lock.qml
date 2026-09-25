@@ -42,18 +42,14 @@ Scope {
     property bool lockWakeAllowed: false
 
     Component.onCompleted: {
-        IdleService.lockComponent = this;
         if (SettingsData.lockAtStartup)
             lock();
     }
 
     function notifyLoginctl(lockAction: bool) {
-        if (!SettingsData.loginctlLockIntegration || !DMSService.isConnected)
+        if (!SettingsData.loginctlLockIntegration)
             return;
-        if (lockAction)
-            DMSService.lockSession(() => {});
-        else
-            DMSService.unlockSession(() => {});
+        Quickshell.execDetached(["sh", "-c", "loginctl " + (lockAction ? "lock-session" : "unlock-session") + " $XDG_SESSION_ID"]);
     }
 
     function lock() {

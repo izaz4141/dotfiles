@@ -36,20 +36,20 @@ Item {
     }
 
     function sampleData() {
-        cpuHistory = addToHistory(cpuHistory, DgopService.cpuUsage);
-        memoryHistory = addToHistory(memoryHistory, DgopService.memoryUsage);
-        networkRxHistory = addToHistory(networkRxHistory, DgopService.networkRxRate);
-        networkTxHistory = addToHistory(networkTxHistory, DgopService.networkTxRate);
-        diskReadHistory = addToHistory(diskReadHistory, DgopService.diskReadRate);
-        diskWriteHistory = addToHistory(diskWriteHistory, DgopService.diskWriteRate);
+        cpuHistory = addToHistory(cpuHistory, SysMonitorService.cpuUsage);
+        memoryHistory = addToHistory(memoryHistory, SysMonitorService.memoryUsage);
+        networkRxHistory = addToHistory(networkRxHistory, SysMonitorService.networkRxRate);
+        networkTxHistory = addToHistory(networkTxHistory, SysMonitorService.networkTxRate);
+        diskReadHistory = addToHistory(diskReadHistory, SysMonitorService.diskReadRate);
+        diskWriteHistory = addToHistory(diskWriteHistory, SysMonitorService.diskWriteRate);
     }
 
     Component.onCompleted: {
-        DgopService.addRef(["cpu", "memory", "network", "disk", "diskmounts", "system"]);
+        SysMonitorService.addRef(["cpu", "memory", "network", "disk", "diskmounts", "system"]);
     }
 
     Component.onDestruction: {
-        DgopService.removeRef(["cpu", "memory", "network", "disk", "diskmounts", "system"]);
+        SysMonitorService.removeRef(["cpu", "memory", "network", "disk", "diskmounts", "system"]);
     }
 
     SystemClock {
@@ -75,14 +75,14 @@ Item {
                 Layout.fillHeight: true
                 title: "CPU"
                 icon: "memory"
-                value: DgopService.cpuUsage.toFixed(1) + "%"
-                subtitle: DgopService.cpuModel || (DgopService.cpuCores + " cores")
+                value: SysMonitorService.cpuUsage.toFixed(1) + "%"
+                subtitle: SysMonitorService.cpuModel || (SysMonitorService.cpuCores + " cores")
                 accentColor: Theme.primary
                 history: root.cpuHistory
                 maxValue: 100
                 showSecondary: false
-                extraInfo: DgopService.cpuTemperature > 0 ? (DgopService.cpuTemperature.toFixed(0) + "°C") : ""
-                extraInfoColor: DgopService.cpuTemperature > 80 ? Theme.error : (DgopService.cpuTemperature > 60 ? Theme.warning : Theme.surfaceVariantText)
+                extraInfo: SysMonitorService.cpuTemperature > 0 ? (SysMonitorService.cpuTemperature.toFixed(0) + "°C") : ""
+                extraInfoColor: SysMonitorService.cpuTemperature > 80 ? Theme.error : (SysMonitorService.cpuTemperature > 60 ? Theme.warning : Theme.surfaceVariantText)
             }
 
             PerformanceCard {
@@ -90,13 +90,13 @@ Item {
                 Layout.fillHeight: true
                 title: I18n.tr("Memory")
                 icon: "sd_card"
-                value: DgopService.memoryUsage.toFixed(1) + "%"
-                subtitle: DgopService.formatSystemMemory(DgopService.usedMemoryKB) + " / " + DgopService.formatSystemMemory(DgopService.totalMemoryKB)
+                value: SysMonitorService.memoryUsage.toFixed(1) + "%"
+                subtitle: SysMonitorService.formatSystemMemory(SysMonitorService.usedMemoryKB) + " / " + SysMonitorService.formatSystemMemory(SysMonitorService.totalMemoryKB)
                 accentColor: Theme.secondary
                 history: root.memoryHistory
                 maxValue: 100
                 showSecondary: false
-                extraInfo: DgopService.totalSwapKB > 0 ? ("Swap: " + DgopService.formatSystemMemory(DgopService.usedSwapKB)) : ""
+                extraInfo: SysMonitorService.totalSwapKB > 0 ? ("Swap: " + SysMonitorService.formatSystemMemory(SysMonitorService.usedSwapKB)) : ""
                 extraInfoColor: Theme.surfaceVariantText
             }
         }
@@ -111,8 +111,8 @@ Item {
                 Layout.fillHeight: true
                 title: I18n.tr("Network")
                 icon: "swap_horiz"
-                value: "↓ " + root.formatBytes(DgopService.networkRxRate)
-                subtitle: "↑ " + root.formatBytes(DgopService.networkTxRate)
+                value: "↓ " + root.formatBytes(SysMonitorService.networkRxRate)
+                subtitle: "↑ " + root.formatBytes(SysMonitorService.networkTxRate)
                 accentColor: Theme.info
                 history: root.networkRxHistory
                 history2: root.networkTxHistory
@@ -127,15 +127,15 @@ Item {
                 Layout.fillHeight: true
                 title: I18n.tr("Disk")
                 icon: "storage"
-                value: "R: " + root.formatBytes(DgopService.diskReadRate)
-                subtitle: "W: " + root.formatBytes(DgopService.diskWriteRate)
+                value: "R: " + root.formatBytes(SysMonitorService.diskReadRate)
+                subtitle: "W: " + root.formatBytes(SysMonitorService.diskWriteRate)
                 accentColor: Theme.warning
                 history: root.diskReadHistory
                 history2: root.diskWriteHistory
                 maxValue: 0
                 showSecondary: true
                 extraInfo: {
-                    const rootMount = DgopService.diskMounts.find(m => m.mountpoint === "/");
+                    const rootMount = SysMonitorService.diskMounts.find(m => m.mountpoint === "/");
                     if (rootMount) {
                         const usedPct = ((rootMount.used || 0) / Math.max(1, rootMount.total || 1) * 100).toFixed(0);
                         return "/ " + usedPct + "% used";

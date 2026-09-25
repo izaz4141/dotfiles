@@ -345,13 +345,13 @@ Item {
                                     DankIcon {
                                         name: "search"
                                         size: 16
-                                        color: !printerTab.manualEntryMode ? Theme.onPrimary : Theme.surfaceText
+                                        color: !printerTab.manualEntryMode ? Theme.primaryText : Theme.surfaceText
                                     }
 
                                     StyledText {
                                         text: I18n.tr("Discover Devices", "Toggle button to scan for printers via mDNS/Avahi")
                                         font.pixelSize: Theme.fontSizeSmall
-                                        color: !printerTab.manualEntryMode ? Theme.onPrimary : Theme.surfaceText
+                                        color: !printerTab.manualEntryMode ? Theme.primaryText : Theme.surfaceText
                                         font.weight: Font.Medium
                                     }
                                 }
@@ -383,13 +383,13 @@ Item {
                                     DankIcon {
                                         name: "edit"
                                         size: 16
-                                        color: printerTab.manualEntryMode ? Theme.onPrimary : Theme.surfaceText
+                                        color: printerTab.manualEntryMode ? Theme.primaryText : Theme.surfaceText
                                     }
 
                                     StyledText {
                                         text: I18n.tr("Add by Address", "Toggle button to manually add a printer by IP or hostname")
                                         font.pixelSize: Theme.fontSizeSmall
-                                        color: printerTab.manualEntryMode ? Theme.onPrimary : Theme.surfaceText
+                                        color: printerTab.manualEntryMode ? Theme.primaryText : Theme.surfaceText
                                         font.weight: Font.Medium
                                     }
                                 }

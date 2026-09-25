@@ -92,7 +92,7 @@ DesktopPluginComponent {
                     width: 4
                     height: clockFace.height * 0.35
                     radius: 2
-                    color: Theme.onSurface
+                    color: Theme.surfaceText
                     antialiasing: true
                     transformOrigin: Item.Bottom
                     rotation: (minutes + seconds / 60) * 6

@@ -25,33 +25,16 @@ Rectangle {
     border.width: 0
 
     property var bluetoothCodecModalRef: null
-    property var devicesBeingPaired: new Set()
 
     signal showCodecSelector(var device)
-
-    function isDeviceBeingPaired(deviceAddress) {
-        return devicesBeingPaired.has(deviceAddress);
-    }
 
     function handlePairDevice(device) {
         if (!device)
             return;
-        const deviceAddr = device.address;
-        const pairingSet = devicesBeingPaired;
-
-        pairingSet.add(deviceAddr);
-        devicesBeingPairedChanged();
 
         BluetoothService.pairDevice(device, function (response) {
-            pairingSet.delete(deviceAddr);
-            devicesBeingPairedChanged();
-
             if (response.error) {
                 ToastService.showError(I18n.tr("Pairing failed"), response.error);
-                return;
-            }
-            if (!BluetoothService.enhancedPairingAvailable) {
-                ToastService.showSuccess(I18n.tr("Device paired"));
             }
         });
     }
@@ -483,7 +466,7 @@ Rectangle {
                     required property int index
 
                     readonly property bool canConnect: BluetoothService.canConnect(modelData)
-                    readonly property bool isBusy: BluetoothService.isDeviceBusy(modelData) || root.isDeviceBeingPaired(modelData.address)
+                    readonly property bool isBusy: BluetoothService.isDeviceBusy(modelData) || (BluetoothService.pairingInProgress && BluetoothService._currentPairAddress === modelData.address)
                     readonly property bool isInteractive: canConnect && !isBusy
                     readonly property string deviceName: modelData.name || modelData.deviceName || I18n.tr("Unknown Device")
 
@@ -713,31 +696,18 @@ Rectangle {
             onTriggered: {
                 if (!bluetoothContextMenu.hasDevice)
                     return;
-                if (!BluetoothService.enhancedPairingAvailable) {
-                    bluetoothContextMenu.currentDevice.forget();
-                    return;
-                }
-
-                const devicePath = BluetoothService.getDevicePath(bluetoothContextMenu.currentDevice);
-                DMSService.bluetoothRemove(devicePath, response => {
-                    if (!response.error)
-                        return;
-                    ToastService.showError(I18n.tr("Failed to remove device"), response.error);
-                });
+                BluetoothService.removeDevice(bluetoothContextMenu.currentDevice);
             }
         }
     }
 
     Connections {
-        target: DMSService
-
-        function onBluetoothPairingRequest(data) {
+        target: BluetoothService
+        function onPairingRequested(deviceName, requestType, passkey) {
             const modal = PopoutService.bluetoothPairingModal;
             if (!modal)
                 return;
-            if (modal.token === data.token)
-                return;
-            modal.show(data);
+            modal.show({deviceName, deviceAddr: "", requestType, passkey});
         }
     }
 }

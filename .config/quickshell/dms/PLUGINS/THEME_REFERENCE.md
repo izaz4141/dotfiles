@@ -52,17 +52,17 @@ Theme.surfaceContainerHighest
 
 ### Text Colors
 ```qml
-Theme.onSurface         // Primary text on surface
-Theme.onSurfaceVariant  // Secondary text on surface
+Theme.surfaceText         // Primary text on surface
+Theme.surfaceVariantText  // Secondary text on surface
 Theme.outline           // Border/divider color
 ```
 
 ### Semantic Colors
 ```qml
 Theme.primary
-Theme.onPrimary
+Theme.primaryText
 Theme.secondary
-Theme.onSecondary
+Theme.secondaryText
 Theme.error
 Theme.warning
 Theme.success
@@ -79,13 +79,13 @@ Theme.popupBackground()  // Popup background with opacity
 ```qml
 DankIcon {
     name: "icon_name"
-    color: Theme.onSurface
+    color: Theme.surfaceText
     font.pixelSize: Theme.iconSize
 }
 
 StyledText {
     text: "Label"
-    color: Theme.onSurface
+    color: Theme.surfaceText
     font.pixelSize: Theme.fontSizeMedium
 }
 ```

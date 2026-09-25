@@ -12,10 +12,11 @@ Item {
 
     required property var powerMenuModalLoader
     required property var processListModalLoader
+    required property var clockModalLoader
     required property var controlCenterLoader
     required property var dankDashPopoutLoader
     required property var notepadSlideoutVariants
-    required property var hyprKeybindsModalLoader
+    required property var toolboxSlideoutVariants
     required property var dankBarRepeater
     required property var hyprlandOverviewLoader
     required property var workspaceRenameModalLoader
@@ -27,6 +28,23 @@ Item {
             return null;
         const firstLoader = root.dankBarRepeater.itemAt(0);
         return firstLoader ? firstLoader.item : null;
+    }
+
+    function getFocusedScreenName() {
+        if (CompositorService.isHyprland && Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.monitor) {
+            return Hyprland.focusedWorkspace.monitor.name;
+        }
+        if (CompositorService.isNiri && NiriService.currentOutput) {
+            return NiriService.currentOutput;
+        }
+        if ((CompositorService.isSway || CompositorService.isScroll || CompositorService.isMiracle) && I3.workspaces?.values) {
+            const focusedWs = I3.workspaces.values.find(ws => ws.focused === true);
+            return focusedWs?.monitor?.name || "";
+        }
+        if (CompositorService.isDwl && DwlService.activeOutput) {
+            return DwlService.activeOutput;
+        }
+        return "";
     }
 
     IpcHandler {
@@ -131,6 +149,33 @@ Item {
     }
 
     IpcHandler {
+        function open(): string {
+            root.clockModalLoader.active = true;
+            if (root.clockModalLoader.item)
+                root.clockModalLoader.item.show();
+
+            return "CLOCK_OPEN_SUCCESS";
+        }
+
+        function close(): string {
+            if (root.clockModalLoader.item)
+                root.clockModalLoader.item.hide();
+
+            return "CLOCK_CLOSE_SUCCESS";
+        }
+
+        function toggle(): string {
+            root.clockModalLoader.active = true;
+            if (root.clockModalLoader.item)
+                root.clockModalLoader.item.toggle();
+
+            return "CLOCK_TOGGLE_SUCCESS";
+        }
+
+        target: "clock"
+    }
+
+    IpcHandler {
         function open(tab: string): string {
             root.dankDashPopoutLoader.active = true;
             if (root.dankDashPopoutLoader.item) {
@@ -191,23 +236,6 @@ Item {
     }
 
     IpcHandler {
-        function getFocusedScreenName() {
-            if (CompositorService.isHyprland && Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.monitor) {
-                return Hyprland.focusedWorkspace.monitor.name;
-            }
-            if (CompositorService.isNiri && NiriService.currentOutput) {
-                return NiriService.currentOutput;
-            }
-            if ((CompositorService.isSway || CompositorService.isScroll || CompositorService.isMiracle) && I3.workspaces?.values) {
-                const focusedWs = I3.workspaces.values.find(ws => ws.focused === true);
-                return focusedWs?.monitor?.name || "";
-            }
-            if (CompositorService.isDwl && DwlService.activeOutput) {
-                return DwlService.activeOutput;
-            }
-            return "";
-        }
-
         function getActiveNotepadInstance() {
             if (root.notepadSlideoutVariants.instances.length === 0) {
                 return null;
@@ -265,6 +293,66 @@ Item {
         }
 
         target: "notepad"
+    }
+
+    IpcHandler {
+        function getActiveToolboxInstance() {
+            if (!root.toolboxSlideoutVariants || root.toolboxSlideoutVariants.instances.length === 0) {
+                return null;
+            }
+
+            if (root.toolboxSlideoutVariants.instances.length === 1) {
+                return root.toolboxSlideoutVariants.instances[0];
+            }
+
+            var focusedScreen = getFocusedScreenName();
+            if (focusedScreen && root.toolboxSlideoutVariants.instances.length > 0) {
+                for (var i = 0; i < root.toolboxSlideoutVariants.instances.length; i++) {
+                    var slideout = root.toolboxSlideoutVariants.instances[i];
+                    if (slideout.modelData && slideout.modelData.name === focusedScreen) {
+                        return slideout;
+                    }
+                }
+            }
+
+            for (var i = 0; i < root.toolboxSlideoutVariants.instances.length; i++) {
+                var slideout = root.toolboxSlideoutVariants.instances[i];
+                if (slideout.isVisible) {
+                    return slideout;
+                }
+            }
+
+            return root.toolboxSlideoutVariants.instances[0];
+        }
+
+        function open(): string {
+            var instance = getActiveToolboxInstance();
+            if (instance) {
+                instance.show();
+                return "TOOLBOX_OPEN_SUCCESS";
+            }
+            return "TOOLBOX_OPEN_FAILED";
+        }
+
+        function close(): string {
+            var instance = getActiveToolboxInstance();
+            if (instance) {
+                instance.hide();
+                return "TOOLBOX_CLOSE_SUCCESS";
+            }
+            return "TOOLBOX_CLOSE_FAILED";
+        }
+
+        function toggle(): string {
+            var instance = getActiveToolboxInstance();
+            if (instance) {
+                instance.toggle();
+                return "TOOLBOX_TOGGLE_SUCCESS";
+            }
+            return "TOOLBOX_TOGGLE_FAILED";
+        }
+
+        target: "toolbox"
     }
 
     IpcHandler {
@@ -378,47 +466,23 @@ Item {
             if (!provider)
                 return "ERROR: No provider specified";
 
-            KeybindsService.loadCheatsheet(provider);
-            root.hyprKeybindsModalLoader.active = true;
-
-            if (!root.hyprKeybindsModalLoader.item)
-                return `KEYBINDS_TOGGLE_FAILED: ${provider}`;
-
-            if (root.hyprKeybindsModalLoader.item.shouldBeVisible)
-                root.hyprKeybindsModalLoader.item.close();
-            else
-                root.hyprKeybindsModalLoader.item.open();
-            return `KEYBINDS_TOGGLE_SUCCESS: ${provider}`;
+            root.cheatsheetLoader.active = !root.cheatsheetLoader.active;
+            return root.cheatsheetLoader.active ? `KEYBINDS_TOGGLE_SUCCESS: ${provider}` : "KEYBINDS_CLOSE_SUCCESS";
         }
 
         function toggleWithPath(provider: string, path: string): string {
             if (!provider)
                 return "ERROR: No provider specified";
 
-            KeybindsService.loadCheatsheet(provider);
-            root.hyprKeybindsModalLoader.active = true;
-
-            if (!root.hyprKeybindsModalLoader.item)
-                return `KEYBINDS_TOGGLE_FAILED: ${provider}`;
-
-            if (root.hyprKeybindsModalLoader.item.shouldBeVisible)
-                root.hyprKeybindsModalLoader.item.close();
-            else
-                root.hyprKeybindsModalLoader.item.open();
-            return `KEYBINDS_TOGGLE_SUCCESS: ${provider} (${path})`;
+            root.cheatsheetLoader.active = !root.cheatsheetLoader.active;
+            return root.cheatsheetLoader.active ? `KEYBINDS_TOGGLE_SUCCESS: ${provider} (${path})` : "KEYBINDS_CLOSE_SUCCESS";
         }
 
         function open(provider: string): string {
             if (!provider)
                 return "ERROR: No provider specified";
 
-            KeybindsService.loadCheatsheet(provider);
-            root.hyprKeybindsModalLoader.active = true;
-
-            if (!root.hyprKeybindsModalLoader.item)
-                return `KEYBINDS_OPEN_FAILED: ${provider}`;
-
-            root.hyprKeybindsModalLoader.item.open();
+            root.cheatsheetLoader.active = true;
             return `KEYBINDS_OPEN_SUCCESS: ${provider}`;
         }
 
@@ -426,21 +490,12 @@ Item {
             if (!provider)
                 return "ERROR: No provider specified";
 
-            KeybindsService.loadCheatsheet(provider);
-            root.hyprKeybindsModalLoader.active = true;
-
-            if (!root.hyprKeybindsModalLoader.item)
-                return `KEYBINDS_OPEN_FAILED: ${provider}`;
-
-            root.hyprKeybindsModalLoader.item.open();
+            root.cheatsheetLoader.active = true;
             return `KEYBINDS_OPEN_SUCCESS: ${provider} (${path})`;
         }
 
         function close(): string {
-            if (!root.hyprKeybindsModalLoader.item)
-                return "KEYBINDS_CLOSE_FAILED";
-
-            root.hyprKeybindsModalLoader.item.close();
+            root.cheatsheetLoader.active = false;
             return "KEYBINDS_CLOSE_SUCCESS";
         }
 
@@ -471,14 +526,7 @@ Item {
             if (!CompositorService.isHyprland)
                 return "HYPR_NOT_AVAILABLE";
 
-            KeybindsService.currentProvider = "hyprland";
-            KeybindsService.loadBinds();
-            root.hyprKeybindsModalLoader.active = true;
-
-            if (!root.hyprKeybindsModalLoader.item)
-                return "HYPR_KEYBINDS_OPEN_FAILED";
-
-            root.hyprKeybindsModalLoader.item.open();
+            root.cheatsheetLoader.active = true;
             return "HYPR_KEYBINDS_OPEN_SUCCESS";
         }
 
@@ -486,10 +534,7 @@ Item {
             if (!CompositorService.isHyprland)
                 return "HYPR_NOT_AVAILABLE";
 
-            if (!root.hyprKeybindsModalLoader.item)
-                return "HYPR_KEYBINDS_CLOSE_FAILED";
-
-            root.hyprKeybindsModalLoader.item.close();
+            root.cheatsheetLoader.active = false;
             return "HYPR_KEYBINDS_CLOSE_SUCCESS";
         }
 
@@ -497,19 +542,8 @@ Item {
             if (!CompositorService.isHyprland)
                 return "HYPR_NOT_AVAILABLE";
 
-            KeybindsService.currentProvider = "hyprland";
-            KeybindsService.loadBinds();
-            root.hyprKeybindsModalLoader.active = true;
-
-            if (!root.hyprKeybindsModalLoader.item)
-                return "HYPR_KEYBINDS_TOGGLE_FAILED";
-
-            if (root.hyprKeybindsModalLoader.item.shouldBeVisible) {
-                root.hyprKeybindsModalLoader.item.close();
-            } else {
-                root.hyprKeybindsModalLoader.item.open();
-            }
-            return "HYPR_KEYBINDS_TOGGLE_SUCCESS";
+            root.cheatsheetLoader.active = !root.cheatsheetLoader.active;
+            return root.cheatsheetLoader.active ? "HYPR_KEYBINDS_OPEN_SUCCESS" : "HYPR_KEYBINDS_CLOSE_SUCCESS";
         }
 
         function toggleOverview(): string {
@@ -1741,5 +1775,32 @@ Item {
         }
 
         target: "tray"
+    }
+
+    IpcHandler {
+        function all(target: string): string {
+            return ScreenshotService.all(target || "clipboard");
+        }
+
+        function window(target: string): string {
+            return ScreenshotService.window(target || "clipboard");
+        }
+
+        function region(target: string): string {
+            const t = target || "clipboard";
+            if (ScreenshotService.regionOverlay)
+                ScreenshotService.regionOverlay.target = t;
+            return ScreenshotService.startRegionCapture();
+        }
+
+        function controls(): string {
+            if (PopoutService.screenshotControls) {
+                PopoutService.screenshotControls.toggle();
+                return PopoutService.screenshotControls.shown ? "SCREENSHOT_CONTROLS_OPEN" : "SCREENSHOT_CONTROLS_CLOSED";
+            }
+            return "ERROR: screenshot controls not available";
+        }
+
+        target: "screenshot"
     }
 }

@@ -118,9 +118,9 @@ Item {
     }
 
     readonly property var sortedProcesses: {
-        if (!showTopProcesses || !DgopService.processes)
+        if (!showTopProcesses || !SysMonitorService.processes)
             return [];
-        var procs = DgopService.processes.slice();
+        var procs = SysMonitorService.processes.slice();
         if (topProcessSortBy === "memory") {
             procs.sort((a, b) => (b.memoryKB || 0) - (a.memoryKB || 0));
         } else {
@@ -142,14 +142,14 @@ Item {
         if (showTopProcesses)
             modules.push("processes");
         activeModuleRefs = modules;
-        DgopService.addRef(modules);
+        SysMonitorService.addRef(modules);
         updateGpuRef();
     }
 
     Component.onDestruction: {
-        DgopService.removeRef(activeModuleRefs);
+        SysMonitorService.removeRef(activeModuleRefs);
         if (currentGpuPciIdRef)
-            DgopService.removeGpuPciId(currentGpuPciIdRef);
+            SysMonitorService.removeGpuPciId(currentGpuPciIdRef);
     }
 
     onShowGpuTempChanged: updateGpuRef()
@@ -157,35 +157,35 @@ Item {
     onShowTopProcessesChanged: {
         if (showTopProcesses) {
             activeModuleRefs = activeModuleRefs.concat(["processes"]);
-            DgopService.addRef(["processes"]);
+            SysMonitorService.addRef(["processes"]);
         } else {
-            DgopService.removeRef(["processes"]);
+            SysMonitorService.removeRef(["processes"]);
             activeModuleRefs = activeModuleRefs.filter(m => m !== "processes");
         }
     }
 
     function updateGpuRef() {
         if (currentGpuPciIdRef && currentGpuPciIdRef !== selectedGpuPciId) {
-            DgopService.removeGpuPciId(currentGpuPciIdRef);
+            SysMonitorService.removeGpuPciId(currentGpuPciIdRef);
             currentGpuPciIdRef = "";
         }
         if (!showGpuTemp || !selectedGpuPciId) {
             if (currentGpuPciIdRef) {
-                DgopService.removeGpuPciId(currentGpuPciIdRef);
+                SysMonitorService.removeGpuPciId(currentGpuPciIdRef);
                 currentGpuPciIdRef = "";
             }
             return;
         }
         if (selectedGpuPciId && !currentGpuPciIdRef) {
-            DgopService.addGpuPciId(selectedGpuPciId);
+            SysMonitorService.addGpuPciId(selectedGpuPciId);
             currentGpuPciIdRef = selectedGpuPciId;
         }
     }
 
     function getGpuInfo() {
-        if (!selectedGpuPciId || !DgopService.availableGpus)
+        if (!selectedGpuPciId || !SysMonitorService.availableGpus)
             return null;
-        return DgopService.availableGpus.find(g => g.pciId === selectedGpuPciId);
+        return SysMonitorService.availableGpus.find(g => g.pciId === selectedGpuPciId);
     }
 
     function formatBytes(bytes) {
@@ -216,16 +216,16 @@ Item {
 
     function sampleData() {
         if (showCpuGraph)
-            cpuHistory = addToHistory(cpuHistory, DgopService.cpuUsage);
+            cpuHistory = addToHistory(cpuHistory, SysMonitorService.cpuUsage);
         if (showMemoryGraph)
-            memHistory = addToHistory(memHistory, DgopService.memoryUsage);
+            memHistory = addToHistory(memHistory, SysMonitorService.memoryUsage);
         if (showNetworkGraph) {
-            netRxHistory = addToHistory(netRxHistory, DgopService.networkRxRate);
-            netTxHistory = addToHistory(netTxHistory, DgopService.networkTxRate);
+            netRxHistory = addToHistory(netRxHistory, SysMonitorService.networkRxRate);
+            netTxHistory = addToHistory(netTxHistory, SysMonitorService.networkTxRate);
         }
         if (showDisk) {
-            diskReadHistory = addToHistory(diskReadHistory, DgopService.diskReadRate);
-            diskWriteHistory = addToHistory(diskWriteHistory, DgopService.diskWriteRate);
+            diskReadHistory = addToHistory(diskReadHistory, SysMonitorService.diskReadRate);
+            diskWriteHistory = addToHistory(diskWriteHistory, SysMonitorService.diskWriteRate);
         }
     }
 
@@ -261,7 +261,7 @@ Item {
                     spacing: 0
 
                     StyledText {
-                        text: DgopService.cpuModel || DgopService.hostname || "System"
+                        text: SysMonitorService.cpuModel || SysMonitorService.hostname || "System"
                         isMonospace: true
                         font.pixelSize: Theme.fontSizeSmall
                         color: root.textColor
@@ -270,8 +270,8 @@ Item {
                     }
 
                     StyledText {
-                        visible: DgopService.shortUptime && DgopService.shortUptime.length > 0
-                        text: DgopService.shortUptime
+                        visible: SysMonitorService.shortUptime && SysMonitorService.shortUptime.length > 0
+                        text: SysMonitorService.shortUptime
                         isMonospace: true
                         font.pixelSize: Theme.fontSizeSmall
                         color: root.dimColor
@@ -466,16 +466,16 @@ Item {
                                 }
 
                                 StyledText {
-                                    visible: tile.tileType === "cpu" && root.showCpuTemp && DgopService.cpuTemperature > 0
-                                    text: DgopService.cpuTemperature.toFixed(0) + "°"
+                                    visible: tile.tileType === "cpu" && root.showCpuTemp && SysMonitorService.cpuTemperature > 0
+                                    text: SysMonitorService.cpuTemperature.toFixed(0) + "°"
                                     isMonospace: true
                                     font.pixelSize: Theme.fontSizeSmall
-                                    color: DgopService.cpuTemperature > 80 ? Theme.error : (DgopService.cpuTemperature > 60 ? Theme.warning : root.dimColor)
+                                    color: SysMonitorService.cpuTemperature > 80 ? Theme.error : (SysMonitorService.cpuTemperature > 60 ? Theme.warning : root.dimColor)
                                 }
 
                                 StyledText {
                                     visible: tile.tileType === "mem"
-                                    text: DgopService.formatSystemMemory(DgopService.usedMemoryKB)
+                                    text: SysMonitorService.formatSystemMemory(SysMonitorService.usedMemoryKB)
                                     isMonospace: true
                                     font.pixelSize: Theme.fontSizeSmall
                                     color: root.dimColor
@@ -488,7 +488,7 @@ Item {
 
                             StyledText {
                                 visible: tile.tileType === "cpu"
-                                text: DgopService.cpuUsage.toFixed(0) + "%"
+                                text: SysMonitorService.cpuUsage.toFixed(0) + "%"
                                 isMonospace: true
                                 font.pixelSize: Theme.fontSizeXLarge
                                 font.weight: Font.Medium
@@ -497,7 +497,7 @@ Item {
 
                             StyledText {
                                 visible: tile.tileType === "mem"
-                                text: DgopService.memoryUsage.toFixed(0) + "%"
+                                text: SysMonitorService.memoryUsage.toFixed(0) + "%"
                                 isMonospace: true
                                 font.pixelSize: Theme.fontSizeXLarge
                                 font.weight: Font.Medium
@@ -515,7 +515,7 @@ Item {
                                         color: root.accentColor
                                     }
                                     StyledText {
-                                        text: root.formatBytes(DgopService.networkRxRate) + "/s"
+                                        text: root.formatBytes(SysMonitorService.networkRxRate) + "/s"
                                         isMonospace: true
                                         font.pixelSize: Theme.fontSizeMedium
                                         color: root.textColor
@@ -529,7 +529,7 @@ Item {
                                         color: root.dimColor
                                     }
                                     StyledText {
-                                        text: root.formatBytes(DgopService.networkTxRate) + "/s"
+                                        text: root.formatBytes(SysMonitorService.networkTxRate) + "/s"
                                         isMonospace: true
                                         font.pixelSize: Theme.fontSizeMedium
                                         color: root.textColor
@@ -548,7 +548,7 @@ Item {
                                         color: root.accentColor
                                     }
                                     StyledText {
-                                        text: root.formatBytes(DgopService.diskReadRate) + "/s"
+                                        text: root.formatBytes(SysMonitorService.diskReadRate) + "/s"
                                         isMonospace: true
                                         font.pixelSize: Theme.fontSizeMedium
                                         color: root.textColor
@@ -562,7 +562,7 @@ Item {
                                         color: root.dimColor
                                     }
                                     StyledText {
-                                        text: root.formatBytes(DgopService.diskWriteRate) + "/s"
+                                        text: root.formatBytes(SysMonitorService.diskWriteRate) + "/s"
                                         isMonospace: true
                                         font.pixelSize: Theme.fontSizeMedium
                                         color: root.textColor
@@ -604,7 +604,7 @@ Item {
                                 color: Theme.withAlpha(Theme.outline, 0.2)
 
                                 Rectangle {
-                                    property real pct: tile.tileType === "cpu" ? DgopService.cpuUsage / 100 : DgopService.memoryUsage / 100
+                                    property real pct: tile.tileType === "cpu" ? SysMonitorService.cpuUsage / 100 : SysMonitorService.memoryUsage / 100
                                     width: parent.width * Math.min(1, pct)
                                     height: parent.height
                                     radius: 2
@@ -689,7 +689,7 @@ Item {
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: Theme.spacingXS
-                visible: root.showDisk && DgopService.diskMounts.length > 0
+                visible: root.showDisk && SysMonitorService.diskMounts.length > 0
 
                 Rectangle {
                     Layout.fillWidth: true
@@ -698,7 +698,7 @@ Item {
                 }
 
                 Repeater {
-                    model: DgopService.diskMounts.filter(m => m.mountpoint === "/" || m.mountpoint === "/home")
+                    model: SysMonitorService.diskMounts.filter(m => m.mountpoint === "/" || m.mountpoint === "/home")
 
                     RowLayout {
                         Layout.fillWidth: true

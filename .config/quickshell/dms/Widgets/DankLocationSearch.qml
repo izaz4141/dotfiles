@@ -54,7 +54,7 @@ Item {
                 root.currentSearchText = searchLocation;
                 const encodedLocation = encodeURIComponent(searchLocation);
                 const searchUrl = "https://nominatim.openstreetmap.org/search?q=" + encodedLocation + "&format=json&limit=5&addressdetails=1";
-                Proc.runCommand("locationSearch", ["dms", "dl", "-4", "--timeout", "10", searchUrl], (output, exitCode) => {
+                Proc.runCommand("locationSearch", ["curl", "-sS", "--fail", "-4", "--connect-timeout", "5", "--max-time", "10", "-H", "User-Agent: DankMaterialShell Location Search", searchUrl], (output, exitCode) => {
                     root.isLoading = false;
                     if (exitCode !== 0) {
                         searchResultsModel.clear();

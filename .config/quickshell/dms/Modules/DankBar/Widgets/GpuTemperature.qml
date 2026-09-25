@@ -18,12 +18,12 @@ BasePill {
     signal gpuTempClicked
 
     property real displayTemp: {
-        if (!DgopService.availableGpus || DgopService.availableGpus.length === 0) {
+        if (!SysMonitorService.availableGpus || SysMonitorService.availableGpus.length === 0) {
             return 0;
         }
 
-        if (selectedGpuIndex >= 0 && selectedGpuIndex < DgopService.availableGpus.length) {
-            return DgopService.availableGpus[selectedGpuIndex].temperature || 0;
+        if (selectedGpuIndex >= 0 && selectedGpuIndex < SysMonitorService.availableGpus.length) {
+            return SysMonitorService.availableGpus[selectedGpuIndex].temperature || 0;
         }
 
         return 0;
@@ -67,17 +67,17 @@ BasePill {
     }
 
     Component.onCompleted: {
-        DgopService.addRef(["gpu"]);
+        SysMonitorService.addRef(["gpu"]);
         if (widgetData && widgetData.pciId) {
-            DgopService.addGpuPciId(widgetData.pciId);
+            SysMonitorService.addGpuPciId(widgetData.pciId);
         } else {
             autoSaveTimer.running = true;
         }
     }
     Component.onDestruction: {
-        DgopService.removeRef(["gpu"]);
+        SysMonitorService.removeRef(["gpu"]);
         if (widgetData && widgetData.pciId) {
-            DgopService.removeGpuPciId(widgetData.pciId);
+            SysMonitorService.removeGpuPciId(widgetData.pciId);
         }
     }
 
@@ -201,7 +201,7 @@ BasePill {
         acceptedButtons: Qt.LeftButton
         onPressed: mouse => {
             root.triggerRipple(this, mouse.x, mouse.y);
-            DgopService.setSortBy("cpu");
+            SysMonitorService.setSortBy("cpu");
             gpuTempClicked();
         }
     }
@@ -212,11 +212,11 @@ BasePill {
         interval: 100
         running: false
         onTriggered: {
-            if (DgopService.availableGpus && DgopService.availableGpus.length > 0) {
-                const firstGpu = DgopService.availableGpus[0];
+            if (SysMonitorService.availableGpus && SysMonitorService.availableGpus.length > 0) {
+                const firstGpu = SysMonitorService.availableGpus[0];
                 if (firstGpu && firstGpu.pciId) {
                     updateWidgetPciId(firstGpu.pciId);
-                    DgopService.addGpuPciId(firstGpu.pciId);
+                    SysMonitorService.addGpuPciId(firstGpu.pciId);
                 }
             }
         }

@@ -17,10 +17,10 @@ BasePill {
     signal cpuClicked
 
     Component.onCompleted: {
-        DgopService.addRef(["cpu"]);
+        SysMonitorService.addRef(["cpu"]);
     }
     Component.onDestruction: {
-        DgopService.removeRef(["cpu"]);
+        SysMonitorService.removeRef(["cpu"]);
     }
 
     content: Component {
@@ -38,11 +38,11 @@ BasePill {
                     name: "memory"
                     size: Theme.barIconSize(root.barThickness, undefined, root.barConfig?.maximizeWidgetIcons, root.barConfig?.iconScale)
                     color: {
-                        if (DgopService.cpuUsage > 80) {
+                        if (SysMonitorService.cpuUsage > 80) {
                             return Theme.tempDanger;
                         }
 
-                        if (DgopService.cpuUsage > 60) {
+                        if (SysMonitorService.cpuUsage > 60) {
                             return Theme.tempWarning;
                         }
 
@@ -53,11 +53,11 @@ BasePill {
 
                 StyledText {
                     text: {
-                        if (DgopService.cpuUsage === undefined || DgopService.cpuUsage === null || DgopService.cpuUsage === 0) {
+                        if (SysMonitorService.cpuUsage === undefined || SysMonitorService.cpuUsage === null || SysMonitorService.cpuUsage === 0) {
                             return "--";
                         }
 
-                        return DgopService.cpuUsage.toFixed(0);
+                        return SysMonitorService.cpuUsage.toFixed(0);
                     }
                     font.pixelSize: Theme.barTextSize(root.barThickness, root.barConfig?.fontScale, root.barConfig?.maximizeWidgetText)
                     color: Theme.widgetTextColor
@@ -76,11 +76,11 @@ BasePill {
                     name: "memory"
                     size: Theme.barIconSize(root.barThickness, undefined, root.barConfig?.maximizeWidgetIcons, root.barConfig?.iconScale)
                     color: {
-                        if (DgopService.cpuUsage > 80) {
+                        if (SysMonitorService.cpuUsage > 80) {
                             return Theme.tempDanger;
                         }
 
-                        if (DgopService.cpuUsage > 60) {
+                        if (SysMonitorService.cpuUsage > 60) {
                             return Theme.tempWarning;
                         }
 
@@ -114,7 +114,7 @@ BasePill {
                     StyledText {
                         id: cpuText
                         text: {
-                            const v = DgopService.cpuUsage;
+                            const v = SysMonitorService.cpuUsage;
                             if (v === undefined || v === null || v === 0) {
                                 return "--%";
                             }
@@ -139,7 +139,7 @@ BasePill {
         acceptedButtons: Qt.LeftButton
         onPressed: mouse => {
             root.triggerRipple(this, mouse.x, mouse.y);
-            DgopService.setSortBy("cpu");
+            SysMonitorService.setSortBy("cpu");
             cpuClicked();
         }
     }

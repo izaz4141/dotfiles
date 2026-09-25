@@ -10,6 +10,12 @@ Scope {
     id: overviewScope
 
     property bool overviewOpen: false
+    property bool closing: false
+
+    function closeOverview() {
+        closing = true
+        overviewOpen = false
+    }
 
     Loader {
         id: hyprlandLoader
@@ -25,6 +31,7 @@ Scope {
                 required property var modelData
                 readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
                 property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor?.id)
+                property int lastDispatchedWorkspaceId: -1
 
                 screen: modelData
                 visible: overviewScope.overviewOpen
@@ -60,7 +67,7 @@ Scope {
                 }
                 onCleared: () => {
                     if (hasBeenActivated && overviewScope.overviewOpen) {
-                        overviewScope.overviewOpen = false
+                        overviewScope.closeOverview()
                     }
                 }
             }
@@ -69,6 +76,7 @@ Scope {
                 target: overviewScope
                 function onOverviewOpenChanged() {
                     if (overviewScope.overviewOpen) {
+                        closing = false
                         grab.hasBeenActivated = false
                         if (CompositorService.useHyprlandFocusGrab)
                             delayedGrabTimer.start()
@@ -105,14 +113,6 @@ Scope {
                 }
             }
 
-            Timer {
-                id: closeTimer
-                interval: Theme.expressiveDurations.expressiveDefaultSpatial + 120
-                onTriggered: {
-                    root.visible = false
-                }
-            }
-
             Rectangle {
                 id: background
                 anchors.fill: parent
@@ -121,7 +121,7 @@ Scope {
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Theme.expressiveDurations.expressiveDefaultSpatial
+                        duration: closing ? 0 : Theme.expressiveDurations.expressiveDefaultSpatial
                         easing.type: Easing.BezierSpline
                         easing.bezierCurve: overviewScope.overviewOpen ? Theme.expressiveCurves.expressiveDefaultSpatial : Theme.expressiveCurves.emphasized
                     }
@@ -132,8 +132,7 @@ Scope {
                     onClicked: mouse => {
                         const localPos = mapToItem(contentContainer, mouse.x, mouse.y)
                         if (localPos.x < 0 || localPos.x > contentContainer.width || localPos.y < 0 || localPos.y > contentContainer.height) {
-                            overviewScope.overviewOpen = false
-                            closeTimer.restart()
+                            overviewScope.closeOverview()
                         }
                     }
                 }
@@ -159,7 +158,7 @@ Scope {
 
                     Behavior on xScale {
                         NumberAnimation {
-                            duration: Theme.expressiveDurations.expressiveDefaultSpatial
+                            duration: closing ? 0 : Theme.expressiveDurations.expressiveDefaultSpatial
                             easing.type: Easing.BezierSpline
                             easing.bezierCurve: overviewScope.overviewOpen ? Theme.expressiveCurves.expressiveDefaultSpatial : Theme.expressiveCurves.emphasized
                         }
@@ -167,7 +166,7 @@ Scope {
 
                     Behavior on yScale {
                         NumberAnimation {
-                            duration: Theme.expressiveDurations.expressiveDefaultSpatial
+                            duration: closing ? 0 : Theme.expressiveDurations.expressiveDefaultSpatial
                             easing.type: Easing.BezierSpline
                             easing.bezierCurve: overviewScope.overviewOpen ? Theme.expressiveCurves.expressiveDefaultSpatial : Theme.expressiveCurves.emphasized
                         }
@@ -181,7 +180,7 @@ Scope {
 
                     Behavior on y {
                         NumberAnimation {
-                            duration: Theme.expressiveDurations.expressiveDefaultSpatial
+                            duration: closing ? 0 : Theme.expressiveDurations.expressiveDefaultSpatial
                             easing.type: Easing.BezierSpline
                             easing.bezierCurve: overviewScope.overviewOpen ? Theme.expressiveCurves.expressiveDefaultSpatial : Theme.expressiveCurves.emphasized
                         }
@@ -190,7 +189,7 @@ Scope {
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Theme.expressiveDurations.expressiveDefaultSpatial
+                        duration: closing ? 0 : Theme.expressiveDurations.expressiveDefaultSpatial
                         easing.type: Easing.BezierSpline
                         easing.bezierCurve: overviewScope.overviewOpen ? Theme.expressiveCurves.expressiveDefaultSpatial : Theme.expressiveCurves.emphasized
                     }
@@ -206,6 +205,13 @@ Scope {
                         overviewOpen: overviewScope.overviewOpen
                     }
                 }
+
+                Connections {
+                    target: overviewLoader.item
+                    function onCloseRequested() {
+                        overviewScope.closeOverview()
+                    }
+                }
             }
 
             FocusScope {
@@ -216,36 +222,54 @@ Scope {
 
                 Keys.onEscapePressed: event => {
                     if (!root.monitorIsFocused) return
-                    overviewScope.overviewOpen = false
-                    closeTimer.restart()
+                    overviewScope.closeOverview()
                     event.accepted = true
                 }
 
                 Keys.onPressed: event => {
                     if (!root.monitorIsFocused) return
+                    if (!overviewLoader.item) return
 
-                    if (event.key === Qt.Key_Left || event.key === Qt.Key_Right) {
-                        if (!overviewLoader.item) return
+                    const thisMonitorWorkspaceIds = overviewLoader.item.thisMonitorWorkspaceIds
+                    if (thisMonitorWorkspaceIds.length === 0) return
 
-                        const thisMonitorWorkspaceIds = overviewLoader.item.thisMonitorWorkspaceIds
-                        if (thisMonitorWorkspaceIds.length === 0) return
+                    const activeId = root.lastDispatchedWorkspaceId !== -1 ? root.lastDispatchedWorkspaceId : (root.monitor.activeWorkspace?.id ?? thisMonitorWorkspaceIds[0])
+                    const currentIndex = thisMonitorWorkspaceIds.indexOf(activeId)
+                    if (currentIndex < 0) return
 
-                        const currentId = root.monitor.activeWorkspace?.id ?? thisMonitorWorkspaceIds[0]
-                        const currentIndex = thisMonitorWorkspaceIds.indexOf(currentId)
-
-                        let targetIndex
-                        if (event.key === Qt.Key_Left) {
-                            targetIndex = currentIndex - 1
-                            if (targetIndex < 0) targetIndex = thisMonitorWorkspaceIds.length - 1
+                    let targetIndex
+                    if (event.key === Qt.Key_Left) {
+                        targetIndex = currentIndex - 1
+                        if (targetIndex < 0) targetIndex = thisMonitorWorkspaceIds.length - 1
+                    } else if (event.key === Qt.Key_Right) {
+                        targetIndex = currentIndex + 1
+                        if (targetIndex >= thisMonitorWorkspaceIds.length) targetIndex = 0
+                    } else if (event.key === Qt.Key_Up || event.key === Qt.Key_Down) {
+                        const columns = overviewLoader.item.effectiveColumns
+                        const col = currentIndex % columns
+                        if (event.key === Qt.Key_Up) {
+                            targetIndex = currentIndex - columns
+                            if (targetIndex < 0)
+                                targetIndex = thisMonitorWorkspaceIds.length - 1 - ((thisMonitorWorkspaceIds.length - 1) % columns) + col
                         } else {
-                            targetIndex = currentIndex + 1
-                            if (targetIndex >= thisMonitorWorkspaceIds.length) targetIndex = 0
+                            targetIndex = currentIndex + columns
+                            if (targetIndex >= thisMonitorWorkspaceIds.length)
+                                targetIndex = col
                         }
-
-                        const targetId = thisMonitorWorkspaceIds[targetIndex]
-                        Hyprland.dispatch("workspace " + targetId)
-                        event.accepted = true
+                    } else {
+                        return
                     }
+
+                    const targetId = thisMonitorWorkspaceIds[targetIndex]
+                    root.lastDispatchedWorkspaceId = targetId
+                    HyprlandService.focusWorkspace(targetId)
+                    Hyprland.refreshWorkspaces()
+                    if (CompositorService.useHyprlandFocusGrab) {
+                        grab.hasBeenActivated = false
+                        grab.active = false
+                        Qt.callLater(() => { grab.active = true })
+                    }
+                    event.accepted = true
                 }
 
                 onVisibleChanged: {
@@ -276,11 +300,11 @@ Scope {
                 target: overviewScope
                 function onOverviewOpenChanged() {
                     if (overviewScope.overviewOpen) {
-                        closeTimer.stop()
+                        closing = false
                         root.visible = true
+                        root.lastDispatchedWorkspaceId = -1
                         Qt.callLater(() => focusScope.forceActiveFocus())
                     } else {
-                        closeTimer.restart()
                         grab.active = false
                     }
                 }

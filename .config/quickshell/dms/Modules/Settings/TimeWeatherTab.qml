@@ -446,7 +446,7 @@ Item {
                         tags: ["weather", "location", "auto", "gps"]
                         settingKey: "useAutoLocation"
                         text: I18n.tr("Auto Location")
-                        description: I18n.tr("Automatically determine your location using your IP address")
+                        description: I18n.tr("Automatically determine your location using geoclue")
                         checked: SettingsData.useAutoLocation
                         onToggled: checked => SettingsData.set("useAutoLocation", checked)
                     }

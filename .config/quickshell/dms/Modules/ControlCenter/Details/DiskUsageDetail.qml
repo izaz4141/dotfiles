@@ -21,11 +21,11 @@ Rectangle {
     border.width: 0
 
     Component.onCompleted: {
-        DgopService.addRef(["diskmounts"]);
+        SysMonitorService.addRef(["diskmounts"]);
     }
 
     Component.onDestruction: {
-        DgopService.removeRef(["diskmounts"]);
+        SysMonitorService.removeRef(["diskmounts"]);
     }
 
     DankFlickable {
@@ -47,7 +47,7 @@ Rectangle {
             Item {
                 width: parent.width
                 height: 100
-                visible: !DgopService.dgopAvailable || !DgopService.diskMounts || DgopService.diskMounts.length === 0
+                visible: !SysMonitorService.monitorAvailable || !SysMonitorService.diskMounts || SysMonitorService.diskMounts.length === 0
 
                 Column {
                     anchors.centerIn: parent
@@ -55,14 +55,14 @@ Rectangle {
 
                     DankIcon {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        name: DgopService.dgopAvailable ? "storage" : "error"
+                        name: SysMonitorService.monitorAvailable ? "storage" : "error"
                         size: 32
-                        color: DgopService.dgopAvailable ? Theme.primary : Theme.error
+                        color: SysMonitorService.monitorAvailable ? Theme.primary : Theme.error
                     }
 
                     StyledText {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: DgopService.dgopAvailable ? I18n.tr("No disk data available") : I18n.tr("dgop not available")
+                        text: SysMonitorService.monitorAvailable ? I18n.tr("No disk data available") : I18n.tr("dgop not available")
                         font.pixelSize: Theme.fontSizeMedium
                         color: Theme.surfaceText
                         horizontalAlignment: Text.AlignHCenter
@@ -71,7 +71,7 @@ Rectangle {
             }
 
             Repeater {
-                model: DgopService.diskMounts || []
+                model: SysMonitorService.diskMounts || []
                 delegate: Rectangle {
                     required property var modelData
                     required property int index

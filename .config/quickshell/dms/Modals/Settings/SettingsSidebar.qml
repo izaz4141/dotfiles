@@ -101,6 +101,13 @@ Rectangle {
                     "icon": "volume_up",
                     "tabIndex": 15,
                     "soundsOnly": true
+                },
+                {
+                    "id": "hyprland",
+                    "text": I18n.tr("Hyprland Decoration"),
+                    "icon": "style",
+                    "tabIndex": 6,
+                    "hyprlandOnly": true
                 }
             ]
         },
@@ -199,7 +206,7 @@ Rectangle {
             "text": I18n.tr("Keyboard Shortcuts"),
             "icon": "keyboard",
             "tabIndex": 2,
-            "shortcutsOnly": true
+            "hyprlandOnly": true
         },
         {
             "id": "displays",
@@ -220,6 +227,12 @@ Rectangle {
                     "tabIndex": 25
                 },
                 {
+                    "id": "input",
+                    "text": I18n.tr("Input", "settings_input"),
+                    "icon": "keyboard",
+                    "tabIndex": 31
+                },
+                {
                     "id": "display_widgets",
                     "text": I18n.tr("Widgets", "settings_displays"),
                     "icon": "widgets",
@@ -231,8 +244,7 @@ Rectangle {
             "id": "network",
             "text": I18n.tr("Network"),
             "icon": "wifi",
-            "tabIndex": 7,
-            "dmsOnly": true
+            "tabIndex": 7
         },
         {
             "id": "system",
@@ -324,9 +336,11 @@ Rectangle {
             return false;
         if (item.hyprlandNiriOnly && !CompositorService.isNiri && !CompositorService.isHyprland)
             return false;
+        if (item.hyprlandOnly && !CompositorService.isHyprland)
+            return false;
         if (item.niriOnly && !CompositorService.isNiri)
             return false;
-        if (item.clipboardOnly && (!DMSService.isConnected || DMSService.apiVersion < 23))
+        if (item.clipboardOnly && !ClipboardService.clipboardAvailable)
             return false;
         return true;
     }

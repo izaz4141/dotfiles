@@ -6,10 +6,11 @@ Rectangle {
     id: root
 
     property bool expanded: false
-    readonly property real contentHeight: contentColumn.height + Theme.spacingL * 2
+    property real maxHeight: 400
+    readonly property real contentHeight: contentColumn.implicitHeight + Theme.spacingL * 2
 
     width: parent.width
-    height: expanded ? contentHeight : 0
+    height: expanded ? Math.min(contentHeight, maxHeight) : 0
     visible: expanded
     clip: true
     radius: Theme.cornerRadius
@@ -105,13 +106,31 @@ Rectangle {
         return Math.round(value / 60000) + " minutes";
     }
 
-    Column {
-        id: contentColumn
+    DankFlickable {
+        id: settingsFlickable
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: Theme.spacingL
-        spacing: Theme.spacingM
+        anchors.bottom: parent.bottom
+        anchors.margins: 0
+        clip: true
+        contentHeight: contentColumn.implicitHeight + Theme.spacingL * 2
+        contentWidth: width
+
+        Component.onCompleted: {
+            if (verticalScrollBar) {
+                verticalScrollBar.implicitWidth = 6;
+                if (verticalScrollBar.contentItem)
+                    verticalScrollBar.contentItem.implicitWidth = 3;
+            }
+        }
+
+        Column {
+            id: contentColumn
+            width: parent.width - (Theme.spacingL * 2 + 12)
+            x: Theme.spacingL
+            y: Theme.spacingL
+            spacing: Theme.spacingM
 
         StyledText {
             text: I18n.tr("Notification Settings")
@@ -418,6 +437,12 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 checked: SettingsData.notificationHistorySaveCritical
                 onToggled: toggled => SettingsData.set("notificationHistorySaveCritical", toggled)
+            }
+        }
+
+            Item {
+                width: parent.width
+                height: Theme.spacingM
             }
         }
     }

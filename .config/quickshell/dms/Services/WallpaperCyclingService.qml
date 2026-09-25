@@ -28,6 +28,7 @@ Singleton {
     property var monitorTimers: ({})
     property var monitorLastTimeChecks: ({})
     property var monitorProcesses: ({})
+    property bool konachanFetching: false
 
     Component {
         id: monitorTimerComponent
@@ -264,7 +265,7 @@ Singleton {
             }
 
             if (process) {
-                process.command = ["sh", "-c", `find "${wallpaperDir}" -maxdepth 1 -type f \\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.webp" -o -iname "*.jxl" -o -iname "*.avif" -o -iname "*.heif" -o -iname "*.exr" \\) 2>/dev/null | sort`];
+                process.command = ["sh", "-c", `find -L "${wallpaperDir}" -maxdepth 1 -type f \\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.webp" -o -iname "*.jxl" -o -iname "*.avif" -o -iname "*.heif" -o -iname "*.exr" \\) 2>/dev/null | sort`];
                 process.targetScreenName = screenName;
                 process.currentWallpaper = currentWallpaper;
                 process.goToPrevious = false;
@@ -272,7 +273,7 @@ Singleton {
             }
         } else {
             // Use global process for fallback
-            cyclingProcess.command = ["sh", "-c", `find "${wallpaperDir}" -maxdepth 1 -type f \\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.webp" -o -iname "*.jxl" -o -iname "*.avif" -o -iname "*.heif" -o -iname "*.exr" \\) 2>/dev/null | sort`];
+            cyclingProcess.command = ["sh", "-c", `find -L "${wallpaperDir}" -maxdepth 1 -type f \\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.webp" -o -iname "*.jxl" -o -iname "*.avif" -o -iname "*.heif" -o -iname "*.exr" \\) 2>/dev/null | sort`];
             cyclingProcess.targetScreenName = screenName || "";
             cyclingProcess.currentWallpaper = currentWallpaper;
             cyclingProcess.running = true;
@@ -296,7 +297,7 @@ Singleton {
             }
 
             if (process) {
-                process.command = ["sh", "-c", `find "${wallpaperDir}" -maxdepth 1 -type f \\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.webp" -o -iname "*.jxl" -o -iname "*.avif" -o -iname "*.heif" -o -iname "*.exr" \\) 2>/dev/null | sort`];
+                process.command = ["sh", "-c", `find -L "${wallpaperDir}" -maxdepth 1 -type f \\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.webp" -o -iname "*.jxl" -o -iname "*.avif" -o -iname "*.heif" -o -iname "*.exr" \\) 2>/dev/null | sort`];
                 process.targetScreenName = screenName;
                 process.currentWallpaper = currentWallpaper;
                 process.goToPrevious = true;
@@ -304,7 +305,7 @@ Singleton {
             }
         } else {
             // Use global process for fallback
-            prevCyclingProcess.command = ["sh", "-c", `find "${wallpaperDir}" -maxdepth 1 -type f \\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.webp" -o -iname "*.jxl" -o -iname "*.avif" -o -iname "*.heif" -o -iname "*.exr" \\) 2>/dev/null | sort`];
+            prevCyclingProcess.command = ["sh", "-c", `find -L "${wallpaperDir}" -maxdepth 1 -type f \\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.webp" -o -iname "*.jxl" -o -iname "*.avif" -o -iname "*.heif" -o -iname "*.exr" \\) 2>/dev/null | sort`];
             prevCyclingProcess.targetScreenName = screenName || "";
             prevCyclingProcess.currentWallpaper = currentWallpaper;
             prevCyclingProcess.running = true;
@@ -353,6 +354,81 @@ Singleton {
         if (currentWallpaper) {
             cycleToPrevWallpaper(screenName, currentWallpaper);
         }
+    }
+
+    function randomWallpaper(screenName) {
+        var currentWallpaper;
+        if (screenName) {
+            currentWallpaper = SessionData.getMonitorWallpaper(screenName);
+        } else {
+            currentWallpaper = SessionData.wallpaperPath;
+        }
+        if (!currentWallpaper || currentWallpaper.startsWith("#"))
+            return;
+        var wallpaperDir = currentWallpaper.substring(0, currentWallpaper.lastIndexOf('/'));
+
+        var proc = randomProcess;
+        proc.targetScreenName = screenName || "";
+        proc.currentWallpaper = currentWallpaper;
+        proc.command = ["sh", "-c", `find -L "${wallpaperDir}" -maxdepth 1 -type f \\( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.bmp" -o -iname "*.gif" -o -iname "*.webp" -o -iname "*.jxl" -o -iname "*.avif" -o -iname "*.heif" -o -iname "*.exr" \\) 2>/dev/null`];
+        proc.running = true;
+    }
+
+    function fetchRandomKonachanWallpaper(screenName) {
+        if (root.konachanFetching)
+            return;
+
+        let downloadDir = "";
+        let current = screenName ? SessionData.getMonitorWallpaper(screenName) : SessionData.wallpaperPath;
+        if (current && !current.startsWith("#")) {
+            let clean = current.startsWith("file://") ? current.substring(7) : current;
+            const idx = clean.lastIndexOf('/');
+            if (idx > 0 && clean.startsWith('/'))
+                downloadDir = clean.substring(0, idx);
+        }
+        if (!downloadDir)
+            downloadDir = Paths.strip(Paths.pictures) + "/Wallpapers";
+
+        const userAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0";
+
+        root.konachanFetching = true;
+        Proc.runCommand("konachanFetch", ["sh", "-c", "page=$((1 + RANDOM % 1000)); curl -sS --fail --connect-timeout 5 --max-time 10 -A \"" + userAgent + "\" \"https://konachan.net/post.json?tags=rating%3Asafe&limit=1&page=$page\""], (output, exitCode) => {
+            if (exitCode !== 0) {
+                root.konachanFetching = false;
+                console.warn("Konachan fetch failed, exit code:", exitCode);
+                return;
+            }
+
+            let fileUrl = "";
+            try {
+                const raw = output.trim();
+                const data = raw ? JSON.parse(raw) : [];
+                if (!Array.isArray(data) || data.length === 0 || !data[0].file_url)
+                    throw new Error("No results");
+                fileUrl = data[0].file_url;
+            } catch (e) {
+                root.konachanFetching = false;
+                console.warn("Konachan response parse failed:", e);
+                return;
+            }
+
+            const cleanUrl = fileUrl.split('?')[0];
+            const ext = (cleanUrl.split('.').pop() || "jpg").toLowerCase();
+
+            Proc.runCommand("konachanDownload", ["sh", "-c", "mkdir -p \"" + downloadDir + "\"; n=1; found=0; for f in \"" + downloadDir + "\"/random_konachan-*; do [ -f \"$f\" ] || continue; found=1; num=${f##*-}; num=${num%%.*}; [ \"$num\" -gt \"$n\" ] 2>/dev/null && n=$num; done; [ \"$found\" -eq 1 ] && n=$((n + 1)); curl -sS -L --fail --connect-timeout 5 --max-time 60 -A \"" + userAgent + "\" \"" + fileUrl + "\" -o \"" + downloadDir + "/random_konachan-$n." + ext + "\" && echo \"" + downloadDir + "/random_konachan-$n." + ext + "\""], (dlOutput, dlExitCode) => {
+                root.konachanFetching = false;
+                const downloadPath = dlOutput ? dlOutput.trim() : "";
+                if (dlExitCode !== 0 || !downloadPath) {
+                    console.warn("Konachan download failed, exit code:", dlExitCode);
+                    return;
+                }
+                if (screenName) {
+                    SessionData.setMonitorWallpaper(screenName, downloadPath);
+                } else {
+                    SessionData.setWallpaper(downloadPath);
+                }
+            }, 0, 60000);
+        }, 0, 15000);
     }
 
     function checkTimeBasedCycling() {
@@ -483,6 +559,35 @@ Singleton {
                             SessionData.setMonitorWallpaper(prevCyclingProcess.targetScreenName, prevWallpaper);
                         } else {
                             SessionData.setWallpaper(prevWallpaper);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Process {
+        id: randomProcess
+
+        property string targetScreenName: ""
+        property string currentWallpaper: ""
+
+        running: false
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (text && text.trim()) {
+                    const files = text.trim().split('\n').filter(file => file.length > 0);
+                    if (files.length === 0)
+                        return;
+                    const currentPath = randomProcess.currentWallpaper;
+                    const candidates = files.length === 1 ? files : files.filter(f => f !== currentPath);
+                    const pick = candidates[Math.floor(Math.random() * candidates.length)];
+                    if (pick) {
+                        if (randomProcess.targetScreenName) {
+                            SessionData.setMonitorWallpaper(randomProcess.targetScreenName, pick);
+                        } else {
+                            SessionData.setWallpaper(pick);
                         }
                     }
                 }

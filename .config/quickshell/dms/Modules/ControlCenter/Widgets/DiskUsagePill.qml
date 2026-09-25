@@ -12,12 +12,12 @@ CompoundPill {
     iconName: "storage"
 
     property var selectedMount: {
-        if (!DgopService.diskMounts || DgopService.diskMounts.length === 0) {
+        if (!SysMonitorService.diskMounts || SysMonitorService.diskMounts.length === 0) {
             return null;
         }
 
-        const targetMount = DgopService.diskMounts.find(mount => mount.mount === mountPath);
-        return targetMount || DgopService.diskMounts.find(mount => mount.mount === "/") || DgopService.diskMounts[0];
+        const targetMount = SysMonitorService.diskMounts.find(mount => mount.mount === mountPath);
+        return targetMount || SysMonitorService.diskMounts.find(mount => mount.mount === "/") || SysMonitorService.diskMounts[0];
     }
 
     property real usagePercent: {
@@ -28,10 +28,10 @@ CompoundPill {
         return parseFloat(percentStr) || 0;
     }
 
-    isActive: DgopService.dgopAvailable && selectedMount !== null
+    isActive: SysMonitorService.monitorAvailable && selectedMount !== null
 
     primaryText: {
-        if (!DgopService.dgopAvailable) {
+        if (!SysMonitorService.monitorAvailable) {
             return I18n.tr("Disk Usage");
         }
         if (!selectedMount) {
@@ -41,7 +41,7 @@ CompoundPill {
     }
 
     secondaryText: {
-        if (!DgopService.dgopAvailable) {
+        if (!SysMonitorService.monitorAvailable) {
             return I18n.tr("dgop not available");
         }
         if (!selectedMount) {
@@ -51,7 +51,7 @@ CompoundPill {
     }
 
     iconColor: {
-        if (!DgopService.dgopAvailable || !selectedMount) {
+        if (!SysMonitorService.monitorAvailable || !selectedMount) {
             return Qt.rgba(Theme.surfaceText.r, Theme.surfaceText.g, Theme.surfaceText.b, 0.5);
         }
         if (usagePercent > 90) {
@@ -64,10 +64,10 @@ CompoundPill {
     }
 
     Component.onCompleted: {
-        DgopService.addRef(["diskmounts"]);
+        SysMonitorService.addRef(["diskmounts"]);
     }
     Component.onDestruction: {
-        DgopService.removeRef(["diskmounts"]);
+        SysMonitorService.removeRef(["diskmounts"]);
     }
 
     onToggled: {

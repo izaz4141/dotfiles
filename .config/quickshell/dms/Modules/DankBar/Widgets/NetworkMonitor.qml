@@ -22,10 +22,10 @@ BasePill {
     }
 
     Component.onCompleted: {
-        DgopService.addRef(["network"])
+        SysMonitorService.addRef(["network"])
     }
     Component.onDestruction: {
-        DgopService.removeRef(["network"])
+        SysMonitorService.removeRef(["network"])
     }
 
     content: Component {
@@ -48,7 +48,7 @@ BasePill {
 
                 StyledText {
                     text: {
-                        const rate = DgopService.networkRxRate
+                        const rate = SysMonitorService.networkRxRate
                         if (rate < 1024) return rate.toFixed(0)
                         if (rate < 1024 * 1024) return (rate / 1024).toFixed(0) + "K"
                         return (rate / (1024 * 1024)).toFixed(0) + "M"
@@ -60,7 +60,7 @@ BasePill {
 
                 StyledText {
                     text: {
-                        const rate = DgopService.networkTxRate
+                        const rate = SysMonitorService.networkTxRate
                         if (rate < 1024) return rate.toFixed(0)
                         if (rate < 1024 * 1024) return (rate / 1024).toFixed(0) + "K"
                         return (rate / (1024 * 1024)).toFixed(0) + "M"
@@ -95,7 +95,7 @@ BasePill {
                     }
 
                     StyledText {
-                        text: DgopService.networkRxRate > 0 ? root.formatNetworkSpeed(DgopService.networkRxRate) : "0 B/s"
+                        text: SysMonitorService.networkRxRate > 0 ? root.formatNetworkSpeed(SysMonitorService.networkRxRate) : "0 B/s"
                         font.pixelSize: Theme.barTextSize(root.barThickness, root.barConfig?.fontScale, root.barConfig?.maximizeWidgetText)
                         color: Theme.widgetTextColor
                         anchors.verticalCenter: parent.verticalCenter
@@ -124,7 +124,7 @@ BasePill {
                     }
 
                     StyledText {
-                        text: DgopService.networkTxRate > 0 ? root.formatNetworkSpeed(DgopService.networkTxRate) : "0 B/s"
+                        text: SysMonitorService.networkTxRate > 0 ? root.formatNetworkSpeed(SysMonitorService.networkTxRate) : "0 B/s"
                         font.pixelSize: Theme.barTextSize(root.barThickness, root.barConfig?.fontScale, root.barConfig?.maximizeWidgetText)
                         color: Theme.widgetTextColor
                         anchors.verticalCenter: parent.verticalCenter

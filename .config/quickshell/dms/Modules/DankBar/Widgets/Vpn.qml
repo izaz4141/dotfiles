@@ -8,7 +8,7 @@ BasePill {
     id: root
 
     Ref {
-        service: DMSNetworkService
+        service: NetworkService
     }
 
     property bool isHovered: clickArea.containsMouse
@@ -40,10 +40,10 @@ BasePill {
             DankIcon {
                 id: icon
 
-                name: DMSNetworkService.connected ? "vpn_lock" : "vpn_key_off"
+                name: NetworkService.connected ? "vpn_lock" : "vpn_key_off"
                 size: Theme.barIconSize(root.barThickness, -4, root.barConfig?.maximizeWidgetIcons, root.barConfig?.iconScale)
-                color: DMSNetworkService.connected ? Theme.primary : Theme.widgetIconColor
-                opacity: DMSNetworkService.isBusy ? 0.5 : 1.0
+                color: NetworkService.connected ? Theme.primary : Theme.widgetIconColor
+                opacity: NetworkService.isBusy ? 0.5 : 1.0
                 anchors.centerIn: parent
 
                 Behavior on opacity {
@@ -67,14 +67,14 @@ BasePill {
 
         anchors.fill: parent
         hoverEnabled: true
-        cursorShape: DMSNetworkService.isBusy ? Qt.BusyCursor : Qt.PointingHandCursor
+        cursorShape: NetworkService.isBusy ? Qt.BusyCursor : Qt.PointingHandCursor
         acceptedButtons: Qt.LeftButton | Qt.RightButton
-        enabled: !DMSNetworkService.isBusy
+        enabled: !NetworkService.isBusy
         onPressed: event => {
             root.triggerRipple(this, event.x, event.y);
             switch (event.button) {
             case Qt.RightButton:
-                DMSNetworkService.toggleVpn();
+                NetworkService.toggleVpn();
                 return;
             case Qt.LeftButton:
                 root.toggleVpnPopup();
@@ -88,10 +88,10 @@ BasePill {
             if (!tooltipLoader.item)
                 return;
             let tooltipText = "";
-            if (!DMSNetworkService.connected) {
+            if (!NetworkService.connected) {
                 tooltipText = "VPN Disconnected";
             } else {
-                const names = DMSNetworkService.activeNames || [];
+                const names = NetworkService.activeNames || [];
                 if (names.length <= 1) {
                     const name = names[0] || "";
                     const maxLength = 25;

@@ -267,7 +267,7 @@ Rectangle {
             Column {
                 width: parent.width
                 spacing: Theme.spacingXS
-                visible: root.cfg.showGpuTemp && DgopService.availableGpus.length > 0
+                visible: root.cfg.showGpuTemp && SysMonitorService.availableGpus.length > 0
 
                 Item {
                     width: 1
@@ -275,7 +275,7 @@ Rectangle {
                 }
 
                 Repeater {
-                    model: DgopService.availableGpus
+                    model: SysMonitorService.availableGpus
 
                     Rectangle {
                         required property var modelData

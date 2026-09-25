@@ -149,10 +149,161 @@ function formatToken(mods, key) {
     return (mods.length ? mods.join("+") + "+" : "") + key;
 }
 
+// Lua/Hyprland key naming helpers (shared with the Hyprland keybinds editor)
+
+function luaKeyNameFromEvent(event) {
+    const k = event.key;
+    if (k >= 65 && k <= 90)
+        return String.fromCharCode(k);
+    if (k >= 48 && k <= 57)
+        return String.fromCharCode(k);
+    if (k >= 16777264 && k <= 16777287)
+        return "F" + (k - 16777264 + 1);
+    const map = {
+        32: "Space",
+        16777217: "Tab",
+        16777220: "Return",
+        16777221: "Return",
+        16777223: "Delete",
+        16777238: "Page_Up",
+        16777239: "Page_Down",
+        16777235: "Up",
+        16777237: "Down",
+        16777234: "Left",
+        16777236: "Right",
+        16777232: "Home",
+        16777233: "End",
+        45: "Minus",
+        61: "Equal",
+        44: "Comma",
+        46: "Period",
+        47: "Slash",
+        92: "Backslash",
+        59: "Semicolon",
+        39: "Apostrophe",
+        91: "Bracketleft",
+        93: "Bracketright",
+        16777225: "Print",
+        16777226: "Print",
+        16777252: "Scroll",
+        16777224: "Pause"
+    };
+    return map[k] || "";
+}
+
+function luaModsFromEvent(event) {
+    const mods = [];
+    if (event.modifiers & 0x10000000)
+        mods.push("SUPER");
+    if (event.modifiers & 0x04000000)
+        mods.push("CTRL");
+    if (event.modifiers & 0x08000000)
+        mods.push("ALT");
+    if (event.modifiers & 0x02000000)
+        mods.push("SHIFT");
+    return mods;
+}
+
+function luaComboFromEvent(event) {
+    const name = luaKeyNameFromEvent(event);
+    if (!name)
+        return "";
+    const mods = luaModsFromEvent(event);
+    mods.push(name);
+    return mods.join(" + ");
+}
+
 function normalizeKeyCombo(keyCombo) {
     if (!keyCombo)
         return "";
     return keyCombo.toLowerCase().replace(/\bmod\b/g, "super").replace(/\bsuper\b/g, "super");
+}
+
+// Normalized set of resolved combos ("super + t") for an editor bind. The
+// Hyprland parser resolves vars.* and array vars into each key entry's `combo`,
+// so this collects the distinct resolved combos across the bind's keys.
+function resolvedCombosOfEditorBind(bind) {
+    const out = [];
+    const seen = {};
+    const keys = (bind && bind.keys) || [];
+    for (let i = 0; i < keys.length; i++) {
+        const combo = normalizeKeyCombo(keys[i].combo || keys[i].key || "");
+        if (combo && !seen[combo]) {
+            seen[combo] = true;
+            out.push(combo);
+        }
+    }
+    return out;
+}
+
+// Builds { comboMap, comboDisplay, collidingBinds } from editor sections.
+// comboMap maps a normalized resolved combo to an array of bind references
+// (section, stmtIndex, desc, actionText). comboDisplay maps a normalized combo
+// to a human-readable original. collidingBinds lists the same bind references,
+// each with the list of other binds sharing at least one resolved combo.
+function computeEditorCollisions(sections) {
+    const comboMap = {};
+    const comboDisplay = {};
+    const refs = [];
+    for (let s = 0; s < (sections || []).length; s++) {
+        const section = sections[s];
+        const binds = section.binds || [];
+        for (let b = 0; b < binds.length; b++) {
+            const bind = binds[b];
+            const ref = {
+                section: section.name,
+                stmtIndex: bind.stmtIndex,
+                desc: bind.desc || bind.actionText || "",
+                actionText: bind.actionText || "",
+                keysRaw: bind.keysRaw || ""
+            };
+            ref._index = refs.length;
+            refs.push(ref);
+            const combos = resolvedCombosOfEditorBind(bind);
+            for (let c = 0; c < combos.length; c++) {
+                if (!comboMap[combos[c]])
+                    comboMap[combos[c]] = [];
+                comboMap[combos[c]].push(ref);
+                if (comboDisplay[combos[c]] === undefined) {
+                    const keys = bind.keys || [];
+                    let display = "";
+                    for (let ki = 0; ki < keys.length; ki++) {
+                        if (normalizeKeyCombo(keys[ki].combo || keys[ki].key || "") === combos[c]) {
+                            display = keys[ki].combo || keys[ki].key || "";
+                            break;
+                        }
+                    }
+                    comboDisplay[combos[c]] = display || combos[c].toUpperCase();
+                }
+            }
+        }
+    }
+
+    for (const combo in comboMap) {
+        if (comboMap[combo].length < 2)
+            continue;
+        for (let i = 0; i < comboMap[combo].length; i++) {
+            const ref = comboMap[combo][i];
+            for (let j = 0; j < comboMap[combo].length; j++) {
+                if (i === j)
+                    continue;
+                const other = comboMap[combo][j];
+                if (!ref.conflicts)
+                    ref.conflicts = [];
+                if (ref.conflictsIndexed === undefined)
+                    ref.conflictsIndexed = {};
+                if (!ref.conflictsIndexed[other._index]) {
+                    ref.conflictsIndexed[other._index] = true;
+                    ref.conflicts.push(other);
+                }
+            }
+        }
+    }
+
+    const collidingBinds = refs.filter(r => r.conflicts && r.conflicts.length > 0);
+    for (let i = 0; i < collidingBinds.length; i++)
+        delete collidingBinds[i].conflictsIndexed;
+    return { comboMap: comboMap, comboDisplay: comboDisplay, collidingBinds: collidingBinds };
 }
 
 function getConflictingBinds(keyCombo, currentAction, allBinds) {

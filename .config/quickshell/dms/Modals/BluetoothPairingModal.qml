@@ -18,14 +18,11 @@ DankModal {
     property string deviceName: ""
     property string deviceAddress: ""
     property string requestType: ""
-    property string token: ""
     property int passkey: 0
     property string pinInput: ""
     property string passkeyInput: ""
 
     function show(pairingData) {
-        console.log("BluetoothPairingModal.show() called:", JSON.stringify(pairingData));
-        token = pairingData.token || "";
         deviceName = pairingData.deviceName || "";
         deviceAddress = pairingData.deviceAddr || "";
         requestType = pairingData.requestType || "";
@@ -33,7 +30,6 @@ DankModal {
         pinInput = "";
         passkeyInput = "";
 
-        console.log("BluetoothPairingModal: Calling open()");
         open();
         Qt.callLater(() => {
             if (contentLoader.item) {
@@ -72,11 +68,8 @@ DankModal {
     }
 
     onBackgroundClicked: () => {
-        if (token) {
-            DMSService.bluetoothCancelPairing(token);
-        }
+        BluetoothService.cancelPairing();
         close();
-        token = "";
         pinInput = "";
         passkeyInput = "";
     }
@@ -93,11 +86,8 @@ DankModal {
             implicitHeight: mainColumn.implicitHeight
 
             Keys.onEscapePressed: event => {
-                if (token) {
-                    DMSService.bluetoothCancelPairing(token);
-                }
+                BluetoothService.cancelPairing();
                 close();
-                token = "";
                 pinInput = "";
                 passkeyInput = "";
                 event.accepted = true;
@@ -282,11 +272,8 @@ DankModal {
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: () => {
-                                    if (token) {
-                                        DMSService.bluetoothCancelPairing(token);
-                                    }
+                                    BluetoothService.cancelPairing();
                                     close();
-                                    token = "";
                                     pinInput = "";
                                     passkeyInput = "";
                                 }
@@ -361,11 +348,8 @@ DankModal {
                 iconSize: Theme.iconSize - 4
                 iconColor: Theme.surfaceText
                 onClicked: () => {
-                    if (token) {
-                        DMSService.bluetoothCancelPairing(token);
-                    }
+                    BluetoothService.cancelPairing();
                     close();
-                    token = "";
                     pinInput = "";
                     passkeyInput = "";
                 }
@@ -374,35 +358,30 @@ DankModal {
     }
 
     function submitPairing() {
-        const secrets = {};
+        let input = "";
 
         switch (requestType) {
         case "pin":
-            secrets["pin"] = pinInput;
+            input = pinInput;
             break;
         case "passkey":
-            secrets["passkey"] = passkeyInput;
+            input = passkeyInput;
             break;
         case "confirm":
         case "display-passkey":
         case "authorize":
-            secrets["decision"] = "yes";
+            input = "yes";
             break;
         default:
             if (requestType.startsWith("authorize-service")) {
-                secrets["decision"] = "yes";
+                input = "yes";
             }
             break;
         }
 
-        DMSService.bluetoothSubmitPairing(token, secrets, true, response => {
-            if (response.error) {
-                ToastService.showError(I18n.tr("Pairing failed"), response.error);
-            }
-        });
+        BluetoothService.submitPairingInput(input);
 
         close();
-        token = "";
         pinInput = "";
         passkeyInput = "";
     }

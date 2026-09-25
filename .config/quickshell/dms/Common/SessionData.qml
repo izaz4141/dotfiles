@@ -159,6 +159,7 @@ Singleton {
     property int nightModeStartMinute: 0
     property int nightModeEndHour: 6
     property int nightModeEndMinute: 0
+    property int nightModeSteps: 1
     property real latitude: 0.0
     property real longitude: 0.0
     property bool nightModeUseIPLocation: false
@@ -840,6 +841,11 @@ Singleton {
         saveSettings();
     }
 
+    function setNightModeSteps(steps) {
+        nightModeSteps = steps;
+        saveSettings();
+    }
+
     function setNightModeUseIPLocation(use) {
         nightModeUseIPLocation = use;
         saveSettings();
@@ -1395,7 +1401,6 @@ Singleton {
         id: settingsFile
 
         path: isGreeterMode ? "" : StandardPaths.writableLocation(StandardPaths.GenericStateLocation) + "/DankMaterialShell/session.json"
-        blockLoading: true
         blockWrites: true
         atomicWrites: true
         watchChanges: !isGreeterMode
@@ -1531,6 +1536,23 @@ Singleton {
             }
         }
 
+        function random(): string {
+            if (root.perMonitorWallpaper) {
+                return "ERROR: Per-monitor mode enabled. Use randomFor(screenName) instead.";
+            }
+
+            if (!root.wallpaperPath) {
+                return "ERROR: No wallpaper set";
+            }
+
+            try {
+                WallpaperCyclingService.randomWallpaper();
+                return "SUCCESS: Random wallpaper selected";
+            } catch (e) {
+                return "ERROR: Failed to select random wallpaper: " + e.toString();
+            }
+        }
+
         function getFor(screenName: string): string {
             if (!screenName) {
                 return "ERROR: No screen name provided";
@@ -1593,6 +1615,24 @@ Singleton {
                 return "SUCCESS: Cycling to previous wallpaper for " + screenName;
             } catch (e) {
                 return "ERROR: Failed to cycle wallpaper for " + screenName + ": " + e.toString();
+            }
+        }
+
+        function randomFor(screenName: string): string {
+            if (!screenName) {
+                return "ERROR: No screen name provided";
+            }
+
+            var currentWallpaper = root.getMonitorWallpaper(screenName);
+            if (!currentWallpaper) {
+                return "ERROR: No wallpaper set for " + screenName;
+            }
+
+            try {
+                WallpaperCyclingService.randomWallpaper(screenName);
+                return "SUCCESS: Random wallpaper selected for " + screenName;
+            } catch (e) {
+                return "ERROR: Failed to select random wallpaper for " + screenName + ": " + e.toString();
             }
         }
     }

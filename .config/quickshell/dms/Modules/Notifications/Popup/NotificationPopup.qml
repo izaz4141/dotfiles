@@ -15,7 +15,7 @@ PanelWindow {
 
     required property var notificationData
     required property string notificationId
-    readonly property bool hasValidData: notificationData && notificationData.notification
+    readonly property bool hasValidData: notificationData && (notificationData.notification != null || notificationData.synthetic)
     readonly property alias hovered: cardHoverHandler.hovered
     property int screenY: 0
     property bool exiting: false
@@ -46,8 +46,9 @@ PanelWindow {
     readonly property real actionButtonHeight: compactMode ? 20 : 24
     readonly property real collapsedContentHeight: Math.max(popupIconSize, Theme.fontSizeSmall * 1.2 + Theme.fontSizeMedium * 1.2 + Theme.fontSizeSmall * 1.2 * (compactMode ? 1 : 2)) + contentBottomClearance
     readonly property real privacyCollapsedContentHeight: Math.max(popupIconSize, Theme.fontSizeSmall * 1.2 + Theme.fontSizeMedium * 1.2) + contentBottomClearance
-    readonly property real basePopupHeight: cardPadding * 2 + collapsedContentHeight + actionButtonHeight + contentSpacing
-    readonly property real basePopupHeightPrivacy: cardPadding * 2 + privacyCollapsedContentHeight + actionButtonHeight + contentSpacing
+    readonly property real liveBarReserved: (notificationData && typeof notificationData.liveProgress === "number" && notificationData.liveProgress >= 0) ? 9 : 0
+    readonly property real basePopupHeight: cardPadding * 2 + collapsedContentHeight + actionButtonHeight + contentSpacing + liveBarReserved
+    readonly property real basePopupHeightPrivacy: cardPadding * 2 + privacyCollapsedContentHeight + actionButtonHeight + contentSpacing + liveBarReserved
 
     signal entered
     signal exitStarted
@@ -111,7 +112,7 @@ PanelWindow {
 
         SettingsData.notificationOverlayEnabled;
 
-        const shouldUseOverlay = (SettingsData.notificationOverlayEnabled) || (notificationData.urgency === NotificationUrgency.Critical);
+        const shouldUseOverlay = (SettingsData.notificationOverlayEnabled) || (notificationData.urgency === NotificationUrgency.Critical && !notificationData.isClockLive);
 
         return shouldUseOverlay ? WlrLayershell.Overlay : WlrLayershell.Top;
     }
@@ -402,8 +403,8 @@ PanelWindow {
             sourceRect.height: Math.max(0, content.height - (content.cardInset * 2))
             sourceRect.radius: Theme.cornerRadius
             sourceRect.color: Theme.withAlpha(Theme.surfaceContainer, Theme.popupTransparency)
-            sourceRect.border.color: notificationData && notificationData.urgency === NotificationUrgency.Critical ? Theme.withAlpha(Theme.primary, 0.3) : Theme.withAlpha(Theme.outline, 0.08)
-            sourceRect.border.width: notificationData && notificationData.urgency === NotificationUrgency.Critical ? 2 : 0
+            sourceRect.border.color: notificationData && notificationData.urgency === NotificationUrgency.Critical && !notificationData.isClockLive ? Theme.withAlpha(Theme.primary, 0.3) : Theme.withAlpha(Theme.outline, 0.08)
+            sourceRect.border.width: notificationData && notificationData.urgency === NotificationUrgency.Critical && !notificationData.isClockLive ? 2 : 0
 
             Rectangle {
                 x: bgShadowLayer.sourceRect.x
@@ -654,6 +655,13 @@ PanelWindow {
                         font.pixelSize: Theme.fontSizeSmall
                         width: parent.width
                         visible: SettingsData.notificationPopupPrivacyMode && !descriptionExpanded && win.hasExpandableBody
+                    }
+
+                    NotificationProgressBar {
+                        width: parent.width
+                        barHeight: 5
+                        progress: notificationData && typeof notificationData.liveProgress === "number" ? (notificationData.liveProgress / 100) : 0
+                        visible: notificationData && typeof notificationData.liveProgress === "number" && notificationData.liveProgress >= 0
                     }
                 }
             }

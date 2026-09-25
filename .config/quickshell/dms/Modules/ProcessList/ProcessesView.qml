@@ -37,10 +37,10 @@ Item {
     }
 
     readonly property var filteredProcesses: {
-        if (!DgopService.allProcesses || DgopService.allProcesses.length === 0)
+        if (!SysMonitorService.allProcesses || SysMonitorService.allProcesses.length === 0)
             return [];
 
-        let procs = DgopService.allProcesses.slice();
+        let procs = SysMonitorService.allProcesses.slice();
 
         if (processFilter === "user") {
             procs = procs.filter(p => p.username === UserInfoService.username);
@@ -58,10 +58,10 @@ Item {
             });
         }
 
-        const asc = DgopService.sortAscending;
+        const asc = SysMonitorService.sortAscending;
         procs.sort((a, b) => {
             let valueA, valueB, result;
-            switch (DgopService.currentSort) {
+            switch (SysMonitorService.currentSort) {
             case "cpu":
                 valueA = a.cpu || 0;
                 valueB = b.cpu || 0;
@@ -221,12 +221,12 @@ Item {
     }
 
     Component.onCompleted: {
-        DgopService.addRef(["processes", "cpu", "memory", "system"]);
+        SysMonitorService.addRef(["processes", "cpu", "memory", "system"]);
         cachedProcesses = filteredProcesses;
     }
 
     Component.onDestruction: {
-        DgopService.removeRef(["processes", "cpu", "memory", "system"]);
+        SysMonitorService.removeRef(["processes", "cpu", "memory", "system"]);
     }
 
     ColumnLayout {
@@ -248,9 +248,9 @@ Item {
                     Layout.minimumWidth: 200
                     text: I18n.tr("Name")
                     sortKey: "name"
-                    currentSort: DgopService.currentSort
-                    sortAscending: DgopService.sortAscending
-                    onClicked: DgopService.toggleSort("name")
+                    currentSort: SysMonitorService.currentSort
+                    sortAscending: SysMonitorService.sortAscending
+                    onClicked: SysMonitorService.toggleSort("name")
                     alignment: Text.AlignLeft
                 }
 
@@ -258,27 +258,27 @@ Item {
                     Layout.preferredWidth: 100
                     text: "CPU"
                     sortKey: "cpu"
-                    currentSort: DgopService.currentSort
-                    sortAscending: DgopService.sortAscending
-                    onClicked: DgopService.toggleSort("cpu")
+                    currentSort: SysMonitorService.currentSort
+                    sortAscending: SysMonitorService.sortAscending
+                    onClicked: SysMonitorService.toggleSort("cpu")
                 }
 
                 SortableHeader {
                     Layout.preferredWidth: 100
                     text: I18n.tr("Memory")
                     sortKey: "memory"
-                    currentSort: DgopService.currentSort
-                    sortAscending: DgopService.sortAscending
-                    onClicked: DgopService.toggleSort("memory")
+                    currentSort: SysMonitorService.currentSort
+                    sortAscending: SysMonitorService.sortAscending
+                    onClicked: SysMonitorService.toggleSort("memory")
                 }
 
                 SortableHeader {
                     Layout.preferredWidth: 80
                     text: "PID"
                     sortKey: "pid"
-                    currentSort: DgopService.currentSort
-                    sortAscending: DgopService.sortAscending
-                    onClicked: DgopService.toggleSort("pid")
+                    currentSort: SysMonitorService.currentSort
+                    sortAscending: SysMonitorService.sortAscending
+                    onClicked: SysMonitorService.toggleSort("pid")
                 }
 
                 Item {
@@ -526,7 +526,7 @@ Item {
                             spacing: Theme.spacingS
 
                             DankIcon {
-                                name: DgopService.getProcessIcon(processItemRoot.processCmd)
+                                name: SysMonitorService.getProcessIcon(processItemRoot.processCmd)
                                 size: Theme.iconSize - 4
                                 color: {
                                     if (processItemRoot.processCpu > 80)
@@ -571,7 +571,7 @@ Item {
 
                             StyledText {
                                 anchors.centerIn: parent
-                                text: DgopService.formatCpuUsage(processItemRoot.processCpu)
+                                text: SysMonitorService.formatCpuUsage(processItemRoot.processCpu)
                                 font.pixelSize: Theme.fontSizeSmall
                                 font.family: SettingsData.monoFontFamily
                                 font.weight: Font.Bold
@@ -605,7 +605,7 @@ Item {
 
                             StyledText {
                                 anchors.centerIn: parent
-                                text: DgopService.formatMemoryUsage(processItemRoot.processMemKB)
+                                text: SysMonitorService.formatMemoryUsage(processItemRoot.processMemKB)
                                 font.pixelSize: Theme.fontSizeSmall
                                 font.family: SettingsData.monoFontFamily
                                 font.weight: Font.Bold

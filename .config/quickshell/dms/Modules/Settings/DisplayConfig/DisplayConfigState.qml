@@ -30,6 +30,7 @@ Singleton {
     property var originalHyprlandSettings: null
     property var originalOutputs: null
     property string originalDisplayNameMode: ""
+    property string savedDefaultLuaSnapshot: ""
     property bool formatChanged: originalDisplayNameMode !== "" && originalDisplayNameMode !== SettingsData.displayNameMode
     property bool hasPendingChanges: Object.keys(pendingChanges).length > 0 || Object.keys(pendingNiriChanges).length > 0 || Object.keys(pendingHyprlandChanges).length > 0 || formatChanged
 
@@ -553,11 +554,26 @@ Singleton {
 
     function parseHyprlandOutputs(content) {
         const result = {};
-        const lines = content.split("\n");
-        for (const line of lines) {
-            const disableMatch = line.match(/^\s*monitor\s*=\s*([^,]+),\s*disable\s*$/);
-            if (disableMatch) {
-                const name = disableMatch[1].trim();
+
+        const luaBlockRegex = /hl\.monitor\s*\(\s*\{([^}]+)\}\s*\)/g;
+        let luaMatch;
+        while ((luaMatch = luaBlockRegex.exec(content)) !== null) {
+            const body = luaMatch[1];
+            const getVal = key => {
+                const m = body.match(new RegExp(key + "\\s*=\\s*\"([^\"]*)\""));
+                return m ? m[1] : "";
+            };
+            const getNum = (key, def) => {
+                const m = body.match(new RegExp(key + "\\s*=\\s*([\\d.]+)"));
+                return m ? parseFloat(m[1]) : def;
+            };
+
+            const name = getVal("output");
+            if (!name)
+                continue;
+
+            const disabledMatch = body.match(/disabled\s*=\s*true/);
+            if (disabledMatch) {
                 result[name] = {
                     "name": name,
                     "logical": {
@@ -576,70 +592,59 @@ Singleton {
                 };
                 continue;
             }
-            const match = line.match(/^\s*monitor\s*=\s*([^,]+),\s*(\d+)x(\d+)@([\d.]+),\s*(-?\d+)x(-?\d+),\s*([\d.]+)/);
-            if (!match)
-                continue;
-            const name = match[1].trim();
-            const rest = line.substring(line.indexOf(match[7]) + match[7].length);
 
-            let transform = 0, vrrMode = 0, bitdepth = undefined, cm = undefined;
-            let sdrBrightness = undefined, sdrSaturation = undefined;
+            const modeStr = getVal("mode");
+            const posStr = getVal("position");
+            const scale = getNum("scale", 1.0);
+            const transform = getNum("transform", 0);
+            const vrrMode = getNum("vrr", 0);
+            const bitdepth = getNum("bitdepth", undefined);
+            const cm = getVal("cm");
+            const sdrBrightness = getNum("sdrbrightness", undefined);
+            const sdrSaturation = getNum("sdrsaturation", undefined);
+            const mirror = getVal("mirror");
 
-            const transformMatch = rest.match(/,\s*transform,\s*(\d+)/);
-            if (transformMatch)
-                transform = parseInt(transformMatch[1]);
+            let modes = [];
+            if (modeStr && modeStr !== "preferred" && modeStr !== "auto") {
+                const modeParts = modeStr.match(/(\d+)x(\d+)@([\d.]+)/);
+                if (modeParts) {
+                    modes = [{
+                        "width": parseInt(modeParts[1]),
+                        "height": parseInt(modeParts[2]),
+                        "refresh_rate": Math.round(parseFloat(modeParts[3]) * 1000)
+                    }];
+                }
+            }
 
-            const vrrMatch = rest.match(/,\s*vrr,\s*(\d+)/);
-            if (vrrMatch)
-                vrrMode = parseInt(vrrMatch[1]);
-
-            const bitdepthMatch = rest.match(/,\s*bitdepth,\s*(\d+)/);
-            if (bitdepthMatch)
-                bitdepth = parseInt(bitdepthMatch[1]);
-
-            const cmMatch = rest.match(/,\s*cm,\s*(\w+)/);
-            if (cmMatch)
-                cm = cmMatch[1];
-
-            const sdrBrightnessMatch = rest.match(/,\s*sdrbrightness,\s*([\d.]+)/);
-            if (sdrBrightnessMatch)
-                sdrBrightness = parseFloat(sdrBrightnessMatch[1]);
-
-            const sdrSaturationMatch = rest.match(/,\s*sdrsaturation,\s*([\d.]+)/);
-            if (sdrSaturationMatch)
-                sdrSaturation = parseFloat(sdrSaturationMatch[1]);
-
-            let mirror = "";
-            const mirrorMatch = rest.match(/,\s*mirror,\s*([^,\s]+)/);
-            if (mirrorMatch)
-                mirror = mirrorMatch[1];
+            let posX = 0, posY = 0;
+            if (posStr && posStr !== "auto") {
+                const posParts = posStr.match(/(-?\d+)x(-?\d+)/);
+                if (posParts) {
+                    posX = parseInt(posParts[1]);
+                    posY = parseInt(posParts[2]);
+                }
+            }
 
             result[name] = {
                 "name": name,
                 "logical": {
-                    "x": parseInt(match[5]),
-                    "y": parseInt(match[6]),
-                    "scale": parseFloat(match[7]),
+                    "x": posX,
+                    "y": posY,
+                    "scale": scale,
                     "transform": hyprlandToTransform(transform)
                 },
-                "modes": [
-                    {
-                        "width": parseInt(match[2]),
-                        "height": parseInt(match[3]),
-                        "refresh_rate": Math.round(parseFloat(match[4]) * 1000)
-                    }
-                ],
-                "current_mode": 0,
+                "modes": modes,
+                "current_mode": modes.length > 0 ? 0 : -1,
                 "vrr_enabled": vrrMode >= 1,
                 "vrr_supported": true,
                 "hyprlandSettings": {
-                    "bitdepth": bitdepth,
-                    "colorManagement": cm,
+                    "bitdepth": bitdepth !== undefined ? bitdepth : undefined,
+                    "colorManagement": cm || undefined,
                     "sdrBrightness": sdrBrightness,
                     "sdrSaturation": sdrSaturation,
                     "vrrFullscreenOnly": vrrMode === 2 ? true : undefined
                 },
-                "mirror": mirror
+                "mirror": mirror || ""
             };
         }
         return result;
@@ -746,10 +751,10 @@ Singleton {
             };
         case "hyprland":
             return {
-                "configFile": configDir + "/hypr/hyprland.conf",
-                "outputsFile": configDir + "/hypr/dms/outputs.conf",
-                "grepPattern": 'source.*dms/outputs.conf',
-                "includeLine": "source = ./dms/outputs.conf"
+                "configFile": configDir + "/hypr/hyprland.lua",
+                "outputsFile": configDir + "/hypr/conf/monitors/default.lua",
+                "grepPattern": "require.*conf%.monitor",
+                "includeLine": 'require("conf.monitor")'
             };
         case "dwl":
             return {
@@ -773,7 +778,13 @@ Singleton {
             return;
         }
 
-        const filename = (compositor === "niri") ? "outputs.kdl" : "outputs.conf";
+        let filename;
+        if (compositor === "niri")
+            filename = "outputs.kdl";
+        else if (compositor === "hyprland")
+            filename = "default.lua";
+        else
+            filename = "outputs.conf";
         const compositorArg = (compositor === "dwl") ? "mangowc" : compositor;
 
         checkingInclude = true;
@@ -1188,12 +1199,21 @@ Singleton {
         originalNiriSettings = null;
         originalHyprlandSettings = null;
         originalDisplayNameMode = "";
+        savedDefaultLuaSnapshot = "";
     }
 
     function discardChanges() {
         if (originalDisplayNameMode !== "") {
             SettingsData.displayNameMode = originalDisplayNameMode;
             SettingsData.saveSettings();
+        }
+        if (CompositorService.isHyprland && savedDefaultLuaSnapshot) {
+            HyprlandService.restoreMonitorConfig(savedDefaultLuaSnapshot, () => {
+                savedDefaultLuaSnapshot = "";
+                backendFetchOutputs();
+                clearPendingChanges();
+            });
+            return;
         }
         backendFetchOutputs();
         clearPendingChanges();
@@ -1262,13 +1282,22 @@ Singleton {
             return;
         }
 
-        changesApplied(changeDescriptions);
-
         if (formatChanged)
             SettingsData.saveSettings();
 
-        if (CompositorService.isHyprland)
-            commitHyprlandSettingsChanges();
+        if (CompositorService.isHyprland) {
+            Proc.runCommand("hypr-read-outputs-snapshot", ["sh", "-c", `cat "${HyprlandService.outputsPath}" 2>/dev/null || true`], (output, exitCode) => {
+                savedDefaultLuaSnapshot = output || "";
+                commitHyprlandSettingsChanges();
+                const mergedOutputs = buildOutputsWithPendingChanges();
+                HyprlandService.previewMonitorConfig(mergedOutputs, buildMergedHyprlandSettings(), () => {
+                    changesApplied(changeDescriptions);
+                });
+            });
+            return;
+        }
+
+        changesApplied(changeDescriptions);
 
         const mergedOutputs = buildOutputsWithPendingChanges();
         backendWriteOutputsConfig(mergedOutputs);
@@ -1460,6 +1489,7 @@ Singleton {
     }
 
     function confirmChanges() {
+        savedDefaultLuaSnapshot = "";
         clearPendingChanges();
         changesConfirmed();
     }
@@ -1486,6 +1516,15 @@ Singleton {
 
         pendingHyprlandChanges = {};
         pendingNiriChanges = {};
+
+        if (CompositorService.isHyprland && savedDefaultLuaSnapshot) {
+            HyprlandService.restoreMonitorConfig(savedDefaultLuaSnapshot, () => {
+                savedDefaultLuaSnapshot = "";
+                clearPendingChanges();
+                changesReverted();
+            });
+            return;
+        }
 
         if (!originalOutputs && !hadNiriChanges && !hadHyprlandChanges) {
             if (hadFormatChange)

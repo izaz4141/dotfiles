@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Effects
 import Quickshell.Io
 import qs.Common
+import qs.Services
 import qs.Widgets
 import qs.Modals.Clipboard
 
@@ -18,8 +19,8 @@ Rectangle {
     signal copyRequested
     signal deleteRequested
 
-    readonly property string entryType: modal ? modal.getEntryType(entryData) : "text"
-    readonly property string entryPreview: modal ? modal.getEntryPreview(entryData) : entryData
+    readonly property string entryType: ClipboardService.getEntryType(entryData)
+    readonly property string entryPreview: ClipboardService.getEntryPreview(entryData)
 
     radius: Theme.cornerRadius
     color: {

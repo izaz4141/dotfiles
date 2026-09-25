@@ -96,6 +96,8 @@ FloatingWindow {
         });
     }
 
+    onClosed: visible = false
+
     onVisibleChanged: {
         if (!visible) {
             closingModal();

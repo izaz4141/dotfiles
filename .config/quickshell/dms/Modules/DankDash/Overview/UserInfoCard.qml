@@ -9,8 +9,8 @@ Card {
     LayoutMirroring.enabled: I18n.isRtl
     LayoutMirroring.childrenInherit: true
 
-    Component.onCompleted: DgopService.addRef("system")
-    Component.onDestruction: DgopService.removeRef("system")
+    Component.onCompleted: SysMonitorService.addRef("system")
+    Component.onDestruction: SysMonitorService.removeRef("system")
 
     Row {
         anchors.left: parent.left
@@ -99,7 +99,7 @@ Card {
                 }
 
                 StyledText {
-                    text: DgopService.shortUptime || I18n.tr("up")
+                    text: SysMonitorService.shortUptime || I18n.tr("up")
                     font.pixelSize: Theme.fontSizeSmall
                     color: Qt.rgba(Theme.surfaceText.r, Theme.surfaceText.g, Theme.surfaceText.b, 0.7)
                     anchors.verticalCenter: parent.verticalCenter

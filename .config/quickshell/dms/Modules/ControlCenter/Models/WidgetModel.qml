@@ -170,8 +170,8 @@ QtObject {
             "description": I18n.tr("Filesystem usage monitoring"),
             "icon": "storage",
             "type": "action",
-            "enabled": DgopService.dgopAvailable,
-            "warning": !DgopService.dgopAvailable ? I18n.tr("Requires 'dgop' tool") : undefined,
+            "enabled": SysMonitorService.monitorAvailable,
+            "warning": !SysMonitorService.monitorAvailable ? I18n.tr("Requires 'dgop' tool") : undefined,
             "allowMultiple": true
         },
         {
@@ -188,8 +188,8 @@ QtObject {
             "description": I18n.tr("VPN connections"),
             "icon": "vpn_key",
             "type": "builtin_plugin",
-            "enabled": DMSNetworkService.available,
-            "warning": !DMSNetworkService.available ? I18n.tr("VPN not available") : undefined,
+            "enabled": NetworkService.available,
+            "warning": !NetworkService.available ? I18n.tr("VPN not available") : undefined,
             "isBuiltinPlugin": true
         },
         {

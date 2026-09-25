@@ -62,9 +62,7 @@ FocusScope {
             visible: active
             focus: active
 
-            sourceComponent: KeybindsTab {
-                parentModal: root.parentModal
-            }
+            sourceComponent: KeybindsEditorTab {}
 
             onActiveChanged: {
                 if (active && item)
@@ -114,6 +112,21 @@ FocusScope {
             sourceComponent: Component {
                 DockTab {}
             }
+
+            onActiveChanged: {
+                if (active && item)
+                    Qt.callLater(() => item.forceActiveFocus());
+            }
+        }
+
+        Loader {
+            id: hyprlandDecorationLoader
+            anchors.fill: parent
+            active: root.currentIndex === 6
+            visible: active
+            focus: active
+
+            sourceComponent: HyprlandDecorationTab {}
 
             onActiveChanged: {
                 if (active && item)
@@ -482,6 +495,21 @@ FocusScope {
             focus: active
 
             sourceComponent: LocaleTab {}
+
+            onActiveChanged: {
+                if (active && item)
+                Qt.callLater(() => item.forceActiveFocus());
+            }
+        }
+
+        Loader {
+            id: inputLoader
+            anchors.fill: parent
+            active: root.currentIndex === 31
+            visible: active
+            focus: active
+
+            sourceComponent: InputTab {}
 
             onActiveChanged: {
                 if (active && item)

@@ -13,10 +13,10 @@ Rectangle {
     property string instanceId: ""
 
     property var selectedMount: {
-        if (!DgopService.diskMounts || DgopService.diskMounts.length === 0)
+        if (!SysMonitorService.diskMounts || SysMonitorService.diskMounts.length === 0)
             return null;
-        const targetMount = DgopService.diskMounts.find(mount => mount.mount === mountPath);
-        return targetMount || DgopService.diskMounts.find(mount => mount.mount === "/") || DgopService.diskMounts[0];
+        const targetMount = SysMonitorService.diskMounts.find(mount => mount.mount === mountPath);
+        return targetMount || SysMonitorService.diskMounts.find(mount => mount.mount === "/") || SysMonitorService.diskMounts[0];
     }
 
     property real usagePercent: {
@@ -25,7 +25,7 @@ Rectangle {
         return parseFloat(selectedMount.percent.replace("%", "")) || 0;
     }
 
-    property bool enabled: DgopService.dgopAvailable
+    property bool enabled: SysMonitorService.monitorAvailable
 
     signal clicked
 
@@ -121,9 +121,9 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        DgopService.addRef(["diskmounts"]);
+        SysMonitorService.addRef(["diskmounts"]);
     }
     Component.onDestruction: {
-        DgopService.removeRef(["diskmounts"]);
+        SysMonitorService.removeRef(["diskmounts"]);
     }
 }

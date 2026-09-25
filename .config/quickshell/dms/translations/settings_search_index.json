@@ -678,7 +678,7 @@
       "shortcuts"
     ],
     "icon": "keyboard",
-    "conditionKey": "keybindsAvailable"
+    "conditionKey": "isHyprland"
   },
   {
     "section": "barConfigurations",

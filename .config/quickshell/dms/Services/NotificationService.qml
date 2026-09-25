@@ -543,7 +543,9 @@ Singleton {
             for (var i = 0; i < n; ++i) {
                 const w = _dismissQueue.pop();
                 try {
-                    if (w && w.notification) {
+                    if (w && w.synthetic) {
+                        root.dismissSentNotification(w);
+                    } else if (w && w.notification) {
                         w.notification.dismiss();
                     }
                 } catch (e) {}
@@ -661,6 +663,7 @@ Singleton {
         property bool popup: false
         property bool removedByLimit: false
         property bool isPersistent: true
+        property bool dismissable: true
         property int seq: 0
         property string persistedImagePath: ""
 
@@ -673,7 +676,7 @@ Singleton {
         readonly property Timer timer: Timer {
             interval: {
                 if (!wrapper.notification)
-                    return 5000;
+                    return 0;
                 switch (wrapper.urgency) {
                 case NotificationUrgency.Low:
                     return SettingsData.notificationTimeoutLow;
@@ -745,12 +748,31 @@ Singleton {
             }
         }
 
-        required property Notification notification
-        readonly property string summary: (notification?.summary ?? "").replace(/<img\b[^>]*>/gi, "")
-        readonly property string body: (notification?.body ?? "").replace(/<img\b[^>]*>/gi, "")
+        property Notification notification: null
+        property bool synthetic: false
+        property string syntheticSummary: ""
+        property string syntheticBody: ""
+        property string syntheticAppName: ""
+        property string syntheticAppIcon: ""
+        property string syntheticImage: ""
+        property var syntheticActions: []
+        property int syntheticLiveProgress: -1
+        readonly property int liveProgress: {
+            if (synthetic)
+                return syntheticLiveProgress;
+            const hints = notification?.hints || {};
+            const v = hints["value"];
+            return typeof v === "number" ? Math.round(v) : -1;
+        }
+        property bool isClockLive: false
+
+        readonly property string summary: (synthetic ? syntheticSummary : (notification?.summary ?? "")).replace(/<img\b[^>]*>/gi, "")
+        readonly property string body: (synthetic ? syntheticBody : (notification?.body ?? "")).replace(/<img\b[^>]*>/gi, "")
         readonly property string htmlBody: root._resolveHtmlBody(body)
-        readonly property string appIcon: notification?.appIcon ?? ""
+        readonly property string appIcon: synthetic ? syntheticAppIcon : (notification?.appIcon ?? "")
         readonly property string appName: {
+            if (synthetic)
+                return syntheticAppName || "app";
             if (!notification)
                 return "app";
             if (notification.appName == "") {
@@ -760,8 +782,8 @@ Singleton {
             }
             return notification.appName || "app";
         }
-        readonly property string desktopEntry: notification?.desktopEntry ?? ""
-        readonly property string image: notification?.image ?? ""
+        readonly property string desktopEntry: synthetic ? "" : (notification?.desktopEntry ?? "")
+        readonly property string image: synthetic ? syntheticImage : (notification?.image ?? "")
         readonly property string cleanImage: {
             if (!image)
                 return "";
@@ -769,7 +791,7 @@ Singleton {
         }
         property int urgencyOverride: notification?.urgency ?? NotificationUrgency.Normal
         readonly property int urgency: urgencyOverride
-        readonly property list<NotificationAction> actions: notification?.actions ?? []
+        readonly property var actions: synthetic ? syntheticActions : (notification?.actions ?? [])
 
         readonly property Connections conn: Connections {
             target: wrapper.notification?.Retainable ?? null
@@ -831,10 +853,8 @@ Singleton {
         }
         visibleNotifications = [];
 
-        _dismissQueue = notifications.slice();
-        if (notifications.length) {
-            notifications = [];
-        }
+        _dismissQueue = notifications.filter(w => w && w.dismissable);
+        notifications = notifications.filter(w => w && !w.dismissable);
         expandedGroups = {};
         expandedMessages = {};
 
@@ -845,8 +865,82 @@ Singleton {
         }
     }
 
+    function sendNotification(opts) {
+        opts = opts || {};
+        const wrapper = notifComponent.createObject(root, {
+            "popup": !root.popupsDisabled && !SessionData.doNotDisturb && opts.popup !== false,
+            "notification": null,
+            "synthetic": true,
+            "isPersistent": true,
+            "urgencyOverride": typeof opts.urgency === "number" ? opts.urgency : NotificationUrgency.Normal,
+            "syntheticSummary": opts.summary || "",
+            "syntheticBody": opts.body || "",
+            "syntheticAppName": opts.appName || "",
+            "syntheticAppIcon": opts.appIcon || "",
+            "syntheticImage": opts.image || "",
+            "syntheticActions": opts.actions || [],
+            "syntheticLiveProgress": typeof opts.liveProgress === "number" ? opts.liveProgress : -1,
+            "isClockLive": opts.isClockLive === true,
+            "dismissable": opts.dismissable !== false
+        });
+        if (!wrapper)
+            return null;
+        root.allWrappers = [...root.allWrappers, wrapper];
+        if (opts.keepInCenter !== false) {
+            root.notifications = [...root.notifications, wrapper];
+            if (wrapper.dismissable && _shouldSaveToHistory(wrapper.urgency, false))
+                root.addToHistory(wrapper);
+        }
+        if (wrapper.popup && opts.enqueuePopup !== false) {
+            _enqueuePopup(wrapper);
+            processQueue();
+        }
+        _recomputeGroupsLater();
+        return wrapper;
+    }
+
+    function updateSentNotification(wrapper, patch) {
+        if (!wrapper || !wrapper.synthetic)
+            return;
+        patch = patch || {};
+        if ("summary" in patch)
+            wrapper.syntheticSummary = patch.summary;
+        if ("body" in patch)
+            wrapper.syntheticBody = patch.body;
+        if ("appName" in patch)
+            wrapper.syntheticAppName = patch.appName;
+        if ("liveProgress" in patch)
+            wrapper.syntheticLiveProgress = patch.liveProgress;
+        if ("isClockLive" in patch)
+            wrapper.isClockLive = patch.isClockLive === true;
+        if ("actions" in patch)
+            wrapper.syntheticActions = patch.actions;
+    }
+
+    function dismissSentNotification(wrapper) {
+        if (!wrapper || !wrapper.synthetic)
+            return;
+        wrapper.popup = false;
+        root.allWrappers = root.allWrappers.filter(w => w !== wrapper);
+        root.notifications = root.notifications.filter(w => w !== wrapper);
+        root.notificationQueue = root.notificationQueue.filter(w => w !== wrapper);
+        root.visibleNotifications = root.visibleNotifications.filter(w => w !== wrapper);
+        _recomputeGroupsLater();
+        wrapper.destroy();
+    }
+
     function dismissNotification(wrapper) {
-        if (!wrapper || !wrapper.notification) {
+        if (!wrapper)
+            return;
+        if (wrapper.synthetic) {
+            if (!wrapper.dismissable) {
+                wrapper.popup = false;
+                return;
+            }
+            dismissSentNotification(wrapper);
+            return;
+        }
+        if (!wrapper.notification) {
             return;
         }
         wrapper.popup = false;
@@ -1065,7 +1159,7 @@ Singleton {
         const groups = {};
 
         for (const notif of notifications) {
-            if (!notif || !notif.notification)
+            if (!notif || (!notif.notification && !notif.synthetic))
                 continue;
             const groupKey = getGroupKey(notif);
             if (!groups[groupKey]) {
@@ -1103,7 +1197,7 @@ Singleton {
         const groups = {};
 
         for (const notif of popups) {
-            if (!notif || !notif.notification)
+            if (!notif || (!notif.notification && !notif.synthetic))
                 continue;
             const groupKey = getGroupKey(notif);
             if (!groups[groupKey]) {

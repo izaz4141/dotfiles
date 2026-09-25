@@ -272,26 +272,54 @@ Singleton {
     }
 
     function getBuiltInLauncherItems(pluginId, query) {
-        if (pluginId !== "dms_settings_search")
-            return [];
-
-        SettingsSearchService.search(query);
-        const results = SettingsSearchService.results;
-        const items = [];
-        for (let i = 0; i < results.length; i++) {
-            const r = results[i];
-            items.push({
-                name: r.label,
-                icon: "material:" + r.icon,
-                comment: r.category,
-                action: "settings_nav:" + r.tabIndex + ":" + r.section,
-                categories: ["Settings"],
-                isCore: true,
-                isBuiltInLauncher: true,
-                builtInPluginId: pluginId
-            });
+        if (pluginId === "dms_settings_search") {
+            SettingsSearchService.search(query);
+            const results = SettingsSearchService.results;
+            const items = [];
+            for (let i = 0; i < results.length; i++) {
+                const r = results[i];
+                items.push({
+                    name: r.label,
+                    icon: "material:" + r.icon,
+                    comment: r.category,
+                    action: "settings_nav:" + r.tabIndex + ":" + r.section,
+                    categories: ["Settings"],
+                    isCore: true,
+                    isBuiltInLauncher: true,
+                    builtInPluginId: pluginId
+                });
+            }
+            return items;
         }
-        return items;
+
+        if (pluginId === "dms_clipboard_search") {
+            if (!ClipboardService.clipboardAvailable)
+                return [];
+            ClipboardService.setSearchText(query || "");
+            const source = ClipboardService.model;
+            const items = [];
+            const limit = Math.min(source.count, 50);
+            for (let i = 0; i < limit; i++) {
+                const entry = source.get(i).entry;
+                const preview = ClipboardService.getEntryPreview(entry).replace(/\s+/g, " ").trim();
+                const isImage = ClipboardService.getEntryType(entry) === "image";
+                items.push({
+                    name: preview.length > 0 ? preview : (isImage ? "Image" : ""),
+                    icon: isImage ? "image" : "content_paste",
+                    iconType: "material",
+                    comment: isImage ? "Image" : "Text",
+                    type: "clipboard",
+                    data: entry,
+                    isCore: true,
+                    isBuiltInLauncher: true,
+                    builtInPluginId: pluginId,
+                    categories: ["Clipboard"]
+                });
+            }
+            return items;
+        }
+
+        return [];
     }
 
     function executeBuiltInLauncherItem(item) {

@@ -13,8 +13,10 @@ Rectangle {
     property string cachedMimeType: ""
     property var _requestedEntryId: null
 
-    readonly property bool canLoadImage: typeof entry?.id === "number" && !!entry?.isImage && String(entry?.mimeType ?? "").startsWith("image/")
-    readonly property string sourceUrl: resolvedSourceUrl(cachedImageData, cachedMimeType || (entry?.mimeType ?? ""))
+    readonly property int entryId: ClipboardService.getEntryId(entry)
+    readonly property string entryType: ClipboardService.getEntryType(entry)
+    readonly property bool canLoadImage: typeof entry === "string" && entryType === "image"
+    readonly property string sourceUrl: resolvedSourceUrl(cachedImageData, cachedMimeType)
 
     radius: Math.max(6, Theme.cornerRadius - 2)
     clip: true
@@ -41,43 +43,29 @@ Rectangle {
     }
 
     function reloadPreview() {
-        if (!canLoadImage || typeof entry?.id !== "number") {
+        if (!canLoadImage || entryId < 0) {
             _requestedEntryId = null;
             cachedImageData = "";
             cachedMimeType = "";
             return;
         }
-        // Entry objects are rebuilt per search; same id means same content
-        if (entry.id === _requestedEntryId)
+        if (entryId === _requestedEntryId)
             return;
 
         cachedImageData = "";
         cachedMimeType = "";
-        const entryId = entry.id;
-        _requestedEntryId = entryId;
-        DMSService.sendRequest("clipboard.getEntry", {
-            "id": entryId
-        }, function (response) {
-            if (_requestedEntryId !== entryId)
+        const requestId = entryId;
+        _requestedEntryId = requestId;
+        ClipboardService.getEntryDataUrl(requestId, (mime, b64) => {
+            if (_requestedEntryId !== requestId)
                 return;
-            if (response.error) {
-                _requestedEntryId = null;
-                return;
-            }
-            if (!response.result) {
+            if (!mime || !b64) {
                 _requestedEntryId = null;
                 ClipboardService.refresh();
                 return;
             }
-            const result = response.result;
-            const mimeType = (result.mimeType ?? entry?.mimeType ?? "").toString();
-            const data = (result.data ?? "").toString();
-            if (data.length === 0 || !resolvedSourceUrl(data, mimeType)) {
-                _requestedEntryId = null;
-                return;
-            }
-            cachedMimeType = mimeType;
-            cachedImageData = data;
+            cachedMimeType = mime;
+            cachedImageData = b64;
         });
     }
 

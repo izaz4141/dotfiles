@@ -36,8 +36,8 @@ Rectangle {
     readonly property real baseCardHeight: cardPadding * 2 + collapsedContentHeight + actionButtonHeight + contentSpacing
 
     width: parent ? parent.width : 400
-    height: expanded ? (expandedContent.height + cardPadding * 2) : (baseCardHeight + collapsedContent.extraHeight)
-    readonly property real targetHeight: expanded ? (expandedContent.height + cardPadding * 2) : (baseCardHeight + collapsedContent.extraHeight)
+    height: expanded ? (expandedContent.height + cardPadding * 2) : (baseCardHeight + collapsedContent.extraHeight + collapsedContent.liveBarExtra)
+    readonly property real targetHeight: expanded ? (expandedContent.height + cardPadding * 2) : (baseCardHeight + collapsedContent.extraHeight + collapsedContent.liveBarExtra)
     radius: Theme.cornerRadius
     scale: (cardHoverHandler.hovered ? 1.004 : 1.0) * listLevelAdjacentScaleInfluence
     readonly property bool shadowsAllowed: Theme.elevationEnabled && Quickshell.env("DMS_DISABLE_LAYER") !== "true" && Quickshell.env("DMS_DISABLE_LAYER") !== "1"
@@ -178,6 +178,8 @@ Rectangle {
         readonly property real collapsedLineCount: compactMode ? 1 : 2
         readonly property real collapsedLineHeight: Theme.fontSizeSmall * 1.2 * collapsedLineCount
         readonly property real extraHeight: (descriptionExpanded && expandedTextHeight > collapsedLineHeight + 2) ? (expandedTextHeight - collapsedLineHeight) : 0
+        readonly property bool liveBarVisible: notificationGroup?.latestNotification && typeof notificationGroup.latestNotification.liveProgress === "number" && notificationGroup.latestNotification.liveProgress >= 0
+        readonly property real liveBarExtra: liveBarVisible ? 5 + Theme.notificationContentSpacing : 0
 
         anchors.top: parent.top
         anchors.left: parent.left
@@ -185,7 +187,7 @@ Rectangle {
         anchors.topMargin: cardPadding
         anchors.leftMargin: Theme.spacingL
         anchors.rightMargin: Theme.spacingL + Theme.notificationHoverRevealMargin
-        height: collapsedContentHeight + extraHeight
+        height: collapsedContentHeight + extraHeight + liveBarExtra
         visible: !expanded
 
         DankCircularImage {
@@ -371,6 +373,13 @@ Rectangle {
                         }
                     }
                 }
+
+                NotificationProgressBar {
+                    width: parent.width
+                    barHeight: 5
+                    progress: collapsedContent.liveBarVisible ? (notificationGroup.latestNotification.liveProgress / 100) : 0
+                    visible: collapsedContent.liveBarVisible
+                }
             }
         }
     }
@@ -444,12 +453,13 @@ Rectangle {
                     readonly property bool isSelected: root.selectedNotificationIndex === index
                     readonly property bool actionsVisible: true
                     readonly property real expandedIconSize: compactMode ? Theme.notificationExpandedIconSizeCompact : Theme.notificationExpandedIconSizeNormal
+                    readonly property bool __liveBarVisible: modelData && typeof modelData.liveProgress === "number" && modelData.liveProgress >= 0
 
                     HoverHandler {
                         id: expandedDelegateHoverHandler
                     }
                     readonly property real expandedItemPadding: compactMode ? Theme.spacingS : Theme.spacingM
-                    readonly property real expandedBaseHeight: expandedItemPadding * 2 + Math.max(expandedIconSize, Theme.fontSizeSmall * 1.2 + Theme.fontSizeMedium * 1.2 + Theme.fontSizeSmall * 1.2 * 2) + actionButtonHeight + contentSpacing * 2
+                    readonly property real expandedBaseHeight: expandedItemPadding * 2 + Math.max(expandedIconSize, Theme.fontSizeSmall * 1.2 + Theme.fontSizeMedium * 1.2 + Theme.fontSizeSmall * 1.2 * 2) + actionButtonHeight + contentSpacing * 2 + (__liveBarVisible ? 9 : 0)
                     property bool __delegateInitialized: false
                     property real swipeOffset: 0
                     property bool isDismissing: false
@@ -675,6 +685,13 @@ Rectangle {
                                                 }
                                             }
                                         }
+                                    }
+
+                                    NotificationProgressBar {
+                                        width: parent.width
+                                        barHeight: 5
+                                        progress: modelData && typeof modelData.liveProgress === "number" ? (modelData.liveProgress / 100) : 0
+                                        visible: modelData && typeof modelData.liveProgress === "number" && modelData.liveProgress >= 0
                                     }
                                 }
 

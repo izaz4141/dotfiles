@@ -26,7 +26,7 @@ Item {
         ClipboardHeader {
             id: header
             width: parent.width
-            totalCount: modal.totalCount
+            totalCount: ClipboardService.totalCount
             showKeyboardHints: modal.showKeyboardHints
             onKeyboardHintsToggled: modal.showKeyboardHints = !modal.showKeyboardHints
             onClearAllClicked: {
@@ -49,8 +49,7 @@ Item {
             ignoreTabKeys: true
             keyForwardTargets: [modal.modalFocusScope]
             onTextChanged: {
-                modal.searchText = text
-                modal.updateFilteredModel()
+                ClipboardService.setSearchText(text)
             }
             Keys.onEscapePressed: function (event) {
                 modal.hide()
@@ -85,7 +84,7 @@ Item {
                 anchors.fill: parent
                 model: filteredModel
 
-                currentIndex: clipboardContent.modal ? clipboardContent.modal.selectedIndex : 0
+                currentIndex: clipboardContent.modal ? ClipboardService.selectedIndex : 0
                 spacing: Theme.spacingXS
                 interactive: true
                 flickDeceleration: 1500
@@ -110,7 +109,7 @@ Item {
                 }
 
                 onCurrentIndexChanged: {
-                    if (clipboardContent.modal && clipboardContent.modal.keyboardNavigationActive && currentIndex >= 0) {
+                    if (ClipboardService.keyboardNavigationActive && currentIndex >= 0) {
                         ensureVisible(currentIndex)
                     }
                 }
@@ -125,18 +124,18 @@ Item {
 
                 delegate: ClipboardEntry {
                     required property int index
-                    required property var model
+                    required property string entry
 
                     width: clipboardListView.width
                     height: ClipboardConstants.itemHeight
-                    entryData: model.entry
+                    entryData: entry
                     entryIndex: index + 1
                     itemIndex: index
-                    isSelected: clipboardContent.modal && clipboardContent.modal.keyboardNavigationActive && index === clipboardContent.modal.selectedIndex
+                    isSelected: ClipboardService.keyboardNavigationActive && index === ClipboardService.selectedIndex
                     modal: clipboardContent.modal
                     listView: clipboardListView
-                    onCopyRequested: clipboardContent.modal.copyEntry(model.entry)
-                    onDeleteRequested: clipboardContent.modal.deleteEntry(model.entry)
+                    onCopyRequested: clipboardContent.modal.copyEntry(entry)
+                    onDeleteRequested: clipboardContent.modal.deleteEntry(entry)
                 }
             }
         }

@@ -26,6 +26,8 @@ Singleton {
     property var powerUnplugSound: null
     property var normalNotificationSound: null
     property var criticalNotificationSound: null
+    property var alarmSound: null
+    property var timerFinishedSound: null
     property real notificationsVolume: 1.0
     property bool notificationsAudioMuted: false
 
@@ -395,7 +397,7 @@ EOFCONFIG
         const themesToSearch = themeName !== "freedesktop" ? `${themeName} freedesktop` : themeName;
 
         const script = `
-            for event_key in audio-volume-change power-plug power-unplug message message-new-instant; do
+            for event_key in audio-volume-change power-plug power-unplug message message-new-instant alarm-clock-elapsed; do
                 found=0
 
                 case "$event_key" in
@@ -404,6 +406,9 @@ EOFCONFIG
                         ;;
                     message-new-instant)
                         names="dialog-warning message-new-instant message-highlight"
+                        ;;
+                    alarm-clock-elapsed)
+                        names="alarm-clock-elapsed service-login"
                         ;;
                     *)
                         names="$event_key"
@@ -457,7 +462,8 @@ EOFCONFIG
             "power-plug": "../assets/sounds/plasma/power-plug.wav",
             "power-unplug": "../assets/sounds/plasma/power-unplug.wav",
             "message": "../assets/sounds/freedesktop/message.wav",
-            "message-new-instant": "../assets/sounds/freedesktop/message-new-instant.wav"
+            "message-new-instant": "../assets/sounds/freedesktop/message-new-instant.wav",
+            "alarm-clock-elapsed": "../assets/sounds/freedesktop/alarm-clock-elapsed.oga"
         };
 
         const specialConditions = {
@@ -551,6 +557,14 @@ EOFCONFIG
             criticalNotificationSound.destroy();
             criticalNotificationSound = null;
         }
+        if (alarmSound) {
+            alarmSound.destroy();
+            alarmSound = null;
+        }
+        if (timerFinishedSound) {
+            timerFinishedSound.destroy();
+            timerFinishedSound = null;
+        }
     }
 
     function createSoundPlayers() {
@@ -622,6 +636,31 @@ EOFCONFIG
                     }
                 }
             `, root, "AudioService.CriticalNotificationSound");
+
+            const alarmClockPath = getSoundPath("alarm-clock-elapsed");
+            alarmSound = Qt.createQmlObject(`
+                import QtQuick
+                import QtMultimedia
+                MediaPlayer {
+                    source: "${alarmClockPath}"
+                    loops: MediaPlayer.Infinite
+                    audioOutput: AudioOutput {
+                        ${deviceProperty}volume: notificationsVolume
+                    }
+                }
+            `, root, "AudioService.AlarmSound");
+
+            timerFinishedSound = Qt.createQmlObject(`
+                import QtQuick
+                import QtMultimedia
+                MediaPlayer {
+                    source: "${alarmClockPath}"
+                    loops: MediaPlayer.Infinite
+                    audioOutput: AudioOutput {
+                        ${deviceProperty}volume: notificationsVolume
+                    }
+                }
+            `, root, "AudioService.TimerFinishedSound");
         } catch (e) {
             console.warn("AudioService: Error creating sound players:", e);
         }
@@ -665,6 +704,36 @@ EOFCONFIG
         if (SettingsData.soundsEnabled && SettingsData.soundVolumeChanged && !notificationsAudioMuted) {
             playVolumeChangeSound();
         }
+    }
+
+    function playAlarmRing() {
+        if (!soundsAvailable || !alarmSound)
+            return;
+        alarmSound.stop();
+        alarmSound.position = 0;
+        alarmSound.play();
+    }
+
+    function stopAlarmRing() {
+        if (!alarmSound)
+            return;
+        alarmSound.stop();
+        alarmSound.position = 0;
+    }
+
+    function playTimerFinished() {
+        if (!soundsAvailable || !timerFinishedSound)
+            return;
+        timerFinishedSound.stop();
+        timerFinishedSound.position = 0;
+        timerFinishedSound.play();
+    }
+
+    function stopTimerFinished() {
+        if (!timerFinishedSound)
+            return;
+        timerFinishedSound.stop();
+        timerFinishedSound.position = 0;
     }
 
     function sinkIcon(node) {

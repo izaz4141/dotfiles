@@ -17,10 +17,10 @@ BasePill {
     signal cpuTempClicked
 
     Component.onCompleted: {
-        DgopService.addRef(["cpu"]);
+        SysMonitorService.addRef(["cpu"]);
     }
     Component.onDestruction: {
-        DgopService.removeRef(["cpu"]);
+        SysMonitorService.removeRef(["cpu"]);
     }
 
     content: Component {
@@ -38,11 +38,11 @@ BasePill {
                     name: "device_thermostat"
                     size: Theme.barIconSize(root.barThickness, undefined, root.barConfig?.maximizeWidgetIcons, root.barConfig?.iconScale)
                     color: {
-                        if (DgopService.cpuTemperature > 85) {
+                        if (SysMonitorService.cpuTemperature > 85) {
                             return Theme.tempDanger;
                         }
 
-                        if (DgopService.cpuTemperature > 69) {
+                        if (SysMonitorService.cpuTemperature > 69) {
                             return Theme.tempWarning;
                         }
 
@@ -53,11 +53,11 @@ BasePill {
 
                 StyledText {
                     text: {
-                        if (DgopService.cpuTemperature === undefined || DgopService.cpuTemperature === null || DgopService.cpuTemperature < 0) {
+                        if (SysMonitorService.cpuTemperature === undefined || SysMonitorService.cpuTemperature === null || SysMonitorService.cpuTemperature < 0) {
                             return "--";
                         }
 
-                        return Math.round(DgopService.cpuTemperature).toString();
+                        return Math.round(SysMonitorService.cpuTemperature).toString();
                     }
                     font.pixelSize: Theme.barTextSize(root.barThickness, root.barConfig?.fontScale, root.barConfig?.maximizeWidgetText)
                     color: Theme.widgetTextColor
@@ -76,11 +76,11 @@ BasePill {
                     name: "device_thermostat"
                     size: Theme.barIconSize(root.barThickness, undefined, root.barConfig?.maximizeWidgetIcons, root.barConfig?.iconScale)
                     color: {
-                        if (DgopService.cpuTemperature > 85) {
+                        if (SysMonitorService.cpuTemperature > 85) {
                             return Theme.tempDanger;
                         }
 
-                        if (DgopService.cpuTemperature > 69) {
+                        if (SysMonitorService.cpuTemperature > 69) {
                             return Theme.tempWarning;
                         }
 
@@ -108,11 +108,11 @@ BasePill {
                     StyledText {
                         id: cpuTempText
                         text: {
-                            if (DgopService.cpuTemperature === undefined || DgopService.cpuTemperature === null || DgopService.cpuTemperature < 0) {
+                            if (SysMonitorService.cpuTemperature === undefined || SysMonitorService.cpuTemperature === null || SysMonitorService.cpuTemperature < 0) {
                                 return "--°";
                             }
 
-                            return Math.round(DgopService.cpuTemperature) + "°";
+                            return Math.round(SysMonitorService.cpuTemperature) + "°";
                         }
                         font.pixelSize: Theme.barTextSize(root.barThickness, root.barConfig?.fontScale, root.barConfig?.maximizeWidgetText)
                         color: Theme.widgetTextColor
@@ -133,7 +133,7 @@ BasePill {
         acceptedButtons: Qt.LeftButton
         onPressed: mouse => {
             root.triggerRipple(this, mouse.x, mouse.y);
-            DgopService.setSortBy("cpu");
+            SysMonitorService.setSortBy("cpu");
             cpuTempClicked();
         }
     }

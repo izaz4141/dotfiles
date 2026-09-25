@@ -10,6 +10,7 @@ Singleton {
 
     readonly property url home: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
     readonly property url pictures: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+    readonly property url downloads: StandardPaths.standardLocations(StandardPaths.DownloadLocation)[0] || `${home}/Downloads`
 
     readonly property url data: `${StandardPaths.standardLocations(StandardPaths.GenericDataLocation)[0]}/DankMaterialShell`
     readonly property url state: `${StandardPaths.standardLocations(StandardPaths.GenericStateLocation)[0]}/DankMaterialShell`
@@ -17,6 +18,8 @@ Singleton {
     readonly property url config: `${StandardPaths.standardLocations(StandardPaths.GenericConfigLocation)[0]}/DankMaterialShell`
 
     readonly property url imagecache: `${cache}/imagecache`
+    readonly property url latexOutput: `${cache}/latex`
+    readonly property url favicons: `${cache}/favicons`
 
     function stringify(path: url): string {
         return path.toString().replace(/%20/g, " ");

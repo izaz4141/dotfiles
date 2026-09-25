@@ -7,14 +7,14 @@
     "comment": ""
   },
   {
-    "term": "%1 DMS bind(s) may be overridden by config binds that come after the include.",
+    "term": "%1 adapter, none connected",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "%1 adapter(s), none connected",
+    "term": "%1 adapters, none connected",
     "translation": "",
     "context": "",
     "reference": "",
@@ -22,13 +22,6 @@
   },
   {
     "term": "%1 characters",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "%1 class(es)",
     "translation": "",
     "context": "",
     "reference": "",
@@ -63,14 +56,14 @@
     "comment": ""
   },
   {
-    "term": "%1 display(s)",
+    "term": "%1 display",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "%1 exists but is not included in config. Custom keybinds will not work until this is fixed.",
+    "term": "%1 displays",
     "translation": "",
     "context": "",
     "reference": "",
@@ -91,28 +84,21 @@
     "comment": ""
   },
   {
-    "term": "%1 issue(s) found",
+    "term": "%1 issue found",
     "translation": "",
     "context": "greeter doctor page error count",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "%1 job(s)",
+    "term": "%1 issues found",
     "translation": "",
-    "context": "",
+    "context": "greeter doctor page error count",
     "reference": "",
     "comment": ""
   },
   {
     "term": "%1 notifications",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "%1 printer(s)",
     "translation": "",
     "context": "",
     "reference": "",
@@ -140,6 +126,13 @@
     "comment": ""
   },
   {
+    "term": "'Alternative' lets the key unlock on its own. 'Second factor' requires password or fingerprint first, then the key.",
+    "translation": "",
+    "context": "lock screen U2F security key mode setting",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "(Default)",
     "translation": "",
     "context": "default monitor label suffix",
@@ -154,7 +147,28 @@
     "comment": ""
   },
   {
+    "term": "(exec \"…\")",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "+ %1 more",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "/path/to/videos",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "0 (default)",
     "translation": "",
     "context": "",
     "reference": "",
@@ -168,6 +182,13 @@
     "comment": ""
   },
   {
+    "term": "0 decimals",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "1 day",
     "translation": "",
     "context": "notification history retention option",
@@ -175,9 +196,9 @@
     "comment": ""
   },
   {
-    "term": "1 device connected",
+    "term": "1 decimals",
     "translation": "",
-    "context": "KDE Connect status single device",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -274,6 +295,13 @@
   },
   {
     "term": "180°",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "2 decimals",
     "translation": "",
     "context": "",
     "reference": "",
@@ -567,20 +595,6 @@
     "comment": ""
   },
   {
-    "term": "Accent Color",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Accept",
-    "translation": "",
-    "context": "KDE Connect accept pairing button",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Accept Jobs",
     "translation": "",
     "context": "",
@@ -631,13 +645,6 @@
   },
   {
     "term": "Activate",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Activation",
     "translation": "",
     "context": "",
     "reference": "",
@@ -777,6 +784,13 @@
     "comment": ""
   },
   {
+    "term": "Add shortcut",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Adjust the number of columns in grid view mode.",
     "translation": "",
     "context": "",
@@ -798,6 +812,13 @@
     "comment": ""
   },
   {
+    "term": "Advanced flag expression is preserved as written.",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Afternoon",
     "translation": "",
     "context": "",
@@ -808,6 +829,13 @@
     "term": "All",
     "translation": "",
     "context": "notification history filter",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "All Interfaces",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -854,9 +882,9 @@
     "comment": ""
   },
   {
-    "term": "Always Active",
+    "term": "Alternative (OR)",
     "translation": "",
-    "context": "",
+    "context": "U2F mode option: key works as standalone unlock method",
     "reference": "",
     "comment": ""
   },
@@ -897,13 +925,6 @@
   },
   {
     "term": "Always show when there's only one connected display",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Amount",
     "translation": "",
     "context": "",
     "reference": "",
@@ -1260,6 +1281,13 @@
     "comment": ""
   },
   {
+    "term": "Auto (Bar-aware)",
+    "translation": "",
+    "context": "bar shadow direction source option | shadow direction option",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Auto (Wide)",
     "translation": "",
     "context": "",
@@ -1463,13 +1491,6 @@
     "comment": ""
   },
   {
-    "term": "Available in Detailed and Forecast view modes",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "BSSID",
     "translation": "",
     "context": "",
@@ -1540,7 +1561,21 @@
     "comment": ""
   },
   {
+    "term": "Bar Shadows",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Bar Transparency",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Base color for shadows (opacity is applied automatically)",
     "translation": "",
     "context": "",
     "reference": "",
@@ -1590,13 +1625,6 @@
   },
   {
     "term": "Bind lock screen to dbus signals from loginctl. Disable if using an external lock screen",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Binds Include Missing",
     "translation": "",
     "context": "",
     "reference": "",
@@ -1745,7 +1773,7 @@
   {
     "term": "Bottom",
     "translation": "",
-    "context": "",
+    "context": "shadow direction option",
     "reference": "",
     "comment": ""
   },
@@ -1816,13 +1844,6 @@
     "term": "Browse",
     "translation": "",
     "context": "theme category option",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Browse Files",
-    "translation": "",
-    "context": "KDE Connect browse tooltip",
     "reference": "",
     "comment": ""
   },
@@ -2002,7 +2023,7 @@
     "comment": ""
   },
   {
-    "term": "Caps Lock is on",
+    "term": "Category",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2059,6 +2080,13 @@
   },
   {
     "term": "Change the locale used by the DMS interface.",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Change the locale used for date and time formatting, independent of the interface language.",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2142,7 +2170,7 @@
     "comment": ""
   },
   {
-    "term": "Choose how the weather widget is displayed",
+    "term": "Choose how this bar resolves shadow direction",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2205,13 +2233,6 @@
     "comment": ""
   },
   {
-    "term": "Chroma Style",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Cipher",
     "translation": "",
     "context": "",
@@ -2241,6 +2262,13 @@
   },
   {
     "term": "Clear All",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Clear All History?",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2282,13 +2310,6 @@
     "comment": ""
   },
   {
-    "term": "Click 'Setup' to create %1 and add include to config.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Click 'Setup' to create %1 and add include to your compositor config.",
     "translation": "",
     "context": "",
@@ -2324,14 +2345,7 @@
     "comment": ""
   },
   {
-    "term": "Click any shortcut to edit. Changes save to %1",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Click to capture",
+    "term": "Click to record",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2374,20 +2388,6 @@
   },
   {
     "term": "Clipboard Manager",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Clipboard sent",
-    "translation": "",
-    "context": "KDE Connect clipboard action | Phone Connect clipboard action",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Clipboard service not available",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2520,20 +2520,6 @@
     "comment": ""
   },
   {
-    "term": "Color theme for syntax highlighting.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Color theme for syntax highlighting. %1 themes available.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Color theme from DMS registry",
     "translation": "",
     "context": "registry theme description",
@@ -2632,6 +2618,13 @@
     "comment": ""
   },
   {
+    "term": "Compact Mode (Horizontal)",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Completed",
     "translation": "",
     "context": "",
@@ -2661,13 +2654,6 @@
   },
   {
     "term": "Config Format",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Config action: %1",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2779,13 +2765,6 @@
     "comment": ""
   },
   {
-    "term": "Conflicts with: %1",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Connect",
     "translation": "",
     "context": "",
@@ -2870,13 +2849,6 @@
     "comment": ""
   },
   {
-    "term": "Content copied",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Contrast",
     "translation": "",
     "context": "",
@@ -2940,28 +2912,21 @@
     "comment": ""
   },
   {
-    "term": "Cooldown",
+    "term": "Controls shadow cast direction for elevation layers",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Copied GIF",
+    "term": "Controls the base blur radius and offset of shadows",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Copied MP4",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Copied WebP",
+    "term": "Controls the transparency of the shadow",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2983,13 +2948,6 @@
   },
   {
     "term": "Copy",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Copy Content",
     "translation": "",
     "context": "",
     "reference": "",
@@ -3220,6 +3178,13 @@
     "comment": ""
   },
   {
+    "term": "Cursor",
+    "translation": "",
+    "context": "input_settings_cursor",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Cursor Config Not Configured",
     "translation": "",
     "context": "",
@@ -3250,14 +3215,7 @@
   {
     "term": "Custom",
     "translation": "",
-    "context": "theme category option",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Custom Color",
-    "translation": "",
-    "context": "",
+    "context": "shadow color option | theme category option",
     "reference": "",
     "comment": ""
   },
@@ -3319,6 +3277,20 @@
   },
   {
     "term": "Custom Reboot Command",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Custom Shadow Color",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Custom Shadow Override",
     "translation": "",
     "context": "",
     "reference": "",
@@ -3417,13 +3389,6 @@
   },
   {
     "term": "DMS service is not connected. Clipboard settings are unavailable.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "DMS shell actions (launcher, clipboard, etc.)",
     "translation": "",
     "context": "",
     "reference": "",
@@ -3577,7 +3542,21 @@
     "comment": ""
   },
   {
+    "term": "Default (Black)",
+    "translation": "",
+    "context": "shadow color option",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Default Width (%)",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Default applications",
     "translation": "",
     "context": "",
     "reference": "",
@@ -3724,13 +3703,6 @@
     "comment": ""
   },
   {
-    "term": "Detailed",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Development",
     "translation": "",
     "context": "",
@@ -3761,14 +3733,7 @@
   {
     "term": "Device paired",
     "translation": "",
-    "context": "Phone Connect pairing action",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Device unpaired",
-    "translation": "",
-    "context": "KDE Connect unpair action | Phone Connect unpair action",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -3776,6 +3741,13 @@
     "term": "Digital",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Direction Source",
+    "translation": "",
+    "context": "bar shadow direction source",
     "reference": "",
     "comment": ""
   },
@@ -3802,6 +3774,13 @@
   },
   {
     "term": "Disable Output",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Disable While Typing",
     "translation": "",
     "context": "",
     "reference": "",
@@ -3998,13 +3977,6 @@
   },
   {
     "term": "Display currently focused application title",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Display hourly weather predictions",
     "translation": "",
     "context": "",
     "reference": "",
@@ -4298,7 +4270,21 @@
     "comment": ""
   },
   {
+    "term": "Edit shortcut",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Education",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Elements",
     "translation": "",
     "context": "",
     "reference": "",
@@ -4368,6 +4354,13 @@
     "comment": ""
   },
   {
+    "term": "Enable Video Screensaver",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Enable Weather",
     "translation": "",
     "context": "",
@@ -4376,6 +4369,13 @@
   },
   {
     "term": "Enable WiFi",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Enable a custom override below to set per-bar shadow intensity, opacity, and color.",
     "translation": "",
     "context": "",
     "reference": "",
@@ -4399,6 +4399,13 @@
     "term": "Enable loginctl lock integration",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Enable security key authentication",
+    "translation": "",
+    "context": "Enable FIDO2/U2F hardware security key for lock screen",
     "reference": "",
     "comment": ""
   },
@@ -4455,13 +4462,6 @@
     "term": "Enter PIN for ",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Enter URL or text to share",
-    "translation": "",
-    "context": "KDE Connect share input placeholder",
     "reference": "",
     "comment": ""
   },
@@ -4697,13 +4697,6 @@
     "comment": ""
   },
   {
-    "term": "Failed to accept pairing",
-    "translation": "",
-    "context": "Phone Connect error",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Failed to activate configuration",
     "translation": "",
     "context": "",
@@ -4728,13 +4721,6 @@
     "term": "Failed to add printer to class",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to browse device",
-    "translation": "",
-    "context": "Phone Connect error",
     "reference": "",
     "comment": ""
   },
@@ -4823,13 +4809,6 @@
     "comment": ""
   },
   {
-    "term": "Failed to disable night mode",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Failed to disconnect VPN",
     "translation": "",
     "context": "",
@@ -4851,13 +4830,6 @@
     "comment": ""
   },
   {
-    "term": "Failed to enable IP location",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Failed to enable WiFi",
     "translation": "",
     "context": "",
@@ -4866,13 +4838,6 @@
   },
   {
     "term": "Failed to enable job acceptance",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to enable night mode",
     "translation": "",
     "context": "",
     "reference": "",
@@ -4889,13 +4854,6 @@
     "term": "Failed to import VPN",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to launch SMS app",
-    "translation": "",
-    "context": "Phone Connect error",
     "reference": "",
     "comment": ""
   },
@@ -4963,13 +4921,6 @@
     "comment": ""
   },
   {
-    "term": "Failed to reject pairing",
-    "translation": "",
-    "context": "Phone Connect error",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Failed to remove device",
     "translation": "",
     "context": "",
@@ -5012,13 +4963,6 @@
     "comment": ""
   },
   {
-    "term": "Failed to ring device",
-    "translation": "",
-    "context": "Phone Connect error",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Failed to save audio config",
     "translation": "",
     "context": "",
@@ -5047,72 +4991,9 @@
     "comment": ""
   },
   {
-    "term": "Failed to send clipboard",
-    "translation": "",
-    "context": "Phone Connect error",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to send file",
-    "translation": "",
-    "context": "Phone Connect error",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to send ping",
-    "translation": "",
-    "context": "Phone Connect error",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to set brightness",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to set night mode location",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to set night mode schedule",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to set night mode temperature",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Failed to set profile image",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to set profile image: %1",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to share",
-    "translation": "",
-    "context": "Phone Connect error",
     "reference": "",
     "comment": ""
   },
@@ -5180,13 +5061,6 @@
     "comment": ""
   },
   {
-    "term": "Feels",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Feels Like",
     "translation": "",
     "context": "",
@@ -5236,14 +5110,14 @@
     "comment": ""
   },
   {
-    "term": "File received from",
+    "term": "File search requires dsearch\nInstall from github.com/AvengeMedia/danksearch",
     "translation": "",
-    "context": "Phone Connect file share notification",
+    "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "File search requires dsearch\nInstall from github.com/morelazers/dsearch",
+    "term": "File search unavailable",
     "translation": "",
     "context": "",
     "reference": "",
@@ -5288,6 +5162,13 @@
     "term": "Finish",
     "translation": "",
     "context": "greeter finish button",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "First Day of Week",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -5425,7 +5306,7 @@
     "comment": ""
   },
   {
-    "term": "Follow focus",
+    "term": "Follow Mouse Focus",
     "translation": "",
     "context": "",
     "reference": "",
@@ -5482,20 +5363,6 @@
   },
   {
     "term": "Force terminal applications to always use dark color schemes",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Forecast",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Forecast Days",
     "translation": "",
     "context": "",
     "reference": "",
@@ -5734,13 +5601,6 @@
   },
   {
     "term": "Good",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Got It",
     "translation": "",
     "context": "",
     "reference": "",
@@ -6202,13 +6062,6 @@
     "comment": ""
   },
   {
-    "term": "Hotkey overlay title (optional)",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Hour",
     "translation": "",
     "context": "",
@@ -6217,13 +6070,6 @@
   },
   {
     "term": "Hourly",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Hourly Forecast Count",
     "translation": "",
     "context": "",
     "reference": "",
@@ -6244,6 +6090,13 @@
     "comment": ""
   },
   {
+    "term": "Hyprland Decoration",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Hyprland Layout Overrides",
     "translation": "",
     "context": "",
@@ -6252,6 +6105,20 @@
   },
   {
     "term": "Hyprland Options",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Hyprland config is not available.",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Hyprland variables are not available.",
     "translation": "",
     "context": "",
     "reference": "",
@@ -6370,6 +6237,13 @@
     "comment": ""
   },
   {
+    "term": "Ignore touchpad input while typing on keyboard",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Image",
     "translation": "",
     "context": "",
@@ -6468,9 +6342,16 @@
     "comment": ""
   },
   {
-    "term": "Inhibitable",
+    "term": "Inherit Global (Default)",
     "translation": "",
-    "context": "",
+    "context": "bar shadow direction source option",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Input",
+    "translation": "",
+    "context": "settings_input",
     "reference": "",
     "comment": ""
   },
@@ -6513,6 +6394,13 @@
     "term": "Install color themes from the DMS theme registry",
     "translation": "",
     "context": "theme browser description",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Install dsearch to search files.",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -6583,6 +6471,13 @@
     "term": "Intensity",
     "translation": "",
     "context": "shadow intensity slider",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Interface",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -6671,6 +6566,13 @@
     "comment": ""
   },
   {
+    "term": "Keep typing",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Keeping Awake",
     "translation": "",
     "context": "",
@@ -6692,13 +6594,6 @@
     "comment": ""
   },
   {
-    "term": "Keybind Sources",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Keybinds",
     "translation": "",
     "context": "greeter settings link",
@@ -6706,14 +6601,14 @@
     "comment": ""
   },
   {
-    "term": "Keybinds Search Settings",
+    "term": "Keyboard",
     "translation": "",
-    "context": "",
+    "context": "input_settings_keyboard",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Keybinds shown alongside regular search results",
+    "term": "Keyboard Layout",
     "translation": "",
     "context": "",
     "reference": "",
@@ -6734,7 +6629,7 @@
     "comment": ""
   },
   {
-    "term": "Keys",
+    "term": "Keyboard layout for input",
     "translation": "",
     "context": "",
     "reference": "",
@@ -6790,21 +6685,42 @@
     "comment": ""
   },
   {
-    "term": "Last launched %1 day%2 ago",
+    "term": "Last launched %1 day ago",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Last launched %1 hour%2 ago",
+    "term": "Last launched %1 days ago",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Last launched %1 minute%2 ago",
+    "term": "Last launched %1 hour ago",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Last launched %1 hours ago",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Last launched %1 minute ago",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Last launched %1 minutes ago",
     "translation": "",
     "context": "",
     "reference": "",
@@ -6902,6 +6818,13 @@
     "comment": ""
   },
   {
+    "term": "Light Direction",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Light Mode",
     "translation": "",
     "context": "",
@@ -6972,6 +6895,13 @@
     "comment": ""
   },
   {
+    "term": "Loading Hyprland variables...",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Loading codecs...",
     "translation": "",
     "context": "",
@@ -6979,14 +6909,7 @@
     "comment": ""
   },
   {
-    "term": "Loading keybinds...",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Loading trending...",
+    "term": "Loading keyboard shortcuts...",
     "translation": "",
     "context": "",
     "reference": "",
@@ -7098,13 +7021,6 @@
     "comment": ""
   },
   {
-    "term": "Locked",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Log Out",
     "translation": "",
     "context": "",
@@ -7126,13 +7042,6 @@
     "comment": ""
   },
   {
-    "term": "Long press",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Longitude",
     "translation": "",
     "context": "",
@@ -7147,6 +7056,13 @@
     "comment": ""
   },
   {
+    "term": "Lua code",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "MAC",
     "translation": "",
     "context": "",
@@ -7157,13 +7073,6 @@
     "term": "MTU",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Make sure KDE Connect or Valent is running on your other devices",
-    "translation": "",
-    "context": "Phone Connect hint message",
     "reference": "",
     "comment": ""
   },
@@ -7196,9 +7105,23 @@
     "comment": ""
   },
   {
+    "term": "Manual",
+    "translation": "",
+    "context": "bar shadow direction source option",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Manual Coordinates",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Manual Direction",
+    "translation": "",
+    "context": "bar manual shadow direction",
     "reference": "",
     "comment": ""
   },
@@ -7294,6 +7217,13 @@
     "comment": ""
   },
   {
+    "term": "Material inspired shadows and elevation on modals, popouts, and dialogs",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Matugen Missing",
     "translation": "",
     "context": "matugen not found status",
@@ -7309,13 +7239,6 @@
   },
   {
     "term": "Matugen Target Monitor",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Matugen Templates",
     "translation": "",
     "context": "",
     "reference": "",
@@ -7588,13 +7511,6 @@
     "comment": ""
   },
   {
-    "term": "Message",
-    "translation": "",
-    "context": "KDE Connect SMS message input placeholder",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Message Content",
     "translation": "",
     "context": "notification privacy mode placeholder",
@@ -7687,6 +7603,13 @@
   },
   {
     "term": "Modal Background",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Modal Shadows",
     "translation": "",
     "context": "",
     "reference": "",
@@ -7805,6 +7728,13 @@
     "comment": ""
   },
   {
+    "term": "Mouse",
+    "translation": "",
+    "context": "input_settings_mouse",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Mouse pointer appearance",
     "translation": "",
     "context": "",
@@ -7813,6 +7743,13 @@
   },
   {
     "term": "Mouse pointer size in pixels",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Mouse sensitivity (-1.0 to +1.0)",
     "translation": "",
     "context": "",
     "reference": "",
@@ -7910,6 +7847,13 @@
     "comment": ""
   },
   {
+    "term": "Natural Scrolling",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Navigation",
     "translation": "",
     "context": "",
@@ -7959,6 +7903,13 @@
     "comment": ""
   },
   {
+    "term": "Network Speed Monitor Settings",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Network Status",
     "translation": "",
     "context": "",
@@ -7987,21 +7938,14 @@
     "comment": ""
   },
   {
+    "term": "Never used",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "New",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "New Key",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "New Keybind",
     "translation": "",
     "context": "",
     "reference": "",
@@ -8023,6 +7967,20 @@
   },
   {
     "term": "New York, NY",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "New category name",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "New category…",
     "translation": "",
     "context": "",
     "reference": "",
@@ -8086,13 +8044,6 @@
   },
   {
     "term": "Niri Layout Overrides",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Niri compositor actions (focus, move, etc.)",
     "translation": "",
     "context": "",
     "reference": "",
@@ -8232,13 +8183,6 @@
     "comment": ""
   },
   {
-    "term": "No Weather Data",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "No Weather Data Available",
     "translation": "",
     "context": "",
@@ -8309,16 +8253,16 @@
     "comment": ""
   },
   {
-    "term": "No changes",
+    "term": "No checks passed",
     "translation": "",
-    "context": "",
+    "context": "greeter doctor page empty state",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "No checks passed",
+    "term": "No clipboard entries found",
     "translation": "",
-    "context": "greeter doctor page empty state",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -8332,21 +8276,14 @@
   {
     "term": "No devices",
     "translation": "",
-    "context": "Phone Connect no devices status | bluetooth status",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "No devices connected",
-    "translation": "",
-    "context": "KDE Connect status",
+    "context": "bluetooth status",
     "reference": "",
     "comment": ""
   },
   {
     "term": "No devices found",
     "translation": "",
-    "context": "KDE Connect no devices message",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -8435,7 +8372,7 @@
     "comment": ""
   },
   {
-    "term": "No keybinds found",
+    "term": "No keyboard shortcuts found in your Hyprland config.",
     "translation": "",
     "context": "",
     "reference": "",
@@ -8547,7 +8484,7 @@
     "comment": ""
   },
   {
-    "term": "No recent clipboard entries found",
+    "term": "No results",
     "translation": "",
     "context": "",
     "reference": "",
@@ -8561,7 +8498,14 @@
     "comment": ""
   },
   {
-    "term": "No saved clipboard entries",
+    "term": "No shortcuts found",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "No shortcuts match your search.",
     "translation": "",
     "context": "",
     "reference": "",
@@ -8583,6 +8527,13 @@
   },
   {
     "term": "No trigger",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "No video found in folder",
     "translation": "",
     "context": "",
     "reference": "",
@@ -8680,16 +8631,9 @@
     "comment": ""
   },
   {
-    "term": "Not detected",
+    "term": "Not enrolled",
     "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Not paired",
-    "translation": "",
-    "context": "KDE Connect not paired status",
+    "context": "fingerprint not detected status | security key not detected status",
     "reference": "",
     "comment": ""
   },
@@ -8869,13 +8813,6 @@
     "comment": ""
   },
   {
-    "term": "Offline",
-    "translation": "",
-    "context": "KDE Connect offline status | Phone Connect offline status",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Offline Report",
     "translation": "",
     "context": "",
@@ -8960,20 +8897,6 @@
     "comment": ""
   },
   {
-    "term": "Open App",
-    "translation": "",
-    "context": "KDE Connect open SMS app button",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Open KDE Connect on your phone",
-    "translation": "",
-    "context": "KDE Connect open app hint",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Open Notepad File",
     "translation": "",
     "context": "",
@@ -8989,13 +8912,6 @@
   },
   {
     "term": "Open folder",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Open in Browser",
     "translation": "",
     "context": "",
     "reference": "",
@@ -9023,34 +8939,6 @@
     "comment": ""
   },
   {
-    "term": "Opening SMS",
-    "translation": "",
-    "context": "KDE Connect SMS action",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Opening SMS app",
-    "translation": "",
-    "context": "Phone Connect SMS action",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Opening file browser",
-    "translation": "",
-    "context": "Phone Connect browse action",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Opening files",
-    "translation": "",
-    "context": "KDE Connect browse action",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Optional description",
     "translation": "",
     "context": "",
@@ -9059,13 +8947,6 @@
   },
   {
     "term": "Optional location",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Options",
     "translation": "",
     "context": "",
     "reference": "",
@@ -9198,7 +9079,7 @@
     "comment": ""
   },
   {
-    "term": "Overrides",
+    "term": "Override the global shadow with per-bar settings",
     "translation": "",
     "context": "",
     "reference": "",
@@ -9256,7 +9137,7 @@
   {
     "term": "Pair",
     "translation": "",
-    "context": "KDE Connect pair button",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -9275,37 +9156,9 @@
     "comment": ""
   },
   {
-    "term": "Pairing",
-    "translation": "",
-    "context": "KDE Connect pairing in progress status",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Pairing failed",
     "translation": "",
-    "context": "Phone Connect error",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Pairing request from",
-    "translation": "",
-    "context": "Phone Connect pairing request notification",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Pairing request sent",
-    "translation": "",
-    "context": "Phone Connect pairing action",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Pairing requested",
-    "translation": "",
-    "context": "KDE Connect pairing requested status",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -9339,6 +9192,13 @@
   },
   {
     "term": "Paste",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Path to a video file or folder containing videos",
     "translation": "",
     "context": "",
     "reference": "",
@@ -9422,13 +9282,6 @@
     "comment": ""
   },
   {
-    "term": "Permission denied to set profile image.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Personalization",
     "translation": "",
     "context": "",
@@ -9436,23 +9289,9 @@
     "comment": ""
   },
   {
-    "term": "Phone Connect Not Available",
+    "term": "Pick a different random video each time from the same folder",
     "translation": "",
-    "context": "Phone Connect unavailable error title",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Phone Connect unavailable",
-    "translation": "",
-    "context": "Phone Connect service unavailable message",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Phone number",
-    "translation": "",
-    "context": "KDE Connect SMS phone input placeholder",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -9474,27 +9313,6 @@
     "term": "Pin to Dock",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Ping",
-    "translation": "",
-    "context": "KDE Connect ping tooltip",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Ping sent",
-    "translation": "",
-    "context": "KDE Connect ping action",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Ping sent to",
-    "translation": "",
-    "context": "Phone Connect ping action",
     "reference": "",
     "comment": ""
   },
@@ -9534,6 +9352,13 @@
     "comment": ""
   },
   {
+    "term": "Play a video when the screen locks.",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Play sound when new notification arrives",
     "translation": "",
     "context": "",
@@ -9563,6 +9388,13 @@
   },
   {
     "term": "Playback",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Playback error: ",
     "translation": "",
     "context": "",
     "reference": "",
@@ -9632,7 +9464,7 @@
     "comment": ""
   },
   {
-    "term": "Pointer",
+    "term": "Popout Shadows",
     "translation": "",
     "context": "",
     "reference": "",
@@ -9712,13 +9544,6 @@
     "term": "Position, pinned apps",
     "translation": "",
     "context": "greeter dock description",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Possible Override Conflicts",
-    "translation": "",
-    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -9814,13 +9639,6 @@
     "comment": ""
   },
   {
-    "term": "Precip",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Precipitation",
     "translation": "",
     "context": "",
@@ -9863,7 +9681,21 @@
     "comment": ""
   },
   {
-    "term": "Press key...",
+    "term": "Press keys…",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Press ✓ to confirm · Esc to cancel",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Press...",
     "translation": "",
     "context": "",
     "reference": "",
@@ -9893,7 +9725,7 @@
   {
     "term": "Primary",
     "translation": "",
-    "context": "button color option | color option | primary color | tile color option",
+    "context": "button color option | color option | primary color | shadow color option | tile color option",
     "reference": "",
     "comment": ""
   },
@@ -10066,13 +9898,6 @@
     "comment": ""
   },
   {
-    "term": "Profile image is too large. Please use a smaller image.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Profile name",
     "translation": "",
     "context": "",
@@ -10095,6 +9920,20 @@
   },
   {
     "term": "Protocol",
+    "translation": "",
+    "context": "Label for printer protocol selector, e.g. ipp, ipps, lpd, socket",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "QtMultimedia is not available",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "QtMultimedia is not available - video screensaver requires qt multimedia services",
     "translation": "",
     "context": "",
     "reference": "",
@@ -10192,20 +10031,6 @@
     "comment": ""
   },
   {
-    "term": "Read Full Release Notes",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Read Full Release Notes",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Read:",
     "translation": "",
     "context": "disk read label",
@@ -10248,9 +10073,23 @@
     "comment": ""
   },
   {
+    "term": "Record",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Recording… press a shortcut · Esc to cancel",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Refresh",
     "translation": "",
-    "context": "Phone Connect refresh tooltip",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -10269,21 +10108,7 @@
     "comment": ""
   },
   {
-    "term": "Reject",
-    "translation": "",
-    "context": "KDE Connect reject pairing button",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Reject Jobs",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Release",
     "translation": "",
     "context": "",
     "reference": "",
@@ -10346,13 +10171,6 @@
     "comment": ""
   },
   {
-    "term": "Repeat",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Replacement",
     "translation": "",
     "context": "",
@@ -10363,13 +10181,6 @@
     "term": "Report",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Request Pairing",
-    "translation": "",
-    "context": "KDE Connect request pairing button",
     "reference": "",
     "comment": ""
   },
@@ -10405,13 +10216,6 @@
     "term": "Requires DWL compositor",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Requires lazy plugin manager",
-    "translation": "",
-    "context": "neovim template description",
     "reference": "",
     "comment": ""
   },
@@ -10570,20 +10374,6 @@
     "comment": ""
   },
   {
-    "term": "Ring",
-    "translation": "",
-    "context": "KDE Connect ring tooltip",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Ringing",
-    "translation": "",
-    "context": "KDE Connect ring action | Phone Connect ring action",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Ripple Effects",
     "translation": "",
     "context": "",
@@ -10647,28 +10437,14 @@
     "comment": ""
   },
   {
-    "term": "Run DMS Templates",
+    "term": "Run matugen to generate Material You colors from wallpaper for DMS and system apps",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Run User Templates",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Run a program (e.g., firefox, kitty)",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Run a shell command (e.g., notify-send)",
+    "term": "Run wallust to generate colors for waybar, kitty, cava, and terminal escape sequences",
     "translation": "",
     "context": "",
     "reference": "",
@@ -10699,13 +10475,6 @@
     "term": "SDR Saturation",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "SMS",
-    "translation": "",
-    "context": "KDE Connect SMS tooltip",
     "reference": "",
     "comment": ""
   },
@@ -10906,6 +10675,13 @@
     "comment": ""
   },
   {
+    "term": "Scroll direction matches finger movement",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Scroll song title",
     "translation": "",
     "context": "",
@@ -10948,28 +10724,7 @@
     "comment": ""
   },
   {
-    "term": "Search by key combo, description, or action name.\n\nDefault action copies the keybind to clipboard.\nRight-click or press Right Arrow to pin frequently used keybinds - they'll appear at the top when not searching.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Search for a location...",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Search keybinds...",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Search keyboard shortcuts from your compositor and applications",
     "translation": "",
     "context": "",
     "reference": "",
@@ -10986,6 +10741,13 @@
     "term": "Search processes...",
     "translation": "",
     "context": "process search placeholder",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Search shortcuts...",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -11011,9 +10773,16 @@
     "comment": ""
   },
   {
-    "term": "Searching...",
+    "term": "Searching",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Second Factor (AND)",
+    "translation": "",
+    "context": "U2F mode option: key required after password or fingerprint",
     "reference": "",
     "comment": ""
   },
@@ -11042,6 +10811,13 @@
     "term": "Security & privacy",
     "translation": "",
     "context": "greeter feature card description",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Security key mode",
+    "translation": "",
+    "context": "lock screen U2F security key mode setting",
     "reference": "",
     "comment": ""
   },
@@ -11081,13 +10857,6 @@
     "comment": ""
   },
   {
-    "term": "Select File to Send",
-    "translation": "",
-    "context": "KDE Connect file browser title",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Select Launcher Logo",
     "translation": "",
     "context": "",
@@ -11098,6 +10867,13 @@
     "term": "Select Profile Image",
     "translation": "",
     "context": "profile image file browser title",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Select Video or Folder",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -11145,13 +10921,6 @@
   },
   {
     "term": "Select an image file...",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Select at least one provider",
     "translation": "",
     "context": "",
     "reference": "",
@@ -11228,13 +10997,6 @@
     "comment": ""
   },
   {
-    "term": "Select which keybind providers to include",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Select which transitions to include in randomization",
     "translation": "",
     "context": "",
@@ -11249,44 +11011,9 @@
     "comment": ""
   },
   {
-    "term": "Selected image file not found.",
+    "term": "Sensitivity",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Send",
-    "translation": "",
-    "context": "KDE Connect SMS send button",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Send Clipboard",
-    "translation": "",
-    "context": "KDE Connect clipboard tooltip",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Send File",
-    "translation": "",
-    "context": "KDE Connect send file button",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Send SMS",
-    "translation": "",
-    "context": "KDE Connect SMS dialog title",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Sending",
-    "translation": "",
-    "context": "Phone Connect file send",
     "reference": "",
     "comment": ""
   },
@@ -11347,14 +11074,14 @@
     "comment": ""
   },
   {
-    "term": "Set key and action to save",
+    "term": "Set notification rules",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Set notification rules",
+    "term": "Setting",
     "translation": "",
     "context": "",
     "reference": "",
@@ -11382,49 +11109,63 @@
     "comment": ""
   },
   {
-    "term": "Shadow",
-    "translation": "",
-    "context": "bar shadow settings card",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Share",
-    "translation": "",
-    "context": "KDE Connect share dialog title | KDE Connect share tooltip",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Share Gamma Control Settings",
+    "term": "Shadow Color",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Share Text",
+    "term": "Shadow Intensity",
     "translation": "",
-    "context": "KDE Connect share button",
+    "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Share URL",
+    "term": "Shadow Opacity",
     "translation": "",
-    "context": "KDE Connect share URL button",
+    "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Shared",
+    "term": "Shadow Override",
     "translation": "",
-    "context": "Phone Connect share success",
+    "context": "bar shadow settings card",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Shell",
+    "term": "Shadow elevation on bars and panels",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Shadow elevation on modals and dialogs",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Shadow elevation on popouts, OSDs, and dropdowns",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Shadows",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Share Gamma Control Settings",
     "translation": "",
     "context": "",
     "reference": "",
@@ -11438,6 +11179,13 @@
     "comment": ""
   },
   {
+    "term": "Shift+Enter to copy",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Shift+Enter to paste",
     "translation": "",
     "context": "",
@@ -11445,35 +11193,7 @@
     "comment": ""
   },
   {
-    "term": "Shift+Enter: Copy • Shift+Del: Clear All • Esc: Close",
-    "translation": "",
-    "context": "Keyboard hints when enter-to-paste is enabled",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Shift+Enter: Paste • Shift+Del: Clear All • Esc: Close",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Short",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Shortcuts",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Shortcuts (%1)",
     "translation": "",
     "context": "",
     "reference": "",
@@ -11550,23 +11270,9 @@
     "comment": ""
   },
   {
-    "term": "Show Feels Like Temperature",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Show Footer",
     "translation": "",
     "context": "launcher footer visibility",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Show Forecast",
-    "translation": "",
-    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -11599,14 +11305,14 @@
     "comment": ""
   },
   {
-    "term": "Show Hourly Forecast",
+    "term": "Show Icon",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Show Humidity",
+    "term": "Show Labels (↓/↑)",
     "translation": "",
     "context": "",
     "reference": "",
@@ -11621,13 +11327,6 @@
   },
   {
     "term": "Show Line Numbers",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Show Location",
     "translation": "",
     "context": "",
     "reference": "",
@@ -11732,20 +11431,6 @@
     "comment": ""
   },
   {
-    "term": "Show Precipitation Probability",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Show Pressure",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Show Profile Image",
     "translation": "",
     "context": "Enable profile image display on the lock screen window",
@@ -11775,13 +11460,6 @@
   },
   {
     "term": "Show Seconds",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Show Sunrise/Sunset",
     "translation": "",
     "context": "",
     "reference": "",
@@ -11830,21 +11508,7 @@
     "comment": ""
   },
   {
-    "term": "Show Weather Condition",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Show Welcome",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Show Wind Speed",
     "translation": "",
     "context": "",
     "reference": "",
@@ -11900,7 +11564,7 @@
     "comment": ""
   },
   {
-    "term": "Show drop shadow on notification popups",
+    "term": "Show drop shadow on notification popups. Requires M3 Elevation to be enabled in Theme & Colors.",
     "translation": "",
     "context": "",
     "reference": "",
@@ -12145,13 +11809,6 @@
     "comment": ""
   },
   {
-    "term": "Skip confirmation",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Skip setup",
     "translation": "",
     "context": "greeter skip button tooltip",
@@ -12292,6 +11949,13 @@
     "comment": ""
   },
   {
+    "term": "Spotlight Search",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Square Corners",
     "translation": "",
     "context": "",
@@ -12306,30 +11970,9 @@
     "comment": ""
   },
   {
-    "term": "Standard",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Start",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Start KDE Connect or Valent",
-    "translation": "",
-    "context": "Phone Connect start daemon hint",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Start KDE Connect or Valent to use this plugin",
-    "translation": "",
-    "context": "Phone Connect daemon hint",
     "reference": "",
     "comment": ""
   },
@@ -12383,6 +12026,13 @@
     "comment": ""
   },
   {
+    "term": "Strict",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Stripes",
     "translation": "",
     "context": "wallpaper transition option",
@@ -12427,7 +12077,7 @@
   {
     "term": "Surface Variant",
     "translation": "",
-    "context": "button color option | tile color option",
+    "context": "button color option | shadow color option | tile color option",
     "reference": "",
     "comment": ""
   },
@@ -12621,14 +12271,21 @@
     "comment": ""
   },
   {
-    "term": "Tab",
+    "term": "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Tab/Shift+Tab: Nav • ←→↑↓: Grid Nav • Enter/Space: Select",
+    "term": "Tap to Click",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Tap touchpad to click",
     "translation": "",
     "context": "",
     "reference": "",
@@ -12679,7 +12336,14 @@
   {
     "term": "Text",
     "translation": "",
-    "context": "shadow color option | text color",
+    "context": "text color",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Text Color",
+    "translation": "",
+    "context": "shadow color option",
     "reference": "",
     "comment": ""
   },
@@ -12726,6 +12390,13 @@
     "comment": ""
   },
   {
+    "term": "Theme Generation",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Theme Registry",
     "translation": "",
     "context": "greeter feature card title",
@@ -12755,13 +12426,6 @@
   },
   {
     "term": "Third-party plugins are created by the community and are not officially supported by DankMaterialShell.\n\nThese plugins may pose security and privacy risks - install at your own risk.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "This bind is overridden by config.kdl",
     "translation": "",
     "context": "",
     "reference": "",
@@ -12873,6 +12537,13 @@
     "comment": ""
   },
   {
+    "term": "Time & Date Locale",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Time & Weather",
     "translation": "",
     "context": "",
@@ -12929,13 +12600,6 @@
     "comment": ""
   },
   {
-    "term": "Title",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Title regex (optional)",
     "translation": "",
     "context": "",
@@ -12951,13 +12615,6 @@
   },
   {
     "term": "To update, run the following command:",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "To use this DMS bind, remove or change the keybind in your config.kdl",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13029,7 +12686,14 @@
   {
     "term": "Top",
     "translation": "",
-    "context": "",
+    "context": "shadow direction option",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Top (Default)",
+    "translation": "",
+    "context": "shadow direction option",
     "reference": "",
     "comment": ""
   },
@@ -13050,7 +12714,7 @@
   {
     "term": "Top Left",
     "translation": "",
-    "context": "screen position option",
+    "context": "screen position option | shadow direction option",
     "reference": "",
     "comment": ""
   },
@@ -13064,7 +12728,7 @@
   {
     "term": "Top Right",
     "translation": "",
-    "context": "screen position option",
+    "context": "screen position option | shadow direction option",
     "reference": "",
     "comment": ""
   },
@@ -13090,6 +12754,13 @@
     "comment": ""
   },
   {
+    "term": "Touchpad",
+    "translation": "",
+    "context": "input_settings_touchpad",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Transform",
     "translation": "",
     "context": "",
@@ -13111,28 +12782,7 @@
     "comment": ""
   },
   {
-    "term": "Trending GIFs",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Trending Stickers",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Trigger",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Trigger Prefix",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13153,7 +12803,7 @@
     "comment": ""
   },
   {
-    "term": "Try a different search",
+    "term": "Try a different search or switch filters.",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13188,21 +12838,14 @@
     "comment": ""
   },
   {
-    "term": "Type this prefix to search keybinds",
+    "term": "Type at least 2 characters to search files.",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Type to search",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Type to search apps",
+    "term": "Type the combo manually",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13232,7 +12875,7 @@
   {
     "term": "Unavailable",
     "translation": "",
-    "context": "Phone Connect unavailable status",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -13286,14 +12929,21 @@
     "comment": ""
   },
   {
-    "term": "Unknown",
+    "term": "Unit Precision",
     "translation": "",
-    "context": "KDE Connect unknown device status | battery status | power profile option | unknown author | widget status",
+    "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Unknown Artist",
+    "term": "Unknown",
+    "translation": "",
+    "context": "battery status | power profile option | unknown author | widget status",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Unknown App",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13335,13 +12985,6 @@
     "comment": ""
   },
   {
-    "term": "Unknown Title",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Unload on Close",
     "translation": "",
     "context": "",
@@ -13364,27 +13007,6 @@
   },
   {
     "term": "Unnamed Rule",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Unpair",
-    "translation": "",
-    "context": "KDE Connect unpair tooltip",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Unpair failed",
-    "translation": "",
-    "context": "Phone Connect error",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Unpin",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13447,6 +13069,13 @@
     "comment": ""
   },
   {
+    "term": "Update Interval",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Update Plugin",
     "translation": "",
     "context": "",
@@ -13469,13 +13098,6 @@
   },
   {
     "term": "Urgent Color",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Usage Tips",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13532,6 +13154,20 @@
   },
   {
     "term": "Use System Theme",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Use a FIDO2/U2F security key (e.g. YubiKey) for lock screen authentication (requires enrolled keys)",
+    "translation": "",
+    "context": "lock screen U2F security key setting",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Use a fixed shadow direction for this bar",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13630,20 +13266,6 @@
   },
   {
     "term": "Use the same position and size on all displays",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Use trigger prefix to activate",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Used when accent color is set to Custom",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13783,13 +13405,6 @@
     "comment": ""
   },
   {
-    "term": "Verification",
-    "translation": "",
-    "context": "Phone Connect pairing verification key label",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Version",
     "translation": "",
     "context": "",
@@ -13839,14 +13454,21 @@
     "comment": ""
   },
   {
-    "term": "Videos",
+    "term": "Video Path",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "View Mode",
+    "term": "Video Screensaver",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Videos",
     "translation": "",
     "context": "",
     "reference": "",
@@ -14014,7 +13636,7 @@
     "comment": ""
   },
   {
-    "term": "What's New",
+    "term": "What does this shortcut do?",
     "translation": "",
     "context": "",
     "reference": "",
@@ -14022,13 +13644,6 @@
   },
   {
     "term": "When enabled, apps are sorted alphabetically. When disabled, apps are sorted by usage frequency.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "When locked",
     "translation": "",
     "context": "",
     "reference": "",
@@ -14301,6 +13916,13 @@
     "comment": ""
   },
   {
+    "term": "Window focus follows mouse movement",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Wipe",
     "translation": "",
     "context": "wallpaper transition option",
@@ -14462,6 +14084,13 @@
     "comment": ""
   },
   {
+    "term": "app...",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "brandon",
     "translation": "",
     "context": "",
@@ -14483,16 +14112,9 @@
     "comment": ""
   },
   {
-    "term": "device",
+    "term": "decimals",
     "translation": "",
-    "context": "Generic device name | Generic device name fallback",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "devices connected",
-    "translation": "",
-    "context": "KDE Connect status multiple devices",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -14518,21 +14140,7 @@
     "comment": ""
   },
   {
-    "term": "e.g., firefox, kitty --title foo",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "e.g., focus-workspace 3, resize-column -10",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "e.g., notify-send 'Hello' && sleep 1",
+    "term": "e.g. SUPER + T",
     "translation": "",
     "context": "",
     "reference": "",
@@ -14560,13 +14168,6 @@
     "comment": ""
   },
   {
-    "term": "leave empty for default",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "loginctl not available - lock integration requires DMS socket connection",
     "translation": "",
     "context": "",
@@ -14582,13 +14183,6 @@
   },
   {
     "term": "minutes",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "ms",
     "translation": "",
     "context": "",
     "reference": "",
@@ -14822,20 +14416,6 @@
     "term": "↑/↓: Nav • Space: Expand • Enter: Action/Expand • E: Text",
     "translation": "",
     "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "↑/↓: Nav • Space: Expand • Enter: Action/Expand • E: Text",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "↑/↓: Navigate • Enter: Paste • Del: Delete • F10: Help",
-    "translation": "",
-    "context": "Keyboard hints when enter-to-paste is enabled",
     "reference": "",
     "comment": ""
   }

@@ -1263,11 +1263,23 @@ Item {
         return Transform.transformFileResult(file, I18n.tr("Open"), I18n.tr("Open folder"), I18n.tr("Copy path"), I18n.tr("Open in terminal"));
     }
 
-    function transformClipboardEntry(entry) {
+    function transformClipboardEntry(rawLine) {
         var copyLabel = I18n.tr("Copy");
         var pasteLabel = I18n.tr("Paste");
         var primaryLabel = SettingsData.clipboardEnterToPaste ? pasteLabel : copyLabel;
         var pasteHintLabel = SettingsData.clipboardEnterToPaste ? I18n.tr("Shift+Enter to copy") : I18n.tr("Shift+Enter to paste");
+        var id = ClipboardService.getEntryId(rawLine);
+        var preview = ClipboardService.getEntryPreview(rawLine);
+        var isImage = ClipboardService.getEntryType(rawLine) === "image";
+        var entry = {
+            "id": id,
+            "preview": preview,
+            "isImage": isImage,
+            "pinned": false,
+            "hash": String(id),
+            "rawLine": rawLine,
+            "_preScored": undefined
+        };
         return Transform.transformClipboardItem(entry, copyLabel, pasteLabel, primaryLabel, I18n.tr("Image"), I18n.tr("Text"), I18n.tr("Pinned"), pasteHintLabel, "", I18n.tr("Clipboard"));
     }
 

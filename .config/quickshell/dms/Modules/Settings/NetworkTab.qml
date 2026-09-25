@@ -1488,7 +1488,7 @@ Item {
 
                                                     Row {
                                                         spacing: Theme.spacingS
-                                                        visible: (modelData.saved || isConnected) && DMSService.apiVersion > 13
+                                                        visible: modelData.saved || isConnected
 
                                                         DankToggle {
                                                             id: autoconnectToggle
@@ -1515,7 +1515,7 @@ Item {
                 height: vpnSection.implicitHeight + Theme.spacingL * 2
                 radius: Theme.cornerRadius
                 color: Theme.surfaceContainerHigh
-                visible: DMSNetworkService.vpnAvailable
+                visible: NetworkService.vpnAvailable
 
                 Column {
                     id: vpnSection
@@ -1529,7 +1529,7 @@ Item {
                         spacing: Theme.spacingM
 
                         DankIcon {
-                            name: DMSNetworkService.connected ? "vpn_lock" : "vpn_key_off"
+                            name: NetworkService.connected ? "vpn_lock" : "vpn_key_off"
                             size: Theme.iconSize
                             color: Theme.primary
                             anchors.verticalCenter: parent.verticalCenter
@@ -1551,15 +1551,15 @@ Item {
 
                             StyledText {
                                 text: {
-                                    if (!DMSNetworkService.connected)
+                                    if (!NetworkService.connected)
                                         return I18n.tr("Disconnected");
-                                    const names = DMSNetworkService.activeNames || [];
+                                    const names = NetworkService.activeNames || [];
                                     if (names.length <= 1)
                                         return names[0] || I18n.tr("Connected");
                                     return names[0] + " +" + (names.length - 1);
                                 }
                                 font.pixelSize: Theme.fontSizeSmall
-                                color: DMSNetworkService.connected ? Theme.primary : Theme.surfaceVariantText
+                                color: NetworkService.connected ? Theme.primary : Theme.surfaceVariantText
                                 width: parent.width
                                 horizontalAlignment: Text.AlignLeft
                             }
@@ -1611,8 +1611,8 @@ Item {
                                 radius: 14
                                 width: disconnectAllRow.width + Theme.spacingM * 2
                                 color: disconnectAllArea.containsMouse ? Theme.errorHover : Theme.surfaceLight
-                                visible: DMSNetworkService.connected
-                                opacity: DMSNetworkService.isBusy ? 0.5 : 1.0
+                                visible: NetworkService.connected
+                                opacity: NetworkService.isBusy ? 0.5 : 1.0
 
                                 Row {
                                     id: disconnectAllRow
@@ -1637,9 +1637,9 @@ Item {
                                     id: disconnectAllArea
                                     anchors.fill: parent
                                     hoverEnabled: true
-                                    cursorShape: DMSNetworkService.isBusy ? Qt.BusyCursor : Qt.PointingHandCursor
-                                    enabled: !DMSNetworkService.isBusy
-                                    onClicked: DMSNetworkService.disconnectAllActive()
+                                    cursorShape: NetworkService.isBusy ? Qt.BusyCursor : Qt.PointingHandCursor
+                                    enabled: !NetworkService.isBusy
+                                    onClicked: NetworkService.disconnectAllActive()
                                 }
                             }
                         }
@@ -1654,7 +1654,7 @@ Item {
                     Item {
                         width: parent.width
                         height: 100
-                        visible: DMSNetworkService.profiles.length === 0
+                        visible: NetworkService.profiles.length === 0
 
                         Column {
                             anchors.centerIn: parent
@@ -1686,17 +1686,17 @@ Item {
                     Column {
                         width: parent.width
                         spacing: 4
-                        visible: DMSNetworkService.profiles.length > 0
+                        visible: NetworkService.profiles.length > 0
 
                         Repeater {
-                            model: DMSNetworkService.profiles
+                            model: NetworkService.profiles
 
                             delegate: Rectangle {
                                 id: vpnProfileRow
                                 required property var modelData
                                 required property int index
 
-                                readonly property bool isActive: DMSNetworkService.isActiveUuid(modelData.uuid)
+                                readonly property bool isActive: NetworkService.isActiveUuid(modelData.uuid)
                                 readonly property bool isExpanded: networkTab.expandedVpnUuid === modelData.uuid
                                 readonly property var configData: isExpanded ? VPNService.editConfig : null
 
@@ -1706,7 +1706,7 @@ Item {
                                 color: vpnRowArea.containsMouse ? Theme.primaryHoverLight : (isActive ? Theme.primaryPressed : Theme.surfaceLight)
                                 border.width: isActive ? 2 : 0
                                 border.color: Theme.primary
-                                opacity: DMSNetworkService.isBusy ? 0.6 : 1.0
+                                opacity: NetworkService.isBusy ? 0.6 : 1.0
                                 clip: true
 
                                 Behavior on height {
@@ -1720,9 +1720,9 @@ Item {
                                     id: vpnRowArea
                                     anchors.fill: parent
                                     hoverEnabled: true
-                                    cursorShape: DMSNetworkService.isBusy ? Qt.BusyCursor : Qt.PointingHandCursor
-                                    enabled: !DMSNetworkService.isBusy
-                                    onClicked: DMSNetworkService.toggle(modelData.uuid)
+                                    cursorShape: NetworkService.isBusy ? Qt.BusyCursor : Qt.PointingHandCursor
+                                    enabled: !NetworkService.isBusy
+                                    onClicked: NetworkService.toggle(modelData.uuid)
                                 }
 
                                 Column {

@@ -15,15 +15,15 @@ BasePill {
     property bool minimumWidth: (widgetData && widgetData.minimumWidth !== undefined) ? widgetData.minimumWidth : true
     property bool showSwap: (widgetData && widgetData.showSwap !== undefined) ? widgetData.showSwap : false
     property bool showInGb: (widgetData && widgetData.showInGb !== undefined) ? widgetData.showInGb : false
-    readonly property real swapUsage: DgopService.totalSwapKB > 0 ? (DgopService.usedSwapKB / DgopService.totalSwapKB) * 100 : 0
+    readonly property real swapUsage: SysMonitorService.totalSwapKB > 0 ? (SysMonitorService.usedSwapKB / SysMonitorService.totalSwapKB) * 100 : 0
 
     signal ramClicked
 
     Component.onCompleted: {
-        DgopService.addRef(["memory"]);
+        SysMonitorService.addRef(["memory"]);
     }
     Component.onDestruction: {
-        DgopService.removeRef(["memory"]);
+        SysMonitorService.removeRef(["memory"]);
     }
 
     content: Component {
@@ -41,11 +41,11 @@ BasePill {
                     name: "developer_board"
                     size: Theme.barIconSize(root.barThickness, undefined, root.barConfig?.maximizeWidgetIcons, root.barConfig?.iconScale)
                     color: {
-                        if (DgopService.memoryUsage > 90) {
+                        if (SysMonitorService.memoryUsage > 90) {
                             return Theme.tempDanger;
                         }
 
-                        if (DgopService.memoryUsage > 75) {
+                        if (SysMonitorService.memoryUsage > 75) {
                             return Theme.tempWarning;
                         }
 
@@ -56,15 +56,15 @@ BasePill {
 
                 StyledText {
                     text: {
-                        if (DgopService.memoryUsage === undefined || DgopService.memoryUsage === null || DgopService.memoryUsage === 0) {
+                        if (SysMonitorService.memoryUsage === undefined || SysMonitorService.memoryUsage === null || SysMonitorService.memoryUsage === 0) {
                             return "--";
                         }
 
                         if (root.showInGb) {
-                            return (DgopService.usedMemoryMB / 1024).toFixed(1);
+                            return (SysMonitorService.usedMemoryMB / 1024).toFixed(1);
                         }
 
-                        return DgopService.memoryUsage.toFixed(0);
+                        return SysMonitorService.memoryUsage.toFixed(0);
                     }
                     font.pixelSize: Theme.barTextSize(root.barThickness, root.barConfig?.fontScale, root.barConfig?.maximizeWidgetText)
                     color: Theme.widgetTextColor
@@ -72,7 +72,7 @@ BasePill {
                 }
 
                 StyledText {
-                    visible: root.showSwap && DgopService.totalSwapKB > 0
+                    visible: root.showSwap && SysMonitorService.totalSwapKB > 0
                     text: root.swapUsage.toFixed(0)
                     font.pixelSize: Theme.barTextSize(root.barThickness, root.barConfig?.fontScale, root.barConfig?.maximizeWidgetText)
                     color: Theme.surfaceVariantText
@@ -91,11 +91,11 @@ BasePill {
                     name: "developer_board"
                     size: Theme.barIconSize(root.barThickness, undefined, root.barConfig?.maximizeWidgetIcons, root.barConfig?.iconScale)
                     color: {
-                        if (DgopService.memoryUsage > 90) {
+                        if (SysMonitorService.memoryUsage > 90) {
                             return Theme.tempDanger;
                         }
 
-                        if (DgopService.memoryUsage > 75) {
+                        if (SysMonitorService.memoryUsage > 75) {
                             return Theme.tempWarning;
                         }
 
@@ -132,18 +132,18 @@ BasePill {
                     StyledText {
                         id: ramText
                         text: {
-                            if (DgopService.memoryUsage === undefined || DgopService.memoryUsage === null || DgopService.memoryUsage === 0) {
+                            if (SysMonitorService.memoryUsage === undefined || SysMonitorService.memoryUsage === null || SysMonitorService.memoryUsage === 0) {
                                 return root.showInGb ? "-- GB" : "--%";
                             }
 
                             let ramText = "";
                             if (root.showInGb) {
-                                ramText = (DgopService.usedMemoryMB / 1024).toFixed(1) + " GB";
+                                ramText = (SysMonitorService.usedMemoryMB / 1024).toFixed(1) + " GB";
                             } else {
-                                ramText = DgopService.memoryUsage.toFixed(0) + "%";
+                                ramText = SysMonitorService.memoryUsage.toFixed(0) + "%";
                             }
 
-                            if (root.showSwap && DgopService.totalSwapKB > 0) {
+                            if (root.showSwap && SysMonitorService.totalSwapKB > 0) {
                                 return ramText + " · " + root.swapUsage.toFixed(0) + "%";
                             }
                             return ramText;
@@ -168,7 +168,7 @@ BasePill {
         acceptedButtons: Qt.LeftButton
         onPressed: mouse => {
             root.triggerRipple(this, mouse.x, mouse.y);
-            DgopService.setSortBy("memory");
+            SysMonitorService.setSortBy("memory");
             ramClicked();
         }
     }

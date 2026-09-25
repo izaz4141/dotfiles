@@ -42,6 +42,7 @@ Singleton {
     property var processListModal: null
     property var processListModalLoader: null
     property var colorPickerModal: null
+    property var screenshotControls: null
     property var notificationModal: null
     property var wifiPasswordModal: null
     property var wifiPasswordModalLoader: null
@@ -54,8 +55,11 @@ Singleton {
     property var windowRuleModalLoader: null
     property var powerProfileModal: null
     property var powerProfileModalLoader: null
+    property var clockModal: null
+    property var clockModalLoader: null
 
     property var notepadSlideouts: []
+    property var toolboxSlideouts: []
 
     property string pendingThemeInstall: ""
     property string pendingPluginInstall: ""
@@ -100,8 +104,11 @@ Singleton {
         const loader = root[loaderName];
         if (!loader)
             return;
-        if (_popoutStillPresented(root[popoutName]))
+        const popout = root[popoutName];
+        if (_popoutStillPresented(popout))
             return;
+        if (popout)
+            PopoutManager.hidePopout(popout);
         root[popoutName] = null;
         loader.active = false;
     }
@@ -808,6 +815,28 @@ Singleton {
         powerProfileModal?.close();
     }
 
+    function openClock() {
+        if (clockModal) {
+            clockModal.show();
+        } else if (clockModalLoader) {
+            clockModalLoader.active = true;
+            Qt.callLater(() => clockModal?.show());
+        }
+    }
+
+    function closeClock() {
+        clockModal?.hide();
+    }
+
+    function toggleClock() {
+        if (clockModal) {
+            clockModal.toggle();
+        } else if (clockModalLoader) {
+            clockModalLoader.active = true;
+            Qt.callLater(() => clockModal?.toggle());
+        }
+    }
+
     function togglePowerProfileModal() {
         if (powerProfileModal) {
             if (powerProfileModal.shouldBeVisible) {
@@ -1043,5 +1072,40 @@ Singleton {
         } else {
             openNotepadPopout();
         }
+    }
+
+    function closeToolboxSlideouts() {
+        for (var i = 0; i < toolboxSlideouts.length; i++) {
+            if (toolboxSlideouts[i] && toolboxSlideouts[i].isVisible)
+                toolboxSlideouts[i].hide();
+        }
+    }
+
+    function toolboxSlideoutForFocusedScreen() {
+        if (!toolboxSlideouts || toolboxSlideouts.length === 0)
+            return null;
+        const focused = BarWidgetService.getFocusedScreenName();
+        if (focused) {
+            for (var i = 0; i < toolboxSlideouts.length; i++) {
+                if (toolboxSlideouts[i]?.modelData?.name === focused)
+                    return toolboxSlideouts[i];
+            }
+        }
+        return toolboxSlideouts[0];
+    }
+
+    function openToolbox() {
+        if (toolboxSlideouts.length > 0)
+            toolboxSlideoutForFocusedScreen()?.show();
+    }
+
+    function closeToolbox() {
+        if (toolboxSlideouts.length > 0)
+            toolboxSlideoutForFocusedScreen()?.hide();
+    }
+
+    function toggleToolbox() {
+        if (toolboxSlideouts.length > 0)
+            toolboxSlideoutForFocusedScreen()?.toggle();
     }
 }

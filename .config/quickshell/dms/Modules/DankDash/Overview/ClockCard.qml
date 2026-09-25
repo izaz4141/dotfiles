@@ -2,10 +2,21 @@ import QtQuick
 import QtQuick.Effects
 import Quickshell
 import qs.Common
+import qs.Services
 import qs.Widgets
 
 Card {
     id: root
+
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+            PopoutService.toggleClock();
+            PopoutService.closeDankDash();
+        }
+    }
 
     Column {
         anchors.centerIn: parent

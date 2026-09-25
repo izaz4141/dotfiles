@@ -15,7 +15,7 @@ Rectangle {
     signal toggleExpand
     signal deleteRequested
 
-    readonly property bool isActive: DMSNetworkService.activeUuids?.includes(profile?.uuid) ?? false
+    readonly property bool isActive: NetworkService.activeUuids?.includes(profile?.uuid) ?? false
     readonly property bool isHovered: rowArea.containsMouse || expandBtn.containsMouse || deleteBtn.containsMouse
     readonly property var configData: isExpanded ? VPNService.editConfig : null
     readonly property var configFields: buildConfigFields()
@@ -25,7 +25,7 @@ Rectangle {
     color: isHovered ? Theme.primaryHoverLight : (isActive ? Theme.primaryPressed : Theme.surfaceLight)
     border.width: isActive ? 2 : 1
     border.color: isActive ? Theme.primary : Theme.outlineLight
-    opacity: DMSNetworkService.isBusy ? 0.5 : 1.0
+    opacity: NetworkService.isBusy ? 0.5 : 1.0
     clip: true
 
     function buildConfigFields() {
@@ -94,9 +94,9 @@ Rectangle {
         id: rowArea
         anchors.fill: parent
         hoverEnabled: true
-        cursorShape: DMSNetworkService.isBusy ? Qt.BusyCursor : Qt.PointingHandCursor
-        enabled: !DMSNetworkService.isBusy
-        onClicked: DMSNetworkService.toggle(profile.uuid)
+        cursorShape: NetworkService.isBusy ? Qt.BusyCursor : Qt.PointingHandCursor
+        enabled: !NetworkService.isBusy
+        onClicked: NetworkService.toggle(profile.uuid)
     }
 
     Column {

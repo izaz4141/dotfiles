@@ -71,9 +71,9 @@ sudo chgrp -R greeter ~/.cache/DankMaterialShell
 sudo chmod -R g+rX ~/.config/DankMaterialShell ~/.cache/DankMaterialShell ~/.cache/quickshell
 
 # Create symlinks
-sudo ln -sf ~/.config/DankMaterialShell/settings.json /var/cache/dms-greeter/settings.json
-sudo ln -sf ~/.local/state/DankMaterialShell/session.json /var/cache/dms-greeter/session.json
-sudo ln -sf ~/.cache/DankMaterialShell/dms-colors.json /var/cache/dms-greeter/colors.json
+sudo ln -sfn ~/.config/DankMaterialShell/settings.json /var/cache/dms-greeter/settings.json
+sudo ln -sfn ~/.local/state/DankMaterialShell/session.json /var/cache/dms-greeter/session.json
+sudo ln -sfn ~/.cache/DankMaterialShell/dms-colors.json /var/cache/dms-greeter/colors.json
 
 # Logout and login for group membership to take effect
 ```
@@ -260,9 +260,9 @@ sudo chgrp -R greeter ~/.config/DankMaterialShell ~/.local/state/DankMaterialShe
 sudo chmod -R g+rX ~/.config/DankMaterialShell ~/.local/state/DankMaterialShell ~/.cache/quickshell
 
 # Create symlinks for theme files
-sudo ln -sf ~/.config/DankMaterialShell/settings.json /var/cache/dms-greeter/settings.json
-sudo ln -sf ~/.local/state/DankMaterialShell/session.json /var/cache/dms-greeter/session.json
-sudo ln -sf ~/.cache/DankMaterialShell/dms-colors.json /var/cache/dms-greeter/colors.json
+sudo ln -sfn ~/.config/DankMaterialShell/settings.json /var/cache/dms-greeter/settings.json
+sudo ln -sfn ~/.local/state/DankMaterialShell/session.json /var/cache/dms-greeter/session.json
+sudo ln -sfn ~/.cache/DankMaterialShell/dms-colors.json /var/cache/dms-greeter/colors.json
 
 # Logout and login for group membership to take effect
 ```

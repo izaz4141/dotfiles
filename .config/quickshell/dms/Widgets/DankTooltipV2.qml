@@ -6,6 +6,8 @@ Item {
     id: root
 
     property string text: ""
+    property bool multiLine: false
+    property real maxWidth: 500
 
     function show(text, item, offsetX, offsetY, preferredSide) {
         if (!item)
@@ -120,13 +122,13 @@ Item {
         contentItem: Text {
             id: textContent
 
-            width: Math.min(implicitWidth, 500)
+            width: Math.min(implicitWidth, root.maxWidth)
             text: tooltip.text
             font.pixelSize: Theme.fontSizeSmall
             color: Theme.surfaceText
-            wrapMode: Text.NoWrap
-            maximumLineCount: 1
-            elide: Text.ElideRight
+            wrapMode: root.multiLine ? Text.WrapAtWordBoundaryOrAnywhere : Text.NoWrap
+            maximumLineCount: root.multiLine ? 0 : 1
+            elide: root.multiLine ? Text.ElideNone : Text.ElideRight
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }

@@ -50,9 +50,9 @@ Rectangle {
 
             StyledText {
                 text: {
-                    if (!DMSNetworkService.connected)
+                    if (!NetworkService.connected)
                         return I18n.tr("Active: None");
-                    const names = DMSNetworkService.activeNames || [];
+                    const names = NetworkService.activeNames || [];
                     if (names.length <= 1)
                         return I18n.tr("Active: %1").arg(names[0] || "VPN");
                     return I18n.tr("Active: %1 +%2").arg(names[0]).arg(names.length - 1);
@@ -105,10 +105,10 @@ Rectangle {
                 height: 28
                 radius: 14
                 color: discAllArea.containsMouse ? Theme.errorHover : Theme.surfaceLight
-                visible: DMSNetworkService.connected
+                visible: NetworkService.connected
                 width: 100
                 Layout.alignment: Qt.AlignVCenter
-                opacity: DMSNetworkService.isBusy ? 0.5 : 1.0
+                opacity: NetworkService.isBusy ? 0.5 : 1.0
 
                 Row {
                     anchors.centerIn: parent
@@ -132,9 +132,9 @@ Rectangle {
                     id: discAllArea
                     anchors.fill: parent
                     hoverEnabled: true
-                    cursorShape: DMSNetworkService.isBusy ? Qt.BusyCursor : Qt.PointingHandCursor
-                    enabled: !DMSNetworkService.isBusy
-                    onClicked: DMSNetworkService.disconnectAllActive()
+                    cursorShape: NetworkService.isBusy ? Qt.BusyCursor : Qt.PointingHandCursor
+                    enabled: !NetworkService.isBusy
+                    onClicked: NetworkService.disconnectAllActive()
                 }
             }
 
@@ -164,7 +164,7 @@ Rectangle {
             Column {
                 anchors.centerIn: parent
                 spacing: Theme.spacingS
-                visible: DMSNetworkService.profiles.length === 0
+                visible: NetworkService.profiles.length === 0
 
                 DankIcon {
                     name: "vpn_key_off"
@@ -191,13 +191,13 @@ Rectangle {
             DankListView {
                 id: vpnListView
                 anchors.fill: parent
-                visible: DMSNetworkService.profiles.length > 0
+                visible: NetworkService.profiles.length > 0
                 spacing: 4
                 cacheBuffer: 200
                 clip: true
 
                 model: ScriptModel {
-                    values: DMSNetworkService.profiles
+                    values: NetworkService.profiles
                     objectProp: "uuid"
                 }
 

@@ -1,8 +1,8 @@
 [config]
 
 [templates.hyprland]
-input_path = '~/.config/matugen/templates/hyprland-colors.conf'
-output_path = '~/.config/hypr/colors.conf'
+input_path = '~/.config/matugen/templates/colors.lua'
+output_path = '~/.config/hypr/scheme/current.lua'
 post_hook = 'hyprctl reload'
 
 [templates.waybar]
@@ -43,7 +43,8 @@ output_path = '~/.config/nwg-dock-hyprland/colors.css'
 
 [templates.sequences]
 input_path = '~/.config/matugen/templates/sequences'
-output_path = '~/.cache/wal/sequences'
+output_path = '~/.cache/matugen/sequences'
+post_hook = 'sh -c ~/.config/matugen/post-hook-scripts/terminal-colors-reload.sh'
 
 [templates.dank]
 input_path = '~/.config/matugen/templates/dank.json'

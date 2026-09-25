@@ -47,6 +47,7 @@ Item {
     property int popupWidth: 0
     property bool alignPopupRight: false
     property int dropdownWidth: 200
+    property int buttonHeight: 40
     property bool compactMode: text === "" && description === ""
     property bool addHorizontalPadding: false
     property string emptyText: ""
@@ -59,7 +60,7 @@ Item {
     }
 
     width: compactMode ? dropdownWidth : parent.width
-    implicitHeight: compactMode ? 40 : Math.max(60, labelColumn.implicitHeight + Theme.spacingM)
+    implicitHeight: compactMode ? root.buttonHeight : Math.max(60, labelColumn.implicitHeight + Theme.spacingM)
 
     Component.onDestruction: {
         if (dropdownMenu.visible)
@@ -101,7 +102,7 @@ Item {
         id: dropdown
 
         width: root.compactMode ? parent.width : (root.popupWidth === -1 ? undefined : (root.popupWidth > 0 ? root.popupWidth : root.dropdownWidth))
-        height: 40
+        height: root.buttonHeight
         anchors.right: parent.right
         anchors.rightMargin: root.addHorizontalPadding && !root.compactMode ? Theme.spacingM : 0
         anchors.verticalCenter: parent.verticalCenter

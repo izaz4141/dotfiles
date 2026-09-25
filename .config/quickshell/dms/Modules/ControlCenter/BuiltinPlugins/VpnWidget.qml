@@ -8,22 +8,22 @@ PluginComponent {
     id: root
 
     Ref {
-        service: DMSNetworkService
+        service: NetworkService
     }
 
-    ccWidgetIcon: DMSNetworkService.isBusy ? "sync" : (DMSNetworkService.connected ? "vpn_lock" : "vpn_key_off")
+    ccWidgetIcon: NetworkService.isBusy ? "sync" : (NetworkService.connected ? "vpn_lock" : "vpn_key_off")
     ccWidgetPrimaryText: I18n.tr("VPN")
     ccWidgetSecondaryText: {
-        if (!DMSNetworkService.connected)
+        if (!NetworkService.connected)
             return I18n.tr("Disconnected");
-        const names = DMSNetworkService.activeNames || [];
+        const names = NetworkService.activeNames || [];
         if (names.length <= 1)
             return names[0] || I18n.tr("Connected");
         return names[0] + " +" + (names.length - 1);
     }
-    ccWidgetIsActive: DMSNetworkService.connected
+    ccWidgetIsActive: NetworkService.connected
 
-    onCcWidgetToggled: DMSNetworkService.toggleVpn()
+    onCcWidgetToggled: NetworkService.toggleVpn()
 
     ccDetailContent: Component {
         VpnDetailContent {

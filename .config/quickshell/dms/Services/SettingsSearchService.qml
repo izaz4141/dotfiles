@@ -26,7 +26,6 @@ Singleton {
             "soundsAvailable": () => AudioService.soundsAvailable,
             "cupsAvailable": () => CupsService.cupsAvailable,
             "networkNotLegacy": () => !NetworkService.usingLegacy,
-            "dmsConnected": () => DMSService.isConnected && DMSService.apiVersion >= 23,
             "matugenAvailable": () => Theme.matugenAvailable
         })
 

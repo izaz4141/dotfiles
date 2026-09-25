@@ -96,7 +96,6 @@ CATEGORY_KEYWORDS = {
 TAB_INDEX_MAP = {
     "WallpaperTab.qml": 0,
     "TimeWeatherTab.qml": 1,
-    "KeybindsTab.qml": 2,
     "DankBarTab.qml": 3,
     "WorkspacesTab.qml": 4,
     "DockTab.qml": 5,
@@ -404,6 +403,7 @@ def parse_tabs_from_sidebar(sidebar_file):
             ("hyprlandNiriOnly", "isHyprlandOrNiri"),
             ("clipboardOnly", "dmsConnected"),
             ("niriOnly", "isNiri"),
+            ("hyprlandOnly", "isHyprland"),
         ]:
             if f'"{qml_cond}": true' in snippet:
                 cond = key

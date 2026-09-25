@@ -21,7 +21,7 @@ FloatingWindow {
     signal closingModal
 
     function show() {
-        if (!DgopService.dgopAvailable) {
+        if (!SysMonitorService.monitorAvailable) {
             console.warn("ProcessListModal: dgop is not available");
             return;
         }
@@ -35,7 +35,7 @@ FloatingWindow {
     }
 
     function toggle() {
-        if (!DgopService.dgopAvailable) {
+        if (!SysMonitorService.monitorAvailable) {
             console.warn("ProcessListModal: dgop is not available");
             return;
         }
@@ -43,7 +43,7 @@ FloatingWindow {
     }
 
     function focusOrToggle() {
-        if (!DgopService.dgopAvailable) {
+        if (!SysMonitorService.monitorAvailable) {
             console.warn("ProcessListModal: dgop is not available");
             return;
         }
@@ -103,9 +103,9 @@ FloatingWindow {
             processFilterGroup.currentIndex = 0;
             if (processesTabLoader.item)
                 processesTabLoader.item.reset();
-            DgopService.removeRef(["cpu", "memory", "network", "disk", "system"]);
+            SysMonitorService.removeRef(["cpu", "memory", "network", "disk", "system"]);
         } else {
-            DgopService.addRef(["cpu", "memory", "network", "disk", "system"]);
+            SysMonitorService.addRef(["cpu", "memory", "network", "disk", "system"]);
             Qt.callLater(() => {
                 if (currentTab === 0 && searchField.visible)
                     searchField.forceActiveFocus();
@@ -197,7 +197,7 @@ FloatingWindow {
             color: Qt.rgba(Theme.error.r, Theme.error.g, Theme.error.b, 0.1)
             border.color: Theme.error
             border.width: 2
-            visible: !DgopService.dgopAvailable
+            visible: !SysMonitorService.monitorAvailable
 
             Column {
                 anchors.centerIn: parent
@@ -232,7 +232,7 @@ FloatingWindow {
         ColumnLayout {
             anchors.fill: parent
             spacing: 0
-            visible: DgopService.dgopAvailable
+            visible: SysMonitorService.monitorAvailable
 
             Item {
                 Layout.fillWidth: true
@@ -494,7 +494,7 @@ FloatingWindow {
                         }
 
                         StyledText {
-                            text: DgopService.processCount.toString()
+                            text: SysMonitorService.processCount.toString()
                             font.pixelSize: Theme.fontSizeSmall
                             font.weight: Font.Bold
                             color: Theme.surfaceText
@@ -511,7 +511,7 @@ FloatingWindow {
                         }
 
                         StyledText {
-                            text: DgopService.shortUptime || "--"
+                            text: SysMonitorService.shortUptime || "--"
                             font.pixelSize: Theme.fontSizeSmall
                             font.weight: Font.Bold
                             color: Theme.surfaceText
@@ -535,7 +535,7 @@ FloatingWindow {
                         }
 
                         StyledText {
-                            text: "↓" + formatBytes(DgopService.networkRxRate) + " ↑" + formatBytes(DgopService.networkTxRate)
+                            text: "↓" + formatBytes(SysMonitorService.networkRxRate) + " ↑" + formatBytes(SysMonitorService.networkTxRate)
                             font.pixelSize: Theme.fontSizeSmall
                             font.family: SettingsData.monoFontFamily
                             color: Theme.surfaceText
@@ -553,7 +553,7 @@ FloatingWindow {
                         }
 
                         StyledText {
-                            text: "↓" + formatBytes(DgopService.diskReadRate) + " ↑" + formatBytes(DgopService.diskWriteRate)
+                            text: "↓" + formatBytes(SysMonitorService.diskReadRate) + " ↑" + formatBytes(SysMonitorService.diskWriteRate)
                             font.pixelSize: Theme.fontSizeSmall
                             font.family: SettingsData.monoFontFamily
                             color: Theme.surfaceText
@@ -571,11 +571,11 @@ FloatingWindow {
                         }
 
                         StyledText {
-                            text: DgopService.cpuUsage.toFixed(1) + "%"
+                            text: SysMonitorService.cpuUsage.toFixed(1) + "%"
                             font.pixelSize: Theme.fontSizeSmall
                             font.family: SettingsData.monoFontFamily
                             font.weight: Font.Bold
-                            color: DgopService.cpuUsage > 80 ? Theme.error : Theme.surfaceText
+                            color: SysMonitorService.cpuUsage > 80 ? Theme.error : Theme.surfaceText
                         }
                     }
 
@@ -590,11 +590,11 @@ FloatingWindow {
                         }
 
                         StyledText {
-                            text: DgopService.formatSystemMemory(DgopService.usedMemoryKB) + " / " + DgopService.formatSystemMemory(DgopService.totalMemoryKB)
+                            text: SysMonitorService.formatSystemMemory(SysMonitorService.usedMemoryKB) + " / " + SysMonitorService.formatSystemMemory(SysMonitorService.totalMemoryKB)
                             font.pixelSize: Theme.fontSizeSmall
                             font.family: SettingsData.monoFontFamily
                             font.weight: Font.Bold
-                            color: DgopService.memoryUsage > 90 ? Theme.error : Theme.surfaceText
+                            color: SysMonitorService.memoryUsage > 90 ? Theme.error : Theme.surfaceText
                         }
                     }
                 }

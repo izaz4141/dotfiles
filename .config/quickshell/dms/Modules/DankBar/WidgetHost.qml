@@ -31,7 +31,7 @@ Loader {
 
     readonly property bool widgetEnabled: widgetData?.enabled !== false
 
-    active: orientationMatches && getWidgetVisible(widgetId, DgopService.dgopAvailable) && (widgetId !== "music" || MprisController.activePlayer !== null)
+    active: orientationMatches && getWidgetVisible(widgetId, SysMonitorService.monitorAvailable) && (widgetId !== "music" || MprisController.activePlayer !== null)
     sourceComponent: getWidgetComponent(widgetId, components)
 
     signal contentItemReady(var item)
@@ -266,12 +266,12 @@ Loader {
         return pluginMap[pluginId] || null;
     }
 
-    function getWidgetVisible(widgetId, dgopAvailable) {
+    function getWidgetVisible(widgetId, monitorAvailable) {
         const widgetVisibility = {
-            "cpuUsage": dgopAvailable,
-            "memUsage": dgopAvailable,
-            "cpuTemp": dgopAvailable,
-            "gpuTemp": dgopAvailable,
+            "cpuUsage": monitorAvailable,
+            "memUsage": monitorAvailable,
+            "cpuTemp": monitorAvailable,
+            "gpuTemp": monitorAvailable,
             "layout": CompositorService.isDwl && DwlService.dwlAvailable
         };
 

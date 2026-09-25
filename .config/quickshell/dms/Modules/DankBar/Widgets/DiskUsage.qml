@@ -14,25 +14,25 @@ BasePill {
     property bool isAutoHideBar: false
 
     property var selectedMount: {
-        if (!DgopService.diskMounts || DgopService.diskMounts.length === 0) {
+        if (!SysMonitorService.diskMounts || SysMonitorService.diskMounts.length === 0) {
             return null;
         }
 
         const currentMountPath = root.mountPath || "/";
 
-        for (let i = 0; i < DgopService.diskMounts.length; i++) {
-            if (DgopService.diskMounts[i].mount === currentMountPath) {
-                return DgopService.diskMounts[i];
+        for (let i = 0; i < SysMonitorService.diskMounts.length; i++) {
+            if (SysMonitorService.diskMounts[i].mount === currentMountPath) {
+                return SysMonitorService.diskMounts[i];
             }
         }
 
-        for (let i = 0; i < DgopService.diskMounts.length; i++) {
-            if (DgopService.diskMounts[i].mount === "/") {
-                return DgopService.diskMounts[i];
+        for (let i = 0; i < SysMonitorService.diskMounts.length; i++) {
+            if (SysMonitorService.diskMounts[i].mount === "/") {
+                return SysMonitorService.diskMounts[i];
             }
         }
 
-        return DgopService.diskMounts[0] || null;
+        return SysMonitorService.diskMounts[0] || null;
     }
 
     property real diskUsagePercent: {
@@ -44,10 +44,10 @@ BasePill {
     }
 
     Component.onCompleted: {
-        DgopService.addRef(["diskmounts"]);
+        SysMonitorService.addRef(["diskmounts"]);
     }
     Component.onDestruction: {
-        DgopService.removeRef(["diskmounts"]);
+        SysMonitorService.removeRef(["diskmounts"]);
     }
 
     readonly property real minTooltipY: {
@@ -75,25 +75,25 @@ BasePill {
             });
 
             root.selectedMount = Qt.binding(() => {
-                if (!DgopService.diskMounts || DgopService.diskMounts.length === 0) {
+                if (!SysMonitorService.diskMounts || SysMonitorService.diskMounts.length === 0) {
                     return null;
                 }
 
                 const currentMountPath = root.mountPath || "/";
 
-                for (let i = 0; i < DgopService.diskMounts.length; i++) {
-                    if (DgopService.diskMounts[i].mount === currentMountPath) {
-                        return DgopService.diskMounts[i];
+                for (let i = 0; i < SysMonitorService.diskMounts.length; i++) {
+                    if (SysMonitorService.diskMounts[i].mount === currentMountPath) {
+                        return SysMonitorService.diskMounts[i];
                     }
                 }
 
-                for (let i = 0; i < DgopService.diskMounts.length; i++) {
-                    if (DgopService.diskMounts[i].mount === "/") {
-                        return DgopService.diskMounts[i];
+                for (let i = 0; i < SysMonitorService.diskMounts.length; i++) {
+                    if (SysMonitorService.diskMounts[i].mount === "/") {
+                        return SysMonitorService.diskMounts[i];
                     }
                 }
 
-                return DgopService.diskMounts[0] || null;
+                return SysMonitorService.diskMounts[0] || null;
             });
         }
 

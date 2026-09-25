@@ -12,7 +12,7 @@ eval "$(zoxide init bash)"
 # -----------------------------------------------------
 # Pywal
 # -----------------------------------------------------
-cat $HOME/.cache/wallust/sequences
+tr -d '\n' < $HOME/.cache/matugen/sequences
 
 
 # >>> conda initialize >>>

@@ -685,7 +685,7 @@ Item {
                             DankIcon {
                                 name: "check"
                                 size: Theme.iconSize - 4
-                                color: Theme.onPrimary
+                                color: Theme.primaryText
                                 anchors.verticalCenter: parent.verticalCenter
                             }
 
@@ -693,7 +693,7 @@ Item {
                                 text: I18n.tr("Save")
                                 font.pixelSize: Theme.fontSizeMedium
                                 font.weight: Font.Medium
-                                color: Theme.onPrimary
+                                color: Theme.primaryText
                                 anchors.verticalCenter: parent.verticalCenter
                             }
                         }

@@ -224,7 +224,7 @@ PluginSettings {
                                 anchors.centerIn: parent
                                 name: "delete"
                                 size: 16
-                                color: deleteArea.containsMouse ? Theme.onError : Theme.surfaceVariantText
+                                color: deleteArea.containsMouse ? Theme.surfaceText : Theme.surfaceVariantText
                             }
 
                             MouseArea {

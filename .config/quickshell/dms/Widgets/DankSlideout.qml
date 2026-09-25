@@ -14,6 +14,9 @@ PanelWindow {
     property string layerNamespace: "dms:slideout"
     WlrLayershell.namespace: layerNamespace
 
+    property string side: "right"
+    readonly property bool fromLeft: root.side === "left"
+
     property bool isVisible: false
     property var targetScreen: null
     property var modelData: null
@@ -48,7 +51,8 @@ PanelWindow {
 
     anchors.top: true
     anchors.bottom: true
-    anchors.right: true
+    anchors.left: root.fromLeft
+    anchors.right: !root.fromLeft
 
     implicitWidth: expandable ? expandedWidthValue : slideoutWidth
     implicitHeight: modelData ? modelData.height : 800
@@ -65,7 +69,7 @@ PanelWindow {
 
     mask: Region {
         item: Rectangle {
-            x: root.width - alignedWidth
+            x: root.fromLeft ? 0 : root.width - alignedWidth
             y: 0
             width: alignedWidth
             height: root.height
@@ -76,16 +80,16 @@ PanelWindow {
         id: slideContainer
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.right: parent.right
+        x: root.fromLeft ? 0 : root.width - width
         width: alignedWidth
         height: alignedHeight
 
-        property real slideOffset: alignedWidth
+        property real slideOffset: root.fromLeft ? -alignedWidth : alignedWidth
 
         Connections {
             target: root
             function onIsVisibleChanged() {
-                slideContainer.slideOffset = root.isVisible ? 0 : slideContainer.width
+                slideContainer.slideOffset = root.isVisible ? 0 : (root.fromLeft ? -slideContainer.width : slideContainer.width)
             }
         }
 

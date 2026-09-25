@@ -896,6 +896,8 @@ Singleton {
             };
             root.lastFetchTime = 0;
             root.forceRefresh();
+            if (SettingsData.useAutoLocation)
+                LocationService.getState();
         });
 
         SettingsData.weatherEnabledChanged.connect(() => {

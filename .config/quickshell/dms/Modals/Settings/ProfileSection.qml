@@ -132,7 +132,7 @@ Rectangle {
             }
 
             StyledText {
-                text: DgopService.hostname || "DMS"
+                text: SysMonitorService.hostname || "DMS"
                 font.pixelSize: Theme.fontSizeMedium
                 color: Theme.surfaceVariantText
                 elide: Text.ElideRight

@@ -30,6 +30,7 @@ Singleton {
 
     property bool loginctlAvailable: false
     property bool wtypeAvailable: false
+    property bool dbusMonitorAvailable: false
     property string sessionId: ""
     property string sessionPath: ""
     property bool locked: false
@@ -48,8 +49,9 @@ Singleton {
     signal loginctlStateChanged
 
     property bool stateInitialized: false
-
-    readonly property string socketPath: Quickshell.env("DMS_SOCKET")
+    property bool _lockMonitorStarted: false
+    property bool _sleepMonitorStarted: false
+    property bool _sleepArgPending: false
 
     Timer {
         id: sessionInitTimer
@@ -61,15 +63,12 @@ Singleton {
             detectHibernateProcess.running = true;
             detectPrimeRunProcess.running = true;
             detectWtypeProcess.running = true;
+            detectLoginctlProcess.running = true;
+            detectDbusMonitorProcess.running = true;
             console.info("SessionService: Native inhibitor available:", nativeInhibitorAvailable);
             if (!SettingsData.loginctlLockIntegration) {
                 console.log("SessionService: loginctl lock integration disabled by user");
                 return;
-            }
-            if (socketPath && socketPath.length > 0) {
-                checkDMSCapabilities();
-            } else {
-                console.log("SessionService: DMS_SOCKET not set");
             }
         }
     }
@@ -157,6 +156,36 @@ Singleton {
         onExited: function (exitCode) {
             if (exitCode === 0) {
                 nvidiaCommand = "nvidia-offload";
+            }
+        }
+    }
+
+    Process {
+        id: detectLoginctlProcess
+        running: false
+        command: ["which", "loginctl"]
+
+        onExited: function (exitCode) {
+            loginctlAvailable = (exitCode === 0);
+            if (loginctlAvailable && dbusMonitorAvailable && SettingsData.loginctlLockIntegration && !stateInitialized) {
+                stateInitialized = true;
+                startLoginctlMonitors();
+                refreshSessionState();
+            }
+        }
+    }
+
+    Process {
+        id: detectDbusMonitorProcess
+        running: false
+        command: ["which", "dbus-monitor"]
+
+        onExited: function (exitCode) {
+            dbusMonitorAvailable = (exitCode === 0);
+            if (loginctlAvailable && dbusMonitorAvailable && SettingsData.loginctlLockIntegration && !stateInitialized) {
+                stateInitialized = true;
+                startLoginctlMonitors();
+                refreshSessionState();
             }
         }
     }
@@ -321,7 +350,7 @@ Singleton {
                 return;
             }
 
-            Hyprland.dispatch("exit");
+            HyprlandService.exit();
         } else {
             Quickshell.execDetached(["sh", "-c", SettingsData.customPowerActionLogout]);
         }
@@ -446,26 +475,69 @@ Singleton {
         }
     }
 
-    Connections {
-        target: DMSService
+    Process {
+        id: lockStateMonitor
+        running: false
+        command: [
+            "dbus-monitor", "--system",
+            "type='signal',interface='org.freedesktop.login1.Session',member='Lock'",
+            "type='signal',interface='org.freedesktop.login1.Session',member='Unlock'"
+        ]
 
-        function onConnectionStateChanged() {
-            if (DMSService.isConnected) {
-                checkDMSCapabilities();
-            }
+        stdout: SplitParser {
+            splitMarker: "\n"
+            onRead: line => root._processLockStateLine(line)
         }
 
-        function onCapabilitiesReceived() {
-            syncSleepInhibitor();
+        onExited: () => {
+            Qt.callLater(() => {
+                if (!SettingsData.loginctlLockIntegration || !loginctlAvailable || !_lockMonitorStarted)
+                    return;
+                console.warn("SessionService: Lock state monitor exited unexpectedly - restarting");
+                startLoginctlMonitors();
+            });
         }
     }
 
-    Connections {
-        target: DMSService
-        enabled: DMSService.isConnected
+    Process {
+        id: prepareForSleepMonitor
+        running: false
+        command: [
+            "dbus-monitor", "--system",
+            "type='signal',interface='org.freedesktop.login1.Manager',member='PrepareForSleep'"
+        ]
 
-        function onCapabilitiesChanged() {
-            checkDMSCapabilities();
+        stdout: SplitParser {
+            splitMarker: "\n"
+            onRead: line => root._processSleepStateLine(line)
+        }
+
+        onExited: () => {
+            Qt.callLater(() => {
+                if (!SettingsData.loginctlLockIntegration || !loginctlAvailable || !_sleepMonitorStarted)
+                    return;
+                console.warn("SessionService: Sleep state monitor exited unexpectedly - restarting");
+                startLoginctlMonitors();
+            });
+        }
+    }
+
+    Process {
+        id: sessionRefreshProcess
+        running: false
+        command: ["sh", "-c", 'SID="${XDG_SESSION_ID:-}"; if [ -z "$SID" ]; then SID=$(loginctl list-sessions --no-legend --no-ask-password 2>/dev/null | tr -s " " | while read s u name seat rest; do [ "$u" = "$(id -u)" ] && [ "$seat" != "-" ] && [ -n "$seat" ] && { echo "$s"; break; }; done); fi; [ -z "$SID" ] && exit 0; exec loginctl show-session "$SID" -p Id -p Active -p IdleHint -p Type -p Display -p Seat -p Name']
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const props = {};
+                for (const line of text.split("\n")) {
+                    const eq = line.indexOf("=");
+                    if (eq > 0) {
+                        props[line.substring(0, eq)] = line.substring(eq + 1).trim();
+                    }
+                }
+                root.applySessionProperties(props);
+            }
         }
     }
 
@@ -474,140 +546,133 @@ Singleton {
 
         function onLoginctlLockIntegrationChanged() {
             if (SettingsData.loginctlLockIntegration) {
-                if (socketPath && socketPath.length > 0 && loginctlAvailable) {
-                    if (!stateInitialized) {
-                        stateInitialized = true;
-                        getLoginctlState();
-                        syncLockBeforeSuspend();
-                    }
+                if (loginctlAvailable && !stateInitialized) {
+                    stateInitialized = true;
+                    startLoginctlMonitors();
+                    refreshSessionState();
                 }
             } else {
                 stateInitialized = false;
+                stopLoginctlMonitors();
             }
-            syncSleepInhibitor();
-        }
-
-        function onLockBeforeSuspendChanged() {
-            if (SettingsData.loginctlLockIntegration) {
-                syncLockBeforeSuspend();
-            }
-            syncSleepInhibitor();
         }
     }
 
-    Connections {
-        target: DMSService
-        enabled: SettingsData.loginctlLockIntegration
-
-        function onLoginctlStateUpdate(data) {
-            updateLoginctlState(data);
-        }
-
-        function onLoginctlEvent(event) {
-            handleLoginctlEvent(event);
-        }
-    }
-
-    function checkDMSCapabilities() {
-        if (!DMSService.isConnected) {
+    function startLoginctlMonitors() {
+        if (!loginctlAvailable || !dbusMonitorAvailable)
             return;
-        }
 
-        if (DMSService.capabilities.length === 0) {
-            return;
+        if (!_lockMonitorStarted) {
+            _lockMonitorStarted = true;
+            console.info("SessionService: Watching logind Lock/Unlock state");
+            lockStateMonitor.running = true;
         }
-
-        if (DMSService.capabilities.includes("loginctl")) {
-            loginctlAvailable = true;
-            if (SettingsData.loginctlLockIntegration && !stateInitialized) {
-                stateInitialized = true;
-                getLoginctlState();
-                syncLockBeforeSuspend();
-            }
-        } else {
-            loginctlAvailable = false;
-            console.log("SessionService: loginctl capability not available in DMS");
+        if (!_sleepMonitorStarted) {
+            _sleepMonitorStarted = true;
+            console.info("SessionService: Watching logind PrepareForSleep state");
+            prepareForSleepMonitor.running = true;
         }
+        refreshSessionState();
     }
 
-    function getLoginctlState() {
+    function stopLoginctlMonitors() {
+        if (_lockMonitorStarted) {
+            _lockMonitorStarted = false;
+            lockStateMonitor.running = false;
+        }
+        if (_sleepMonitorStarted) {
+            _sleepMonitorStarted = false;
+            prepareForSleepMonitor.running = false;
+        }
+        locked = false;
+        lockedHint = false;
+        preparingForSleep = false;
+    }
+
+    function refreshSessionState() {
         if (!loginctlAvailable)
             return;
-        DMSService.sendRequest("loginctl.getState", null, response => {
-            if (response.result) {
-                updateLoginctlState(response.result);
-            }
-        });
+        sessionRefreshProcess.running = true;
     }
 
-    function syncLockBeforeSuspend() {
-        if (!loginctlAvailable)
-            return;
-        DMSService.sendRequest("loginctl.setLockBeforeSuspend", {
-            enabled: SettingsData.lockBeforeSuspend
-        }, response => {
-            if (response.error) {
-                console.warn("SessionService: Failed to sync lock before suspend:", response.error);
-            } else {
-                console.log("SessionService: Synced lock before suspend:", SettingsData.lockBeforeSuspend);
+    function applySessionProperties(props) {
+        let changed = false;
+
+        if (props.Id !== undefined && props.Id !== sessionId) {
+            sessionId = props.Id;
+            changed = true;
+        }
+        if (props.Name !== undefined && props.Name !== userName) {
+            userName = props.Name;
+            changed = true;
+        }
+        if (props.Seat !== undefined && props.Seat !== seat) {
+            seat = props.Seat;
+            changed = true;
+        }
+        if (props.Display !== undefined && props.Display !== display) {
+            display = props.Display;
+            changed = true;
+        }
+        if (props.Type !== undefined && props.Type !== sessionType) {
+            sessionType = props.Type;
+            changed = true;
+        }
+        if (props.IdleHint !== undefined) {
+            const idleVal = props.IdleHint === "yes";
+            if (idleVal !== idleHint) {
+                idleHint = idleVal;
+                changed = true;
             }
-        });
-    }
-
-    function syncSleepInhibitor() {
-        if (!loginctlAvailable)
-            return;
-        if (!DMSService.apiVersion || DMSService.apiVersion < 4)
-            return;
-        DMSService.sendRequest("loginctl.setSleepInhibitorEnabled", {
-            enabled: SettingsData.loginctlLockIntegration && SettingsData.lockBeforeSuspend
-        }, response => {
-            if (response.error) {
-                console.warn("SessionService: Failed to sync sleep inhibitor:", response.error);
-            } else {
-                console.log("SessionService: Synced sleep inhibitor:", SettingsData.loginctlLockIntegration);
+        }
+        if (props.Active !== undefined) {
+            const activeVal = props.Active === "yes";
+            if (activeVal !== active) {
+                active = activeVal;
+                changed = true;
             }
-        });
-    }
-
-    function updateLoginctlState(state) {
-        const wasLocked = locked;
-        const wasSleeping = preparingForSleep;
-
-        sessionId = state.sessionId || "";
-        sessionPath = state.sessionPath || "";
-        locked = state.locked || false;
-        active = state.active || false;
-        idleHint = state.idleHint || false;
-        lockedHint = state.lockedHint || false;
-        preparingForSleep = state.preparingForSleep || false;
-        sessionType = state.sessionType || "";
-        userName = state.userName || "";
-        seat = state.seat || "";
-        display = state.display || "";
-
-        if (locked && !wasLocked) {
-            sessionLocked();
-        } else if (!locked && wasLocked) {
-            sessionUnlocked();
         }
 
-        if (wasSleeping && !preparingForSleep) {
-            sessionResumed();
-        }
-
-        loginctlStateChanged();
+        if (changed)
+            loginctlStateChanged();
     }
 
-    function handleLoginctlEvent(event) {
-        if (event.event === "Lock") {
+    function _processLockStateLine(line) {
+        if (line.includes("member=Lock")) {
+            const wasLocked = locked;
             locked = true;
             lockedHint = true;
-            sessionLocked();
-        } else if (event.event === "Unlock") {
+            if (!wasLocked)
+                sessionLocked();
+            refreshSessionState();
+        } else if (line.includes("member=Unlock")) {
+            const wasLocked = locked;
             locked = false;
             lockedHint = false;
-            sessionUnlocked();
+            if (wasLocked)
+                sessionUnlocked();
+            refreshSessionState();
+        }
+    }
+
+    function _processSleepStateLine(line) {
+        if (line.includes("member=PrepareForSleep")) {
+            _sleepArgPending = true;
+            return;
+        }
+        if (!_sleepArgPending)
+            return;
+
+        const trimmed = line.trim();
+        if (trimmed === "boolean true") {
+            _sleepArgPending = false;
+            preparingForSleep = true;
+        } else if (trimmed === "boolean false") {
+            _sleepArgPending = false;
+            const wasSleeping = preparingForSleep;
+            preparingForSleep = false;
+            if (wasSleeping)
+                sessionResumed();
         }
     }
 }

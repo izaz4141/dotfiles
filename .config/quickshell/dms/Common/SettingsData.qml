@@ -129,9 +129,10 @@ Singleton {
     property string currentThemeCategory: "generic"
     property string customThemeFile: ""
     property var registryThemeVariants: ({})
+    property bool useMatugen: true
     property string matugenScheme: "scheme-tonal-spot"
-    property bool runUserMatugenTemplates: true
     property string matugenTargetMonitor: ""
+    property bool wallustEnabled: true
     property real popupTransparency: 1.0
     property real dockTransparency: 1
     property string widgetBackgroundColor: "sch"
@@ -369,6 +370,19 @@ Singleton {
                 "cursorHideTimeout": 0
             }
         })
+    property var inputSettings: ({
+            "hyprland": {
+                "kb_layout": "us",
+                "follow_mouse": 1,
+                "sensitivity": 0,
+                "touchpad": {
+                    "natural_scroll": true,
+                    "tap_to_click": true,
+                    "disable_while_typing": false
+                }
+            }
+        })
+
     property var availableCursorThemes: ["System Default"]
     property string systemDefaultCursorTheme: ""
 
@@ -406,11 +420,37 @@ Singleton {
     }
     onNotepadLastCustomTransparencyChanged: saveSettings()
 
+    property real toolboxWidth: 460
+    property string toolboxAiSystemPrompt: ""
+    property string toolboxAiTool: "search"
+    property real toolboxAiTemperature: 0.5
+    property string toolboxAiModel: ""
+    property bool toolboxAiTextFadeIn: false
+    property string toolboxAiSearchEngineBaseUrl: "https://www.google.com/search?q="
+    property var toolboxAiSearchExcludedSites: ["quora.com", "facebook.com"]
+    property string toolboxBooruProvider: "yandere"
+    property int toolboxBooruLimit: 20
+    property bool toolboxBooruAllowNsfw: false
+
+    onToolboxWidthChanged: saveSettings()
+    onToolboxAiSystemPromptChanged: saveSettings()
+    onToolboxAiToolChanged: saveSettings()
+    onToolboxAiTemperatureChanged: saveSettings()
+    onToolboxAiModelChanged: saveSettings()
+    onToolboxAiTextFadeInChanged: saveSettings()
+    onToolboxAiSearchEngineBaseUrlChanged: saveSettings()
+    onToolboxAiSearchExcludedSitesChanged: saveSettings()
+    onToolboxBooruProviderChanged: saveSettings()
+    onToolboxBooruLimitChanged: saveSettings()
+    onToolboxBooruAllowNsfwChanged: saveSettings()
+
     property bool soundsEnabled: true
     property bool useSystemSoundTheme: false
     property bool soundNewNotification: true
     property bool soundVolumeChanged: true
     property bool soundPluggedIn: true
+
+    property var alarms: []
 
     property int acMonitorTimeout: 0
     property int acLockTimeout: 0
@@ -429,6 +469,10 @@ Singleton {
     property int fadeToLockGracePeriod: 5
     property bool fadeToDpmsEnabled: true
     property int fadeToDpmsGracePeriod: 5
+    property int acBrightnessLevel: 5
+    property int batteryBrightnessLevel: 5
+    property int acBrightnessTimeout: 0
+    property int batteryBrightnessTimeout: 0
     property string launchPrefix: ""
     property var brightnessDevicePins: ({})
     property var wifiNetworkPins: ({})
@@ -440,29 +484,6 @@ Singleton {
     property bool qtThemingEnabled: false
     property bool syncModeWithPortal: true
     property bool terminalsAlwaysDark: false
-
-    property bool runDmsMatugenTemplates: true
-    property bool matugenTemplateGtk: true
-    property bool matugenTemplateNiri: true
-    property bool matugenTemplateHyprland: true
-    property bool matugenTemplateMangowc: true
-    property bool matugenTemplateQt5ct: true
-    property bool matugenTemplateQt6ct: true
-    property bool matugenTemplateFirefox: true
-    property bool matugenTemplatePywalfox: true
-    property bool matugenTemplateZenBrowser: true
-    property bool matugenTemplateVesktop: true
-    property bool matugenTemplateEquibop: true
-    property bool matugenTemplateGhostty: true
-    property bool matugenTemplateKitty: true
-    property bool matugenTemplateFoot: true
-    property bool matugenTemplateNeovim: true
-    property bool matugenTemplateAlacritty: true
-    property bool matugenTemplateWezterm: true
-    property bool matugenTemplateDgop: true
-    property bool matugenTemplateKcolorscheme: true
-    property bool matugenTemplateVscode: true
-    property bool matugenTemplateEmacs: true
 
     property bool showDock: false
     property bool dockAutoHide: false
@@ -1089,7 +1110,7 @@ Singleton {
         const gtkThemeName = (iconTheme === "System Default") ? systemDefaultIconTheme : iconTheme;
         if (gtkThemeName === "System Default" || gtkThemeName === "")
             return;
-        if (typeof DMSService !== "undefined" && DMSService.apiVersion >= 3 && typeof PortalService !== "undefined") {
+        if (typeof PortalService !== "undefined") {
             PortalService.setSystemIconTheme(gtkThemeName);
         }
 
@@ -1854,15 +1875,6 @@ Singleton {
         if (matugenScheme === normalized)
             return;
         set("matugenScheme", normalized);
-        if (typeof Theme !== "undefined") {
-            Theme.generateSystemThemesFromCurrentTheme();
-        }
-    }
-
-    function setRunUserMatugenTemplates(enabled) {
-        if (runUserMatugenTemplates === enabled)
-            return;
-        set("runUserMatugenTemplates", enabled);
         if (typeof Theme !== "undefined") {
             Theme.generateSystemThemesFromCurrentTheme();
         }

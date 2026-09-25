@@ -16,8 +16,8 @@ Rectangle {
     signal editModeToggled
     signal settingsButtonClicked
 
-    Component.onCompleted: DgopService.addRef("system")
-    Component.onDestruction: DgopService.removeRef("system")
+    Component.onCompleted: SysMonitorService.addRef("system")
+    Component.onDestruction: SysMonitorService.removeRef("system")
 
     implicitHeight: 70
     radius: Theme.cornerRadius
@@ -60,7 +60,7 @@ Rectangle {
             }
 
             Typography {
-                text: DgopService.uptime || I18n.tr("Unknown")
+                text: SysMonitorService.uptime || I18n.tr("Unknown")
                 style: Typography.Style.Caption
                 color: Theme.surfaceVariantText
             }

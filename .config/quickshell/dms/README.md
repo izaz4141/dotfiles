@@ -72,7 +72,7 @@ Singletons providing system integration:
 - `BatteryService` - Battery status and power profiles
 - `IdleService` - Idle detection and inhibit locks
 - `ClipboardService` - Clipboard history with images
-- `DgopService` - System metrics (CPU, RAM, GPU)
+- `SysMonitorService` - System metrics (CPU, RAM, GPU)
 
 **Integration**
 - `NiriService` - Niri workspace integration

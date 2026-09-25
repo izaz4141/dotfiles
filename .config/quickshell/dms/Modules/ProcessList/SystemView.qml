@@ -8,11 +8,11 @@ Item {
     id: root
 
     Component.onCompleted: {
-        DgopService.addRef(["system", "cpu"]);
+        SysMonitorService.addRef(["system", "cpu"]);
     }
 
     Component.onDestruction: {
-        DgopService.removeRef(["system", "cpu"]);
+        SysMonitorService.removeRef(["system", "cpu"]);
     }
 
     ColumnLayout {
@@ -58,35 +58,35 @@ Item {
 
                     InfoRow {
                         label: I18n.tr("Hostname", "system info label")
-                        value: DgopService.hostname || "--"
+                        value: SysMonitorService.hostname || "--"
                     }
                     InfoRow {
                         label: I18n.tr("Distribution", "system info label")
-                        value: DgopService.distribution || "--"
+                        value: SysMonitorService.distribution || "--"
                     }
                     InfoRow {
                         label: I18n.tr("Kernel", "system info label")
-                        value: DgopService.kernelVersion || "--"
+                        value: SysMonitorService.kernelVersion || "--"
                     }
                     InfoRow {
                         label: I18n.tr("Architecture", "system info label")
-                        value: DgopService.architecture || "--"
+                        value: SysMonitorService.architecture || "--"
                     }
                     InfoRow {
                         label: I18n.tr("CPU")
-                        value: DgopService.cpuModel || ("" + DgopService.cpuCores + " cores")
+                        value: SysMonitorService.cpuModel || ("" + SysMonitorService.cpuCores + " cores")
                     }
                     InfoRow {
                         label: I18n.tr("Uptime")
-                        value: DgopService.uptime || "--"
+                        value: SysMonitorService.uptime || "--"
                     }
                     InfoRow {
                         label: I18n.tr("Load Average", "system info label")
-                        value: DgopService.loadAverage || "--"
+                        value: SysMonitorService.loadAverage || "--"
                     }
                     InfoRow {
                         label: I18n.tr("Processes")
-                        value: DgopService.processCount > 0 ? DgopService.processCount.toString() : "--"
+                        value: SysMonitorService.processCount > 0 ? SysMonitorService.processCount.toString() : "--"
                     }
                 }
             }
@@ -136,7 +136,7 @@ Item {
                     clip: true
                     spacing: 8
 
-                    model: DgopService.availableGpus
+                    model: SysMonitorService.availableGpus
 
                     delegate: Rectangle {
                         required property var modelData
@@ -308,10 +308,10 @@ Item {
 
                                         if (!wasEnabled) {
                                             enabledIds.push(pciId);
-                                            DgopService.addGpuPciId(pciId);
+                                            SysMonitorService.addGpuPciId(pciId);
                                         } else {
                                             enabledIds.splice(idx, 1);
-                                            DgopService.removeGpuPciId(pciId);
+                                            SysMonitorService.removeGpuPciId(pciId);
                                         }
 
                                         SessionData.setEnabledGpuPciIds(enabledIds);
@@ -333,7 +333,7 @@ Item {
                         height: 100
                         radius: Theme.cornerRadius
                         color: "transparent"
-                        visible: DgopService.availableGpus.length === 0
+                        visible: SysMonitorService.availableGpus.length === 0
 
                         Column {
                             anchors.centerIn: parent

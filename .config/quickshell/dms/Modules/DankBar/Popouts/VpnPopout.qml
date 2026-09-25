@@ -10,7 +10,7 @@ DankPopout {
     layerNamespace: "dms:vpn"
 
     Ref {
-        service: DMSNetworkService
+        service: NetworkService
     }
 
     property bool wasVisible: false
@@ -24,7 +24,7 @@ DankPopout {
 
     onShouldBeVisibleChanged: {
         if (shouldBeVisible && !wasVisible) {
-            DMSNetworkService.getState();
+            NetworkService.getState();
         }
         wasVisible = shouldBeVisible;
     }

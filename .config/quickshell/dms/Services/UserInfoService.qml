@@ -10,7 +10,7 @@ Singleton {
 
     property string username: ""
     property string fullName: ""
-    property string profilePicture: ""
+
     property string hostname: ""
     property bool profileAvailable: false
 

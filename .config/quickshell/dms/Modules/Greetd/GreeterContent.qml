@@ -68,7 +68,7 @@ Item {
             GreeterState.username = lastUser;
             GreeterState.usernameInput = lastUser;
             GreeterState.showPasswordInput = true;
-            PortalService.getGreeterUserProfileImage(lastUser);
+            PortalService.getProfileImageForUser(lastUser);
         }
     }
 
@@ -138,7 +138,7 @@ Item {
         target: GreeterState
         function onUsernameChanged() {
             if (GreeterState.username) {
-                PortalService.getGreeterUserProfileImage(GreeterState.username);
+                PortalService.getProfileImageForUser(GreeterState.username);
             }
         }
     }
@@ -428,7 +428,7 @@ Item {
                                     if (text.trim()) {
                                         GreeterState.username = text.trim();
                                         GreeterState.showPasswordInput = true;
-                                        PortalService.getGreeterUserProfileImage(GreeterState.username);
+                                        PortalService.getProfileImageForUser(GreeterState.username);
                                         GreeterState.passwordBuffer = "";
                                         syncingFromState = true;
                                         text = "";
@@ -575,7 +575,7 @@ Item {
                                     if (inputField.text.trim()) {
                                         GreeterState.username = inputField.text.trim();
                                         GreeterState.showPasswordInput = true;
-                                        PortalService.getGreeterUserProfileImage(GreeterState.username);
+                                        PortalService.getProfileImageForUser(GreeterState.username);
                                         GreeterState.passwordBuffer = "";
                                         inputField.text = "";
                                     }

@@ -53,9 +53,7 @@ Rectangle {
     }
 
     property int currentPreferenceIndex: {
-        if (DMSService.apiVersion < 5)
-            return 1;
-        if (NetworkService.backend !== "networkmanager" || DMSService.apiVersion <= 10)
+        if (NetworkService.backend !== "networkmanager")
             return 1;
         if (!hasEthernetAvailable)
             return 1;
@@ -129,7 +127,7 @@ Rectangle {
             DankButtonGroup {
                 id: preferenceControls
                 anchors.verticalCenter: parent.verticalCenter
-                visible: hasBothConnectionTypes && NetworkService.backend === "networkmanager" && DMSService.apiVersion > 10
+                visible: hasBothConnectionTypes && NetworkService.backend === "networkmanager"
                 buttonHeight: 28
                 textSize: Theme.fontSizeSmall
 
@@ -285,7 +283,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.margins: Theme.spacingM
         anchors.topMargin: Theme.spacingM
-        visible: currentPreferenceIndex === 0 && NetworkService.backend === "networkmanager" && DMSService.apiVersion > 10
+        visible: currentPreferenceIndex === 0 && NetworkService.backend === "networkmanager"
         contentHeight: wiredColumn.height
         clip: true
 
@@ -742,7 +740,7 @@ Rectangle {
                         event.accepted = true;
                         return;
                     }
-                    if (modelData.secured && !modelData.saved && DMSService.apiVersion < 7) {
+                    if (false && modelData.secured && !modelData.saved) {
                         PopoutService.showWifiPasswordModal(modelData.ssid);
                     } else {
                         NetworkService.connectToWifi(modelData.ssid);
@@ -800,7 +798,7 @@ Rectangle {
                     NetworkService.disconnectWifi();
                     return;
                 }
-                if (networkContextMenu.currentSecured && !networkContextMenu.currentSaved && DMSService.apiVersion < 7) {
+                if (false && networkContextMenu.currentSecured && !networkContextMenu.currentSaved) {
                     PopoutService.showWifiPasswordModal(networkContextMenu.currentSSID);
                     return;
                 }
@@ -834,8 +832,8 @@ Rectangle {
 
         MenuItem {
             text: networkContextMenu.currentAutoconnect ? I18n.tr("Disable Autoconnect") : I18n.tr("Enable Autoconnect")
-            height: networkContextMenu.showSavedOptions && DMSService.apiVersion > 13 ? 32 : 0
-            visible: networkContextMenu.showSavedOptions && DMSService.apiVersion > 13
+            height: networkContextMenu.showSavedOptions ? 32 : 0
+            visible: networkContextMenu.showSavedOptions
 
             contentItem: StyledText {
                 text: parent.text

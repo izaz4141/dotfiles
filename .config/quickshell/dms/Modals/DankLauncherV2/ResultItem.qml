@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import qs.Common
+import qs.Services
 import qs.Widgets
 import "../../Common/htmlElide.js" as HtmlElide
 
@@ -33,7 +34,7 @@ Rectangle {
             return item.icon || "";
         }
     }
-    readonly property bool hasClipboardPreview: item?.type === "clipboard" && !!item?.data?.isImage && String(item?.data?.mimeType ?? "").startsWith("image/")
+    readonly property bool hasClipboardPreview: item?.type === "clipboard" && typeof item?.data === "string" && ClipboardService.getEntryType(item.data) === "image"
 
     width: parent?.width ?? 200
     height: 52

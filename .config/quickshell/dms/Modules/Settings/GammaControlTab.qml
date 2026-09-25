@@ -331,6 +331,18 @@ Item {
                                     }
                                 }
                             }
+
+                            SettingsSliderRow {
+                                width: parent.width - Theme.spacingM * 2
+                                text: I18n.tr("Transition Steps")
+                                description: I18n.tr("Number of gradual temperature steps when switching between day and night")
+                                minimum: 1
+                                maximum: 20
+                                step: 1
+                                unit: ""
+                                value: SessionData.nightModeSteps || 1
+                                onSliderValueChanged: newValue => SessionData.setNightModeSteps(newValue)
+                            }
                         }
 
                         Column {
@@ -339,93 +351,31 @@ Item {
                             spacing: Theme.spacingM
                             width: parent.width
 
-                            DankToggle {
-                                id: ipLocationToggle
-                                width: parent.width
-                                text: I18n.tr("Use IP Location")
-                                description: I18n.tr("Automatically detect location based on IP address")
-                                checked: SessionData.nightModeUseIPLocation || false
-                                onToggled: checked => {
-                                    SessionData.setNightModeUseIPLocation(checked);
+                            Row {
+                                spacing: Theme.spacingS
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                DankIcon {
+                                    name: DisplayService.geoclueAgentRunning ? "location_on" : "location_off"
+                                    size: Theme.iconSizeSmall
+                                    color: DisplayService.geoclueAgentRunning ? Theme.success : Theme.surfaceVariantText
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
 
-                                Connections {
-                                    target: SessionData
-                                    function onNightModeUseIPLocationChanged() {
-                                        ipLocationToggle.checked = SessionData.nightModeUseIPLocation;
-                                    }
+                                StyledText {
+                                    text: DisplayService.geoclueAgentRunning ? I18n.tr("Geoclue agent running") : I18n.tr("Geoclue agent not running")
+                                    font.pixelSize: Theme.fontSizeSmall
+                                    color: DisplayService.geoclueAgentRunning ? Theme.success : Theme.surfaceVariantText
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
                             }
 
-                            Column {
+                            StyledText {
+                                text: I18n.tr("Uses geoclue-agent to automatically detect your location for sunrise/sunset times. The agent will be started automatically when location mode is active.")
+                                font.pixelSize: Theme.fontSizeSmall
+                                color: Theme.surfaceVariantText
                                 width: parent.width
-                                spacing: Theme.spacingM
-                                leftPadding: Theme.spacingM
-                                visible: !SessionData.nightModeUseIPLocation
-
-                                StyledText {
-                                    text: I18n.tr("Manual Coordinates")
-                                    font.pixelSize: Theme.fontSizeMedium
-                                    color: Theme.surfaceText
-                                }
-
-                                Row {
-                                    spacing: Theme.spacingL
-
-                                    Column {
-                                        spacing: Theme.spacingXS
-
-                                        StyledText {
-                                            text: I18n.tr("Latitude")
-                                            font.pixelSize: Theme.fontSizeSmall
-                                            color: Theme.surfaceVariantText
-                                        }
-
-                                        DankTextField {
-                                            width: 120
-                                            height: 40
-                                            text: SessionData.latitude.toString()
-                                            placeholderText: "0.0"
-                                            onEditingFinished: {
-                                                const lat = parseFloat(text);
-                                                if (!isNaN(lat) && lat >= -90 && lat <= 90 && lat !== SessionData.latitude) {
-                                                    SessionData.setLatitude(lat);
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    Column {
-                                        spacing: Theme.spacingXS
-
-                                        StyledText {
-                                            text: I18n.tr("Longitude")
-                                            font.pixelSize: Theme.fontSizeSmall
-                                            color: Theme.surfaceVariantText
-                                        }
-
-                                        DankTextField {
-                                            width: 120
-                                            height: 40
-                                            text: SessionData.longitude.toString()
-                                            placeholderText: "0.0"
-                                            onEditingFinished: {
-                                                const lon = parseFloat(text);
-                                                if (!isNaN(lon) && lon >= -180 && lon <= 180 && lon !== SessionData.longitude) {
-                                                    SessionData.setLongitude(lon);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-
-                                StyledText {
-                                    text: I18n.tr("Uses sunrise/sunset times to automatically adjust night mode based on your location.")
-                                    font.pixelSize: Theme.fontSizeSmall
-                                    color: Theme.surfaceVariantText
-                                    width: parent.width - parent.leftPadding
-                                    wrapMode: Text.WordWrap
-                                }
+                                wrapMode: Text.WordWrap
                             }
                         }
 

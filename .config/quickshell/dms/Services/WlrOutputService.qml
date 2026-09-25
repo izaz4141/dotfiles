@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import Quickshell
+import qs.Common
 
 Singleton {
     id: root
@@ -14,85 +15,257 @@ Singleton {
     signal stateChanged
     signal configurationApplied(bool success, string message)
 
-    Connections {
-        target: DMSService
-
-        function onCapabilitiesReceived() {
-            checkCapabilities()
-        }
-
-        function onConnectionStateChanged() {
-            if (DMSService.isConnected) {
-                checkCapabilities()
-                return
-            }
-            wlrOutputAvailable = false
-        }
-
-        function onWlrOutputStateUpdate(data) {
-            if (!wlrOutputAvailable) {
-                return
-            }
-            handleStateUpdate(data)
-        }
-    }
-
     Component.onCompleted: {
-        if (!DMSService.dmsAvailable) {
-            return
-        }
-        checkCapabilities()
+        Qt.callLater(checkCompositor)
     }
 
-    function checkCapabilities() {
-        if (!DMSService.capabilities || !Array.isArray(DMSService.capabilities)) {
-            wlrOutputAvailable = false
-            return
-        }
+    Connections {
+        target: CompositorService
 
-        const hasWlrOutput = DMSService.capabilities.includes("wlroutput")
-        if (hasWlrOutput && !wlrOutputAvailable) {
+        function onCompositorChanged() {
+            checkCompositor()
+        }
+    }
+
+    Connections {
+        target: CompositorService.isNiri ? NiriService : null
+        enabled: CompositorService.isNiri
+
+        function onOutputsChanged() {
+            if (CompositorService.isNiri && wlrOutputAvailable) {
+                fetchNiriOutputs()
+            }
+        }
+    }
+
+    function checkCompositor() {
+        const wasAvailable = wlrOutputAvailable
+
+        if (CompositorService.isHyprland || CompositorService.isNiri || CompositorService.isSway) {
             wlrOutputAvailable = true
-            console.info("WlrOutputService: wlr-output-management capability detected")
+            if (!wasAvailable) {
+                console.info("WlrOutputService: Compositor detected:", CompositorService.compositor)
+            }
             requestState()
-            return
-        }
-
-        if (!hasWlrOutput) {
+        } else {
             wlrOutputAvailable = false
         }
     }
 
     function requestState() {
-        if (!DMSService.isConnected || !wlrOutputAvailable) {
+        if (!wlrOutputAvailable) {
             return
         }
 
-        DMSService.sendRequest("wlroutput.getState", null, response => {
-            if (!response.result) {
-                return
-            }
-            handleStateUpdate(response.result)
-        })
+        if (CompositorService.isHyprland) {
+            fetchHyprlandOutputs()
+        } else if (CompositorService.isNiri) {
+            fetchNiriOutputs()
+        } else if (CompositorService.isSway) {
+            fetchSwayOutputs()
+        }
     }
 
-    function handleStateUpdate(state) {
-        outputs = state.outputs || []
-        serial = state.serial || 0
+    function fetchHyprlandOutputs() {
+        Proc.runCommand("wlr-fetch-outputs", ["hyprctl", "monitors", "-j"], (output, exitCode) => {
+            if (exitCode !== 0) {
+                console.warn("WlrOutputService: Failed to fetch Hyprland monitors:", exitCode)
+                return
+            }
+            try {
+                const data = JSON.parse(output)
+                outputs = transformHyprlandOutputs(data)
+                serial++
+                console.log("WlrOutputService: Updated with", outputs.length, "Hyprland outputs")
+                stateChanged()
+            } catch (e) {
+                console.warn("WlrOutputService: Failed to parse Hyprland monitors:", e)
+            }
+        }, 0, 5000)
+    }
 
-        if (outputs.length === 0) {
-            console.warn("WlrOutputService: Received empty outputs list")
-        } else {
-            console.log("WlrOutputService: Updated with", outputs.length, "outputs, serial:", serial)
-            outputs.forEach((output, index) => {
-                console.log("WlrOutputService: Output", index, "-", output.name,
-                           "enabled:", output.enabled,
-                           "mode:", output.currentMode ?
-                           output.currentMode.width + "x" + output.currentMode.height + "@" +
-                           (output.currentMode.refresh / 1000) + "Hz" : "none")
+    function parseHyprlandMode(modeStr, index) {
+        const match = modeStr.match(/^(\d+)x(\d+)@([\d.]+)Hz$/)
+        if (!match) return null
+        return {
+            "id": String(index),
+            "width": parseInt(match[1]),
+            "height": parseInt(match[2]),
+            "refresh": Math.round(parseFloat(match[3]) * 1000),
+            "preferred": index === 0
+        }
+    }
+
+    function transformHyprlandOutputs(data) {
+        if (!Array.isArray(data)) return []
+
+        const result = []
+        for (const monitor of data) {
+            if (!monitor || !monitor.name) continue
+
+            const modes = []
+            const availableModes = monitor.availableModes || []
+            for (let i = 0; i < availableModes.length; i++) {
+                const mode = parseHyprlandMode(availableModes[i], i)
+                if (mode) modes.push(mode)
+            }
+
+            if (modes.length === 0 && monitor.width && monitor.height) {
+                const refresh = Math.round(monitor.refreshRate || 60000)
+                modes.push({
+                    "id": "0",
+                    "width": monitor.width,
+                    "height": monitor.height,
+                    "refresh": refresh,
+                    "preferred": true
+                })
+            }
+
+            const currentRefresh = Math.round((monitor.refreshRate || 60000) * 1000)
+            const currentModeIndex = modes.findIndex(m =>
+                m.width === monitor.width &&
+                m.height === monitor.height &&
+                Math.abs(m.refresh - currentRefresh) < 1000
+            )
+            const currentMode = modes[currentModeIndex >= 0 ? currentModeIndex : 0] || null
+
+            result.push({
+                "name": monitor.name,
+                "enabled": !monitor.disabled,
+                "make": monitor.make || "",
+                "model": monitor.model || "",
+                "serialNumber": monitor.serial || "",
+                "modes": modes,
+                "currentMode": currentMode,
+                "x": monitor.x ?? 0,
+                "y": monitor.y ?? 0,
+                "scale": monitor.scale ?? 1.0,
+                "transform": monitor.transform ?? 0,
+                "adaptiveSyncSupported": true,
+                "adaptiveSync": monitor.vrr ? 1 : 0
             })
         }
+
+        return result
+    }
+
+    function fetchNiriOutputs() {
+        if (!NiriService || !NiriService.outputs) {
+            console.warn("WlrOutputService: NiriService not available")
+            return
+        }
+
+        const niriOutputs = NiriService.outputs
+        outputs = transformNiriOutputs(niriOutputs)
+        serial++
+        console.log("WlrOutputService: Updated with", outputs.length, "Niri outputs")
         stateChanged()
+    }
+
+    function transformNiriOutputs(data) {
+        if (!data || typeof data !== "object") return []
+
+        const result = []
+        for (const name in data) {
+            const output = data[name]
+            if (!output) continue
+
+            const niriModes = output.modes || []
+            const modes = niriModes.map((m, i) => ({
+                "id": String(i),
+                "width": m.width,
+                "height": m.height,
+                "refresh": m.refresh_rate ?? 60000,
+                "preferred": i === 0
+            }))
+
+            const currentModeIndex = output.current_mode ?? 0
+            const currentMode = modes[currentModeIndex] || null
+
+            const transformMap = {
+                "Normal": 0, "90": 1, "180": 2, "270": 3,
+                "Flipped": 4, "Flipped90": 5, "Flipped180": 6, "Flipped270": 7
+            }
+
+            result.push({
+                "name": name,
+                "enabled": true,
+                "make": output.make || "",
+                "model": output.model || "",
+                "serialNumber": output.serial || "",
+                "modes": modes,
+                "currentMode": currentMode,
+                "x": output.logical?.x ?? 0,
+                "y": output.logical?.y ?? 0,
+                "scale": output.logical?.scale ?? 1.0,
+                "transform": transformMap[output.logical?.transform] ?? 0,
+                "adaptiveSyncSupported": false,
+                "adaptiveSync": output.vrr_enabled ? 1 : 0
+            })
+        }
+
+        return result
+    }
+
+    function fetchSwayOutputs() {
+        Proc.runCommand("wlr-fetch-outputs", ["swaymsg", "-t", "get_outputs"], (output, exitCode) => {
+            if (exitCode !== 0) {
+                console.warn("WlrOutputService: Failed to fetch Sway outputs:", exitCode)
+                return
+            }
+            try {
+                const data = JSON.parse(output)
+                outputs = transformSwayOutputs(data)
+                serial++
+                console.log("WlrOutputService: Updated with", outputs.length, "Sway outputs")
+                stateChanged()
+            } catch (e) {
+                console.warn("WlrOutputService: Failed to parse Sway outputs:", e)
+            }
+        }, 0, 5000)
+    }
+
+    function transformSwayOutputs(data) {
+        if (!Array.isArray(data)) return []
+
+        const transformMap = {
+            "normal": 0, "90": 1, "180": 2, "270": 3,
+            "flipped": 4, "flipped_90": 5, "flipped_180": 6, "flipped_270": 7
+        }
+
+        const result = []
+        for (const output of data) {
+            if (!output || !output.name) continue
+
+            const modes = (output.modes || []).map((m, i) => ({
+                "id": String(i),
+                "width": m.width,
+                "height": m.height,
+                "refresh": m.refresh ?? 60000,
+                "preferred": m.preferred ?? false
+            }))
+
+            const currentModeIndex = output.current_mode ?? 0
+            const currentMode = modes[currentModeIndex] || null
+
+            result.push({
+                "name": output.name,
+                "enabled": output.active ?? true,
+                "make": output.make || "",
+                "model": output.model || "",
+                "serialNumber": output.serial || "",
+                "modes": modes,
+                "currentMode": currentMode,
+                "x": output.rect?.x ?? 0,
+                "y": output.rect?.y ?? 0,
+                "scale": output.scale ?? 1.0,
+                "transform": transformMap[output.transform] ?? 0,
+                "adaptiveSyncSupported": false,
+                "adaptiveSync": 0
+            })
+        }
+
+        return result
     }
 
     function getOutput(name) {
@@ -106,170 +279,5 @@ Singleton {
 
     function getEnabledOutputs() {
         return outputs.filter(output => output.enabled)
-    }
-
-    function applyConfiguration(heads, callback) {
-        if (!DMSService.isConnected || !wlrOutputAvailable) {
-            if (callback) {
-                callback(false, "Not connected")
-            }
-            return
-        }
-
-        console.log("WlrOutputService: Applying configuration for", heads.length, "outputs")
-        heads.forEach((head, index) => {
-            console.log("WlrOutputService: Head", index, "- name:", head.name,
-                       "enabled:", head.enabled,
-                       "modeId:", head.modeId,
-                       "customMode:", JSON.stringify(head.customMode),
-                       "position:", JSON.stringify(head.position),
-                       "scale:", head.scale,
-                       "transform:", head.transform,
-                       "adaptiveSync:", head.adaptiveSync)
-        })
-
-        DMSService.sendRequest("wlroutput.applyConfiguration", {
-            "heads": heads
-        }, response => {
-            const success = !response.error
-            const message = response.error || response.result?.message || ""
-
-            if (response.error) {
-                console.warn("WlrOutputService: applyConfiguration error:", response.error)
-            } else {
-                console.log("WlrOutputService: Configuration applied successfully")
-            }
-
-            configurationApplied(success, message)
-            if (callback) {
-                callback(success, message)
-            }
-        })
-    }
-
-    function testConfiguration(heads, callback) {
-        if (!DMSService.isConnected || !wlrOutputAvailable) {
-            if (callback) {
-                callback(false, "Not connected")
-            }
-            return
-        }
-
-        console.log("WlrOutputService: Testing configuration for", heads.length, "outputs")
-
-        DMSService.sendRequest("wlroutput.testConfiguration", {
-            "heads": heads
-        }, response => {
-            const success = !response.error
-            const message = response.error || response.result?.message || ""
-
-            if (response.error) {
-                console.warn("WlrOutputService: testConfiguration error:", response.error)
-            } else {
-                console.log("WlrOutputService: Configuration test passed")
-            }
-
-            if (callback) {
-                callback(success, message)
-            }
-        })
-    }
-
-    function setOutputEnabled(outputName, enabled, callback) {
-        const output = getOutput(outputName)
-        if (!output) {
-            console.warn("WlrOutputService: Output not found:", outputName)
-            if (callback) {
-                callback(false, "Output not found")
-            }
-            return
-        }
-
-        const heads = [{
-            "name": outputName,
-            "enabled": enabled
-        }]
-
-        if (enabled && output.currentMode) {
-            heads[0].modeId = output.currentMode.id
-        }
-
-        applyConfiguration(heads, callback)
-    }
-
-    function setOutputMode(outputName, modeId, callback) {
-        const heads = [{
-            "name": outputName,
-            "enabled": true,
-            "modeId": modeId
-        }]
-
-        applyConfiguration(heads, callback)
-    }
-
-    function setOutputCustomMode(outputName, width, height, refresh, callback) {
-        const heads = [{
-            "name": outputName,
-            "enabled": true,
-            "customMode": {
-                "width": width,
-                "height": height,
-                "refresh": refresh
-            }
-        }]
-
-        applyConfiguration(heads, callback)
-    }
-
-    function setOutputPosition(outputName, x, y, callback) {
-        const heads = [{
-            "name": outputName,
-            "enabled": true,
-            "position": {
-                "x": x,
-                "y": y
-            }
-        }]
-
-        applyConfiguration(heads, callback)
-    }
-
-    function setOutputScale(outputName, scale, callback) {
-        const heads = [{
-            "name": outputName,
-            "enabled": true,
-            "scale": scale
-        }]
-
-        applyConfiguration(heads, callback)
-    }
-
-    function setOutputTransform(outputName, transform, callback) {
-        const heads = [{
-            "name": outputName,
-            "enabled": true,
-            "transform": transform
-        }]
-
-        applyConfiguration(heads, callback)
-    }
-
-    function setOutputAdaptiveSync(outputName, state, callback) {
-        const heads = [{
-            "name": outputName,
-            "enabled": true,
-            "adaptiveSync": state
-        }]
-
-        applyConfiguration(heads, callback)
-    }
-
-    function configureOutput(config, callback) {
-        const heads = [config]
-        applyConfiguration(heads, callback)
-    }
-
-    function configureMultipleOutputs(configs, callback) {
-        applyConfiguration(configs, callback)
     }
 }

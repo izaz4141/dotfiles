@@ -18,11 +18,11 @@ Item {
     }
 
     Component.onCompleted: {
-        DgopService.addRef(["disk", "diskmounts"]);
+        SysMonitorService.addRef(["disk", "diskmounts"]);
     }
 
     Component.onDestruction: {
-        DgopService.removeRef(["disk", "diskmounts"]);
+        SysMonitorService.removeRef(["disk", "diskmounts"]);
     }
 
     ColumnLayout {
@@ -76,7 +76,7 @@ Item {
                             }
 
                             StyledText {
-                                text: root.formatSpeed(DgopService.diskReadRate)
+                                text: root.formatSpeed(SysMonitorService.diskReadRate)
                                 font.pixelSize: Theme.fontSizeSmall
                                 font.family: SettingsData.monoFontFamily
                                 font.weight: Font.Bold
@@ -94,7 +94,7 @@ Item {
                             }
 
                             StyledText {
-                                text: root.formatSpeed(DgopService.diskWriteRate)
+                                text: root.formatSpeed(SysMonitorService.diskWriteRate)
                                 font.pixelSize: Theme.fontSizeSmall
                                 font.family: SettingsData.monoFontFamily
                                 font.weight: Font.Bold
@@ -150,7 +150,7 @@ Item {
                     clip: true
                     spacing: 4
 
-                    model: DgopService.diskMounts
+                    model: SysMonitorService.diskMounts
 
                     delegate: Rectangle {
                         required property var modelData
@@ -318,7 +318,7 @@ Item {
                         height: 80
                         radius: Theme.cornerRadius
                         color: "transparent"
-                        visible: DgopService.diskMounts.length === 0
+                        visible: SysMonitorService.diskMounts.length === 0
 
                         Column {
                             anchors.centerIn: parent

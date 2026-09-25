@@ -25,6 +25,8 @@ Singleton {
     property var initialNetworkStats: null
     property real lastTimestamp: 0
     property bool initialized: false
+    property var lastInterfaceStats: ({})
+    property var networkInterfaceSpeeds: ({})
 
     property int historySize: 60
     property var downloadHistory: []
@@ -160,7 +162,7 @@ Singleton {
     Timer {
         id: updateTimer
         interval: root.updateInterval
-        running: root.refCount > 0 && root.enabledModules.length > 0
+        running: root.refCount > 0
         repeat: true
         triggeredOnStart: true
         onTriggered: root.updateAllStats()
@@ -223,11 +225,34 @@ Singleton {
             root.lastNetworkStats = { rx: data.rx, tx: data.tx };
             root.lastTimestamp = now;
             root.networkInterfaces = data.interfaces;
+
+            if (timeDelta > 0 && root.lastInterfaceStats) {
+                let interfaceSpeeds = {};
+                for (const iface of data.interfaces) {
+                    const prev = root.lastInterfaceStats[iface.name];
+                    if (prev) {
+                        let rxDelta = iface.rxBytes - prev.rxBytes;
+                        let txDelta = iface.txBytes - prev.txBytes;
+                        if (rxDelta < 0) rxDelta += Math.pow(2, 64);
+                        if (txDelta < 0) txDelta += Math.pow(2, 64);
+                        interfaceSpeeds[iface.name] = {
+                            rxSpeed: rxDelta / timeDelta,
+                            txSpeed: txDelta / timeDelta
+                        };
+                    }
+                }
+                root.networkInterfaceSpeeds = interfaceSpeeds;
+            }
+
+            let ifaceStats = {};
+            for (const iface of data.interfaces) {
+                ifaceStats[iface.name] = { rxBytes: iface.rxBytes, txBytes: iface.txBytes };
+            }
+            root.lastInterfaceStats = ifaceStats;
         }
     }
 
     Component.onCompleted: {
         console.info("NetworkSpeedService: Initialized");
-        updateTimer.running = false;
     }
 }

@@ -40,7 +40,7 @@ Column {
             "id": widget.id,
             "enabled": widget.enabled
         };
-        var keys = ["size", "selectedGpuIndex", "pciId", "mountPath", "diskUsageMode", "minimumWidth", "showSwap", "showInGb", "mediaSize", "clockCompactMode", "focusedWindowCompactMode", "runningAppsCompactMode", "keyboardLayoutNameCompactMode", "runningAppsGroupByApp", "runningAppsCurrentWorkspace", "runningAppsCurrentMonitor", "showNetworkIcon", "showBluetoothIcon", "showAudioIcon", "showAudioPercent", "showVpnIcon", "showBrightnessIcon", "showBrightnessPercent", "showMicIcon", "showMicPercent", "showBatteryIcon", "showPrinterIcon", "showScreenSharingIcon", "barMaxVisibleApps", "barMaxVisibleRunningApps", "barShowOverflowBadge", "selectedInterface", "updateInterval", "showIcon", "showLabels", "compactMode", "unitPrecision"];
+        var keys = ["size", "selectedGpuIndex", "pciId", "mountPath", "diskUsageMode", "minimumWidth", "showSwap", "showInGb", "mediaSize", "clockCompactMode", "focusedWindowCompactMode", "runningAppsCompactMode", "keyboardLayoutNameCompactMode", "runningAppsGroupByApp", "runningAppsCurrentWorkspace", "runningAppsCurrentMonitor", "showNetworkIcon", "showBluetoothIcon", "showAudioIcon", "showAudioPercent", "showVpnIcon", "showBrightnessIcon", "showBrightnessPercent", "showMicIcon", "showMicPercent", "showBatteryIcon", "showPrinterIcon", "showScreenSharingIcon", "barMaxVisibleApps", "barMaxVisibleRunningApps", "barShowOverflowBadge", "selectedInterface", "updateInterval", "showIcon", "showLabels", "compactMode", "unitPrecision", "hideThreshold"];
         for (var i = 0; i < keys.length; i++) {
             if (widget[keys[i]] !== undefined)
                 result[keys[i]] = widget[keys[i]];
@@ -142,8 +142,8 @@ Column {
                             text: {
                                 if (modelData.id === "gpuTemp") {
                                     var selectedIdx = modelData.selectedGpuIndex !== undefined ? modelData.selectedGpuIndex : 0;
-                                    if (DgopService.availableGpus && DgopService.availableGpus.length > selectedIdx) {
-                                        var gpu = DgopService.availableGpus[selectedIdx];
+                                    if (SysMonitorService.availableGpus && SysMonitorService.availableGpus.length > selectedIdx) {
+                                        var gpu = SysMonitorService.availableGpus[selectedIdx];
                                         return gpu.driver ? gpu.driver.toUpperCase() : "";
                                     }
                                     return I18n.tr("No GPU detected");
@@ -215,10 +215,10 @@ Column {
                                     return mountPath;
                                 }
                                 options: {
-                                    if (!DgopService.diskMounts || DgopService.diskMounts.length === 0) {
+                                    if (!SysMonitorService.diskMounts || SysMonitorService.diskMounts.length === 0) {
                                         return ["root (/)"];
                                     }
-                                    return DgopService.diskMounts.map(mount => {
+                                    return SysMonitorService.diskMounts.map(mount => {
                                         if (mount.mount === "/") {
                                             return "root (/)";
                                         }
@@ -838,7 +838,7 @@ Column {
         property int widgetIndex: -1
 
         width: 200
-        height: 80
+        height: memMenuColumn.implicitHeight + Theme.spacingS * 2
         padding: 0
         modal: true
         focus: true
@@ -853,9 +853,10 @@ Column {
 
         contentItem: Item {
             Column {
+                id: memMenuColumn
                 anchors.fill: parent
                 anchors.margins: Theme.spacingS
-                spacing: 2
+                spacing: 4
 
                 Rectangle {
                     width: parent.width
@@ -993,7 +994,7 @@ Column {
                 id: diskMenuColumn
                 anchors.fill: parent
                 anchors.margins: Theme.spacingS
-                spacing: 2
+                spacing: 4
 
                 Rectangle {
                     width: parent.width
@@ -1107,7 +1108,7 @@ Column {
                 id: menuColumn
                 anchors.fill: parent
                 anchors.margins: Theme.spacingS
-                spacing: 2
+                spacing: 4
 
                 Repeater {
                     model: [
@@ -1273,7 +1274,7 @@ Column {
         property int widgetIndex: -1
 
         width: 200
-        height: 160
+        height: menuPrivacyColumn.implicitHeight + Theme.spacingS * 2
         padding: 0
         modal: true
         focus: true
@@ -1300,7 +1301,7 @@ Column {
                 id: menuPrivacyColumn
                 anchors.fill: parent
                 anchors.margins: Theme.spacingS
-                spacing: 2
+                spacing: 4
 
                 Rectangle {
                     width: parent.width
@@ -1510,10 +1511,10 @@ Column {
                 id: gpuMenuColumn
                 anchors.fill: parent
                 anchors.margins: Theme.spacingS
-                spacing: 2
+                spacing: 4
 
                 Repeater {
-                    model: DgopService.availableGpus || []
+                    model: SysMonitorService.availableGpus || []
 
                     delegate: Rectangle {
                         required property var modelData
@@ -1618,7 +1619,7 @@ Column {
                 id: musicMenuColumn
                 anchors.fill: parent
                 anchors.margins: Theme.spacingS
-                spacing: 2
+                spacing: 4
 
                 Repeater {
                     model: [
@@ -1735,7 +1736,7 @@ Column {
                 id: runningAppsMenuColumn
                 anchors.fill: parent
                 anchors.margins: Theme.spacingS
-                spacing: 2
+                spacing: 4
 
                 Rectangle {
                     width: parent.width
@@ -2539,7 +2540,7 @@ Column {
                 id: networkSpeedMenuColumn
                 anchors.fill: parent
                 anchors.margins: Theme.spacingS
-                spacing: 2
+                spacing: 4
 
                 Rectangle {
                     width: parent.width
@@ -2592,6 +2593,7 @@ Column {
                         anchors.rightMargin: Theme.spacingS
                         anchors.verticalCenter: parent.verticalCenter
                         width: 160
+                        buttonHeight: 28
                         currentValue: {
                             const iface = networkSpeedContextMenu.currentWidgetData?.selectedInterface || "all";
                             if (iface === "all") return I18n.tr("All Interfaces");
@@ -2616,6 +2618,7 @@ Column {
                         id: interfaceArea
                         anchors.fill: parent
                         hoverEnabled: true
+                        acceptedButtons: Qt.NoButton
                         cursorShape: Qt.PointingHandCursor
                     }
                 }
@@ -2657,6 +2660,7 @@ Column {
                         minimum: 500
                         maximum: 5000
                         step: 100
+                        unit: "ms"
                         value: networkSpeedContextMenu.currentWidgetData?.updateInterval || 1000
                         onValueChanged: {
                             root.networkSpeedSettingChanged(networkSpeedContextMenu.sectionId, networkSpeedContextMenu.widgetIndex, "updateInterval", value);
@@ -2668,6 +2672,7 @@ Column {
                         id: updateIntervalArea
                         anchors.fill: parent
                         hoverEnabled: true
+                        acceptedButtons: Qt.NoButton
                         cursorShape: Qt.PointingHandCursor
                     }
                 }
@@ -2865,6 +2870,7 @@ Column {
                         anchors.rightMargin: Theme.spacingS
                         anchors.verticalCenter: parent.verticalCenter
                         width: 100
+                        buttonHeight: 28
                         currentValue: {
                             const prec = networkSpeedContextMenu.currentWidgetData?.unitPrecision ?? 1;
                             return prec + " " + I18n.tr("decimals");
@@ -2880,6 +2886,72 @@ Column {
                         id: precisionArea
                         anchors.fill: parent
                         hoverEnabled: true
+                        acceptedButtons: Qt.NoButton
+                        cursorShape: Qt.PointingHandCursor
+                    }
+                }
+
+                Rectangle {
+                    width: parent.width
+                    height: 32
+                    radius: Theme.cornerRadius
+                    color: hideThresholdArea.containsMouse ? Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.12) : "transparent"
+
+                    Row {
+                        anchors.left: parent.left
+                        anchors.leftMargin: Theme.spacingS
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: Theme.spacingS
+
+                        DankIcon {
+                            name: "visibility_off"
+                            size: 16
+                            color: Theme.surfaceText
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        StyledText {
+                            text: I18n.tr("Hide Threshold")
+                            font.pixelSize: Theme.fontSizeSmall
+                            color: Theme.surfaceText
+                            font.weight: Font.Normal
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+
+                    Row {
+                        anchors.right: parent.right
+                        anchors.rightMargin: Theme.spacingS
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: Theme.spacingXS
+
+                        DankTextField {
+                            id: hideThresholdField
+                            width: 80
+                            text: String(networkSpeedContextMenu.currentWidgetData?.hideThreshold ?? 0)
+                            validator: IntValidator { bottom: 0; top: 1000 }
+                            onEditingFinished: {
+                                var raw = parseInt(text, 10);
+                                if (isNaN(raw)) raw = 0;
+                                raw = Math.max(0, Math.min(1000, raw));
+                                text = String(raw);
+                                root.networkSpeedSettingChanged(networkSpeedContextMenu.sectionId, networkSpeedContextMenu.widgetIndex, "hideThreshold", raw);
+                            }
+                        }
+
+                        StyledText {
+                            text: "KB/s"
+                            font.pixelSize: Theme.fontSizeSmall
+                            color: Theme.surfaceVariantText
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+
+                    MouseArea {
+                        id: hideThresholdArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        acceptedButtons: Qt.NoButton
                         cursorShape: Qt.PointingHandCursor
                     }
                 }

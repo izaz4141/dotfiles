@@ -228,7 +228,7 @@ Column {
                     StyledText {
                         anchors.centerIn: parent
                         text: I18n.tr("Remove")
-                        color: Theme.onError
+                        color: Theme.surfaceText
                         font.pixelSize: Theme.fontSizeSmall
                         font.weight: Font.Medium
                     }

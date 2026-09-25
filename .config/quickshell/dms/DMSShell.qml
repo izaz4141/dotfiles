@@ -12,8 +12,9 @@ import qs.Modules.AppDrawer
 import qs.Modules.DankDash
 import qs.Modules.ControlCenter
 import qs.Modules.Dock
-// import qs.Modules.Lock
+import qs.Modules.Lock
 import qs.Modules.Notepad
+import qs.Modules.Toolbox
 import qs.Modules.Notifications.Center
 import qs.Widgets
 import qs.Modules.Notifications.Popup
@@ -63,49 +64,49 @@ Item {
 
     DesktopWidgetLayer {}
 
-    // Lock {
-    //     id: lock
-    // }
+    Lock {
+        id: lock
+    }
 
-    // Variants {
-    //     model: Quickshell.screens
+    Variants {
+        model: Quickshell.screens
 
-    //     delegate: Loader {
-    //         id: fadeWindowLoader
-    //         required property var modelData
-    //         active: SettingsData.fadeToLockEnabled
-    //         asynchronous: false
+        delegate: Loader {
+            id: fadeWindowLoader
+            required property var modelData
+            active: SettingsData.fadeToLockEnabled
+            asynchronous: false
 
-    //         sourceComponent: FadeToLockWindow {
-    //             screen: fadeWindowLoader.modelData
+            sourceComponent: FadeToLockWindow {
+                screen: fadeWindowLoader.modelData
 
-    //             onFadeCompleted: {
-    //                 IdleService.lockRequested();
-    //             }
+                onFadeCompleted: {
+                    IdleService.lockRequested();
+                }
 
-    //             onFadeCancelled: {
-    //                 console.log("Fade to lock cancelled by user on screen:", fadeWindowLoader.modelData.name);
-    //             }
-    //         }
+                onFadeCancelled: {
+                    console.log("Fade to lock cancelled by user on screen:", fadeWindowLoader.modelData.name);
+                }
+            }
 
-    //         Connections {
-    //             target: IdleService
-    //             enabled: fadeWindowLoader.item !== null
+            Connections {
+                target: IdleService
+                enabled: fadeWindowLoader.item !== null
 
-    //             function onFadeToLockRequested() {
-    //                 if (fadeWindowLoader.item) {
-    //                     fadeWindowLoader.item.startFade();
-    //                 }
-    //             }
+                function onFadeToLockRequested() {
+                    if (fadeWindowLoader.item) {
+                        fadeWindowLoader.item.startFade();
+                    }
+                }
 
-    //             function onCancelFadeToLock() {
-    //                 if (fadeWindowLoader.item) {
-    //                     fadeWindowLoader.item.cancelFade();
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+                function onCancelFadeToLock() {
+                    if (fadeWindowLoader.item) {
+                        fadeWindowLoader.item.cancelFade();
+                    }
+                }
+            }
+        }
+    }
 
     // Variants {
     //     model: Quickshell.screens
@@ -836,6 +837,36 @@ Item {
         Component.onCompleted: PopoutService.notepadSlideouts = instances
     }
 
+    Variants {
+        id: toolboxSlideoutVariants
+        model: SettingsData.getFilteredScreens("toolbox")
+
+        delegate: DankSlideout {
+            id: toolboxSlideout
+            modelData: item
+            title: I18n.tr("Toolbox")
+            side: "left"
+            slideoutWidth: SettingsData.toolboxWidth
+
+            content: Component {
+                ToolboxContent {
+                    onHideRequested: toolboxSlideout.hide()
+                }
+            }
+
+            function toggle() {
+                if (isVisible) {
+                    hide();
+                } else {
+                    show();
+                }
+            }
+        }
+
+        onInstancesChanged: PopoutService.toolboxSlideouts = instances
+        Component.onCompleted: PopoutService.toolboxSlideouts = instances
+    }
+
     LazyLoader {
         id: powerMenuModalLoader
 
@@ -876,15 +907,16 @@ Item {
     }
 
     LazyLoader {
-        id: hyprKeybindsModalLoader
+        id: clockModalLoader
 
         active: false
+        Component.onCompleted: PopoutService.clockModalLoader = clockModalLoader
 
-        KeybindsModal {
-            id: keybindsModal
+        ClockModal {
+            id: clockModal
 
             Component.onCompleted: {
-                PopoutService.hyprKeybindsModal = keybindsModal;
+                PopoutService.clockModal = clockModal;
             }
         }
     }
@@ -907,10 +939,11 @@ Item {
     DMSShellIPC {
         powerMenuModalLoader: powerMenuModalLoader
         processListModalLoader: processListModalLoader
+        clockModalLoader: clockModalLoader
         controlCenterLoader: controlCenterLoader
         dankDashPopoutLoader: dankDashPopoutLoader
         notepadSlideoutVariants: notepadSlideoutVariants
-        hyprKeybindsModalLoader: hyprKeybindsModalLoader
+        toolboxSlideoutVariants: toolboxSlideoutVariants
         dankBarRepeater: dankBarRepeater
         hyprlandOverviewLoader: hyprlandOverviewLoader
         workspaceRenameModalLoader: workspaceRenameModalLoader
@@ -970,6 +1003,22 @@ Item {
         active: CompositorService.isNiri && SettingsData.niriOverviewOverlayEnabled
         component: NiriOverviewOverlay {
             id: niriOverviewOverlay
+        }
+    }
+
+    ScreenshotControls {
+        id: screenshotControls
+
+        Component.onCompleted: {
+            PopoutService.screenshotControls = screenshotControls;
+        }
+    }
+
+    ScreenshotRegionOverlay {
+        id: screenshotRegionOverlay
+
+        Component.onCompleted: {
+            ScreenshotService.regionOverlay = screenshotRegionOverlay;
         }
     }
 

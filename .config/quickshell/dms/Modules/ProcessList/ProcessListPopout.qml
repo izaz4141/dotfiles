@@ -48,7 +48,7 @@ DankPopout {
     }
 
     Ref {
-        service: DgopService
+        service: SysMonitorService
     }
 
     ProcessContextMenu {
@@ -212,7 +212,7 @@ DankPopout {
                         if (!SessionData.enabledGpuPciIds || SessionData.enabledGpuPciIds.length === 0)
                             return [];
                         const result = [];
-                        for (const gpu of DgopService.availableGpus) {
+                        for (const gpu of SysMonitorService.availableGpus) {
                             if (SessionData.enabledGpuPciIds.indexOf(gpu.pciId) !== -1 && gpu.temperature > 0)
                                 result.push(gpu);
                         }
@@ -245,14 +245,14 @@ DankPopout {
                             spacing: Theme.spacingXS / 2
 
                             StyledText {
-                                text: DgopService.hostname || "localhost"
+                                text: SysMonitorService.hostname || "localhost"
                                 font.pixelSize: Theme.fontSizeMedium
                                 font.weight: Font.Bold
                                 color: Theme.surfaceText
                             }
 
                             StyledText {
-                                text: DgopService.distribution || "Linux"
+                                text: SysMonitorService.distribution || "Linux"
                                 font.pixelSize: Theme.fontSizeSmall
                                 color: Theme.surfaceVariantText
                             }
@@ -271,7 +271,7 @@ DankPopout {
                                     }
 
                                     StyledText {
-                                        text: DgopService.shortUptime || "--"
+                                        text: SysMonitorService.shortUptime || "--"
                                         font.pixelSize: Theme.fontSizeSmall - 1
                                         font.family: SettingsData.monoFontFamily
                                         color: Theme.surfaceVariantText
@@ -285,7 +285,7 @@ DankPopout {
                                 }
 
                                 StyledText {
-                                    text: DgopService.processCount + " " + I18n.tr("procs", "short for processes")
+                                    text: SysMonitorService.processCount + " " + I18n.tr("procs", "short for processes")
                                     font.pixelSize: Theme.fontSizeSmall - 1
                                     font.family: SettingsData.monoFontFamily
                                     color: Theme.surfaceVariantText
@@ -303,22 +303,22 @@ DankPopout {
                         CircleGauge {
                             width: statsContainer.gaugeSize
                             height: statsContainer.gaugeSize
-                            value: DgopService.cpuUsage / 100
-                            label: DgopService.cpuUsage.toFixed(0) + "%"
+                            value: SysMonitorService.cpuUsage / 100
+                            label: SysMonitorService.cpuUsage.toFixed(0) + "%"
                             sublabel: "CPU"
-                            detail: DgopService.cpuTemperature > 0 ? (DgopService.cpuTemperature.toFixed(0) + "°") : ""
-                            accentColor: DgopService.cpuUsage > 80 ? Theme.error : (DgopService.cpuUsage > 50 ? Theme.warning : Theme.primary)
-                            detailColor: DgopService.cpuTemperature > 85 ? Theme.error : (DgopService.cpuTemperature > 70 ? Theme.warning : Theme.surfaceVariantText)
+                            detail: SysMonitorService.cpuTemperature > 0 ? (SysMonitorService.cpuTemperature.toFixed(0) + "°") : ""
+                            accentColor: SysMonitorService.cpuUsage > 80 ? Theme.error : (SysMonitorService.cpuUsage > 50 ? Theme.warning : Theme.primary)
+                            detailColor: SysMonitorService.cpuTemperature > 85 ? Theme.error : (SysMonitorService.cpuTemperature > 70 ? Theme.warning : Theme.surfaceVariantText)
                         }
 
                         CircleGauge {
                             width: statsContainer.gaugeSize
                             height: statsContainer.gaugeSize
-                            value: DgopService.memoryUsage / 100
-                            label: statsContainer.compactMem(DgopService.usedMemoryKB)
+                            value: SysMonitorService.memoryUsage / 100
+                            label: statsContainer.compactMem(SysMonitorService.usedMemoryKB)
                             sublabel: I18n.tr("Memory")
-                            detail: DgopService.totalSwapKB > 0 ? ("+" + statsContainer.compactMem(DgopService.usedSwapKB)) : ""
-                            accentColor: DgopService.memoryUsage > 90 ? Theme.error : (DgopService.memoryUsage > 70 ? Theme.warning : Theme.secondary)
+                            detail: SysMonitorService.totalSwapKB > 0 ? ("+" + statsContainer.compactMem(SysMonitorService.usedSwapKB)) : ""
+                            accentColor: SysMonitorService.memoryUsage > 90 ? Theme.error : (SysMonitorService.memoryUsage > 70 ? Theme.warning : Theme.secondary)
                         }
 
                         CircleGauge {

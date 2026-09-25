@@ -119,13 +119,13 @@ Column {
     }
 
     SettingsDivider {
-        visible: (cfg.showGpuTemp ?? false) && DgopService.availableGpus.length > 0
+        visible: (cfg.showGpuTemp ?? false) && SysMonitorService.availableGpus.length > 0
     }
 
     Item {
         width: parent.width
         height: gpuSelectColumn.height + Theme.spacingM * 2
-        visible: (cfg.showGpuTemp ?? false) && DgopService.availableGpus.length > 0
+        visible: (cfg.showGpuTemp ?? false) && SysMonitorService.availableGpus.length > 0
 
         Column {
             id: gpuSelectColumn
@@ -145,7 +145,7 @@ Column {
                 spacing: Theme.spacingXS
 
                 Repeater {
-                    model: DgopService.availableGpus
+                    model: SysMonitorService.availableGpus
 
                     Rectangle {
                         required property var modelData

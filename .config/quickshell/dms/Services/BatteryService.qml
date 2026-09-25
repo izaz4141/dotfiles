@@ -171,8 +171,9 @@ Singleton {
         const btDevices = [];
         const bluetoothTypes = [UPowerDeviceType.BluetoothGeneric, UPowerDeviceType.Headphones, UPowerDeviceType.Headset, UPowerDeviceType.Keyboard, UPowerDeviceType.Mouse, UPowerDeviceType.Speakers];
 
-        for (var i = 0; i < UPower.devices.count; i++) {
-            const dev = UPower.devices.get(i);
+        const devValues = UPower.devices.values;
+        for (var i = 0; i < devValues.length; i++) {
+            const dev = devValues[i];
             if (dev && dev.ready && bluetoothTypes.includes(dev.type)) {
                 btDevices.push({
                     "name": dev.model || UPowerDeviceType.toString(dev.type),

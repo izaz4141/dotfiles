@@ -73,7 +73,7 @@ Item {
                     const center = (travel * ratio) + sliderHandle.width / 2
                     return Math.max(0, Math.min(sliderTrack.width, center))
                 }
-                color: slider.enabled ? Theme.primary : Theme.withAlpha(Theme.onSurface, 0.12)
+                color: slider.enabled ? Theme.primary : Theme.withAlpha(Theme.surfaceText, 0.12)
 
             }
 
@@ -91,7 +91,7 @@ Item {
                     return Math.max(0, Math.min(travel, travel * ratio))
                 }
                 anchors.verticalCenter: parent.verticalCenter
-                color: slider.enabled ? Theme.primary : Theme.withAlpha(Theme.onSurface, 0.12)
+                color: slider.enabled ? Theme.primary : Theme.withAlpha(Theme.surfaceText, 0.12)
                 border.width: 3
                 border.color: slider.thumbOutlineColor
 
@@ -99,7 +99,7 @@ Item {
                 StyledRect {
                     anchors.fill: parent
                     radius: Theme.cornerRadius
-                    color: Theme.onPrimary
+                    color: Theme.primaryText
                     opacity: slider.enabled ? (sliderMouseArea.pressed ? 0.16 : (sliderMouseArea.containsMouse ? 0.08 : 0)) : 0
                     visible: opacity > 0
                 }
@@ -122,7 +122,7 @@ Item {
                     width: 0
                     height: 0
                     radius: width / 2
-                    color: Theme.onPrimary
+                    color: Theme.primaryText
                     opacity: 0
 
                     function start() {

@@ -5,265 +5,365 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Common
+import qs.Modals.Clipboard
 
 Singleton {
     id: root
 
-    readonly property int longTextThreshold: 200
+    property bool clipboardAvailable: false
 
-    readonly property bool clipboardAvailable: DMSService.isConnected && (DMSService.capabilities.length === 0 || DMSService.capabilities.includes("clipboard"))
-    readonly property bool wtypeAvailable: SessionService.wtypeAvailable
-
-    property var internalEntries: []
-    property var clipboardEntries: []
-    property var unpinnedEntries: []
-    property var pinnedEntries: []
-    property int pinnedCount: 0
-    property int totalCount: 0
+    property alias model: listModel
+    property alias filteredModel: filteredClipboardModel
     property string searchText: ""
+    property int totalCount: 0
     property int selectedIndex: 0
     property bool keyboardNavigationActive: false
-    property int refCount: 0
 
-    signal historyCopied
-    signal historyCleared
+    property string pasteTool: ""
+
+    signal entriesLoaded
+
+    ListModel {
+        id: listModel
+    }
+
+    ListModel {
+        id: filteredClipboardModel
+    }
 
     Process {
-        id: wtypeProcess
-        command: ["wtype", "-M", "ctrl", "-P", "v", "-p", "v", "-m", "ctrl"]
+        id: clipboardProbe
+        command: ["sh", "-c", "command -v cliphist"]
         running: false
+
+        onExited: exitCode => {
+            root.clipboardAvailable = (exitCode === 0);
+        }
+    }
+
+    Process {
+        id: listProcess
+        command: ["cliphist", "list"]
+        running: false
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                listModel.clear()
+                const lines = text.trim().split('\n')
+                for (const line of lines) {
+                    if (line.trim().length > 0) {
+                        listModel.append({
+                            "entry": line
+                        })
+                    }
+                }
+                root.updateFilteredModel()
+                root.entriesLoaded()
+            }
+        }
+    }
+
+    Process {
+        id: deleteProcess
+        property string deletedEntry: ""
+        running: false
+
+        onExited: exitCode => {
+            if (exitCode === 0) {
+                for (var i = 0; i < listModel.count; i++) {
+                    if (listModel.get(i).entry === deleteProcess.deletedEntry) {
+                        listModel.remove(i)
+                        break
+                    }
+                }
+                for (var j = 0; j < filteredClipboardModel.count; j++) {
+                    if (filteredClipboardModel.get(j).entry === deleteProcess.deletedEntry) {
+                        filteredClipboardModel.remove(j)
+                        break
+                    }
+                }
+                root.totalCount = filteredClipboardModel.count
+                if (filteredClipboardModel.count === 0) {
+                    root.keyboardNavigationActive = false
+                    root.selectedIndex = 0
+                } else if (root.selectedIndex >= filteredClipboardModel.count) {
+                    root.selectedIndex = filteredClipboardModel.count - 1
+                }
+                Qt.callLater(root.refresh)
+            } else {
+                console.warn("Failed to delete clipboard entry")
+            }
+        }
+    }
+
+    Process {
+        id: wipeProcess
+        command: ["sh", "-c", "printf y | cliphist wipe"]
+        running: false
+
+        onExited: exitCode => {
+            if (exitCode === 0) {
+                listModel.clear()
+                filteredClipboardModel.clear()
+                root.totalCount = 0
+                Qt.callLater(root.refresh)
+            } else {
+                console.warn("cliphist wipe failed, exit code:", exitCode)
+            }
+        }
+    }
+
+    Process {
+        id: copyProcess
+        running: false
+        property var pendingCallback: null
+        onExited: exitCode => {
+            const cb = pendingCallback
+            pendingCallback = null
+            if (cb) cb()
+        }
+    }
+
+    Process {
+        id: pasteKeystroke
+        running: false
+    }
+
+    Process {
+        id: wtypeProbe
+        command: ["sh", "-c", "command -v wtype"]
+        running: false
+        onExited: exitCode => {
+            if (exitCode === 0) {
+                root.pasteTool = "wtype"
+            } else {
+                ydotoolProbe.running = true
+            }
+        }
+    }
+
+    Process {
+        id: ydotoolProbe
+        command: ["sh", "-c", "command -v ydotool"]
+        running: false
+        onExited: exitCode => {
+            if (exitCode === 0) {
+                root.pasteTool = "ydotool"
+            } else {
+                root.pasteTool = ""
+            }
+        }
+    }
+
+    Process {
+        id: dataUrlDecoder
+        running: false
+        property int entryId: -1
+        property var callback: null
+
+        command: {
+            const tmp = (Quickshell.env("XDG_RUNTIME_DIR") || "/tmp") + "/dms-cliphist-" + entryId + "-" + Date.now()
+            return ["sh", "-c", `cliphist decode ${entryId} > ${tmp} 2>/dev/null && file -b --mime-type ${tmp} && echo "::TMP::${tmp}"`]
+        }
+
+        stdout: StdioCollector {
+            id: dataUrlMimeCollector
+        }
+
+        onExited: exitCode => {
+            const cb = dataUrlDecoder.callback
+            dataUrlDecoder.callback = null
+            if (exitCode !== 0) {
+                if (cb) cb("", "")
+                return
+            }
+            const raw = (dataUrlMimeCollector.text || "").trim()
+            const sepIdx = raw.lastIndexOf("::TMP::")
+            if (sepIdx < 0) {
+                if (cb) cb("", "")
+                return
+            }
+            const mime = raw.substring(0, sepIdx).trim()
+            const tmp = raw.substring(sepIdx + "::TMP::".length).trim()
+            b64Encoder.tmpPath = tmp
+            b64Encoder.mime = mime
+            b64Encoder.callback = cb
+            b64Encoder.running = true
+        }
+    }
+
+    Process {
+        id: b64Encoder
+        running: false
+        property string tmpPath: ""
+        property string mime: ""
+        property var callback: null
+
+        command: ["sh", "-c", `base64 -w0 ${tmpPath}`]
+
+        stdout: StdioCollector {
+            id: b64Collector
+        }
+
+        onExited: exitCode => {
+            const cb = b64Encoder.callback
+            const mime = b64Encoder.mime
+            const path = b64Encoder.tmpPath
+            b64Encoder.callback = null
+            b64Encoder.mime = ""
+            b64Encoder.tmpPath = ""
+            if (exitCode === 0) {
+                const b64 = (b64Collector.text || "").trim()
+                if (cb) cb(mime, b64)
+            } else {
+                if (cb) cb("", "")
+            }
+            if (path) {
+                Quickshell.execDetached(["rm", "-f", path])
+            }
+        }
     }
 
     Timer {
         id: pasteTimer
         interval: 200
         repeat: false
-        onTriggered: wtypeProcess.running = true
+        property var callback: null
+        onTriggered: {
+            const cb = callback
+            callback = null
+            root.sendPasteKeystroke()
+            if (cb) {
+                Qt.callLater(cb)
+            }
+        }
     }
 
-    function updateFilteredModel() {
-        const query = searchText.trim();
-        let filtered = [];
-
-        if (query.length === 0) {
-            filtered = internalEntries;
-        } else {
-            const lowerQuery = query.toLowerCase();
-            filtered = internalEntries.filter(entry => entry.preview.toLowerCase().includes(lowerQuery));
-        }
-
-        filtered.sort((a, b) => {
-            if (a.pinned !== b.pinned)
-                return b.pinned ? 1 : -1;
-            return b.id - a.id;
-        });
-
-        clipboardEntries = filtered;
-        unpinnedEntries = filtered.filter(e => !e.pinned);
-        totalCount = clipboardEntries.length;
-
-        if (unpinnedEntries.length === 0) {
-            keyboardNavigationActive = false;
-            selectedIndex = 0;
-            return;
-        }
-        if (selectedIndex >= unpinnedEntries.length) {
-            selectedIndex = unpinnedEntries.length - 1;
-        }
+    Component.onCompleted: {
+        clipboardProbe.running = true
+        wtypeProbe.running = true
     }
 
     function refresh() {
-        if (!clipboardAvailable) {
-            return;
+        listProcess.running = true
+    }
+
+    function copyEntry(entry, callback) {
+        const entryId = entry.split('\t')[0]
+        copyProcess.command = ["sh", "-c", `cliphist decode ${entryId} | wl-copy`]
+        copyProcess.pendingCallback = callback || null
+        copyProcess.running = true
+    }
+
+    function pasteEntry(entry, callback) {
+        copyEntry(entry, () => {
+            pasteTimer.callback = callback || null
+            pasteTimer.start()
+        })
+    }
+
+    function sendPasteKeystroke() {
+        if (pasteTool === "wtype") {
+            pasteKeystroke.command = ["wtype", "-M", "ctrl", "v", "-m", "ctrl"]
+            pasteKeystroke.running = true
+        } else if (pasteTool === "ydotool") {
+            pasteKeystroke.command = ["ydotool", "key", "ctrl+v"]
+            pasteKeystroke.running = true
+        } else {
+            console.warn("ClipboardService: no paste tool available (install wtype or ydotool)")
         }
-        DMSService.sendRequest("clipboard.getHistory", null, function (response) {
-            if (response.error) {
-                console.warn("ClipboardService: Failed to get history:", response.error);
-                return;
-            }
-            internalEntries = response.result || [];
-            pinnedEntries = internalEntries.filter(e => e.pinned);
-            pinnedCount = pinnedEntries.length;
-            updateFilteredModel();
-        });
     }
 
-    function reset() {
-        searchText = "";
-        selectedIndex = 0;
-        keyboardNavigationActive = false;
-        internalEntries = [];
-        clipboardEntries = [];
-        unpinnedEntries = [];
+    function getEntryId(entry) {
+        if (!entry) return -1
+        const parts = entry.split('\t')
+        const id = parseInt(parts[0])
+        return isNaN(id) ? -1 : id
     }
 
-    function copyEntry(entry, closeCallback) {
-        DMSService.sendRequest("clipboard.copyEntry", {
-            "id": entry.id
-        }, function (response) {
-            if (response.error) {
-                ToastService.showError(I18n.tr("Failed to copy entry"));
-                return;
-            }
-            ToastService.showInfo(entry.isImage ? I18n.tr("Image copied to clipboard") : I18n.tr("Copied to clipboard"));
-            historyCopied();
-            if (closeCallback) {
-                closeCallback();
-            }
-        });
+    function invalidateLauncherSearchCache() {
+        searchText = ""
     }
 
-    function pasteEntry(entry, closeCallback) {
-        if (!wtypeAvailable) {
-            ToastService.showError(I18n.tr("wtype not available - install wtype for paste support"));
-            return;
+    function getEntryDataUrl(id, callback) {
+        if (id === undefined || id === null || id < 0) {
+            callback("", "")
+            return
         }
-        DMSService.sendRequest("clipboard.copyEntry", {
-            "id": entry.id
-        }, function (response) {
-            if (response.error) {
-                ToastService.showError(I18n.tr("Failed to copy entry"));
-                return;
-            }
-            if (closeCallback) {
-                closeCallback();
-            }
-            pasteTimer.start();
-        });
-    }
-
-    function pasteSelected(closeCallback) {
-        if (!keyboardNavigationActive || clipboardEntries.length === 0 || selectedIndex < 0 || selectedIndex >= clipboardEntries.length) {
-            return;
-        }
-        pasteEntry(clipboardEntries[selectedIndex], closeCallback);
+        dataUrlDecoder.entryId = id
+        dataUrlDecoder.callback = callback
+        dataUrlDecoder.running = true
     }
 
     function deleteEntry(entry) {
-        DMSService.sendRequest("clipboard.deleteEntry", {
-            "id": entry.id
-        }, function (response) {
-            if (response.error) {
-                console.warn("ClipboardService: Failed to delete entry:", response.error);
-                return;
-            }
-            internalEntries = internalEntries.filter(e => e.id !== entry.id);
-            updateFilteredModel();
-            if (clipboardEntries.length === 0) {
-                keyboardNavigationActive = false;
-                selectedIndex = 0;
-                return;
-            }
-            if (selectedIndex >= clipboardEntries.length) {
-                selectedIndex = clipboardEntries.length - 1;
-            }
-        });
-    }
-
-    function deletePinnedEntry(entry, confirmDialog) {
-        if (!confirmDialog) {
-            return;
-        }
-        confirmDialog.show(I18n.tr("Delete Saved Item?"), I18n.tr("This will permanently remove this saved clipboard item. This action cannot be undone."), function () {
-            DMSService.sendRequest("clipboard.deleteEntry", {
-                "id": entry.id
-            }, function (response) {
-                if (response.error) {
-                    console.warn("ClipboardService: Failed to delete entry:", response.error);
-                    return;
-                }
-                internalEntries = internalEntries.filter(e => e.id !== entry.id);
-                updateFilteredModel();
-                ToastService.showInfo(I18n.tr("Saved item deleted"));
-            });
-        }, function () {});
-    }
-
-    function pinEntry(entry) {
-        DMSService.sendRequest("clipboard.getPinnedCount", null, function (countResponse) {
-            if (countResponse.error) {
-                ToastService.showError(I18n.tr("Failed to check pin limit"));
-                return;
-            }
-
-            const maxPinned = 25;
-            if (countResponse.result.count >= maxPinned) {
-                ToastService.showError(I18n.tr("Maximum pinned entries reached") + " (" + maxPinned + ")");
-                return;
-            }
-
-            DMSService.sendRequest("clipboard.pinEntry", {
-                "id": entry.id
-            }, function (response) {
-                if (response.error) {
-                    ToastService.showError(I18n.tr("Failed to pin entry"));
-                    return;
-                }
-                ToastService.showInfo(I18n.tr("Entry pinned"));
-                refresh();
-            });
-        });
-    }
-
-    function unpinEntry(entry) {
-        DMSService.sendRequest("clipboard.unpinEntry", {
-            "id": entry.id
-        }, function (response) {
-            if (response.error) {
-                ToastService.showError(I18n.tr("Failed to unpin entry"));
-                return;
-            }
-            ToastService.showInfo(I18n.tr("Entry unpinned"));
-            refresh();
-        });
+        deleteProcess.deletedEntry = entry
+        deleteProcess.command = ["sh", "-c", `echo '${entry.replace(/'/g, "'\\''")}' | cliphist delete`]
+        deleteProcess.running = true
     }
 
     function clearAll() {
-        const hasPinned = pinnedCount > 0;
-        const savedCount = pinnedCount;
-        DMSService.sendRequest("clipboard.clearHistory", null, function (response) {
-            if (response.error) {
-                console.warn("ClipboardService: Failed to clear history:", response.error);
-                return;
-            }
-            refresh();
-            historyCleared();
-            if (hasPinned) {
-                ToastService.showInfo(I18n.tr("History cleared. %1 pinned entries kept.").arg(savedCount));
-            }
-        });
+        wipeProcess.running = true
     }
 
     function getEntryPreview(entry) {
-        return entry.preview || "";
+        if (!entry) return ""
+        let content = entry.replace(/^\s*\d+\s+/, "");
+        if (content.includes("image/") || content.includes("binary data") || /\.(png|jpg|jpeg|gif|bmp|webp)/i.test(content)) {
+            const dimensionMatch = content.match(/(\d+)x(\d+)/);
+            if (dimensionMatch) {
+                return `Image ${dimensionMatch[1]}×${dimensionMatch[2]}`;
+            }
+            const typeMatch = content.match(/\b(png|jpg|jpeg|gif|bmp|webp)\b/i);
+            if (typeMatch) {
+                return `Image (${typeMatch[1].toUpperCase()})`;
+            }
+            return "Image";
+        }
+        if (content.length > ClipboardConstants.previewLength) {
+            return content.substring(0, ClipboardConstants.previewLength) + "...";
+        }
+        return content;
     }
 
     function getEntryType(entry) {
-        if (entry.isImage) {
+        if (!entry) return "text"
+        if (entry.includes("image/") || entry.includes("binary data") || /\.(png|jpg|jpeg|gif|bmp|webp)/i.test(entry) || /\b(png|jpg|jpeg|gif|bmp|webp)\b/i.test(entry)) {
             return "image";
         }
-        if (entry.size > longTextThreshold) {
+        if (entry.length > ClipboardConstants.longTextThreshold) {
             return "long_text";
         }
         return "text";
     }
 
-    function hashedPinnedEntry(entryHash) {
-        if (!entryHash) {
-            return false;
-        }
-        return pinnedEntries.some(pinnedEntry => pinnedEntry.hash === entryHash);
+    function setSearchText(text) {
+        searchText = text || ""
+        updateFilteredModel()
     }
 
-    Connections {
-        target: DMSService
-        enabled: root.refCount > 0
-        function onClipboardStateUpdate(data) {
-            const newHistory = data.history || [];
-            internalEntries = newHistory;
-            pinnedEntries = newHistory.filter(e => e.pinned);
-            pinnedCount = pinnedEntries.length;
-            updateFilteredModel();
+    function updateFilteredModel() {
+        filteredClipboardModel.clear()
+        for (var i = 0; i < listModel.count; i++) {
+            const entry = listModel.get(i).entry
+            if (searchText.trim().length === 0) {
+                filteredClipboardModel.append({
+                    "entry": entry
+                })
+            } else {
+                const content = getEntryPreview(entry).toLowerCase()
+                if (content.includes(searchText.toLowerCase())) {
+                    filteredClipboardModel.append({
+                        "entry": entry
+                    })
+                }
+            }
+        }
+        root.totalCount = filteredClipboardModel.count
+        if (filteredClipboardModel.count === 0) {
+            root.keyboardNavigationActive = false
+            root.selectedIndex = 0
+        } else if (root.selectedIndex >= filteredClipboardModel.count) {
+            root.selectedIndex = filteredClipboardModel.count - 1
         }
     }
 }

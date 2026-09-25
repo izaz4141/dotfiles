@@ -108,40 +108,40 @@ Item {
                 "text": I18n.tr("CPU Usage"),
                 "description": I18n.tr("CPU usage indicator"),
                 "icon": "memory",
-                "enabled": DgopService.dgopAvailable,
-                "warning": !DgopService.dgopAvailable ? I18n.tr("Requires 'dgop' tool") : undefined
+                "enabled": SysMonitorService.monitorAvailable,
+                "warning": !SysMonitorService.monitorAvailable ? I18n.tr("Requires 'dgop' tool") : undefined
             },
             {
                 "id": "memUsage",
                 "text": I18n.tr("Memory Usage"),
                 "description": I18n.tr("Memory usage indicator"),
                 "icon": "developer_board",
-                "enabled": DgopService.dgopAvailable,
-                "warning": !DgopService.dgopAvailable ? I18n.tr("Requires 'dgop' tool") : undefined
+                "enabled": SysMonitorService.monitorAvailable,
+                "warning": !SysMonitorService.monitorAvailable ? I18n.tr("Requires 'dgop' tool") : undefined
             },
             {
                 "id": "diskUsage",
                 "text": I18n.tr("Disk Usage"),
                 "description": I18n.tr("Percentage"),
                 "icon": "storage",
-                "enabled": DgopService.dgopAvailable,
-                "warning": !DgopService.dgopAvailable ? I18n.tr("Requires 'dgop' tool") : undefined
+                "enabled": SysMonitorService.monitorAvailable,
+                "warning": !SysMonitorService.monitorAvailable ? I18n.tr("Requires 'dgop' tool") : undefined
             },
             {
                 "id": "cpuTemp",
                 "text": I18n.tr("CPU Temperature"),
                 "description": I18n.tr("CPU temperature display"),
                 "icon": "device_thermostat",
-                "enabled": DgopService.dgopAvailable,
-                "warning": !DgopService.dgopAvailable ? I18n.tr("Requires 'dgop' tool") : undefined
+                "enabled": SysMonitorService.monitorAvailable,
+                "warning": !SysMonitorService.monitorAvailable ? I18n.tr("Requires 'dgop' tool") : undefined
             },
             {
                 "id": "gpuTemp",
                 "text": I18n.tr("GPU Temperature"),
                 "description": "",
                 "icon": "auto_awesome_mosaic",
-                "warning": !DgopService.dgopAvailable ? I18n.tr("Requires 'dgop' tool") : I18n.tr("This widget prevents GPU power off states, which can significantly impact battery life on laptops. It is not recommended to use this on laptops with hybrid graphics."),
-                "enabled": DgopService.dgopAvailable
+                "warning": !SysMonitorService.monitorAvailable ? I18n.tr("Requires 'dgop' tool") : I18n.tr("This widget prevents GPU power off states, which can significantly impact battery life on laptops. It is not recommended to use this on laptops with hybrid graphics."),
+                "enabled": SysMonitorService.monitorAvailable
             },
             {
                 "id": "systemTray",
@@ -408,6 +408,7 @@ Item {
             widgetObj.showLabels = true;
             widgetObj.compactMode = false;
             widgetObj.unitPrecision = 1;
+            widgetObj.hideThreshold = 0;
         }
         if (widgetId === "cpuUsage" || widgetId === "memUsage" || widgetId === "cpuTemp" || widgetId === "gpuTemp")
             widgetObj.minimumWidth = true;
@@ -436,7 +437,7 @@ Item {
             "id": widget.id,
             "enabled": widget.enabled
         };
-        var keys = ["size", "selectedGpuIndex", "pciId", "mountPath", "diskUsageMode", "minimumWidth", "showSwap", "showInGb", "mediaSize", "clockCompactMode", "focusedWindowCompactMode", "runningAppsCompactMode", "keyboardLayoutNameCompactMode", "runningAppsGroupByApp", "runningAppsCurrentWorkspace", "runningAppsCurrentMonitor", "showNetworkIcon", "showBluetoothIcon", "showAudioIcon", "showAudioPercent", "showVpnIcon", "showBrightnessIcon", "showBrightnessPercent", "showMicIcon", "showMicPercent", "showBatteryIcon", "showPrinterIcon", "showScreenSharingIcon", "barMaxVisibleApps", "barMaxVisibleRunningApps", "barShowOverflowBadge", "selectedInterface", "updateInterval", "showIcon", "showLabels", "compactMode", "unitPrecision"];
+        var keys = ["size", "selectedGpuIndex", "pciId", "mountPath", "diskUsageMode", "minimumWidth", "showSwap", "showInGb", "mediaSize", "clockCompactMode", "focusedWindowCompactMode", "runningAppsCompactMode", "keyboardLayoutNameCompactMode", "runningAppsGroupByApp", "runningAppsCurrentWorkspace", "runningAppsCurrentMonitor", "showNetworkIcon", "showBluetoothIcon", "showAudioIcon", "showAudioPercent", "showVpnIcon", "showBrightnessIcon", "showBrightnessPercent", "showMicIcon", "showMicPercent", "showBatteryIcon", "showPrinterIcon", "showScreenSharingIcon", "barMaxVisibleApps", "barMaxVisibleRunningApps", "barShowOverflowBadge", "selectedInterface", "updateInterval", "showIcon", "showLabels", "compactMode", "unitPrecision", "hideThreshold"];
         for (var i = 0; i < keys.length; i++) {
             if (widget[keys[i]] !== undefined)
                 result[keys[i]] = widget[keys[i]];
@@ -481,7 +482,7 @@ Item {
         var widgets = getWidgetsForSection(sectionId).slice();
         if (widgetIndex < 0 || widgetIndex >= widgets.length)
             return;
-        var pciId = DgopService.availableGpus && DgopService.availableGpus.length > selectedGpuIndex ? DgopService.availableGpus[selectedGpuIndex].pciId : "";
+        var pciId = SysMonitorService.availableGpus && SysMonitorService.availableGpus.length > selectedGpuIndex ? SysMonitorService.availableGpus[selectedGpuIndex].pciId : "";
         var newWidget = cloneWidgetData(widgets[widgetIndex]);
         newWidget.selectedGpuIndex = selectedGpuIndex;
         newWidget.pciId = pciId;
@@ -572,6 +573,18 @@ Item {
     }
 
     function handleOverflowSettingChanged(sectionId, widgetIndex, settingName, value) {
+        var widgets = getWidgetsForSection(sectionId).slice();
+        if (widgetIndex < 0 || widgetIndex >= widgets.length) {
+            setWidgetsForSection(sectionId, widgets);
+            return;
+        }
+        var newWidget = cloneWidgetData(widgets[widgetIndex]);
+        newWidget[settingName] = value;
+        widgets[widgetIndex] = newWidget;
+        setWidgetsForSection(sectionId, widgets);
+    }
+
+    function handleNetworkSpeedSettingChanged(sectionId, widgetIndex, settingName, value) {
         var widgets = getWidgetsForSection(sectionId).slice();
         if (widgetIndex < 0 || widgetIndex >= widgets.length) {
             setWidgetsForSection(sectionId, widgets);
@@ -690,6 +703,20 @@ Item {
                     item.barMaxVisibleRunningApps = widget.barMaxVisibleRunningApps;
                 if (widget.barShowOverflowBadge !== undefined)
                     item.barShowOverflowBadge = widget.barShowOverflowBadge;
+                if (widget.selectedInterface !== undefined)
+                    item.selectedInterface = widget.selectedInterface;
+                if (widget.updateInterval !== undefined)
+                    item.updateInterval = widget.updateInterval;
+                if (widget.showIcon !== undefined)
+                    item.showIcon = widget.showIcon;
+                if (widget.showLabels !== undefined)
+                    item.showLabels = widget.showLabels;
+                if (widget.compactMode !== undefined)
+                    item.compactMode = widget.compactMode;
+                if (widget.unitPrecision !== undefined)
+                    item.unitPrecision = widget.unitPrecision;
+                if (widget.hideThreshold !== undefined)
+                    item.hideThreshold = widget.hideThreshold;
             }
             widgets.push(item);
         });
@@ -976,6 +1003,9 @@ Item {
                         onOverflowSettingChanged: (sectionId, widgetIndex, settingName, value) => {
                             widgetsTab.handleOverflowSettingChanged(sectionId, widgetIndex, settingName, value);
                         }
+                        onNetworkSpeedSettingChanged: (sectionId, widgetIndex, settingName, value) => {
+                            widgetsTab.handleNetworkSpeedSettingChanged(sectionId, widgetIndex, settingName, value);
+                        }
                     }
                 }
 
@@ -1040,6 +1070,9 @@ Item {
                         onOverflowSettingChanged: (sectionId, widgetIndex, settingName, value) => {
                             widgetsTab.handleOverflowSettingChanged(sectionId, widgetIndex, settingName, value);
                         }
+                        onNetworkSpeedSettingChanged: (sectionId, widgetIndex, settingName, value) => {
+                            widgetsTab.handleNetworkSpeedSettingChanged(sectionId, widgetIndex, settingName, value);
+                        }
                     }
                 }
 
@@ -1103,6 +1136,9 @@ Item {
                         }
                         onOverflowSettingChanged: (sectionId, widgetIndex, settingName, value) => {
                             widgetsTab.handleOverflowSettingChanged(sectionId, widgetIndex, settingName, value);
+                        }
+                        onNetworkSpeedSettingChanged: (sectionId, widgetIndex, settingName, value) => {
+                            widgetsTab.handleNetworkSpeedSettingChanged(sectionId, widgetIndex, settingName, value);
                         }
                     }
                 }

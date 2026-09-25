@@ -15,6 +15,7 @@ Singleton {
 
     readonly property string stateDir: Paths.strip(StandardPaths.writableLocation(StandardPaths.GenericCacheLocation).toString()) + "/DankMaterialShell"
     readonly property bool envDisableMatugen: Quickshell.env("DMS_DISABLE_MATUGEN") === "1" || Quickshell.env("DMS_DISABLE_MATUGEN") === "true"
+    readonly property bool envDisableWallust: Quickshell.env("DMS_DISABLE_WALLUST") === "1" || Quickshell.env("DMS_DISABLE_WALLUST") === "true"
     readonly property string defaultFontFamily: "Inter Variable"
     readonly property string defaultMonoFontFamily: "Fira Code"
 
@@ -95,6 +96,7 @@ Singleton {
     }
 
     property bool matugenAvailable: false
+    property bool wallustAvailable: false
     property bool gtkThemingEnabled: typeof SettingsData !== "undefined" ? SettingsData.gtkAvailable : false
     property bool qtThemingEnabled: typeof SettingsData !== "undefined" ? (SettingsData.qt5ctAvailable || SettingsData.qt6ctAvailable) : false
     property var workerRunning: false
@@ -139,6 +141,9 @@ Singleton {
 
     Component.onCompleted: {
         Quickshell.execDetached(["mkdir", "-p", stateDir]);
+        Proc.runCommand("wallustCheck", ["which", "wallust"], (output, code) => {
+            wallustAvailable = (code === 0) && !envDisableWallust;
+        }, 0);
         Proc.runCommand("matugenCheck", ["which", "matugen"], (output, code) => {
             matugenAvailable = (code === 0) && !envDisableMatugen;
             const isGreeterMode = (typeof SessionData !== "undefined" && SessionData.isGreeterMode);
@@ -162,10 +167,10 @@ Singleton {
 
             const isLight = (typeof SessionData !== "undefined" && SessionData.isLightMode);
             const iconTheme = (typeof SettingsData !== "undefined" && SettingsData.iconTheme) ? SettingsData.iconTheme : "System Default";
+            const selectedMatugenType = (typeof SettingsData !== "undefined" && SettingsData.matugenScheme) ? SettingsData.matugenScheme : "scheme-tonal-spot";
 
             if (currentTheme === dynamic) {
                 if (rawWallpaperPath) {
-                    const selectedMatugenType = (typeof SettingsData !== "undefined" && SettingsData.matugenScheme) ? SettingsData.matugenScheme : "scheme-tonal-spot";
                     if (rawWallpaperPath.startsWith("#")) {
                         setDesiredTheme("hex", rawWallpaperPath, isLight, iconTheme, selectedMatugenType);
                     } else {
@@ -178,7 +183,7 @@ Singleton {
                 if (darkTheme && darkTheme.primary) {
                     const stockColors = buildMatugenColorsFromTheme(darkTheme, lightTheme);
                     const themeData = isLight ? lightTheme : darkTheme;
-                    setDesiredTheme("hex", themeData.primary, isLight, iconTheme, themeData.matugen_type, stockColors);
+                    setDesiredTheme("hex", themeData.primary, isLight, iconTheme, themeData.matugen_type || "scheme-tonal-spot", stockColors);
                 }
             }
         }, 0);
@@ -1119,6 +1124,7 @@ Singleton {
     property real fontSizeMedium: Math.round(fontScale * 14)
     property real fontSizeLarge: Math.round(fontScale * 16)
     property real fontSizeXLarge: Math.round(fontScale * 20)
+    property string syntaxHighlightingTheme: isLightMode ? "ayu Light" : "Monokai"
     property real barHeight: 48
     property real iconSize: 24
     property real iconSizeSmall: 16
@@ -1187,9 +1193,7 @@ Singleton {
         }
 
         if (!isGreeterMode) {
-            if (!matugenAvailable) {
-                PortalService.setLightMode(light);
-            }
+            PortalService.setLightMode(light);
             if (typeof SettingsData !== "undefined") {
                 SettingsData.updateCosmicThemeMode(light);
             }
@@ -1497,7 +1501,7 @@ Singleton {
     }
 
     function setDesiredTheme(kind, value, isLight, iconTheme, matugenType, stockColors) {
-        if (!matugenAvailable) {
+        if (!matugenAvailable || (typeof SettingsData !== "undefined" && !SettingsData.useMatugen)) {
             console.warn("Theme: matugen not available or disabled - cannot set system theme");
             return;
         }
@@ -1521,97 +1525,43 @@ Singleton {
             NiriService.suppressNextToast();
         }
 
-        const desired = {
-            "kind": kind,
-            "value": value,
-            "mode": isLight ? "light" : "dark",
-            "iconTheme": iconTheme || "System Default",
-            "matugenType": matugenType || "scheme-tonal-spot",
-            "runUserTemplates": (typeof SettingsData !== "undefined") ? SettingsData.runUserMatugenTemplates : true
-        };
-
         console.log("Theme: Starting matugen worker");
         workerRunning = true;
 
-        const args = ["dms", "matugen", "queue", "--state-dir", stateDir, "--shell-dir", shellDir, "--config-dir", configDir, "--kind", desired.kind, "--value", desired.value, "--mode", desired.mode, "--icon-theme", desired.iconTheme, "--matugen-type", desired.matugenType,];
-
-        if (!desired.runUserTemplates) {
-            args.push("--run-user-templates=false");
-        }
-        if (stockColors) {
-            args.push("--stock-colors", JSON.stringify(stockColors));
-        }
-        if (typeof SettingsData !== "undefined" && SettingsData.syncModeWithPortal) {
-            args.push("--sync-mode-with-portal");
-        }
-        if (typeof SettingsData !== "undefined" && SettingsData.terminalsAlwaysDark) {
-            args.push("--terminals-always-dark");
-        }
-
-        if (typeof SettingsData !== "undefined") {
-            const skipTemplates = [];
-            if (!SettingsData.runDmsMatugenTemplates) {
-                skipTemplates.push("gtk", "nvim", "niri", "qt5ct", "qt6ct", "firefox", "pywalfox", "zenbrowser", "vesktop", "equibop", "ghostty", "kitty", "foot", "alacritty", "wezterm", "dgop", "kcolorscheme", "vscode", "emacs");
-            } else {
-                if (!SettingsData.matugenTemplateGtk)
-                    skipTemplates.push("gtk");
-                if (!SettingsData.matugenTemplateNiri)
-                    skipTemplates.push("niri");
-                if (!SettingsData.matugenTemplateHyprland)
-                    skipTemplates.push("hyprland");
-                if (!SettingsData.matugenTemplateMangowc)
-                    skipTemplates.push("mangowc");
-                if (!SettingsData.matugenTemplateQt5ct)
-                    skipTemplates.push("qt5ct");
-                if (!SettingsData.matugenTemplateQt6ct)
-                    skipTemplates.push("qt6ct");
-                if (!SettingsData.matugenTemplateFirefox)
-                    skipTemplates.push("firefox");
-                if (!SettingsData.matugenTemplatePywalfox)
-                    skipTemplates.push("pywalfox");
-                if (!SettingsData.matugenTemplateZenBrowser)
-                    skipTemplates.push("zenbrowser");
-                if (!SettingsData.matugenTemplateVesktop)
-                    skipTemplates.push("vesktop");
-                if (!SettingsData.matugenTemplateEquibop)
-                    skipTemplates.push("equibop");
-                if (!SettingsData.matugenTemplateGhostty)
-                    skipTemplates.push("ghostty");
-                if (!SettingsData.matugenTemplateKitty)
-                    skipTemplates.push("kitty");
-                if (!SettingsData.matugenTemplateFoot)
-                    skipTemplates.push("foot");
-                if (!SettingsData.matugenTemplateNeovim)
-                    skipTemplates.push("nvim");
-                if (!SettingsData.matugenTemplateAlacritty)
-                    skipTemplates.push("alacritty");
-                if (!SettingsData.matugenTemplateWezterm)
-                    skipTemplates.push("wezterm");
-                if (!SettingsData.matugenTemplateDgop)
-                    skipTemplates.push("dgop");
-                if (!SettingsData.matugenTemplateKcolorscheme)
-                    skipTemplates.push("kcolorscheme");
-                if (!SettingsData.matugenTemplateVscode)
-                    skipTemplates.push("vscode");
-                if (!SettingsData.matugenTemplateEmacs)
-                    skipTemplates.push("emacs");
-            }
-            if (skipTemplates.length > 0) {
-                args.push("--skip-templates", skipTemplates.join(","));
-            }
-        }
+        const mode = isLight ? "light" : "dark";
+        const args = kind === "image"
+            ? ["matugen", "image", value, "-t", matugenType, "-m", mode, "--source-color-index", "0"]
+            : ["matugen", "color", value, "-t", matugenType, "-m", mode];
 
         systemThemeGenerator.command = args;
         systemThemeGenerator.running = true;
     }
 
     function generateSystemThemesFromCurrentTheme() {
+        runWallust();
+
         const isGreeterMode = (typeof SessionData !== "undefined" && SessionData.isGreeterMode);
-        if (!matugenAvailable || isGreeterMode)
+        if (!matugenAvailable || (typeof SettingsData !== "undefined" && !SettingsData.useMatugen) || isGreeterMode)
             return;
 
         _pendingGenerateParams = true;
         _themeGenerateDebounce.restart();
+    }
+
+    function runWallust() {
+        if (!wallustAvailable)
+            return;
+        if (typeof SettingsData !== "undefined" && !SettingsData.wallustEnabled)
+            return;
+        if (!rawWallpaperPath || rawWallpaperPath.startsWith("#"))
+            return;
+        const isGreeterMode = (typeof SessionData !== "undefined" && SessionData.isGreeterMode);
+        if (isGreeterMode)
+            return;
+
+        console.info("Theme: Running wallust for", rawWallpaperPath);
+        wallustProcess.command = ["wallust", "run", rawWallpaperPath];
+        wallustProcess.running = true;
     }
 
     function _executeThemeGeneration() {
@@ -1625,8 +1575,8 @@ Singleton {
         if (currentTheme === dynamic) {
             if (!rawWallpaperPath)
                 return;
-            const selectedMatugenType = (typeof SettingsData !== "undefined" && SettingsData.matugenScheme) ? SettingsData.matugenScheme : "scheme-tonal-spot";
             const kind = rawWallpaperPath.startsWith("#") ? "hex" : "image";
+            const selectedMatugenType = (typeof SettingsData !== "undefined" && SettingsData.matugenScheme) ? SettingsData.matugenScheme : "scheme-tonal-spot";
             setDesiredTheme(kind, rawWallpaperPath, isLight, iconTheme, selectedMatugenType, null);
             return;
         }
@@ -1687,7 +1637,7 @@ Singleton {
 
         const stockColors = buildMatugenColorsFromTheme(darkTheme, lightTheme);
         const themeData = isLight ? lightTheme : darkTheme;
-        setDesiredTheme("hex", themeData.primary, isLight, iconTheme, themeData.matugen_type, stockColors);
+        setDesiredTheme("hex", themeData.primary, isLight, iconTheme, themeData.matugen_type || "scheme-tonal-spot", stockColors);
     }
 
     function buildMatugenColorsFromTheme(darkTheme, lightTheme) {
@@ -1953,6 +1903,23 @@ Singleton {
             pendingThemeRequest = null;
             console.info("Theme: Processing queued theme request");
             setDesiredTheme(req.kind, req.value, req.isLight, req.iconTheme, req.matugenType, req.stockColors);
+        }
+    }
+
+    Process {
+        id: wallustProcess
+        running: false
+        stdout: SplitParser {
+            onRead: data => console.info("Wallust:", data)
+        }
+        stderr: SplitParser {
+            onRead: data => console.warn("Wallust:", data)
+        }
+        onExited: exitCode => {
+            if (exitCode === 0)
+                console.info("Theme: Wallust completed successfully");
+            else
+                console.warn("Theme: Wallust failed with exit code:", exitCode);
         }
     }
 

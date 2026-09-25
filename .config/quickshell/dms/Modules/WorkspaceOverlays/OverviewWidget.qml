@@ -10,6 +10,7 @@ Item {
     id: root
     required property var panelWindow
     required property bool overviewOpen
+    signal closeRequested()
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
     readonly property real dpr: CompositorService.getScreenScale(panelWindow.screen)
     readonly property int workspacesShown: SettingsData.overviewRows * SettingsData.overviewColumns
@@ -219,10 +220,27 @@ Item {
                                 id: workspaceArea
                                 anchors.fill: parent
                                 acceptedButtons: Qt.LeftButton
+                                onWheel: event => {
+                                    if (root.draggingTargetWorkspace !== -1)
+                                        return;
+                                    const direction = event.angleDelta.y > 0 ? -1 : 1;
+                                    const allIds = root.displayedWorkspaceIds;
+                                    if (!allIds || allIds.length === 0)
+                                        return;
+                                    const activeWsId = root.monitor?.activeWorkspace?.id;
+                                    const currentIdx = activeWsId !== undefined ? allIds.indexOf(activeWsId) : -1;
+                                    const startIdx = currentIdx !== -1 ? currentIdx : 0;
+                                    let nextIdx = startIdx + direction;
+                                    if (nextIdx < 0) nextIdx = allIds.length - 1;
+                                    if (nextIdx >= allIds.length) nextIdx = 0;
+                                    const nextId = allIds[nextIdx];
+                                    if (nextId !== undefined && nextId !== activeWsId)
+                                        HyprlandService.focusWorkspace(nextId);
+                                }
                                 onClicked: {
                                     if (root.draggingTargetWorkspace === -1) {
-                                        root.overviewOpen = false;
-                                        Hyprland.dispatch(`workspace ${workspaceValue}`);
+                                        HyprlandService.focusWorkspace(workspaceValue);
+                                        root.closeRequested();
                                     }
                                 }
                             }
@@ -351,7 +369,7 @@ Item {
                             root.draggingTargetWorkspace = -1;
 
                             if (targetWorkspace !== -1 && targetWorkspace !== windowData?.workspace.id) {
-                                Hyprland.dispatch(`movetoworkspacesilent ${targetWorkspace},address:${windowData?.address}`);
+                                HyprlandService.moveToWorkspace(targetWorkspace, windowData?.address, false);
                                 Qt.callLater(() => {
                                     Hyprland.refreshToplevels();
                                     Hyprland.refreshWorkspaces();
@@ -370,11 +388,11 @@ Item {
                             if (!windowData || !windowData.address)
                                 return;
                             if (event.button === Qt.LeftButton) {
-                                root.overviewOpen = false;
-                                Hyprland.dispatch(`focuswindow address:${windowData.address}`);
+                                HyprlandService.focusWindow(windowData.address);
+                                root.closeRequested();
                                 event.accepted = true;
                             } else if (event.button === Qt.MiddleButton) {
-                                Hyprland.dispatch(`closewindow address:${windowData.address}`);
+                                HyprlandService.closeWindow(windowData.address);
                                 event.accepted = true;
                             }
                         }
