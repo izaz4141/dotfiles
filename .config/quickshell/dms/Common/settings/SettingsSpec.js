@@ -482,7 +482,7 @@ var SPEC = {
     clipboardEnterToPaste: { def: false },
 
     toolboxWidth: { def: 460 },
-    toolboxAiSystemPrompt: { def: "" },
+    toolboxAiSystemPromptFile: { def: "NoPrompt.md" },
     toolboxAiTool: { def: "search" },
     toolboxAiTemperature: { def: 0.5 },
     toolboxAiModel: { def: "" },

@@ -7,6 +7,13 @@
     "comment": ""
   },
   {
+    "term": "%1 Safe Storage",
+    "translation": "",
+    "context": "Keyring",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "%1 adapter, none connected",
     "translation": "",
     "context": "",
@@ -70,6 +77,13 @@
     "comment": ""
   },
   {
+    "term": "%1 does not require an API key",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "%1 exists but is not included. Window rules won't apply.",
     "translation": "",
     "context": "",
@@ -101,6 +115,13 @@
     "term": "%1 notifications",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "%1 shortcuts share the same keys",
+    "translation": "",
+    "context": "Keybind collision summary",
     "reference": "",
     "comment": ""
   },
@@ -147,6 +168,13 @@
     "comment": ""
   },
   {
+    "term": "(empty)",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "(exec \"…\")",
     "translation": "",
     "context": "",
@@ -154,9 +182,37 @@
     "comment": ""
   },
   {
+    "term": "(untitled)",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "**Instructions**: Log into Mistral account, go to Keys on the sidebar, click Create new key",
+    "translation": "",
+    "context": "AiChat model",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key",
+    "translation": "",
+    "context": "AiChat model",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "+ %1 more",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": ". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!",
+    "translation": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -254,7 +310,7 @@
   {
     "term": "10 seconds",
     "translation": "",
-    "context": "wallpaper interval",
+    "context": "screenshot with 10 second delay | wallpaper interval",
     "reference": "",
     "comment": ""
   },
@@ -401,7 +457,7 @@
   {
     "term": "3 seconds",
     "translation": "",
-    "context": "",
+    "context": "screenshot with 3 second delay",
     "reference": "",
     "comment": ""
   },
@@ -478,7 +534,7 @@
   {
     "term": "5 seconds",
     "translation": "",
-    "context": "wallpaper interval",
+    "context": "screenshot with 5 second delay | wallpaper interval",
     "reference": "",
     "comment": ""
   },
@@ -539,16 +595,16 @@
     "comment": ""
   },
   {
-    "term": "90 days",
+    "term": "90°",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "90°",
+    "term": "<i>No further instruction provided</i>",
     "translation": "",
-    "context": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -567,7 +623,35 @@
     "comment": ""
   },
   {
+    "term": "A prompt with this filename already exists",
+    "translation": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "A shortcut shares its keys with another",
+    "translation": "",
+    "context": "Keybind collision summary",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "AC Power",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "AI Assistant",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "AI Search",
     "translation": "",
     "context": "",
     "reference": "",
@@ -577,6 +661,27 @@
     "term": "API",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "API key is set\nChange with /key YOUR_API_KEY",
+    "translation": "",
+    "context": "Keyring",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "API key set for %1",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "API key:\n\n```txt\n%1\n```",
+    "translation": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -672,6 +777,13 @@
     "comment": ""
   },
   {
+    "term": "Active Window",
+    "translation": "",
+    "context": "screenshot active window",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Active tile background and icon color",
     "translation": "",
     "context": "control center tile color setting description",
@@ -709,7 +821,7 @@
   {
     "term": "Add",
     "translation": "",
-    "context": "",
+    "context": "Toolbox prompt settings",
     "reference": "",
     "comment": ""
   },
@@ -764,6 +876,13 @@
   },
   {
     "term": "Add a custom prefix to all application launches. This can be used for things like 'uwsm-app', 'systemd-run', or other command wrappers.",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Add alarm",
     "translation": "",
     "context": "",
     "reference": "",
@@ -826,9 +945,37 @@
     "comment": ""
   },
   {
+    "term": "Alarm",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Alarm label",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Alarm ringing",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Alarms",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "All",
     "translation": "",
-    "context": "notification history filter",
+    "context": "notification history filter | screenshot entire screen",
     "reference": "",
     "comment": ""
   },
@@ -864,6 +1011,34 @@
     "term": "All displays",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "All-rounder | Good quality, decent quantity",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Allow NSFW",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Allow NSFW Results",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Allow NSFW content",
+    "translation": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -948,6 +1123,13 @@
     "term": "Analyzing configuration...",
     "translation": "",
     "context": "greeter doctor page loading text",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Animate AI response text as it appears",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -1071,6 +1253,13 @@
     "comment": ""
   },
   {
+    "term": "Approve",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Apps",
     "translation": "",
     "context": "",
@@ -1130,6 +1319,13 @@
     "term": "Arrange displays and configure resolution, refresh rate, and VRR",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Attach a file. Only works with Gemini.",
+    "translation": "",
+    "context": "AiChat toolbar",
     "reference": "",
     "comment": ""
   },
@@ -1309,13 +1505,6 @@
     "comment": ""
   },
   {
-    "term": "Auto-Clear After",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Auto-Hide Timeout",
     "translation": "",
     "context": "",
@@ -1407,21 +1596,7 @@
     "comment": ""
   },
   {
-    "term": "Automatically delete entries older than this",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Automatically detect location based on IP address",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Automatically determine your location using your IP address",
+    "term": "Automatically determine your location using geoclue",
     "translation": "",
     "context": "",
     "reference": "",
@@ -1729,6 +1904,20 @@
     "comment": ""
   },
   {
+    "term": "Booru",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Booru Settings",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Border",
     "translation": "",
     "context": "launcher border option",
@@ -1767,6 +1956,13 @@
     "term": "Border with BG",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Both",
+    "translation": "",
+    "context": "save and copy screenshot",
     "reference": "",
     "comment": ""
   },
@@ -1835,6 +2031,20 @@
   },
   {
     "term": "Brightness control not available",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Brightness level",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Brightness lower after",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2093,6 +2303,13 @@
     "comment": ""
   },
   {
+    "term": "Changes are saved to %1",
+    "translation": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Channel",
     "translation": "",
     "context": "",
@@ -2184,6 +2401,13 @@
     "comment": ""
   },
   {
+    "term": "Choose model",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Choose the background color for widgets",
     "translation": "",
     "context": "",
@@ -2254,6 +2478,13 @@
     "comment": ""
   },
   {
+    "term": "Clean stuff | Excellent quality, no NSFW",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Clear",
     "translation": "",
     "context": "",
@@ -2296,16 +2527,16 @@
     "comment": ""
   },
   {
-    "term": "Clear all history when server starts",
+    "term": "Clear chat history",
     "translation": "",
-    "context": "",
+    "context": "AiChat toolbar",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Clear at Startup",
+    "term": "Clear the current list of images",
     "translation": "",
-    "context": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -2375,7 +2606,7 @@
   {
     "term": "Clipboard",
     "translation": "",
-    "context": "",
+    "context": "copy screenshot to clipboard",
     "reference": "",
     "comment": ""
   },
@@ -2394,16 +2625,9 @@
     "comment": ""
   },
   {
-    "term": "Clipboard works but nothing saved to disk",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Clock",
     "translation": "",
-    "context": "",
+    "context": "clock window title",
     "reference": "",
     "comment": ""
   },
@@ -2437,6 +2661,34 @@
   },
   {
     "term": "Close Window",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Code saved to file",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Collides with %1 shortcuts",
+    "translation": "",
+    "context": "Keybind collision count",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Collides with another shortcut",
+    "translation": "",
+    "context": "Keybind collision count",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Collides with: %1",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2583,9 +2835,23 @@
     "comment": ""
   },
   {
+    "term": "Command rejected by user",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Commands",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Commands, edit configs, search.\nTakes an extra turn to switch to search mode if that's needed",
+    "translation": "",
+    "context": "AiChat toolbar",
     "reference": "",
     "comment": ""
   },
@@ -2681,6 +2947,13 @@
     "comment": ""
   },
   {
+    "term": "Configuration file: ",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Configuration will be preserved when this display reconnects",
     "translation": "",
     "context": "",
@@ -2758,6 +3031,13 @@
     "comment": ""
   },
   {
+    "term": "Confirm combo",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Confirm passkey for ",
     "translation": "",
     "context": "",
@@ -2808,6 +3088,13 @@
   },
   {
     "term": "Connected Displays",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Connected to %1",
     "translation": "",
     "context": "",
     "reference": "",
@@ -2912,6 +3199,13 @@
     "comment": ""
   },
   {
+    "term": "Controls response randomness on a 0–200% scale",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Controls shadow cast direction for elevation layers",
     "translation": "",
     "context": "",
@@ -2949,7 +3243,7 @@
   {
     "term": "Copy",
     "translation": "",
-    "context": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -2985,6 +3279,20 @@
     "term": "Copy Text",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Copy code",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Copy image",
+    "translation": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -3094,6 +3402,13 @@
     "comment": ""
   },
   {
+    "term": "Current API endpoint: %1\nSet it with %2mode PROVIDER",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Current Items",
     "translation": "",
     "context": "",
@@ -3157,9 +3472,23 @@
     "comment": ""
   },
   {
+    "term": "Current model: %1\nSet it with %2model MODEL",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Current time and date display",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Current tool: %1\nSet it with %2tool TOOL",
+    "translation": "",
+    "context": "AiChat toolbar",
     "reference": "",
     "comment": ""
   },
@@ -3388,13 +3717,6 @@
     "comment": ""
   },
   {
-    "term": "DMS service is not connected. Clipboard settings are unavailable.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "DMS_SOCKET not available",
     "translation": "",
     "context": "",
@@ -3535,6 +3857,13 @@
     "comment": ""
   },
   {
+    "term": "Deduplication Search Depth",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Default",
     "translation": "",
     "context": "notification rule action option | notification rule urgency option | widget style option",
@@ -3593,7 +3922,7 @@
   {
     "term": "Delete",
     "translation": "",
-    "context": "",
+    "context": "AiChat interface | Toolbox prompt settings",
     "reference": "",
     "comment": ""
   },
@@ -3619,13 +3948,6 @@
     "comment": ""
   },
   {
-    "term": "Delete Saved Item?",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Delete VPN",
     "translation": "",
     "context": "",
@@ -3643,6 +3965,20 @@
     "term": "Delete profile \"%1\"?",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Delete prompt \"%1\"? This can't be undone.",
+    "translation": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Delete this shortcut? This can't be undone.",
+    "translation": "",
+    "context": "Keybind delete confirmation",
     "reference": "",
     "comment": ""
   },
@@ -3731,13 +4067,6 @@
     "comment": ""
   },
   {
-    "term": "Device paired",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Digital",
     "translation": "",
     "context": "",
@@ -3766,9 +4095,9 @@
     "comment": ""
   },
   {
-    "term": "Disable History Persistence",
+    "term": "Disable NSFW content",
     "translation": "",
-    "context": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -3783,6 +4112,13 @@
     "term": "Disable While Typing",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Disable tools",
+    "translation": "",
+    "context": "AiChat toolbar",
     "reference": "",
     "comment": ""
   },
@@ -4256,6 +4592,13 @@
     "comment": ""
   },
   {
+    "term": "Edit",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Edit App",
     "translation": "",
     "context": "",
@@ -4273,6 +4616,13 @@
     "term": "Edit shortcut",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Editing %1",
+    "translation": "",
+    "context": "Toolbox prompt settings",
     "reference": "",
     "comment": ""
   },
@@ -4557,20 +4907,6 @@
     "comment": ""
   },
   {
-    "term": "Entry pinned",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Entry unpinned",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Environment Variables",
     "translation": "",
     "context": "",
@@ -4599,9 +4935,23 @@
     "comment": ""
   },
   {
+    "term": "Every day",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Exact",
     "translation": "",
     "context": "notification rule match type option",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Excluded Sites",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -4683,6 +5033,13 @@
     "comment": ""
   },
   {
+    "term": "Fade In Text",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Fade to lock screen",
     "translation": "",
     "context": "",
@@ -4739,13 +5096,6 @@
     "comment": ""
   },
   {
-    "term": "Failed to check pin limit",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Failed to connect VPN",
     "translation": "",
     "context": "",
@@ -4760,9 +5110,9 @@
     "comment": ""
   },
   {
-    "term": "Failed to copy entry",
+    "term": "Failed to copy image",
     "translation": "",
-    "context": "",
+    "context": "booru image copy failure",
     "reference": "",
     "comment": ""
   },
@@ -4802,6 +5152,20 @@
     "comment": ""
   },
   {
+    "term": "Failed to delete prompt \"%1\"",
+    "translation": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Failed to delete the shortcut. Check the shell log for details.",
+    "translation": "",
+    "context": "Keybind delete failure",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Failed to disable job acceptance",
     "translation": "",
     "context": "",
@@ -4823,13 +5187,6 @@
     "comment": ""
   },
   {
-    "term": "Failed to disconnect WiFi",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Failed to enable WiFi",
     "translation": "",
     "context": "",
@@ -4838,6 +5195,13 @@
   },
   {
     "term": "Failed to enable job acceptance",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Failed to generate QR code",
     "translation": "",
     "context": "",
     "reference": "",
@@ -4907,21 +5271,7 @@
     "comment": ""
   },
   {
-    "term": "Failed to pin entry",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Failed to print test page",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to remove device",
     "translation": "",
     "context": "",
     "reference": "",
@@ -4938,6 +5288,20 @@
     "term": "Failed to remove printer from class",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Failed to rename prompt \"%1\"",
+    "translation": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Failed to reorder the shortcut.",
+    "translation": "",
+    "context": "Keybind reorder failure",
     "reference": "",
     "comment": ""
   },
@@ -4970,9 +5334,9 @@
     "comment": ""
   },
   {
-    "term": "Failed to save clipboard setting",
+    "term": "Failed to save image",
     "translation": "",
-    "context": "",
+    "context": "booru image save failure",
     "reference": "",
     "comment": ""
   },
@@ -4991,21 +5355,21 @@
     "comment": ""
   },
   {
+    "term": "Failed to save prompt \"%1\"",
+    "translation": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Failed to save the shortcut. Check the shell log for details.",
+    "translation": "",
+    "context": "Keybind save failure",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Failed to set profile image",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to start connection to %1",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Failed to unpin entry",
     "translation": "",
     "context": "",
     "reference": "",
@@ -5071,6 +5435,13 @@
     "term": "Feels Like %1°",
     "translation": "",
     "context": "weather feels like temperature",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Fetching...",
+    "translation": "",
+    "context": "konachan fetch status",
     "reference": "",
     "comment": ""
   },
@@ -5341,6 +5712,20 @@
     "comment": ""
   },
   {
+    "term": "For desktop wallpapers | Good quality",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "For storing API keys and other sensitive information",
+    "translation": "",
+    "context": "Keyring",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Force HDR",
     "translation": "",
     "context": "",
@@ -5446,6 +5831,13 @@
     "comment": ""
   },
   {
+    "term": "Fri",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Fruit Salad",
     "translation": "",
     "context": "matugen color scheme option",
@@ -5509,6 +5901,13 @@
     "comment": ""
   },
   {
+    "term": "Functions",
+    "translation": "",
+    "context": "AI tool option",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "G: grid • Z/X: size",
     "translation": "",
     "context": "Widget grid keyboard hints",
@@ -5565,9 +5964,37 @@
     "comment": ""
   },
   {
+    "term": "General",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Generic",
     "translation": "",
     "context": "theme category option",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Genshin Impact",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Geoclue agent not running",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Geoclue agent running",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -5579,9 +6006,30 @@
     "comment": ""
   },
   {
+    "term": "Get the next page of results",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Girl on white background",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "GitHub",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Gives the model search capabilities (immediately)",
+    "translation": "",
+    "context": "AiChat toolbar",
     "reference": "",
     "comment": ""
   },
@@ -5894,6 +6342,13 @@
     "comment": ""
   },
   {
+    "term": "Hide Threshold",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Hide Updater Widget",
     "translation": "",
     "context": "When updater widget is used, then hide it if no update found",
@@ -5992,13 +6447,6 @@
     "comment": ""
   },
   {
-    "term": "History cleared. %1 pinned entries kept.",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Hold Duration",
     "translation": "",
     "context": "",
@@ -6070,6 +6518,20 @@
   },
   {
     "term": "Hourly",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "How many characters of each entry to show in the list. Higher = more readable, lower = more compact.",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "How many recent items to scan when looking for duplicates",
     "translation": "",
     "context": "",
     "reference": "",
@@ -6216,7 +6678,7 @@
     "comment": ""
   },
   {
-    "term": "Idle monitoring not supported - requires newer Quickshell version",
+    "term": "Idle management requires hypridle - not found in PATH",
     "translation": "",
     "context": "",
     "reference": "",
@@ -6251,9 +6713,37 @@
     "comment": ""
   },
   {
-    "term": "Image copied to clipboard",
+    "term": "Image Boards",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Image copied",
+    "translation": "",
+    "context": "booru image copied to clipboard",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Image provider used by the Toolbox",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Image saved",
+    "translation": "",
+    "context": "booru image saved to disk",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Immediate",
+    "translation": "",
+    "context": "screenshot taken immediately",
     "reference": "",
     "comment": ""
   },
@@ -6280,6 +6770,13 @@
   },
   {
     "term": "Include Transitions",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Include adult results when supported by the provider",
     "translation": "",
     "context": "",
     "reference": "",
@@ -6461,6 +6958,13 @@
     "comment": ""
   },
   {
+    "term": "Intelligence",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Intelligent Auto-hide",
     "translation": "",
     "context": "",
@@ -6477,7 +6981,7 @@
   {
     "term": "Interface",
     "translation": "",
-    "context": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -6510,9 +7014,58 @@
     "comment": ""
   },
   {
+    "term": "Invalid API provider. Supported: \n- ",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Invalid arguments. Must provide `command`.",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Invalid arguments. Must provide `key` and `value`.",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Invalid configuration",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Invalid model. Supported: \n```\n",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Invalid password for %1",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Invalid prompt filename",
+    "translation": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Invalid tool. Supported tools:\n- %1",
+    "translation": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -6587,13 +7140,6 @@
     "comment": ""
   },
   {
-    "term": "Key",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Keybinds",
     "translation": "",
     "context": "greeter settings link",
@@ -6636,6 +7182,13 @@
     "comment": ""
   },
   {
+    "term": "Keys",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Kill Process",
     "translation": "",
     "context": "",
@@ -6657,9 +7210,44 @@
     "comment": ""
   },
   {
+    "term": "Label",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Landscape",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Lap",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Large",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Large images | God tier quality, no NSFW.",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Large language models",
+    "translation": "",
+    "context": "AiChat toolbar",
     "reference": "",
     "comment": ""
   },
@@ -6881,6 +7469,13 @@
     "comment": ""
   },
   {
+    "term": "List Preview Width",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Lively palette with saturated accents.",
     "translation": "",
     "context": "",
@@ -6895,7 +7490,42 @@
     "comment": ""
   },
   {
+    "term": "Load chat",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Load chat from %1",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Load prompt from %1",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Loaded the following system prompt from %1\n\n---\n\n%2",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Loading Hyprland variables...",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Loading clipboard configuration...",
     "translation": "",
     "context": "",
     "reference": "",
@@ -6926,6 +7556,13 @@
     "term": "Local",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Local Ollama model | %1",
+    "translation": "",
+    "context": "AiChat model",
     "reference": "",
     "comment": ""
   },
@@ -7154,6 +7791,20 @@
     "comment": ""
   },
   {
+    "term": "Markdown and text prompt files are supported",
+    "translation": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Markdown test",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Marker Supply Empty",
     "translation": "",
     "context": "",
@@ -7343,13 +7994,6 @@
     "comment": ""
   },
   {
-    "term": "Maximum Entry Size",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Maximum History",
     "translation": "",
     "context": "",
@@ -7357,7 +8001,7 @@
     "comment": ""
   },
   {
-    "term": "Maximum Pinned Entries",
+    "term": "Maximum Store Size",
     "translation": "",
     "context": "",
     "reference": "",
@@ -7371,7 +8015,7 @@
     "comment": ""
   },
   {
-    "term": "Maximum number of entries that can be saved",
+    "term": "Maximum number of images requested per page",
     "translation": "",
     "context": "",
     "reference": "",
@@ -7385,14 +8029,7 @@
     "comment": ""
   },
   {
-    "term": "Maximum pinned entries reached",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Maximum size per clipboard entry",
+    "term": "Maximum total disk size of the clipboard database",
     "translation": "",
     "context": "",
     "reference": "",
@@ -7518,6 +8155,13 @@
     "comment": ""
   },
   {
+    "term": "Message the model... \"%1\" for commands",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Microphone",
     "translation": "",
     "context": "",
@@ -7575,6 +8219,20 @@
   },
   {
     "term": "Minimal palette built around a single hue.",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Minimum Store Length",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Minimum number of characters before an entry is stored",
     "translation": "",
     "context": "",
     "reference": "",
@@ -7644,6 +8302,20 @@
     "comment": ""
   },
   {
+    "term": "Model set to %1",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Model used by the Toolbox assistant",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Modified",
     "translation": "",
     "context": "",
@@ -7654,6 +8326,20 @@
     "term": "Modular widget bar",
     "translation": "",
     "context": "greeter feature card description",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Moe",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Mon",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -8008,6 +8694,13 @@
     "comment": ""
   },
   {
+    "term": "Next page",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Night",
     "translation": "",
     "context": "",
@@ -8053,6 +8746,20 @@
     "term": "No",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "No API key\nSet it with /key YOUR_API_KEY",
+    "translation": "",
+    "context": "Keyring",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "No API key set for %1",
+    "translation": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -8407,6 +9114,13 @@
     "comment": ""
   },
   {
+    "term": "No models available",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "No monitors",
     "translation": "",
     "context": "no monitors available label",
@@ -8484,6 +9198,13 @@
     "comment": ""
   },
   {
+    "term": "No prompt files found",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "No results",
     "translation": "",
     "context": "",
@@ -8498,6 +9219,13 @@
     "comment": ""
   },
   {
+    "term": "No screen available",
+    "translation": "",
+    "context": "no screen to capture",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "No shortcuts found",
     "translation": "",
     "context": "",
@@ -8508,6 +9236,13 @@
     "term": "No shortcuts match your search.",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "No system prompt file is selected",
+    "translation": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -8591,7 +9326,7 @@
   {
     "term": "None",
     "translation": "",
-    "context": "wallpaper transition option",
+    "context": "AI tool option | wallpaper transition option",
     "reference": "",
     "comment": ""
   },
@@ -8641,6 +9376,13 @@
     "term": "Not set",
     "translation": "",
     "context": "wallpaper not set label",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Not visible to model",
+    "translation": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -8750,6 +9492,13 @@
     "comment": ""
   },
   {
+    "term": "Number of gradual temperature steps when switching between day and night",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Numbers",
     "translation": "",
     "context": "",
@@ -8855,6 +9604,34 @@
     "comment": ""
   },
   {
+    "term": "Once",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Online | %1's model | Delivers fast, responsive and well-formatted answers. Disadvantages: not very eager to do stuff; might make up unknown function calls",
+    "translation": "",
+    "context": "AiChat model",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Online | Google's model\nNewer model that's slower than its predecessor but should deliver higher quality answers",
+    "translation": "",
+    "context": "AiChat model",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Online | Google's model\nPro-level intelligence at the speed and pricing of Flash.",
+    "translation": "",
+    "context": "AiChat model",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Only adjust gamma based on time or location rules.",
     "translation": "",
     "context": "",
@@ -8914,6 +9691,13 @@
     "term": "Open folder",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Open image link",
+    "translation": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -9131,6 +9915,13 @@
     "term": "Padding",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Page %1",
+    "translation": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -9723,6 +10514,13 @@
     "comment": ""
   },
   {
+    "term": "Previous page",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Primary",
     "translation": "",
     "context": "button color option | color option | primary color | shadow color option | tile color option",
@@ -9919,9 +10717,51 @@
     "comment": ""
   },
   {
+    "term": "Prompt File",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Prompt file not found",
+    "translation": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Prompt file not found: %1",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Prompt filename",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Protocol",
     "translation": "",
     "context": "Label for printer protocol selector, e.g. ipp, ipps, lpd, socket",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Provider",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Provider set to ",
+    "translation": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -10024,6 +10864,20 @@
     "comment": ""
   },
   {
+    "term": "Random SFW anime wallpaper from Konachan.\nImage is saved to the current wallpaper folder.",
+    "translation": "",
+    "context": "konachan button tooltip",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Random: Konachan",
+    "translation": "",
+    "context": "random konachan wallpaper button",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Rate",
     "translation": "",
     "context": "",
@@ -10101,9 +10955,30 @@
     "comment": ""
   },
   {
+    "term": "Regenerate",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Regex",
     "translation": "",
     "context": "notification rule match type option",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Region",
+    "translation": "",
+    "context": "screenshot capture region",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Reject",
+    "translation": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -10159,12 +11034,19 @@
   {
     "term": "Rename",
     "translation": "",
-    "context": "",
+    "context": "Toolbox prompt settings",
     "reference": "",
     "comment": ""
   },
   {
     "term": "Rename Workspace",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Repeat",
     "translation": "",
     "context": "",
     "reference": "",
@@ -10293,6 +11175,13 @@
     "term": "Restarting audio system...",
     "translation": "",
     "context": "Loading overlay while WirePlumber restarts",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Results per Page",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -10479,14 +11368,28 @@
     "comment": ""
   },
   {
-    "term": "Save",
+    "term": "Sat",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
+    "term": "Save",
+    "translation": "",
+    "context": "AiChat interface | save screenshot to file",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Save Notepad File",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Save Prompt",
     "translation": "",
     "context": "",
     "reference": "",
@@ -10507,6 +11410,13 @@
     "comment": ""
   },
   {
+    "term": "Save chat",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Save critical priority notifications to history",
     "translation": "",
     "context": "notification history setting",
@@ -10517,6 +11427,13 @@
     "term": "Save dismissed notifications to history",
     "translation": "",
     "context": "notification history toggle description",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Save image",
+    "translation": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -10542,6 +11459,13 @@
     "comment": ""
   },
   {
+    "term": "Save to Downloads",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Saved",
     "translation": "",
     "context": "",
@@ -10563,9 +11487,9 @@
     "comment": ""
   },
   {
-    "term": "Saved item deleted",
+    "term": "Saved to %1",
     "translation": "",
-    "context": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -10654,6 +11578,34 @@
     "comment": ""
   },
   {
+    "term": "Screenshot copied",
+    "translation": "",
+    "context": "screenshot copied to clipboard",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Screenshot failed",
+    "translation": "",
+    "context": "screenshot capture failed",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Screenshot saved",
+    "translation": "",
+    "context": "screenshot saved to disk",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Screenshot saved and copied",
+    "translation": "",
+    "context": "screenshot saved to disk and copied to clipboard",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Scroll",
     "translation": "",
     "context": "",
@@ -10696,6 +11648,13 @@
     "comment": ""
   },
   {
+    "term": "Scroll to Bottom",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Scroll wheel behavior on media widget",
     "translation": "",
     "context": "",
@@ -10710,7 +11669,28 @@
     "comment": ""
   },
   {
+    "term": "Search",
+    "translation": "",
+    "context": "AI tool option",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Search App Actions",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Search Engine URL",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Search Exclusions",
     "translation": "",
     "context": "",
     "reference": "",
@@ -10899,6 +11879,13 @@
     "comment": ""
   },
   {
+    "term": "Select a prompt file to edit",
+    "translation": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Select a widget to add to your desktop. Each widget is a separate instance with its own settings.",
     "translation": "",
     "context": "",
@@ -11018,6 +12005,13 @@
     "comment": ""
   },
   {
+    "term": "Separate domains with commas",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Separator",
     "translation": "",
     "context": "",
@@ -11032,9 +12026,23 @@
     "comment": ""
   },
   {
+    "term": "Set API key",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Set Custom Device Name",
     "translation": "",
     "context": "Audio device rename dialog title",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Set config option `%1` to `%2`",
+    "translation": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -11077,6 +12085,34 @@
     "term": "Set notification rules",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5.",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Set the current API provider",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Set the system prompt file for the model.",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Set the tool to use for the model.",
+    "translation": "",
+    "context": "AiChat toolbar",
     "reference": "",
     "comment": ""
   },
@@ -11189,6 +12225,13 @@
     "term": "Shift+Enter to paste",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Shiggy",
+    "translation": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -11774,6 +12817,13 @@
     "comment": ""
   },
   {
+    "term": "Silence",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Size",
     "translation": "",
     "context": "launcher size option",
@@ -11838,6 +12888,13 @@
   },
   {
     "term": "Snap",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Snooze",
     "translation": "",
     "context": "",
     "reference": "",
@@ -12019,6 +13076,13 @@
     "comment": ""
   },
   {
+    "term": "Stopwatch",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Stretch",
     "translation": "",
     "context": "wallpaper fill mode",
@@ -12043,6 +13107,13 @@
     "term": "Summary",
     "translation": "",
     "context": "notification rule match field option",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Sun",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -12124,6 +13195,13 @@
     "comment": ""
   },
   {
+    "term": "Switched to search mode. Continue with the user's request.",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Sync Mode with Portal",
     "translation": "",
     "context": "",
@@ -12154,7 +13232,7 @@
   {
     "term": "System",
     "translation": "",
-    "context": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -12201,6 +13279,13 @@
     "comment": ""
   },
   {
+    "term": "System Prompt File",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "System Sounds",
     "translation": "",
     "context": "",
@@ -12237,6 +13322,13 @@
   },
   {
     "term": "System notification area icons",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "System prompt template used by the AI assistant",
     "translation": "",
     "context": "",
     "reference": "",
@@ -12288,6 +13380,41 @@
     "term": "Tap touchpad to click",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Temperature",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Temperature\nChange with /temp VALUE",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Temperature must be between 0 and 2",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Temperature set to %1",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Temperature: %1",
+    "translation": "",
+    "context": "AiChat interface",
     "reference": "",
     "comment": ""
   },
@@ -12348,6 +13475,13 @@
     "comment": ""
   },
   {
+    "term": "That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "The 'dgop' tool is required for system monitoring.\nPlease install dgop to use this feature.",
     "translation": "",
     "context": "dgop unavailable error message",
@@ -12369,9 +13503,30 @@
     "comment": ""
   },
   {
+    "term": "The current system prompt from %1 is\n\n---\n\n%2",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "The hentai one | Great quantity, a lot of NSFW, quality varies wildly",
+    "translation": "",
+    "context": "Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "The job queue of this printer is empty",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "The popular one | Best quantity, but quality can vary wildly",
+    "translation": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -12418,6 +13573,13 @@
     "comment": ""
   },
   {
+    "term": "Thinking",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Third-Party Plugin Warning",
     "translation": "",
     "context": "",
@@ -12446,6 +13608,13 @@
     "comment": ""
   },
   {
+    "term": "This shortcut can't be reordered.",
+    "translation": "",
+    "context": "Reorder restriction",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "This widget prevents GPU power off states, which can significantly impact battery life on laptops. It is not recommended to use this on laptops with hybrid graphics.",
     "translation": "",
     "context": "",
@@ -12467,7 +13636,14 @@
     "comment": ""
   },
   {
-    "term": "This will permanently remove this saved clipboard item. This action cannot be undone.",
+    "term": "Thought",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Thu",
     "translation": "",
     "context": "",
     "reference": "",
@@ -12600,6 +13776,27 @@
     "comment": ""
   },
   {
+    "term": "Timer",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Timer completed",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Timer finished",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Title regex (optional)",
     "translation": "",
     "context": "",
@@ -12677,7 +13874,49 @@
     "comment": ""
   },
   {
+    "term": "Tool",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Tool set to: %1",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Toolbox",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Toolbox Layout",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Toolbox Width",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Tools",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Tools available to the selected model",
     "translation": "",
     "context": "",
     "reference": "",
@@ -12754,6 +13993,13 @@
     "comment": ""
   },
   {
+    "term": "Total token count\nInput: %1\nOutput: %2",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Touchpad",
     "translation": "",
     "context": "input_settings_touchpad",
@@ -12769,6 +14015,13 @@
   },
   {
     "term": "Transition Effect",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Transition Steps",
     "translation": "",
     "context": "",
     "reference": "",
@@ -12810,6 +14063,13 @@
     "comment": ""
   },
   {
+    "term": "Tue",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Turn off all displays immediately when the lock screen activates",
     "translation": "",
     "context": "",
@@ -12827,6 +14087,13 @@
     "term": "Type",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Type /key to get started with online models",
+    "translation": "",
+    "context": "AiChat toolbar",
     "reference": "",
     "comment": ""
   },
@@ -12985,6 +14252,20 @@
     "comment": ""
   },
   {
+    "term": "Unknown command: ",
+    "translation": "",
+    "context": "AiChat interface | Booru",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Unknown function call: %1",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Unload on Close",
     "translation": "",
     "context": "",
@@ -13100,6 +14381,27 @@
     "term": "Urgent Color",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Usage: %1load CHAT_NAME",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Usage: %1save CHAT_NAME",
+    "translation": "",
+    "context": "AiChat toolbar",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Usage: %1tool TOOL_NAME",
+    "translation": "",
+    "context": "AiChat toolbar",
     "reference": "",
     "comment": ""
   },
@@ -13286,14 +14588,14 @@
     "comment": ""
   },
   {
-    "term": "Uses sunrise/sunset times based on your location.",
+    "term": "Uses geoclue-agent to automatically detect your location for sunrise/sunset times. The agent will be started automatically when location mode is active.",
     "translation": "",
     "context": "",
     "reference": "",
     "comment": ""
   },
   {
-    "term": "Uses sunrise/sunset times to automatically adjust night mode based on your location.",
+    "term": "Uses sunrise/sunset times based on your location.",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13356,7 +14658,7 @@
     "comment": ""
   },
   {
-    "term": "VPN imported: %1",
+    "term": "VPN imported",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13475,6 +14777,13 @@
     "comment": ""
   },
   {
+    "term": "View Markdown source",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Visibility",
     "translation": "",
     "context": "",
@@ -13534,6 +14843,13 @@
     "term": "WPA/WPA2",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Waifus only | Excellent quality, limited quantity",
+    "translation": "",
+    "context": "Booru",
     "reference": "",
     "comment": ""
   },
@@ -13616,6 +14932,13 @@
   },
   {
     "term": "Weather Widget",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Wed",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13805,6 +15128,13 @@
   },
   {
     "term": "Width",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Width of the Toolbox slideout",
     "translation": "",
     "context": "",
     "reference": "",
@@ -14077,6 +15407,13 @@
     "comment": ""
   },
   {
+    "term": "Zerochan only provides safe results",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "actions",
     "translation": "",
     "context": "",
@@ -14266,9 +15603,30 @@
     "comment": ""
   },
   {
+    "term": "or",
+    "translation": "",
+    "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "procs",
     "translation": "",
     "context": "short for processes",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "qrencode is not installed. Install it to generate WiFi QR codes.",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "quora.com, facebook.com",
+    "translation": "",
+    "context": "example excluded search domains",
     "reference": "",
     "comment": ""
   },
@@ -14309,13 +15667,6 @@
   },
   {
     "term": "v%1 by %2",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "wtype not available - install wtype for paste support",
     "translation": "",
     "context": "",
     "reference": "",

@@ -314,6 +314,12 @@ Rectangle {
             "tabIndex": 12
         },
         {
+            "id": "toolbox",
+            "text": I18n.tr("Toolbox"),
+            "icon": "service_toolbox",
+            "tabIndex": 32
+        },
+        {
             "id": "separator",
             "separator": true
         },

@@ -15,11 +15,52 @@ DankDropdown {
     property var tags: []
     property string settingKey: ""
 
+    property string storeKey: ""
+    property var storedValue: undefined
+    property var encodeValue: null
+    property var decodeValue: null
+
     readonly property bool isHighlighted: settingKey !== "" && SettingsSearchService.highlightSection === settingKey
 
     width: parent?.width ?? 0
     addHorizontalPadding: true
     usePopupTransparency: false
+
+    function toStored(uiValue) {
+        return root.encodeValue ? root.encodeValue(uiValue) : uiValue;
+    }
+
+    function toUi(stored) {
+        return root.decodeValue ? root.decodeValue(stored) : stored;
+    }
+
+    function commitStore(uiValue) {
+        if (!root.storeKey)
+            return;
+        const value = root.toStored(uiValue);
+        if (SettingsData[root.storeKey] === value)
+            return;
+        SettingsData.set(root.storeKey, value);
+    }
+
+    function labelFromStore() {
+        const stored = root.storedValue;
+        if (stored === undefined || stored === null)
+            return "";
+        return String(root.toUi(stored));
+    }
+
+    function syncFromStore() {
+        if (!root.storeKey)
+            return;
+        const label = root.labelFromStore();
+        if (label === "")
+            return;
+        Qt.callLater(() => {
+            if (root.currentValue !== label)
+                root.currentValue = label;
+        });
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -46,6 +87,7 @@ DankDropdown {
     }
 
     Component.onCompleted: {
+        root.syncFromStore();
         if (!settingKey)
             return;
         let flickable = findParentFlickable();
@@ -56,5 +98,12 @@ DankDropdown {
     Component.onDestruction: {
         if (settingKey)
             SettingsSearchService.unregisterCard(settingKey);
+    }
+
+    onStoredValueChanged: root.syncFromStore()
+
+    Connections {
+        target: root
+        function onValueChanged(label) { root.commitStore(label); }
     }
 }

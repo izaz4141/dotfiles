@@ -421,7 +421,7 @@ Singleton {
     onNotepadLastCustomTransparencyChanged: saveSettings()
 
     property real toolboxWidth: 460
-    property string toolboxAiSystemPrompt: ""
+    property string toolboxAiSystemPromptFile: "NoPrompt.md"
     property string toolboxAiTool: "search"
     property real toolboxAiTemperature: 0.5
     property string toolboxAiModel: ""
@@ -433,7 +433,7 @@ Singleton {
     property bool toolboxBooruAllowNsfw: false
 
     onToolboxWidthChanged: saveSettings()
-    onToolboxAiSystemPromptChanged: saveSettings()
+    onToolboxAiSystemPromptFileChanged: saveSettings()
     onToolboxAiToolChanged: saveSettings()
     onToolboxAiTemperatureChanged: saveSettings()
     onToolboxAiModelChanged: saveSettings()

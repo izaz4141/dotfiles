@@ -1,6 +1,7 @@
 # AGENTS.md
 
 This file provides guidance to AI coding assistants.
+DONT USE GIT CMD, ONLY USE CURRENT CONTEXT
 
 ## AI Guidance
 

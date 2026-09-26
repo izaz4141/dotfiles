@@ -22,8 +22,9 @@ Singleton {
 
     signal responseFinished()
 
+    property string activePromptText: ""
     property string systemPrompt: {
-        let prompt = SettingsData.toolboxAiSystemPrompt ?? "";
+        let prompt = root.activePromptText;
         for (let key in root.promptSubstitutions) {
             prompt = prompt.split(key).join(root.promptSubstitutions[key]);
         }
@@ -56,14 +57,20 @@ Singleton {
         return modelName.replace(/:/g, "_").replace(/ /g, "-").replace(/\//g, "-")
     }
 
-    property list<var> defaultPrompts: []
-    property list<var> userPrompts: []
-    property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
+    property list<var> promptFiles: []
+    property list<var> promptFileNames: []
+    property string activePromptFileName: SettingsData?.toolboxAiSystemPromptFile ?? "NoPrompt.md"
+    property string promptLoadTarget: ""
+    property bool activePromptLoaded: false
+    property bool pendingPromptFeedback: false
+
+    onActivePromptFileNameChanged: {
+        root.reloadActivePrompt(root.activePromptFileName);
+    }
     property list<var> savedChats: []
 
     property string scriptPath: FileUtils.trimFileProtocol(Quickshell.shellPath("Scripts"))
-    property string defaultAiPrompts: FileUtils.trimFileProtocol(Quickshell.shellPath("assets/toolbox/prompts"))
-    property string userAiPrompts: FileUtils.trimFileProtocol(`${Paths.config}/ai/prompts`)
+    property string promptDirectory: FileUtils.trimFileProtocol(Quickshell.shellPath("assets/toolbox/prompts"))
     property string aiChats: FileUtils.trimFileProtocol(`${Paths.data}/user/ai/chats`)
 
     property var promptSubstitutions: {
@@ -292,8 +299,9 @@ Singleton {
     Component.onCompleted: {
         setModel(currentModelId, false, false);
         Quickshell.execDetached(["bash", "-c", "mkdir -p /tmp/quickshell/ai"])
-        Quickshell.execDetached(["mkdir", "-p", root.userAiPrompts])
         Quickshell.execDetached(["mkdir", "-p", root.aiChats])
+        root.refreshPromptFiles()
+        root.reloadActivePrompt(root.activePromptFileName)
     }
 
     function guessModelLogo(model) {
@@ -355,30 +363,238 @@ Singleton {
         }
     }
 
-    Process {
-        id: getDefaultPrompts
-        running: true
-        command: ["ls", "-1", root.defaultAiPrompts]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                if (text.length === 0) return;
-                root.defaultPrompts = text.split("\n")
-                    .filter(fileName => fileName.endsWith(".md") || fileName.endsWith(".txt"))
-                    .map(fileName => `${root.defaultAiPrompts}/${fileName}`)
-            }
+    function promptFileNameFromPath(value) {
+        if (value === undefined || value === null)
+            return "";
+        let fileName = String(value).trim();
+        const cleanPath = FileUtils.trimFileProtocol(fileName);
+        const directoryPrefix = root.promptDirectory + "/";
+        if (cleanPath.startsWith(directoryPrefix))
+            fileName = cleanPath.slice(directoryPrefix.length);
+        if (!fileName || fileName.includes("/") || fileName.includes("\\") || fileName.includes("\0"))
+            return "";
+        return fileName;
+    }
+
+    function isPromptFileName(value) {
+        const fileName = root.promptFileNameFromPath(value);
+        if (!fileName || fileName !== String(value).trim())
+            return false;
+        return /\.(md|txt)$/i.test(fileName);
+    }
+
+    function normalizePromptFileName(value) {
+        let fileName = root.promptFileNameFromPath(value);
+        if (!fileName)
+            return "";
+        if (!/\.(md|txt)$/i.test(fileName)) {
+            if (fileName.includes("."))
+                return "";
+            fileName += ".md";
+        }
+        return fileName;
+    }
+
+    function promptPathForName(fileName) {
+        const normalized = root.normalizePromptFileName(fileName);
+        return normalized ? `${root.promptDirectory}/${normalized}` : "";
+    }
+
+    function findPromptFileName(value) {
+        const requested = root.promptFileNameFromPath(value);
+        if (!requested)
+            return "";
+        const direct = root.promptFileNames.find(fileName => fileName.toLowerCase() === requested.toLowerCase());
+        if (direct)
+            return direct;
+        const normalized = root.normalizePromptFileName(requested);
+        const exact = root.promptFileNames.find(fileName => fileName.toLowerCase() === normalized.toLowerCase());
+        if (exact)
+            return exact;
+        const stem = FileUtils.trimFileExt(requested).toLowerCase();
+        const matches = root.promptFileNames.filter(fileName => FileUtils.trimFileExt(fileName).toLowerCase() === stem);
+        return matches.length === 1 ? matches[0] : "";
+    }
+
+    function promptFileExists(value) {
+        return root.findPromptFileName(value) !== "";
+    }
+
+    function fallbackPromptFileName(excludedName = "") {
+        const excluded = excludedName.toLowerCase();
+        const defaultName = root.promptFileNames.find(fileName => fileName.toLowerCase() === "noprompt.md" && fileName.toLowerCase() !== excluded);
+        if (defaultName)
+            return defaultName;
+        return root.promptFileNames.find(fileName => fileName.toLowerCase() !== excluded) || "";
+    }
+
+    function ensureSelectedPromptFile() {
+        const selected = root.findPromptFileName(SettingsData.toolboxAiSystemPromptFile ?? "");
+        const fallback = selected || root.fallbackPromptFileName();
+        if (SettingsData.toolboxAiSystemPromptFile !== fallback)
+            SettingsData.set("toolboxAiSystemPromptFile", fallback);
+    }
+
+    function setActivePromptFileName(fileName) {
+        if (!fileName) {
+            SettingsData.set("toolboxAiSystemPromptFile", "");
+            return true;
+        }
+        const normalized = root.findPromptFileName(fileName) || root.normalizePromptFileName(fileName);
+        if (!normalized)
+            return false;
+        if (SettingsData.toolboxAiSystemPromptFile !== normalized)
+            SettingsData.set("toolboxAiSystemPromptFile", normalized);
+        return true;
+    }
+
+    function refreshPromptFiles() {
+        if (getPrompts.running)
+            getPrompts.running = false;
+        getPrompts.running = true;
+    }
+
+    function reportPromptError(message) {
+        ToastService.showError(message);
+    }
+
+    function createPrompt(fileName, content = "") {
+        const normalized = root.normalizePromptFileName(fileName);
+        if (!normalized) {
+            root.reportPromptError(I18n.tr("Invalid prompt filename", "Toolbox prompt settings"));
+            return false;
+        }
+        if (root.promptFileExists(normalized)) {
+            root.reportPromptError(I18n.tr("A prompt with this filename already exists", "Toolbox prompt settings"));
+            return false;
+        }
+        promptWriterComponent.createObject(root, {
+            fileName: normalized,
+            content: String(content ?? ""),
+            operation: "create"
+        });
+        return true;
+    }
+
+    function savePrompt(fileName, content) {
+        const resolved = root.findPromptFileName(fileName);
+        if (!resolved) {
+            root.reportPromptError(I18n.tr("Prompt file not found", "Toolbox prompt settings"));
+            return false;
+        }
+        promptWriterComponent.createObject(root, {
+            fileName: resolved,
+            content: String(content ?? ""),
+            operation: "save"
+        });
+        return true;
+    }
+
+    function renamePrompt(fileName, newFileName) {
+        const source = root.findPromptFileName(fileName);
+        const destination = root.normalizePromptFileName(newFileName);
+        if (!source || !destination) {
+            root.reportPromptError(I18n.tr("Invalid prompt filename", "Toolbox prompt settings"));
+            return false;
+        }
+        if (source === destination)
+            return false;
+        if (root.promptFileExists(destination)) {
+            root.reportPromptError(I18n.tr("A prompt with this filename already exists", "Toolbox prompt settings"));
+            return false;
+        }
+        promptRenameComponent.createObject(root, {
+            sourceName: source,
+            destinationName: destination
+        });
+        return true;
+    }
+
+    function deletePrompt(fileName) {
+        const resolved = root.findPromptFileName(fileName);
+        if (!resolved) {
+            root.reportPromptError(I18n.tr("Prompt file not found", "Toolbox prompt settings"));
+            return false;
+        }
+        promptDeleteComponent.createObject(root, {
+            fileName: resolved
+        });
+        return true;
+    }
+
+    function printPrompt() {
+        if (!root.activePromptFileName) {
+            root.addMessage(I18n.tr("No system prompt file is selected", "AiChat interface"), root.interfaceRole);
+            return;
+        }
+        root.addMessage(I18n.tr("The current system prompt from %1 is\n\n---\n\n%2", "AiChat interface").arg(root.activePromptFileName).arg(root.activePromptText), root.interfaceRole);
+    }
+
+    function applyLoadedPrompt(fileName, content) {
+        if (root.promptLoadTarget !== fileName)
+            return;
+        root.activePromptText = String(content ?? "");
+        root.activePromptLoaded = true;
+        if (root.pendingPromptFeedback) {
+            root.addMessage(I18n.tr("Loaded the following system prompt from %1\n\n---\n\n%2", "AiChat interface").arg(fileName).arg(root.activePromptText), root.interfaceRole);
+            root.pendingPromptFeedback = false;
         }
     }
 
+    function reloadActivePrompt(fileName = root.activePromptFileName) {
+        const target = fileName ? (root.findPromptFileName(fileName) || root.normalizePromptFileName(fileName)) : "";
+        const path = root.promptPathForName(target);
+        root.promptLoadTarget = target;
+        root.activePromptLoaded = false;
+        if (!path) {
+            root.activePromptText = "";
+            return;
+        }
+        if (promptLoader.path === path) {
+            root.applyLoadedPrompt(target, promptLoader.text());
+            return;
+        }
+        root.activePromptText = "";
+        promptLoader.path = path;
+    }
+
+    function selectPromptFile(fileName) {
+        const resolved = root.findPromptFileName(fileName) || root.normalizePromptFileName(fileName);
+        if (!resolved)
+            return false;
+        if (SettingsData.toolboxAiSystemPromptFile !== resolved)
+            SettingsData.set("toolboxAiSystemPromptFile", resolved);
+        return true;
+    }
+
+    function loadPrompt(fileName) {
+        const resolved = root.findPromptFileName(fileName);
+        if (!resolved) {
+            root.addMessage(I18n.tr("Prompt file not found: %1", "AiChat interface").arg(fileName), root.interfaceRole);
+            return false;
+        }
+        root.pendingPromptFeedback = true;
+        if (SettingsData.toolboxAiSystemPromptFile !== resolved) {
+            root.selectPromptFile(resolved);
+            return true;
+        }
+        root.reloadActivePrompt(resolved);
+        return true;
+    }
+
     Process {
-        id: getUserPrompts
-        running: true
-        command: ["ls", "-1", root.userAiPrompts]
+        id: getPrompts
+        running: false
+        command: ["ls", "-1", root.promptDirectory]
         stdout: StdioCollector {
             onStreamFinished: {
-                if (text.length === 0) return;
-                root.userPrompts = text.split("\n")
-                    .filter(fileName => fileName.endsWith(".md") || fileName.endsWith(".txt"))
-                    .map(fileName => `${root.userAiPrompts}/${fileName}`)
+                const names = (text ?? "").split("\n")
+                    .map(fileName => fileName.trim())
+                    .filter(fileName => root.isPromptFileName(fileName))
+                    .sort((left, right) => left.localeCompare(right));
+                root.promptFileNames = names;
+                root.promptFiles = names.map(fileName => root.promptPathForName(fileName));
+                root.ensureSelectedPromptFile();
             }
         }
     }
@@ -399,22 +615,106 @@ Singleton {
 
     FileView {
         id: promptLoader
-        watchChanges: false;
-        onLoadedChanged: {
-            if (!promptLoader.loaded) return;
-            SettingsData.set("toolboxAiSystemPrompt", promptLoader.text());
-            root.addMessage(I18n.tr("Loaded the following system prompt\n\n---\n\n%1", "AiChat interface").arg(SettingsData.toolboxAiSystemPrompt), root.interfaceRole);
+        path: ""
+        blockLoading: true
+        blockWrites: true
+        atomicWrites: true
+        watchChanges: true
+        printErrors: true
+        onLoaded: {
+            if (root.promptPathForName(root.promptLoadTarget) !== promptLoader.path)
+                return;
+            root.applyLoadedPrompt(root.promptLoadTarget, text());
+        }
+        onLoadFailed: {
+            if (!promptLoader.path || promptLoader.path !== root.promptPathForName(root.promptLoadTarget))
+                return;
+            root.activePromptText = "";
+            root.activePromptLoaded = false;
+            if (root.pendingPromptFeedback) {
+                root.addMessage(I18n.tr("Prompt file not found: %1", "AiChat interface").arg(root.promptLoadTarget), root.interfaceRole);
+                root.pendingPromptFeedback = false;
+            }
         }
     }
 
-    function printPrompt() {
-        root.addMessage(I18n.tr("The current system prompt is\n\n---\n\n%1", "AiChat interface").arg(SettingsData.toolboxAiSystemPrompt), root.interfaceRole);
+    Component {
+        id: promptWriterComponent
+        FileView {
+            property string fileName
+            property string content
+            property string operation
+
+            path: root.promptPathForName(fileName)
+            blockLoading: true
+            blockWrites: false
+            atomicWrites: true
+            watchChanges: false
+            printErrors: true
+
+            Component.onCompleted: setText(content)
+
+            onSaved: {
+                if (operation === "create")
+                    root.setActivePromptFileName(fileName);
+                if (root.activePromptFileName && root.activePromptFileName.toLowerCase() === fileName.toLowerCase()) {
+                    root.promptLoadTarget = root.activePromptFileName;
+                    root.activePromptText = content;
+                    root.activePromptLoaded = true;
+                }
+                root.refreshPromptFiles();
+                destroy();
+            }
+
+            onSaveFailed: {
+                root.reportPromptError(I18n.tr("Failed to save prompt \"%1\"", "Toolbox prompt settings").arg(fileName));
+                destroy();
+            }
+        }
     }
 
-    function loadPrompt(filePath) {
-        promptLoader.path = ""
-        promptLoader.path = filePath;
-        promptLoader.reload();
+    Component {
+        id: promptRenameComponent
+        Process {
+            property string sourceName
+            property string destinationName
+
+            command: ["mv", "--", root.promptPathForName(sourceName), root.promptPathForName(destinationName)]
+
+            Component.onCompleted: running = true
+
+            onExited: exitCode => {
+                if (exitCode === 0) {
+                    root.setActivePromptFileName(destinationName);
+                    root.refreshPromptFiles();
+                } else {
+                    root.reportPromptError(I18n.tr("Failed to rename prompt \"%1\"", "Toolbox prompt settings").arg(sourceName));
+                }
+                destroy();
+            }
+        }
+    }
+
+    Component {
+        id: promptDeleteComponent
+        Process {
+            property string fileName
+
+            command: ["rm", "-f", "--", root.promptPathForName(fileName)]
+
+            Component.onCompleted: running = true
+
+            onExited: exitCode => {
+                if (exitCode === 0) {
+                    if (root.activePromptFileName && root.activePromptFileName.toLowerCase() === fileName.toLowerCase())
+                        root.setActivePromptFileName(root.fallbackPromptFileName(fileName));
+                    root.refreshPromptFiles();
+                } else {
+                    root.reportPromptError(I18n.tr("Failed to delete prompt \"%1\"", "Toolbox prompt settings").arg(fileName));
+                }
+                destroy();
+            }
+        }
     }
 
     function addMessage(message, role) {

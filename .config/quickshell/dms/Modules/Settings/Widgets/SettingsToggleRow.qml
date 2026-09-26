@@ -15,9 +15,40 @@ DankToggle {
     property var tags: []
     property string settingKey: ""
 
+    property string storeKey: ""
+    property var storedValue: undefined
+    property var encodeValue: null
+    property var decodeValue: null
+
     readonly property bool isHighlighted: settingKey !== "" && SettingsSearchService.highlightSection === settingKey
 
     width: parent?.width ?? 0
+
+    function toStored(uiValue) {
+        return root.encodeValue ? root.encodeValue(uiValue) : uiValue;
+    }
+
+    function toUi(stored) {
+        return root.decodeValue ? root.decodeValue(stored) : stored;
+    }
+
+    function commitStore(uiValue) {
+        if (!root.storeKey)
+            return;
+        const value = root.toStored(uiValue);
+        if (SettingsData[root.storeKey] === value)
+            return;
+        SettingsData.set(root.storeKey, value);
+    }
+
+    function syncFromStore() {
+        if (!root.storeKey)
+            return;
+        const uiValue = root.toUi(root.storedValue);
+        if (typeof uiValue !== "boolean")
+            return;
+        root.checked = uiValue;
+    }
 
     function findParentFlickable() {
         let p = root.parent;
@@ -30,6 +61,7 @@ DankToggle {
     }
 
     Component.onCompleted: {
+        root.syncFromStore();
         if (!settingKey)
             return;
         let flickable = findParentFlickable();
@@ -40,6 +72,13 @@ DankToggle {
     Component.onDestruction: {
         if (settingKey)
             SettingsSearchService.unregisterCard(settingKey);
+    }
+
+    onStoredValueChanged: root.syncFromStore()
+
+    Connections {
+        target: root
+        function onToggled(checked) { root.commitStore(checked); }
     }
 
     Rectangle {

@@ -18,7 +18,38 @@ Item {
     property string text: ""
     property string description: ""
 
+    property string storeKey: ""
+    property var storedValue: undefined
+    property var encodeValue: null
+    property var decodeValue: null
+
     readonly property bool isHighlighted: settingKey !== "" && SettingsSearchService.highlightSection === settingKey
+
+    function toStored(uiValue) {
+        return root.encodeValue ? root.encodeValue(uiValue) : uiValue;
+    }
+
+    function toUi(stored) {
+        return root.decodeValue ? root.decodeValue(stored) : stored;
+    }
+
+    function commitStore(uiValue) {
+        if (!root.storeKey)
+            return;
+        const value = root.toStored(uiValue);
+        if (SettingsData[root.storeKey] === value)
+            return;
+        SettingsData.set(root.storeKey, value);
+    }
+
+    function syncFromStore() {
+        if (!root.storeKey)
+            return;
+        const uiValue = root.toUi(root.storedValue);
+        if (typeof uiValue !== "number" || !isFinite(uiValue))
+            return;
+        slider.value = Math.round(uiValue);
+    }
 
     function findParentFlickable() {
         let p = root.parent;
@@ -31,6 +62,7 @@ Item {
     }
 
     Component.onCompleted: {
+        root.syncFromStore();
         if (!settingKey)
             return;
         let flickable = findParentFlickable();
@@ -41,6 +73,13 @@ Item {
     Component.onDestruction: {
         if (settingKey)
             SettingsSearchService.unregisterCard(settingKey);
+    }
+
+    onStoredValueChanged: root.syncFromStore()
+
+    Connections {
+        target: root
+        function onSliderValueChanged(newValue) { root.commitStore(newValue); }
     }
 
     Rectangle {

@@ -123,6 +123,7 @@ TAB_INDEX_MAP = {
     "WindowRulesTab.qml": 28,
     "AudioTab.qml": 29,
     "LocaleTab.qml": 30,
+    "ToolboxTab.qml": 32,
 }
 
 TAB_CATEGORY_MAP = {
@@ -156,6 +157,7 @@ TAB_CATEGORY_MAP = {
     28: "Window Rules",
     29: "Audio",
     30: "Locale",
+    32: "Toolbox",
 }
 
 SEARCHABLE_COMPONENTS = [

@@ -121,7 +121,7 @@ Item {
     }, {
         "name": "prompt",
         "icon": "notes",
-        "description": I18n.tr("Set the system prompt for the model.", "AiChat toolbar"),
+        "description": I18n.tr("Set the system prompt file for the model.", "AiChat toolbar"),
         "execute": args => {
             if (args.length === 0 || args[0] === "get") {
                 Ai.printPrompt();
@@ -289,7 +289,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             root.suggestionList = root.makeFinder(Ai.modelList).find(root.suggestionQuery).map(r => root.makeSuggestionEntry(text, root.commandPrefix + "model " + r.item, Ai.models[r.item].name, Ai.models[r.item].description, root.commandIcon("model")));
         } else if (text.startsWith(root.commandPrefix + "prompt")) {
             root.suggestionQuery = text.split(" ")[1] ?? "";
-            root.suggestionList = root.makeFinder(Ai.promptFiles).find(root.suggestionQuery).map(r => root.makeSuggestionEntry(text, root.commandPrefix + "prompt " + r.item, FileUtils.trimFileExt(FileUtils.fileNameForPath(r.item)), I18n.tr("Load prompt from %1", "AiChat toolbar").arg(r.item), root.commandIcon("prompt")));
+            root.suggestionList = root.makeFinder(Ai.promptFileNames).find(root.suggestionQuery).map(r => root.makeSuggestionEntry(text, root.commandPrefix + "prompt " + r.item, r.item, I18n.tr("Load prompt from %1", "AiChat toolbar").arg(r.item), root.commandIcon("prompt")));
         } else if (text.startsWith(root.commandPrefix + "save") || text.startsWith(root.commandPrefix + "load")) {
             const verb = text.startsWith(root.commandPrefix + "save") ? "save" : "load";
             root.suggestionQuery = text.split(" ")[1] ?? "";

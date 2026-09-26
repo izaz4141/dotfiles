@@ -413,19 +413,19 @@
     "tabIndex": 1,
     "category": "Time & Weather",
     "keywords": [
-      "address",
       "auto",
       "automatically",
       "clock",
       "date",
       "determine",
       "forecast",
+      "geoclue",
       "gps",
       "location",
       "time",
       "weather"
     ],
-    "description": "Automatically determine your location using your IP address"
+    "description": "Automatically determine your location using geoclue"
   },
   {
     "section": "dateFormat",
@@ -1706,6 +1706,19 @@
     "icon": "opacity"
   },
   {
+    "section": "_tab_6",
+    "label": "Hyprland Decoration",
+    "tabIndex": 6,
+    "category": "Settings",
+    "keywords": [
+      "decoration",
+      "hyprland",
+      "settings"
+    ],
+    "icon": "style",
+    "conditionKey": "isHyprland"
+  },
+  {
     "section": "_tab_7",
     "label": "Network",
     "tabIndex": 7,
@@ -1721,8 +1734,7 @@
       "wifi",
       "wireless"
     ],
-    "icon": "wifi",
-    "conditionKey": "dmsConnected"
+    "icon": "wifi"
   },
   {
     "section": "_tab_8",
@@ -2199,24 +2211,6 @@
     "description": "Free VRAM/memory when the launcher is closed. May cause a slight delay when reopening."
   },
   {
-    "section": "matugenTemplateAlacritty",
-    "label": "Alacritty",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "alacritty",
-      "appearance",
-      "colors",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "terminal",
-      "theme"
-    ]
-  },
-  {
     "section": "applications",
     "label": "Applications",
     "tabIndex": 10,
@@ -2555,75 +2549,6 @@
     "description": "Show darkened overlay behind modal dialogs"
   },
   {
-    "section": "matugenTemplateEmacs",
-    "label": "Emacs",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "emacs",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateFirefox",
-    "label": "Firefox",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "firefox",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateGtk",
-    "label": "GTK",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "gtk",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateGhostty",
-    "label": "Ghostty",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "ghostty",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "terminal",
-      "theme"
-    ]
-  },
-  {
     "section": "cursorHideWhenTyping",
     "label": "Hide When Typing",
     "tabIndex": 10,
@@ -2664,23 +2589,6 @@
     ],
     "description": "Hide cursor when using touch input",
     "conditionKey": "isHyprland"
-  },
-  {
-    "section": "matugenTemplateHyprland",
-    "label": "Hyprland",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "hyprland",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
   },
   {
     "section": "hyprlandLayout",
@@ -2737,29 +2645,6 @@
     ],
     "icon": "interests",
     "description": "DankShell & System Icons (requires restart)"
-  },
-  {
-    "section": "matugenTemplateKcolorscheme",
-    "label": "KColorScheme",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "colour",
-      "colours",
-      "hue",
-      "kcolorscheme",
-      "kde",
-      "look",
-      "matugen",
-      "palette",
-      "scheme",
-      "style",
-      "template",
-      "theme",
-      "tint"
-    ]
   },
   {
     "section": "m3ElevationLightDirection",
@@ -2847,21 +2732,22 @@
     "conditionKey": "isDwl"
   },
   {
-    "section": "matugenScheme",
-    "label": "Matugen Palette",
+    "section": "useMatugen",
+    "label": "Matugen",
     "tabIndex": 10,
     "category": "Theme & Colors",
     "keywords": [
-      "algorithm",
       "appearance",
+      "apps",
       "background",
-      "based",
       "bg",
       "colors",
       "colour",
       "colours",
       "desktop",
       "dynamic",
+      "enable",
+      "generate",
       "hue",
       "image",
       "look",
@@ -2870,35 +2756,14 @@
       "palette",
       "picture",
       "scheme",
-      "select",
       "style",
+      "system",
       "theme",
       "tint",
       "wallpaper",
       "wallpaper colors"
     ],
-    "description": "Select the palette algorithm used for wallpaper-based colors"
-  },
-  {
-    "section": "matugenTemplates",
-    "label": "Matugen Templates",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "dynamic",
-      "look",
-      "material",
-      "matugen",
-      "scheme",
-      "style",
-      "templates",
-      "theme",
-      "theming",
-      "wallpaper colors"
-    ],
-    "icon": "auto_awesome",
+    "description": "Run matugen to generate Material You colors from wallpaper for DMS and system apps",
     "conditionKey": "matugenAvailable"
   },
   {
@@ -3265,42 +3130,6 @@
     "description": "Controls opacity of all popouts, modals, and their content layers"
   },
   {
-    "section": "runDmsMatugenTemplates",
-    "label": "Run DMS Templates",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "dms",
-      "look",
-      "matugen",
-      "run",
-      "scheme",
-      "style",
-      "templates",
-      "theme"
-    ]
-  },
-  {
-    "section": "runUserMatugenTemplates",
-    "label": "Run User Templates",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "look",
-      "matugen",
-      "run",
-      "scheme",
-      "style",
-      "templates",
-      "theme",
-      "user"
-    ]
-  },
-  {
     "section": "m3ElevationColorMode",
     "label": "Shadow Color",
     "tabIndex": 10,
@@ -3531,40 +3360,75 @@
     "description": "Select the palette algorithm used for wallpaper-based colors"
   },
   {
-    "section": "matugenTemplateVscode",
-    "label": "VS Code",
+    "section": "themeGeneration",
+    "label": "Theme Generation",
     "tabIndex": 10,
     "category": "Theme & Colors",
     "keywords": [
       "appearance",
-      "code",
+      "apps",
+      "background",
+      "bg",
       "colors",
+      "colour",
+      "colours",
+      "desktop",
+      "dynamic",
+      "generate",
+      "generation",
+      "hue",
+      "image",
       "look",
+      "material",
       "matugen",
+      "palette",
+      "picture",
       "scheme",
       "style",
-      "template",
+      "system",
+      "templates",
       "theme",
-      "vscode"
-    ]
+      "theming",
+      "tint",
+      "wallpaper",
+      "wallpaper colors"
+    ],
+    "icon": "auto_awesome",
+    "description": "Run matugen to generate Material You colors from wallpaper for DMS and system apps",
+    "conditionKey": "matugenAvailable"
   },
   {
-    "section": "matugenTemplateWezterm",
-    "label": "WezTerm",
+    "section": "wallustEnabled",
+    "label": "Wallust",
     "tabIndex": 10,
     "category": "Theme & Colors",
     "keywords": [
       "appearance",
+      "cava",
       "colors",
+      "colour",
+      "colours",
+      "enable",
+      "escape",
+      "generate",
+      "hue",
+      "kitty",
       "look",
-      "matugen",
+      "palette",
+      "panel",
       "scheme",
+      "sequences",
+      "statusbar",
       "style",
-      "template",
+      "taskbar",
       "terminal",
       "theme",
-      "wezterm"
-    ]
+      "tint",
+      "topbar",
+      "wallust",
+      "waybar"
+    ],
+    "description": "Run wallust to generate colors for waybar, kitty, cava, and terminal escape sequences"
   },
   {
     "section": "widgetBackgroundColor",
@@ -3780,220 +3644,6 @@
       "windows"
     ],
     "description": "Rounded corners for windows (decoration.rounding)"
-  },
-  {
-    "section": "matugenTemplateDgop",
-    "label": "dgop",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "dgop",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateEquibop",
-    "label": "equibop",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "discord",
-      "equibop",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateFoot",
-    "label": "foot",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "foot",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "terminal",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateKitty",
-    "label": "kitty",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "kitty",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "terminal",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateMangowc",
-    "label": "mangowc",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "look",
-      "mangowc",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateNeovim",
-    "label": "neovim",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "lazy",
-      "look",
-      "manager",
-      "matugen",
-      "neovim",
-      "plugin",
-      "requires",
-      "scheme",
-      "style",
-      "template",
-      "terminal",
-      "theme"
-    ],
-    "description": "Requires lazy plugin manager"
-  },
-  {
-    "section": "matugenTemplateNiri",
-    "label": "niri",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "look",
-      "matugen",
-      "niri",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplatePywalfox",
-    "label": "pywalfox",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "look",
-      "matugen",
-      "pywalfox",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateQt5ct",
-    "label": "qt5ct",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "look",
-      "matugen",
-      "qt5ct",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateQt6ct",
-    "label": "qt6ct",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "look",
-      "matugen",
-      "qt6ct",
-      "scheme",
-      "style",
-      "template",
-      "theme"
-    ]
-  },
-  {
-    "section": "matugenTemplateVesktop",
-    "label": "vesktop",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "discord",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "theme",
-      "vesktop"
-    ]
-  },
-  {
-    "section": "matugenTemplateZenBrowser",
-    "label": "zenbrowser",
-    "tabIndex": 10,
-    "category": "Theme & Colors",
-    "keywords": [
-      "appearance",
-      "colors",
-      "look",
-      "matugen",
-      "scheme",
-      "style",
-      "template",
-      "theme",
-      "zenbrowser"
-    ]
   },
   {
     "section": "lockScreenActiveMonitor",
@@ -4214,6 +3864,27 @@
       "startup"
     ],
     "description": "Automatically lock the screen when DMS starts"
+  },
+  {
+    "section": "lockBeforeSuspend",
+    "label": "Lock before suspend",
+    "tabIndex": 11,
+    "category": "Lock Screen",
+    "keywords": [
+      "automatic",
+      "automatically",
+      "before",
+      "lock",
+      "login",
+      "password",
+      "prepares",
+      "screen",
+      "security",
+      "sleep",
+      "suspend",
+      "system"
+    ],
+    "description": "Automatically lock the screen when the system prepares to suspend"
   },
   {
     "section": "lockScreenNotificationMode",
@@ -6026,6 +5697,47 @@
     "description": "Note: this only changes the percentage, it does not actually limit charging."
   },
   {
+    "section": "brightnessLevel",
+    "label": "Brightness level",
+    "tabIndex": 21,
+    "category": "Power & Sleep",
+    "keywords": [
+      "backlight",
+      "bright",
+      "brightness",
+      "dim",
+      "energy",
+      "level",
+      "monitor",
+      "power",
+      "shutdown",
+      "sleep",
+      "suspend"
+    ]
+  },
+  {
+    "section": "brightnessTimeout",
+    "label": "Brightness lower after",
+    "tabIndex": 21,
+    "category": "Power & Sleep",
+    "keywords": [
+      "after",
+      "backlight",
+      "bright",
+      "brightness",
+      "dim",
+      "energy",
+      "inactivity",
+      "lower",
+      "monitor",
+      "power",
+      "shutdown",
+      "sleep",
+      "suspend",
+      "timer"
+    ]
+  },
+  {
     "section": "customPowerActions",
     "label": "Custom Power Actions",
     "tabIndex": 21,
@@ -6191,27 +5903,6 @@
     ],
     "icon": "schedule",
     "description": "Gradually fade the screen before locking with a configurable grace period"
-  },
-  {
-    "section": "lockBeforeSuspend",
-    "label": "Lock before suspend",
-    "tabIndex": 21,
-    "category": "Power & Sleep",
-    "keywords": [
-      "automatically",
-      "before",
-      "energy",
-      "lock",
-      "power",
-      "prepares",
-      "screen",
-      "security",
-      "shutdown",
-      "sleep",
-      "suspend",
-      "system"
-    ],
-    "description": "Automatically lock the screen when the system prepares to suspend"
   },
   {
     "section": "fadeToLockGracePeriod",
@@ -6427,68 +6118,44 @@
     "icon": "widgets"
   },
   {
-    "section": "disabled",
+    "section": "minStoreLength",
     "label": "Advanced",
     "tabIndex": 23,
     "category": "System",
     "keywords": [
       "advanced",
+      "before",
+      "characters",
       "clipboard",
-      "cliphist",
-      "copy",
-      "disable",
-      "disk",
-      "history",
+      "entry",
       "linux",
-      "nothing",
+      "minimum",
+      "number",
       "os",
-      "paste",
-      "saved",
-      "system",
-      "works"
-    ],
-    "icon": "tune",
-    "description": "Clipboard works but nothing saved to disk"
-  },
-  {
-    "section": "autoClearDays",
-    "label": "Auto-Clear After",
-    "tabIndex": 23,
-    "category": "System",
-    "keywords": [
-      "after",
-      "auto",
-      "automatically",
-      "clear",
-      "clipboard",
-      "days",
-      "delete",
-      "entries",
-      "linux",
-      "older",
-      "os",
+      "stored",
       "system"
     ],
-    "description": "Automatically delete entries older than this"
+    "icon": "tune",
+    "description": "Minimum number of characters before an entry is stored"
   },
   {
-    "section": "clearAtStartup",
+    "section": "clipboardEnterToPaste",
     "label": "Behavior",
     "tabIndex": 23,
     "category": "System",
     "keywords": [
       "behavior",
-      "clear",
       "clipboard",
-      "history",
+      "copy",
+      "enter",
       "linux",
       "os",
-      "server",
-      "starts",
+      "paste",
+      "press",
       "system"
     ],
     "icon": "settings",
-    "description": "Clear all history when server starts"
+    "description": "Press Enter to paste, Shift+Enter to copy"
   },
   {
     "section": "_tab_23",
@@ -6509,25 +6176,30 @@
     "conditionKey": "dmsConnected"
   },
   {
-    "section": "clipboardEnterToPaste",
-    "label": "Enter to Paste",
+    "section": "maxDedupeSearch",
+    "label": "Deduplication Search Depth",
     "tabIndex": 23,
     "category": "System",
     "keywords": [
-      "behavior",
       "clipboard",
-      "copy",
-      "enter",
+      "dedupe",
+      "deduplication",
+      "depth",
+      "duplicates",
+      "items",
       "linux",
+      "looking",
+      "many",
       "os",
-      "paste",
-      "press",
+      "recent",
+      "scan",
+      "search",
       "system"
     ],
-    "description": "Press Enter to paste, Shift+Enter to copy"
+    "description": "How many recent items to scan when looking for duplicates"
   },
   {
-    "section": "maxHistory",
+    "section": "maxItems",
     "label": "History Settings",
     "tabIndex": 23,
     "category": "System",
@@ -6551,14 +6223,41 @@
     "description": "Maximum number of clipboard entries to keep"
   },
   {
-    "section": "maxEntrySize",
-    "label": "Maximum Entry Size",
+    "section": "previewWidth",
+    "label": "List Preview Width",
+    "tabIndex": 23,
+    "category": "System",
+    "keywords": [
+      "characters",
+      "clipboard",
+      "compact",
+      "entry",
+      "higher",
+      "linux",
+      "list",
+      "lower",
+      "many",
+      "more",
+      "os",
+      "preview",
+      "readable",
+      "show",
+      "system",
+      "width"
+    ],
+    "description": "How many characters of each entry to show in the list. Higher = more readable, lower = more compact."
+  },
+  {
+    "section": "maxStoreSize",
+    "label": "Maximum Store Size",
     "tabIndex": 23,
     "category": "System",
     "keywords": [
       "clipboard",
       "cliphist",
       "copy",
+      "database",
+      "disk",
       "entry",
       "history",
       "limit",
@@ -6567,29 +6266,11 @@
       "os",
       "paste",
       "size",
-      "system"
+      "store",
+      "system",
+      "total"
     ],
-    "description": "Maximum size per clipboard entry"
-  },
-  {
-    "section": "maxPinned",
-    "label": "Maximum Pinned Entries",
-    "tabIndex": 23,
-    "category": "System",
-    "keywords": [
-      "clipboard",
-      "entries",
-      "limit",
-      "linux",
-      "max",
-      "maximum",
-      "number",
-      "os",
-      "pinned",
-      "saved",
-      "system"
-    ],
-    "description": "Maximum number of entries that can be saved"
+    "description": "Maximum total disk size of the clipboard database"
   },
   {
     "section": "_tab_24",
@@ -6828,5 +6509,210 @@
       "time"
     ],
     "description": "Change the locale used for date and time formatting, independent of the interface language."
+  },
+  {
+    "section": "_tab_31",
+    "label": "Input",
+    "tabIndex": 31,
+    "category": "Settings",
+    "keywords": [
+      "input",
+      "settings"
+    ],
+    "icon": "keyboard"
+  },
+  {
+    "section": "toolboxAiModel",
+    "label": "AI Assistant",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "ai",
+      "assistant",
+      "model",
+      "toolbox"
+    ],
+    "icon": "neurology",
+    "description": "Model used by the Toolbox assistant"
+  },
+  {
+    "section": "toolboxAiSearchEngineBaseUrl",
+    "label": "AI Search",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "ai",
+      "engine",
+      "search",
+      "toolbox",
+      "url"
+    ],
+    "icon": "search"
+  },
+  {
+    "section": "toolboxBooruAllowNsfw",
+    "label": "Allow NSFW Results",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "adult",
+      "allow",
+      "booru",
+      "nsfw",
+      "provides",
+      "results",
+      "safe",
+      "toolbox",
+      "zerochan"
+    ],
+    "description": "Zerochan only provides safe results"
+  },
+  {
+    "section": "toolboxBooruProvider",
+    "label": "Booru Settings",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "booru",
+      "image",
+      "provider",
+      "settings",
+      "toolbox"
+    ],
+    "icon": "manga",
+    "description": "Image provider used by the Toolbox"
+  },
+  {
+    "section": "toolboxAiTextFadeIn",
+    "label": "Fade In Text",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "ai",
+      "animate",
+      "animation",
+      "appears",
+      "fade",
+      "response",
+      "text",
+      "toolbox"
+    ],
+    "description": "Animate AI response text as it appears"
+  },
+  {
+    "section": "toolboxBooruLimit",
+    "label": "Results per Page",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "booru",
+      "images",
+      "limit",
+      "maximum",
+      "number",
+      "page",
+      "per",
+      "requested",
+      "results",
+      "toolbox"
+    ],
+    "description": "Maximum number of images requested per page"
+  },
+  {
+    "section": "toolboxAiSearchExcludedSites",
+    "label": "Search Exclusions",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "ai",
+      "domains",
+      "exclude",
+      "exclusions",
+      "search",
+      "sites",
+      "toolbox"
+    ],
+    "icon": "block"
+  },
+  {
+    "section": "toolboxAiSystemPromptFile",
+    "label": "System Prompt File",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "ai",
+      "assistant",
+      "file",
+      "instructions",
+      "prompt",
+      "schema",
+      "system",
+      "template",
+      "toolbox"
+    ],
+    "icon": "description",
+    "description": "System prompt template used by the AI assistant"
+  },
+  {
+    "section": "toolboxAiTemperature",
+    "label": "Temperature",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "ai",
+      "celsius",
+      "controls",
+      "fahrenheit",
+      "randomness",
+      "response",
+      "scale",
+      "temp",
+      "temperature",
+      "toolbox"
+    ],
+    "description": "Controls response randomness on a 0–200% scale"
+  },
+  {
+    "section": "toolboxAiTool",
+    "label": "Tool",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "ai",
+      "available",
+      "functions",
+      "model",
+      "search",
+      "selected",
+      "tool",
+      "toolbox",
+      "tools"
+    ],
+    "description": "Tools available to the selected model"
+  },
+  {
+    "section": "_tab_32",
+    "label": "Toolbox",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "toolbox"
+    ],
+    "icon": "service_toolbox"
+  },
+  {
+    "section": "toolboxWidth",
+    "label": "Toolbox Layout",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "layout",
+      "size",
+      "slideout",
+      "toolbox",
+      "width"
+    ],
+    "icon": "view_sidebar",
+    "description": "Width of the Toolbox slideout"
   }
 ]
