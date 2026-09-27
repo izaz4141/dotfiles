@@ -13,6 +13,7 @@ Button {
     property bool enableScaleAnimation: false
     property bool enableRipple: typeof SettingsData !== "undefined" ? (SettingsData.enableRippleEffects ?? true) : true
     padding: 0
+    horizontalPadding: Theme.spacingS
 
     property color backgroundColor: Theme.buttonBg
     property color textColor: Theme.buttonText
