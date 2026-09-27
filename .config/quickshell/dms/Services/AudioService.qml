@@ -19,7 +19,56 @@ Singleton {
     property bool gsettingsAvailable: false
     property var availableSoundThemes: []
     property string currentSoundTheme: ""
-    property var soundFilePaths: ({})
+    property var soundCandidates: ({})
+
+    readonly property var soundEvents: [
+        {
+            key: "audio-volume-change",
+            bundled: "../assets/sounds/freedesktop/audio-volume-change.wav",
+            themeNames: ["audio-volume-change"]
+        },
+        {
+            key: "power-plug",
+            bundled: "../assets/sounds/plasma/power-plug.wav",
+            themeNames: ["power-plug"]
+        },
+        {
+            key: "power-unplug",
+            bundled: "../assets/sounds/plasma/power-unplug.wav",
+            themeNames: ["power-unplug"]
+        },
+        {
+            key: "message",
+            bundled: "../assets/sounds/freedesktop/message.wav",
+            themeNames: ["dialog-information", "message", "message-lowpriority", "bell"]
+        },
+        {
+            key: "message-new-instant",
+            bundled: "../assets/sounds/freedesktop/message-new-instant.wav",
+            themeNames: ["dialog-warning", "message-new-instant", "message-highlight"]
+        },
+        {
+            key: "alarm-clock-elapsed",
+            bundled: "../assets/sounds/freedesktop/alarm-clock-elapsed.oga",
+            themeNames: ["alarm-clock-elapsed", "service-login"]
+        },
+        {
+            key: "timer-finished",
+            bundled: "../assets/sounds/freedesktop/alarm-clock-elapsed.oga",
+            themeNames: ["timer-finished"]
+        }
+    ]
+
+    readonly property var soundEventKeys: {
+        const keys = [];
+        for (let i = 0; i < soundEvents.length; i++)
+            keys.push(soundEvents[i].key);
+        return keys;
+    }
+
+    readonly property var bundledThemeOverrides: ({
+            "smooth": ["audio-volume-change"]
+        })
 
     property var volumeChangeSound: null
     property var powerPlugSound: null
@@ -28,6 +77,11 @@ Singleton {
     property var criticalNotificationSound: null
     property var alarmSound: null
     property var timerFinishedSound: null
+    property var previewPlayer: null
+    property string previewKey: ""
+    property bool previewPlaying: false
+    property bool discoverRunning: false
+    property bool discoverQueued: false
     property real notificationsVolume: 1.0
     property bool notificationsAudioMuted: false
 
@@ -319,7 +373,6 @@ EOFCONFIG
         Proc.runCommand("checkGsettings", ["sh", "-c", "gsettings get org.gnome.desktop.sound theme-name 2>/dev/null"], (output, exitCode) => {
             gsettingsAvailable = (exitCode === 0);
             if (gsettingsAvailable) {
-                scanSoundThemes();
                 getCurrentSoundTheme();
             }
         }, 0);
@@ -347,6 +400,7 @@ EOFCONFIG
             } else {
                 availableSoundThemes = [];
             }
+            reloadSounds();
         }, 0);
     }
 
@@ -354,14 +408,10 @@ EOFCONFIG
         Proc.runCommand("getCurrentSoundTheme", ["sh", "-c", "gsettings get org.gnome.desktop.sound theme-name 2>/dev/null | sed \"s/'//g\""], (output, exitCode) => {
             if (exitCode === 0 && output.trim()) {
                 currentSoundTheme = output.trim();
-                console.log("AudioService: Current system sound theme:", currentSoundTheme);
-                if (SettingsData.useSystemSoundTheme) {
-                    discoverSoundFiles(currentSoundTheme);
-                }
             } else {
                 currentSoundTheme = "";
-                console.log("AudioService: No system sound theme found");
             }
+            reloadSounds();
         }, 0);
     }
 
@@ -373,131 +423,230 @@ EOFCONFIG
         Proc.runCommand("setSoundTheme", ["sh", "-c", `gsettings set org.gnome.desktop.sound theme-name '${themeName}'`], (output, exitCode) => {
             if (exitCode === 0) {
                 currentSoundTheme = themeName;
-                if (SettingsData.useSystemSoundTheme) {
-                    discoverSoundFiles(themeName);
-                }
+                reloadSounds();
             }
         }, 0);
     }
 
-    function discoverSoundFiles(themeName) {
-        if (!themeName) {
-            soundFilePaths = {};
-            if (soundsAvailable) {
-                destroySoundPlayers();
-                createSoundPlayers();
-            }
+    function soundEventEntry(soundEvent) {
+        return soundEvents.find(entry => entry.key === soundEvent) ?? null;
+    }
+
+    function bundledPathFor(soundEvent) {
+        const entry = soundEventEntry(soundEvent);
+        if (!entry)
+            return Qt.resolvedUrl("../assets/sounds/freedesktop/message.wav");
+        return Qt.resolvedUrl(entry.bundled);
+    }
+
+    function bundledFilePath(soundEvent) {
+        return Paths.strip(bundledPathFor(soundEvent));
+    }
+
+    function customSoundPath(soundEvent) {
+        return SettingsData.soundEvents?.[soundEvent]?.custom ?? "";
+    }
+
+    function isSoundEventEnabled(soundEvent) {
+        if (!SettingsData.soundsEnabled)
+            return false;
+        return SettingsData.soundEvents?.[soundEvent]?.enabled ?? true;
+    }
+
+    function themeSoundPath(soundEvent) {
+        if (!SettingsData.useSystemSoundTheme)
+            return "";
+        if (bundledThemeOverrides[currentSoundTheme.toLowerCase()]?.includes(soundEvent))
+            return "";
+        const candidates = soundCandidates[soundEvent];
+        if (!candidates || candidates.length === 0)
+            return "";
+        return Paths.toFileUrl(candidates[0]);
+    }
+
+    function getSoundPath(soundEvent) {
+        const custom = customSoundPath(soundEvent);
+        if (custom)
+            return Paths.toFileUrl(custom);
+        const themed = themeSoundPath(soundEvent);
+        if (themed)
+            return themed;
+        return bundledPathFor(soundEvent);
+    }
+
+    function soundSourceOptions(soundEvent) {
+        const files = [bundledFilePath(soundEvent)].concat(soundCandidates[soundEvent] ?? []);
+        const options = [];
+        for (const file of files) {
+            const label = Paths.shortenHome(file);
+            if (!options.includes(label))
+                options.push(label);
+        }
+        return options;
+    }
+
+    function soundSourceLabel(soundEvent) {
+        const custom = customSoundPath(soundEvent);
+        if (custom)
+            return Paths.shortenHome(custom);
+        const themed = themeSoundPath(soundEvent);
+        if (themed)
+            return I18n.tr("System theme");
+        return I18n.tr("Default");
+    }
+
+    function setEventEnabled(soundEvent, enabled) {
+        const current = SettingsData.soundEvents ?? {};
+        const entry = Object.assign({}, current[soundEvent] ?? {});
+        entry.enabled = enabled;
+        const updated = Object.assign({}, current);
+        updated[soundEvent] = entry;
+        SettingsData.set("soundEvents", updated);
+    }
+
+    function setCustomSound(soundEvent, path) {
+        if (!path)
+            return;
+        const current = SettingsData.soundEvents ?? {};
+        const entry = Object.assign({}, current[soundEvent] ?? {});
+        entry.custom = path;
+        const updated = Object.assign({}, current);
+        updated[soundEvent] = entry;
+        SettingsData.set("soundEvents", updated);
+    }
+
+    function clearCustomSound(soundEvent) {
+        const current = SettingsData.soundEvents ?? {};
+        if (!current[soundEvent]?.custom)
+            return;
+        const entry = Object.assign({}, current[soundEvent]);
+        delete entry.custom;
+        const updated = Object.assign({}, current);
+        if (Object.keys(entry).length === 0)
+            delete updated[soundEvent];
+        else
+            updated[soundEvent] = entry;
+        SettingsData.set("soundEvents", updated);
+    }
+
+    function selectSoundSource(soundEvent, label) {
+        if (!label)
+            return;
+        if (label === Paths.shortenHome(bundledFilePath(soundEvent))) {
+            clearCustomSound(soundEvent);
             return;
         }
+        setCustomSound(soundEvent, Paths.expandTilde(label));
+    }
+
+    function previewSound(soundEvent) {
+        if (!soundsAvailable || !previewPlayer)
+            return;
+        if (previewKey === soundEvent && previewPlaying) {
+            stopPreview();
+            return;
+        }
+        previewKey = soundEvent;
+        previewPlayer.stop();
+        previewPlayer.source = getSoundPath(soundEvent);
+        previewPlayer.play();
+    }
+
+    function stopPreview() {
+        if (previewPlayer)
+            previewPlayer.stop();
+        previewKey = "";
+        previewPlaying = false;
+    }
+
+    function refreshSoundSources() {
+        if (!soundsAvailable)
+            return;
+
+        for (const binding of soundPlayerBindings()) {
+            const player = root[binding.property];
+            if (!player)
+                continue;
+            const source = String(getSoundPath(binding.key) ?? "");
+            if (String(player.source ?? "") === source)
+                continue;
+            player.stop();
+            player.source = source;
+        }
+    }
+
+    function discoverSoundFiles() {
+        if (discoverRunning) {
+            discoverQueued = true;
+            return;
+        }
+        discoverRunning = true;
 
         const xdgDataDirs = Quickshell.env("XDG_DATA_DIRS");
         const searchPaths = xdgDataDirs && xdgDataDirs.trim() !== "" ? xdgDataDirs.split(":").concat(Paths.strip(StandardPaths.writableLocation(StandardPaths.GenericDataLocation))) : ["/usr/share", "/usr/local/share", Paths.strip(StandardPaths.writableLocation(StandardPaths.GenericDataLocation))];
 
-        const extensions = ["oga", "ogg", "wav", "mp3", "flac"];
-        const themesToSearch = themeName !== "freedesktop" ? `${themeName} freedesktop` : themeName;
+        const extensions = ["oga", "ogg", "wav", "mp3", "flac", "opus", "m4a"];
 
-        const script = `
-            for event_key in audio-volume-change power-plug power-unplug message message-new-instant alarm-clock-elapsed; do
-                found=0
+        const themes = [];
+        const addTheme = name => {
+            if (name && name !== "" && !themes.includes(name))
+                themes.push(name);
+        };
+        addTheme(currentSoundTheme);
+        for (const name of availableSoundThemes)
+            addTheme(name);
+        addTheme("freedesktop");
 
-                case "$event_key" in
-                    message)
-                        names="dialog-information message message-lowpriority bell"
-                        ;;
-                    message-new-instant)
-                        names="dialog-warning message-new-instant message-highlight"
-                        ;;
-                    alarm-clock-elapsed)
-                        names="alarm-clock-elapsed service-login"
-                        ;;
-                    *)
-                        names="$event_key"
-                        ;;
-                esac
+        if (themes.length === 0) {
+            soundCandidates = {};
+            discoverRunning = false;
+            refreshSoundSources();
+            return;
+        }
 
-                for theme in ${themesToSearch}; do
-                    for event_name in $names; do
-                        for base_path in ${searchPaths.join(" ")}; do
-                            sounds_path="$base_path/sounds"
-                            for ext in ${extensions.join(" ")}; do
-                                file_path="$sounds_path/$theme/stereo/$event_name.$ext"
-                                if [ -f "$file_path" ]; then
-                                    echo "$event_key=$file_path"
-                                    found=1
-                                    break
-                                fi
-                            done
-                            [ $found -eq 1 ] && break
-                        done
-                        [ $found -eq 1 ] && break
-                    done
-                    [ $found -eq 1 ] && break
-                done
+        const script = soundEvents.map(entry => `for event_name in ${entry.themeNames.join(" ")}; do
+    for theme in ${themes.join(" ")}; do
+        for base_path in ${searchPaths.join(" ")}; do
+            for ext in ${extensions.join(" ")}; do
+                file_path="$base_path/sounds/$theme/stereo/$event_name.$ext"
+                [ -f "$file_path" ] && echo "${entry.key}=$file_path"
             done
-        `;
+        done
+    done
+done`).join("\n");
 
         Proc.runCommand("discoverSoundFiles", ["sh", "-c", script], (output, exitCode) => {
-            const paths = {};
+            const found = {};
             if (exitCode === 0 && output.trim()) {
-                const lines = output.trim().split('\n');
-                for (let line of lines) {
-                    const parts = line.split('=');
-                    if (parts.length === 2) {
-                        paths[parts[0]] = "file://" + parts[1];
-                    }
+                for (const line of output.trim().split('\n')) {
+                    const separator = line.indexOf('=');
+                    if (separator < 1)
+                        continue;
+                    const key = line.slice(0, separator);
+                    const filePath = line.slice(separator + 1);
+                    if (!found[key])
+                        found[key] = [];
+                    if (!found[key].includes(filePath))
+                        found[key].push(filePath);
                 }
             }
-            soundFilePaths = paths;
 
-            if (soundsAvailable) {
-                destroySoundPlayers();
-                createSoundPlayers();
+            const candidates = {};
+            for (const entry of soundEvents)
+                candidates[entry.key] = found[entry.key] ?? [];
+            soundCandidates = candidates;
+
+            discoverRunning = false;
+            if (discoverQueued) {
+                discoverQueued = false;
+                discoverSoundFiles();
             }
+            refreshSoundSources();
         }, 0);
     }
 
-    function getSoundPath(soundEvent) {
-        const soundMap = {
-            "audio-volume-change": "../assets/sounds/freedesktop/audio-volume-change.wav",
-            "power-plug": "../assets/sounds/plasma/power-plug.wav",
-            "power-unplug": "../assets/sounds/plasma/power-unplug.wav",
-            "message": "../assets/sounds/freedesktop/message.wav",
-            "message-new-instant": "../assets/sounds/freedesktop/message-new-instant.wav",
-            "alarm-clock-elapsed": "../assets/sounds/freedesktop/alarm-clock-elapsed.oga"
-        };
-
-        const specialConditions = {
-            "smooth": ["audio-volume-change"]
-        };
-
-        const themeLower = currentSoundTheme.toLowerCase();
-        if (SettingsData.useSystemSoundTheme && specialConditions[themeLower]?.includes(soundEvent)) {
-            const bundledPath = Qt.resolvedUrl(soundMap[soundEvent] || "../assets/sounds/freedesktop/message.wav");
-            console.log("AudioService: Using bundled sound (special condition) for", soundEvent, ":", bundledPath);
-            return bundledPath;
-        }
-
-        if (SettingsData.useSystemSoundTheme && soundFilePaths[soundEvent]) {
-            console.log("AudioService: Using system sound for", soundEvent, ":", soundFilePaths[soundEvent]);
-            return soundFilePaths[soundEvent];
-        }
-
-        const bundledPath = Qt.resolvedUrl(soundMap[soundEvent] || "../assets/sounds/freedesktop/message.wav");
-        console.log("AudioService: Using bundled sound for", soundEvent, ":", bundledPath);
-        return bundledPath;
-    }
-
     function reloadSounds() {
-        console.log("AudioService: Reloading sounds, useSystemSoundTheme:", SettingsData.useSystemSoundTheme, "currentSoundTheme:", currentSoundTheme);
-        if (SettingsData.useSystemSoundTheme && currentSoundTheme) {
-            discoverSoundFiles(currentSoundTheme);
-        } else {
-            soundFilePaths = {};
-            if (soundsAvailable) {
-                destroySoundPlayers();
-                createSoundPlayers();
-            }
-        }
+        discoverSoundFiles();
     }
 
     function setupMediaDevices() {
@@ -536,34 +685,33 @@ EOFCONFIG
         }
     }
 
+    function soundPlayerBindings() {
+        return [
+            { property: "volumeChangeSound", key: "audio-volume-change", loops: false },
+            { property: "powerPlugSound", key: "power-plug", loops: false },
+            { property: "powerUnplugSound", key: "power-unplug", loops: false },
+            { property: "normalNotificationSound", key: "message", loops: false },
+            { property: "criticalNotificationSound", key: "message-new-instant", loops: false },
+            { property: "alarmSound", key: "alarm-clock-elapsed", loops: true },
+            { property: "timerFinishedSound", key: "timer-finished", loops: true }
+        ];
+    }
+
     function destroySoundPlayers() {
-        if (volumeChangeSound) {
-            volumeChangeSound.destroy();
-            volumeChangeSound = null;
+        previewPlaying = false;
+        previewKey = "";
+
+        for (const binding of soundPlayerBindings()) {
+            const player = root[binding.property];
+            if (!player)
+                continue;
+            player.destroy();
+            root[binding.property] = null;
         }
-        if (powerPlugSound) {
-            powerPlugSound.destroy();
-            powerPlugSound = null;
-        }
-        if (powerUnplugSound) {
-            powerUnplugSound.destroy();
-            powerUnplugSound = null;
-        }
-        if (normalNotificationSound) {
-            normalNotificationSound.destroy();
-            normalNotificationSound = null;
-        }
-        if (criticalNotificationSound) {
-            criticalNotificationSound.destroy();
-            criticalNotificationSound = null;
-        }
-        if (alarmSound) {
-            alarmSound.destroy();
-            alarmSound = null;
-        }
-        if (timerFinishedSound) {
-            timerFinishedSound.destroy();
-            timerFinishedSound = null;
+
+        if (previewPlayer) {
+            previewPlayer.destroy();
+            previewPlayer = null;
         }
     }
 
@@ -574,93 +722,33 @@ EOFCONFIG
 
         setupMediaDevices();
 
+        const deviceProperty = mediaDevices ? "device: root.mediaDevices.defaultAudioOutput\n                        " : "";
+
         try {
-            const deviceProperty = mediaDevices ? `device: root.mediaDevices.defaultAudioOutput\n                    ` : "";
+            for (const binding of soundPlayerBindings()) {
+                const loopsProperty = binding.loops ? "loops: MediaPlayer.Infinite\n                    " : "";
+                root[binding.property] = Qt.createQmlObject(`
+                    import QtQuick
+                    import QtMultimedia
+                    MediaPlayer {
+                        source: "${getSoundPath(binding.key)}"
+                        ${loopsProperty}audioOutput: AudioOutput {
+                            ${deviceProperty}volume: notificationsVolume
+                        }
+                    }
+                `, root, `AudioService.${binding.property}`);
+            }
 
-            const volumeChangePath = getSoundPath("audio-volume-change");
-            volumeChangeSound = Qt.createQmlObject(`
+            previewPlayer = Qt.createQmlObject(`
                 import QtQuick
                 import QtMultimedia
                 MediaPlayer {
-                    source: "${volumeChangePath}"
                     audioOutput: AudioOutput {
                         ${deviceProperty}volume: notificationsVolume
                     }
+                    onPlaybackStateChanged: root.previewPlaying = playbackState === MediaPlayer.PlayingState
                 }
-            `, root, "AudioService.VolumeChangeSound");
-
-            const powerPlugPath = getSoundPath("power-plug");
-            powerPlugSound = Qt.createQmlObject(`
-                import QtQuick
-                import QtMultimedia
-                MediaPlayer {
-                    source: "${powerPlugPath}"
-                    audioOutput: AudioOutput {
-                        ${deviceProperty}volume: notificationsVolume
-                    }
-                }
-            `, root, "AudioService.PowerPlugSound");
-
-            const powerUnplugPath = getSoundPath("power-unplug");
-            powerUnplugSound = Qt.createQmlObject(`
-                import QtQuick
-                import QtMultimedia
-                MediaPlayer {
-                    source: "${powerUnplugPath}"
-                    audioOutput: AudioOutput {
-                        ${deviceProperty}volume: notificationsVolume
-                    }
-                }
-            `, root, "AudioService.PowerUnplugSound");
-
-            const messagePath = getSoundPath("message");
-            normalNotificationSound = Qt.createQmlObject(`
-                import QtQuick
-                import QtMultimedia
-                MediaPlayer {
-                    source: "${messagePath}"
-                    audioOutput: AudioOutput {
-                        ${deviceProperty}volume: notificationsVolume
-                    }
-                }
-            `, root, "AudioService.NormalNotificationSound");
-
-            const messageNewInstantPath = getSoundPath("message-new-instant");
-            criticalNotificationSound = Qt.createQmlObject(`
-                import QtQuick
-                import QtMultimedia
-                MediaPlayer {
-                    source: "${messageNewInstantPath}"
-                    audioOutput: AudioOutput {
-                        ${deviceProperty}volume: notificationsVolume
-                    }
-                }
-            `, root, "AudioService.CriticalNotificationSound");
-
-            const alarmClockPath = getSoundPath("alarm-clock-elapsed");
-            alarmSound = Qt.createQmlObject(`
-                import QtQuick
-                import QtMultimedia
-                MediaPlayer {
-                    source: "${alarmClockPath}"
-                    loops: MediaPlayer.Infinite
-                    audioOutput: AudioOutput {
-                        ${deviceProperty}volume: notificationsVolume
-                    }
-                }
-            `, root, "AudioService.AlarmSound");
-
-            timerFinishedSound = Qt.createQmlObject(`
-                import QtQuick
-                import QtMultimedia
-                MediaPlayer {
-                    source: "${alarmClockPath}"
-                    loops: MediaPlayer.Infinite
-                    audioOutput: AudioOutput {
-                        ${deviceProperty}volume: notificationsVolume
-                    }
-                }
-            `, root, "AudioService.TimerFinishedSound");
+            `, root, "AudioService.PreviewPlayer");
         } catch (e) {
             console.warn("AudioService: Error creating sound players:", e);
         }
@@ -673,11 +761,15 @@ EOFCONFIG
     function playVolumeChangeSound() {
         if (!soundsAvailable || !volumeChangeSound || notificationsAudioMuted || isMediaPlaying())
             return;
+        if (!isSoundEventEnabled("audio-volume-change"))
+            return;
         volumeChangeSound.play();
     }
 
     function playPowerPlugSound() {
         if (!soundsAvailable || !powerPlugSound || notificationsAudioMuted || isMediaPlaying())
+            return;
+        if (!isSoundEventEnabled("power-plug"))
             return;
         powerPlugSound.play();
     }
@@ -685,11 +777,15 @@ EOFCONFIG
     function playPowerUnplugSound() {
         if (!soundsAvailable || !powerUnplugSound || notificationsAudioMuted || isMediaPlaying())
             return;
+        if (!isSoundEventEnabled("power-unplug"))
+            return;
         powerUnplugSound.play();
     }
 
     function playNormalNotificationSound() {
         if (!soundsAvailable || !normalNotificationSound || SessionData.doNotDisturb || notificationsAudioMuted || isMediaPlaying())
+            return;
+        if (!isSoundEventEnabled("message"))
             return;
         normalNotificationSound.play();
     }
@@ -697,17 +793,21 @@ EOFCONFIG
     function playCriticalNotificationSound() {
         if (!soundsAvailable || !criticalNotificationSound || SessionData.doNotDisturb || notificationsAudioMuted || isMediaPlaying())
             return;
+        if (!isSoundEventEnabled("message-new-instant"))
+            return;
         criticalNotificationSound.play();
     }
 
     function playVolumeChangeSoundIfEnabled() {
-        if (SettingsData.soundsEnabled && SettingsData.soundVolumeChanged && !notificationsAudioMuted) {
+        if (SettingsData.soundsEnabled && !notificationsAudioMuted) {
             playVolumeChangeSound();
         }
     }
 
     function playAlarmRing() {
         if (!soundsAvailable || !alarmSound)
+            return;
+        if (!isSoundEventEnabled("alarm-clock-elapsed"))
             return;
         alarmSound.stop();
         alarmSound.position = 0;
@@ -723,6 +823,8 @@ EOFCONFIG
 
     function playTimerFinished() {
         if (!soundsAvailable || !timerFinishedSound)
+            return;
+        if (!isSoundEventEnabled("timer-finished"))
             return;
         timerFinishedSound.stop();
         timerFinishedSound.position = 0;
@@ -1077,11 +1179,15 @@ EOFCONFIG
         function onUseSystemSoundThemeChanged() {
             reloadSounds();
         }
+        function onSoundEventsChanged() {
+            refreshSoundSources();
+        }
     }
 
     Component.onCompleted: {
         if (soundsAvailable) {
             checkGsettings();
+            scanSoundThemes();
             Qt.callLater(createSoundPlayers);
         }
 

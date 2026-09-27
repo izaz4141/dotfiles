@@ -168,6 +168,7 @@ SEARCHABLE_COMPONENTS = [
     "SettingsButtonGroupRow",
     "SettingsSliderRow",
     "SettingsToggleCard",
+    "SettingsSoundRow",
 ]
 
 STOPWORDS = {

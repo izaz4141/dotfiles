@@ -610,7 +610,7 @@ Singleton {
                 }
             }
 
-            if (SettingsData.soundsEnabled && SettingsData.soundNewNotification) {
+            if (SettingsData.soundsEnabled) {
                 if (policy.urgency === NotificationUrgency.Critical) {
                     AudioService.playCriticalNotificationSound();
                 } else {

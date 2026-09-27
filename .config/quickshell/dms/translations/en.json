@@ -68,7 +68,7 @@
   {
     "term": "%1 does not require an API key",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:794, Services/Ai.qml:816",
+    "reference": "Services/Ai.qml:798, Services/Ai.qml:820",
     "comment": ""
   },
   {
@@ -230,19 +230,19 @@
   {
     "term": "1 hour",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204, Modules/Settings/WallpaperTab.qml:1043",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204",
     "comment": ""
   },
   {
     "term": "1 hour 30 minutes",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204, Modules/Settings/WallpaperTab.qml:1043",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204",
     "comment": ""
   },
   {
     "term": "1 minute",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/NotificationsTab.qml:62, Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204, Modules/Settings/WallpaperTab.qml:1043, Modules/Notifications/Center/NotificationSettings.qml:70",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/NotificationsTab.qml:62, Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204, Modules/Notifications/Center/NotificationSettings.qml:70",
     "comment": ""
   },
   {
@@ -266,7 +266,7 @@
   {
     "term": "10 seconds",
     "context": "screenshot with 10 second delay | wallpaper interval",
-    "reference": "Widgets/ScreenshotControls.qml:32, Modules/Settings/NotificationsTab.qml:50, Modules/Settings/PowerSleepTab.qml:104, Modules/Settings/PowerSleepTab.qml:130, Modules/Settings/PowerSleepTab.qml:560, Modules/Settings/WallpaperTab.qml:1043, Modules/Notifications/Center/NotificationSettings.qml:58",
+    "reference": "Widgets/ScreenshotControls.qml:32, Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/NotificationsTab.qml:50, Modules/Settings/PowerSleepTab.qml:104, Modules/Settings/PowerSleepTab.qml:130, Modules/Settings/PowerSleepTab.qml:560, Modules/Notifications/Center/NotificationSettings.qml:58",
     "comment": ""
   },
   {
@@ -290,13 +290,13 @@
   {
     "term": "15 minutes",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204, Modules/Settings/WallpaperTab.qml:1043",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204",
     "comment": ""
   },
   {
     "term": "15 seconds",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/NotificationsTab.qml:54, Modules/Settings/PowerSleepTab.qml:104, Modules/Settings/PowerSleepTab.qml:130, Modules/Settings/WallpaperTab.qml:1043, Modules/Notifications/Center/NotificationSettings.qml:62",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/NotificationsTab.qml:54, Modules/Settings/PowerSleepTab.qml:104, Modules/Settings/PowerSleepTab.qml:130, Modules/Notifications/Center/NotificationSettings.qml:62",
     "comment": ""
   },
   {
@@ -314,7 +314,7 @@
   {
     "term": "2 hours",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204, Modules/Settings/WallpaperTab.qml:1043",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204",
     "comment": ""
   },
   {
@@ -338,7 +338,7 @@
   {
     "term": "20 seconds",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/PowerSleepTab.qml:104, Modules/Settings/PowerSleepTab.qml:130, Modules/Settings/WallpaperTab.qml:1043",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/PowerSleepTab.qml:104, Modules/Settings/PowerSleepTab.qml:130",
     "comment": ""
   },
   {
@@ -380,7 +380,7 @@
   {
     "term": "3 hours",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204, Modules/Settings/WallpaperTab.qml:1043",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204",
     "comment": ""
   },
   {
@@ -404,13 +404,13 @@
   {
     "term": "30 minutes",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204, Modules/Settings/WallpaperTab.qml:1043",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204",
     "comment": ""
   },
   {
     "term": "30 seconds",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/NotificationsTab.qml:58, Modules/Settings/PowerSleepTab.qml:104, Modules/Settings/PowerSleepTab.qml:130, Modules/Settings/WallpaperTab.qml:1043, Modules/Notifications/Center/NotificationSettings.qml:66",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/NotificationsTab.qml:58, Modules/Settings/PowerSleepTab.qml:104, Modules/Settings/PowerSleepTab.qml:130, Modules/Notifications/Center/NotificationSettings.qml:66",
     "comment": ""
   },
   {
@@ -452,13 +452,13 @@
   {
     "term": "5 minutes",
     "context": "wallpaper interval",
-    "reference": "Modules/Settings/NotificationsTab.qml:70, Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204, Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/WallpaperTab.qml:1067, Modules/Settings/WallpaperTab.qml:1091, Modules/Notifications/Center/NotificationSettings.qml:78",
+    "reference": "Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/WallpaperTab.qml:1067, Modules/Settings/WallpaperTab.qml:1091, Modules/Settings/NotificationsTab.qml:70, Modules/Settings/PowerSleepTab.qml:11, Modules/Settings/PowerSleepTab.qml:204, Modules/Notifications/Center/NotificationSettings.qml:78",
     "comment": ""
   },
   {
     "term": "5 seconds",
     "context": "screenshot with 5 second delay | wallpaper interval",
-    "reference": "Widgets/ScreenshotControls.qml:31, Modules/Settings/NotificationsTab.qml:42, Modules/Settings/NotificationsTab.qml:157, Modules/Settings/PowerSleepTab.qml:104, Modules/Settings/PowerSleepTab.qml:115, Modules/Settings/PowerSleepTab.qml:130, Modules/Settings/PowerSleepTab.qml:141, Modules/Settings/PowerSleepTab.qml:560, Modules/Settings/WallpaperTab.qml:1043, Modules/Notifications/Center/NotificationSettings.qml:50",
+    "reference": "Widgets/ScreenshotControls.qml:31, Modules/Settings/WallpaperTab.qml:1043, Modules/Settings/NotificationsTab.qml:42, Modules/Settings/NotificationsTab.qml:157, Modules/Settings/PowerSleepTab.qml:104, Modules/Settings/PowerSleepTab.qml:115, Modules/Settings/PowerSleepTab.qml:130, Modules/Settings/PowerSleepTab.qml:141, Modules/Settings/PowerSleepTab.qml:560, Modules/Notifications/Center/NotificationSettings.qml:50",
     "comment": ""
   },
   {
@@ -518,7 +518,7 @@
   {
     "term": "<i>No further instruction provided</i>",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:741",
+    "reference": "Services/Ai.qml:745",
     "comment": ""
   },
   {
@@ -536,7 +536,7 @@
   {
     "term": "A prompt with this filename already exists",
     "context": "Toolbox prompt settings",
-    "reference": "Services/Ai.qml:470, Services/Ai.qml:505",
+    "reference": "Services/Ai.qml:468, Services/Ai.qml:503",
     "comment": ""
   },
   {
@@ -554,13 +554,13 @@
   {
     "term": "AI Assistant",
     "context": "AI Assistant",
-    "reference": "Modules/Settings/ToolboxTab.qml:238",
+    "reference": "Modules/Settings/ToolboxTab.qml:335",
     "comment": ""
   },
   {
     "term": "AI Search",
     "context": "AI Search",
-    "reference": "Modules/Settings/ToolboxTab.qml:558",
+    "reference": "Modules/Settings/ToolboxTab.qml:721",
     "comment": ""
   },
   {
@@ -572,19 +572,19 @@
   {
     "term": "API key is set\nChange with /key YOUR_API_KEY",
     "context": "Keyring",
-    "reference": "Modules/Toolbox/AiChat.qml:561",
+    "reference": "Modules/Toolbox/AiChat.qml:422",
     "comment": ""
   },
   {
     "term": "API key set for %1",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:803",
+    "reference": "Services/Ai.qml:807",
     "comment": ""
   },
   {
     "term": "API key:\n\n```txt\n%1\n```",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:811",
+    "reference": "Services/Ai.qml:815",
     "comment": ""
   },
   {
@@ -704,7 +704,7 @@
   {
     "term": "Add",
     "context": "Toolbox prompt settings",
-    "reference": "Modules/Plugins/ListSettingWithInput.qml:126, Modules/Settings/DesktopWidgetsTab.qml:152, Modules/Settings/KeybindsEditorTab.qml:1221, Modules/Settings/KeybindsEditorTab.qml:1663, Modules/Settings/ToolboxTab.qml:316",
+    "reference": "Modules/Plugins/ListSettingWithInput.qml:126, Modules/Settings/DesktopWidgetsTab.qml:152, Modules/Settings/KeybindsEditorTab.qml:1221, Modules/Settings/KeybindsEditorTab.qml:1663, Modules/Settings/ToolboxTab.qml:439",
     "comment": ""
   },
   {
@@ -811,8 +811,8 @@
   },
   {
     "term": "Alarm",
-    "context": "Alarm",
-    "reference": "Services/ClockService.qml:240, Modules/Clock/AlarmTab.qml:116, Modules/Clock/ClockApp.qml:15",
+    "context": "Row label for the alarm sound setting",
+    "reference": "Services/ClockService.qml:240, Modules/Settings/SoundsTab.qml:162, Modules/Clock/AlarmTab.qml:116, Modules/Clock/ClockApp.qml:15",
     "comment": ""
   },
   {
@@ -878,19 +878,19 @@
   {
     "term": "Allow NSFW",
     "context": "Booru",
-    "reference": "Modules/Toolbox/Booru.qml:508",
+    "reference": "Modules/Toolbox/Booru.qml:488",
     "comment": ""
   },
   {
     "term": "Allow NSFW Results",
     "context": "Allow NSFW Results",
-    "reference": "Modules/Settings/ToolboxTab.qml:682",
+    "reference": "Modules/Settings/ToolboxTab.qml:865",
     "comment": ""
   },
   {
     "term": "Allow NSFW content",
     "context": "Booru",
-    "reference": "Modules/Toolbox/Booru.qml:63",
+    "reference": "Modules/Toolbox/BooruCommand.qml:35",
     "comment": ""
   },
   {
@@ -968,7 +968,7 @@
   {
     "term": "Animate AI response text as it appears",
     "context": "Animate AI response text as it appears",
-    "reference": "Modules/Settings/ToolboxTab.qml:283",
+    "reference": "Modules/Settings/ToolboxTab.qml:396",
     "comment": ""
   },
   {
@@ -1136,7 +1136,7 @@
   {
     "term": "Attach a file. Only works with Gemini.",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:101",
+    "reference": "Modules/Toolbox/AiCommand.qml:16",
     "comment": ""
   },
   {
@@ -1196,7 +1196,7 @@
   {
     "term": "Audio system restarted",
     "context": "Audio system restarted",
-    "reference": "Services/AudioService.qml:265",
+    "reference": "Services/AudioService.qml:319",
     "comment": ""
   },
   {
@@ -1358,7 +1358,7 @@
   {
     "term": "Automatic Cycling",
     "context": "Automatic Cycling",
-    "reference": "Modules/Settings/LockScreenTab.qml:282, Modules/Settings/WallpaperTab.qml:954",
+    "reference": "Modules/Settings/WallpaperTab.qml:954, Modules/Settings/LockScreenTab.qml:282",
     "comment": ""
   },
   {
@@ -1514,7 +1514,7 @@
   {
     "term": "Battery",
     "context": "Battery",
-    "reference": "Modules/Settings/PowerSleepTab.qml:60, Modules/Settings/WidgetsTab.qml:176, Modules/Settings/WidgetsTabSection.qml:1162, Modules/ControlCenter/Models/WidgetModel.qml:161, Modules/ControlCenter/Widgets/BatteryPill.qml:17",
+    "reference": "Modules/Settings/WidgetsTab.qml:176, Modules/Settings/WidgetsTabSection.qml:1162, Modules/Settings/PowerSleepTab.qml:60, Modules/ControlCenter/Models/WidgetModel.qml:161, Modules/ControlCenter/Widgets/BatteryPill.qml:17",
     "comment": ""
   },
   {
@@ -1640,7 +1640,7 @@
   {
     "term": "Booru Settings",
     "context": "Booru Settings",
-    "reference": "Modules/Settings/ToolboxTab.qml:651",
+    "reference": "Modules/Settings/ToolboxTab.qml:820",
     "comment": ""
   },
   {
@@ -1724,7 +1724,7 @@
   {
     "term": "Brightness",
     "context": "Brightness",
-    "reference": "Modules/Settings/DockTab.qml:474, Modules/Settings/LauncherTab.qml:276, Modules/Settings/OSDTab.qml:117, Modules/Settings/WidgetsTabSection.qml:1152",
+    "reference": "Modules/Settings/DockTab.qml:474, Modules/Settings/LauncherTab.qml:276, Modules/Settings/WidgetsTabSection.qml:1152, Modules/Settings/OSDTab.qml:117",
     "comment": ""
   },
   {
@@ -1760,7 +1760,7 @@
   {
     "term": "Browse",
     "context": "theme category option",
-    "reference": "Modules/Settings/LockScreenTab.qml:273, Modules/Settings/PluginsTab.qml:209, Modules/Settings/ThemeColorsTab.qml:252, Modals/DankLauncherV2/Controller.qml:220, Modals/DankLauncherV2/Controller.qml:1435, Modals/DankLauncherV2/SpotlightResultRow.qml:61",
+    "reference": "Modules/Settings/PluginsTab.qml:209, Modules/Settings/LockScreenTab.qml:273, Modules/Settings/ThemeColorsTab.qml:252, Modals/DankLauncherV2/Controller.qml:220, Modals/DankLauncherV2/Controller.qml:1435, Modals/DankLauncherV2/SpotlightResultRow.qml:61",
     "comment": ""
   },
   {
@@ -1862,7 +1862,7 @@
   {
     "term": "Cancel",
     "context": "Cancel",
-    "reference": "Modals/BluetoothPairingModal.qml:262, Modals/PolkitAuthModal.qml:270, Modals/WifiPasswordModal.qml:691, Modals/WindowRuleModal.qml:1130, Modals/WorkspaceRenameModal.qml:161, Modules/Settings/AudioTab.qml:726, Modules/Settings/DisplayConfigTab.qml:256, Modules/Settings/DisplayConfigTab.qml:301, Modules/Settings/KeybindsEditorTab.qml:1640, Modules/Settings/KeybindsEditorTab.qml:1652, Modules/Settings/PluginBrowser.qml:122, Modules/Settings/PluginBrowser.qml:830, Modules/Settings/ThemeBrowser.qml:121, Modules/Settings/ToolboxTab.qml:467, Modules/Settings/ToolboxTab.qml:506, Modules/Settings/ToolboxTab.qml:546, Modules/Clock/AlarmTab.qml:264, Modals/DankLauncherV2/AppEditView.qml:283, Modals/FileBrowser/FileBrowserOverwriteDialog.qml:83",
+    "reference": "Modals/BluetoothPairingModal.qml:262, Modals/PolkitAuthModal.qml:270, Modals/WifiPasswordModal.qml:691, Modals/WindowRuleModal.qml:1130, Modals/WorkspaceRenameModal.qml:161, Modules/Settings/AudioTab.qml:726, Modules/Settings/DisplayConfigTab.qml:256, Modules/Settings/DisplayConfigTab.qml:301, Modules/Settings/KeybindsEditorTab.qml:1640, Modules/Settings/KeybindsEditorTab.qml:1652, Modules/Settings/PluginBrowser.qml:122, Modules/Settings/PluginBrowser.qml:830, Modules/Settings/ThemeBrowser.qml:121, Modules/Settings/ToolboxTab.qml:590, Modules/Settings/ToolboxTab.qml:629, Modules/Settings/ToolboxTab.qml:709, Modules/Clock/AlarmTab.qml:264, Modals/DankLauncherV2/AppEditView.qml:283, Modals/FileBrowser/FileBrowserOverwriteDialog.qml:83",
     "comment": ""
   },
   {
@@ -1976,7 +1976,7 @@
   {
     "term": "Changes are saved to %1",
     "context": "Toolbox prompt settings",
-    "reference": "Modules/Settings/ToolboxTab.qml:421",
+    "reference": "Modules/Settings/ToolboxTab.qml:544",
     "comment": ""
   },
   {
@@ -2060,7 +2060,13 @@
   {
     "term": "Choose model",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:106",
+    "reference": "Modules/Toolbox/AiCommand.qml:21",
+    "comment": ""
+  },
+  {
+    "term": "Choose sound file",
+    "context": "Tooltip on the per-event sound row button that opens a file browser",
+    "reference": "Modules/Settings/Widgets/SettingsSoundRow.qml:113",
     "comment": ""
   },
   {
@@ -2131,8 +2137,8 @@
   },
   {
     "term": "Clear",
-    "context": "Clear",
-    "reference": "Modules/Settings/KeybindsEditorTab.qml:1319, Modules/Settings/PrinterTab.qml:1386, Modules/Notifications/Center/NotificationHeader.qml:117",
+    "context": "AiChat toolbar | Booru",
+    "reference": "Modules/Settings/KeybindsEditorTab.qml:1319, Modules/Settings/PrinterTab.qml:1386, Modules/Toolbox/AiChat.qml:711, Modules/Toolbox/Booru.qml:505, Modules/Notifications/Center/NotificationHeader.qml:117",
     "comment": ""
   },
   {
@@ -2168,13 +2174,13 @@
   {
     "term": "Clear chat history",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:170",
+    "reference": "Modules/Toolbox/AiCommand.qml:85",
     "comment": ""
   },
   {
     "term": "Clear the current list of images",
     "context": "Booru",
-    "reference": "Modules/Toolbox/Booru.qml:51",
+    "reference": "Modules/Toolbox/BooruCommand.qml:20",
     "comment": ""
   },
   {
@@ -2432,7 +2438,7 @@
   {
     "term": "Command rejected by user",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:1001",
+    "reference": "Services/Ai.qml:1005",
     "comment": ""
   },
   {
@@ -2744,7 +2750,7 @@
   {
     "term": "Controls response randomness on a 0–200% scale",
     "context": "Controls response randomness on a 0–200% scale",
-    "reference": "Modules/Settings/ToolboxTab.qml:268",
+    "reference": "Modules/Settings/ToolboxTab.qml:381",
     "comment": ""
   },
   {
@@ -2864,7 +2870,7 @@
   {
     "term": "Create",
     "context": "Create",
-    "reference": "Modals/WindowRuleModal.qml:1154, Modules/Settings/DisplayConfigTab.qml:246, Modules/Settings/ToolboxTab.qml:460",
+    "reference": "Modals/WindowRuleModal.qml:1154, Modules/Settings/DisplayConfigTab.qml:246, Modules/Settings/ToolboxTab.qml:583",
     "comment": ""
   },
   {
@@ -2918,7 +2924,7 @@
   {
     "term": "Current API endpoint: %1\nSet it with %2mode PROVIDER",
     "context": "Booru",
-    "reference": "Modules/Toolbox/Booru.qml:479",
+    "reference": "Modules/Toolbox/Booru.qml:459",
     "comment": ""
   },
   {
@@ -2978,7 +2984,7 @@
   {
     "term": "Current model: %1\nSet it with %2model MODEL",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:847",
+    "reference": "Modules/Toolbox/AiChat.qml:697",
     "comment": ""
   },
   {
@@ -2990,7 +2996,7 @@
   {
     "term": "Current tool: %1\nSet it with %2tool TOOL",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:853",
+    "reference": "Modules/Toolbox/AiChat.qml:703",
     "comment": ""
   },
   {
@@ -3242,7 +3248,7 @@
   {
     "term": "Dark Mode",
     "context": "Dark Mode",
-    "reference": "Modules/Settings/ThemeColorsTab.qml:1346, Modules/Settings/WallpaperTab.qml:629, Modules/ControlCenter/Components/DragDropGrid.qml:620, Modules/ControlCenter/Models/WidgetModel.qml:77",
+    "reference": "Modules/Settings/WallpaperTab.qml:629, Modules/Settings/ThemeColorsTab.qml:1346, Modules/ControlCenter/Components/DragDropGrid.qml:620, Modules/ControlCenter/Models/WidgetModel.qml:77",
     "comment": ""
   },
   {
@@ -3314,7 +3320,7 @@
   {
     "term": "Default",
     "context": "notification rule action option | notification rule urgency option | widget style option",
-    "reference": "Modules/Settings/DockTab.qml:379, Modules/Settings/LauncherTab.qml:181, Modules/Settings/NotificationsTab.qml:116, Modules/Settings/NotificationsTab.qml:139, Modules/Settings/ThemeColorsTab.qml:1439",
+    "reference": "Services/AudioService.qml:495, Modules/Settings/DockTab.qml:379, Modules/Settings/LauncherTab.qml:181, Modules/Settings/NotificationsTab.qml:116, Modules/Settings/NotificationsTab.qml:139, Modules/Settings/ThemeColorsTab.qml:1439, Modules/Settings/Widgets/SettingsSoundRow.qml:100",
     "comment": ""
   },
   {
@@ -3362,7 +3368,7 @@
   {
     "term": "Delete",
     "context": "AiChat interface | Toolbox prompt settings",
-    "reference": "Widgets/VpnDetailContent.qml:221, Modules/Settings/DesktopWidgetInstanceCard.qml:152, Modules/Settings/DisplayConfigTab.qml:291, Modules/Settings/KeybindsEditorTab.qml:1604, Modules/Settings/KeybindsEditorTab.qml:1629, Modules/Settings/NetworkTab.qml:1825, Modules/Settings/PrinterTab.qml:1094, Modules/Settings/PrinterTab.qml:1680, Modules/Settings/ToolboxTab.qml:329, Modules/Settings/ToolboxTab.qml:538, Modules/Toolbox/aiChat/AiMessage.qml:226",
+    "reference": "Widgets/VpnDetailContent.qml:221, Modules/Settings/DesktopWidgetInstanceCard.qml:152, Modules/Settings/DisplayConfigTab.qml:291, Modules/Settings/KeybindsEditorTab.qml:1604, Modules/Settings/KeybindsEditorTab.qml:1629, Modules/Settings/NetworkTab.qml:1825, Modules/Settings/PrinterTab.qml:1094, Modules/Settings/PrinterTab.qml:1680, Modules/Settings/ToolboxTab.qml:452, Modules/Settings/ToolboxTab.qml:701, Modules/Toolbox/aiChat/AiMessage.qml:226",
     "comment": ""
   },
   {
@@ -3404,7 +3410,7 @@
   {
     "term": "Delete prompt \"%1\"? This can't be undone.",
     "context": "Toolbox prompt settings",
-    "reference": "Modules/Settings/ToolboxTab.qml:529",
+    "reference": "Modules/Settings/ToolboxTab.qml:692",
     "comment": ""
   },
   {
@@ -3482,7 +3488,7 @@
   {
     "term": "Device names updated",
     "context": "Device names updated",
-    "reference": "Services/AudioService.qml:265",
+    "reference": "Services/AudioService.qml:319",
     "comment": ""
   },
   {
@@ -3512,7 +3518,7 @@
   {
     "term": "Disable NSFW content",
     "context": "Booru",
-    "reference": "Modules/Toolbox/Booru.qml:59",
+    "reference": "Modules/Toolbox/BooruCommand.qml:30",
     "comment": ""
   },
   {
@@ -3536,7 +3542,7 @@
   {
     "term": "Disabled",
     "context": "bluetooth status | lock screen notification mode option",
-    "reference": "Modules/Settings/DankBarTab.qml:357, Modules/Settings/LockScreenTab.qml:103, Modules/Settings/NetworkTab.qml:823, Modules/Settings/NotificationsTab.qml:709, Modules/Settings/ThemeColorsTab.qml:1320, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1243, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1249, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1251, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1263, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1277, Modules/ControlCenter/Components/DragDropGrid.qml:317",
+    "reference": "Modules/Settings/DankBarTab.qml:357, Modules/Settings/NetworkTab.qml:823, Modules/Settings/LockScreenTab.qml:103, Modules/Settings/NotificationsTab.qml:709, Modules/Settings/ThemeColorsTab.qml:1320, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1243, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1249, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1251, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1263, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1277, Modules/ControlCenter/Components/DragDropGrid.qml:317",
     "comment": ""
   },
   {
@@ -3553,8 +3559,14 @@
   },
   {
     "term": "Discard",
-    "context": "Discard",
-    "reference": "Modules/Settings/DisplayConfigTab.qml:519",
+    "context": "Toolbox prompt settings",
+    "reference": "Modules/Settings/DisplayConfigTab.qml:519, Modules/Settings/ToolboxTab.qml:661",
+    "comment": ""
+  },
+  {
+    "term": "Discard unsaved changes to \"%1\"?",
+    "context": "Toolbox prompt settings",
+    "reference": "Modules/Settings/ToolboxTab.qml:652",
     "comment": ""
   },
   {
@@ -3962,7 +3974,7 @@
   {
     "term": "Editing %1",
     "context": "Toolbox prompt settings",
-    "reference": "Modules/Settings/ToolboxTab.qml:341",
+    "reference": "Modules/Settings/ToolboxTab.qml:464",
     "comment": ""
   },
   {
@@ -4028,7 +4040,7 @@
   {
     "term": "Enable System Sounds",
     "context": "Enable System Sounds",
-    "reference": "Modules/Settings/SoundsTab.qml:36",
+    "reference": "Modules/Settings/SoundsTab.qml:40",
     "comment": ""
   },
   {
@@ -4244,7 +4256,7 @@
   {
     "term": "Excluded Sites",
     "context": "Excluded Sites",
-    "reference": "Modules/Settings/ToolboxTab.qml:618",
+    "reference": "Modules/Settings/ToolboxTab.qml:784",
     "comment": ""
   },
   {
@@ -4316,7 +4328,7 @@
   {
     "term": "Fade In Text",
     "context": "Fade In Text",
-    "reference": "Modules/Settings/ToolboxTab.qml:282",
+    "reference": "Modules/Settings/ToolboxTab.qml:395",
     "comment": ""
   },
   {
@@ -4418,7 +4430,7 @@
   {
     "term": "Failed to delete prompt \"%1\"",
     "context": "Toolbox prompt settings",
-    "reference": "Services/Ai.qml:709",
+    "reference": "Services/Ai.qml:713",
     "comment": ""
   },
   {
@@ -4496,7 +4508,7 @@
   {
     "term": "Failed to parse plugin_settings.json",
     "context": "Failed to parse plugin_settings.json",
-    "reference": "Common/SettingsData.qml:1290",
+    "reference": "Common/SettingsData.qml:1288",
     "comment": ""
   },
   {
@@ -4508,7 +4520,7 @@
   {
     "term": "Failed to parse settings.json",
     "context": "Failed to parse settings.json",
-    "reference": "Common/SettingsData.qml:1228, Common/SettingsData.qml:2678",
+    "reference": "Common/SettingsData.qml:1226, Common/SettingsData.qml:2676",
     "comment": ""
   },
   {
@@ -4538,7 +4550,7 @@
   {
     "term": "Failed to rename prompt \"%1\"",
     "context": "Toolbox prompt settings",
-    "reference": "Services/Ai.qml:687",
+    "reference": "Services/Ai.qml:691",
     "comment": ""
   },
   {
@@ -4550,7 +4562,7 @@
   {
     "term": "Failed to restart audio system",
     "context": "Failed to restart audio system",
-    "reference": "Services/AudioService.qml:269",
+    "reference": "Services/AudioService.qml:323",
     "comment": ""
   },
   {
@@ -4568,7 +4580,7 @@
   {
     "term": "Failed to save audio config",
     "context": "Failed to save audio config",
-    "reference": "Services/AudioService.qml:154",
+    "reference": "Services/AudioService.qml:208",
     "comment": ""
   },
   {
@@ -4592,7 +4604,7 @@
   {
     "term": "Failed to save prompt \"%1\"",
     "context": "Toolbox prompt settings",
-    "reference": "Services/Ai.qml:666",
+    "reference": "Services/Ai.qml:670",
     "comment": ""
   },
   {
@@ -4766,13 +4778,13 @@
   {
     "term": "Fix Now",
     "context": "Fix Now",
-    "reference": "Modules/Settings/ThemeColorsTab.qml:2177, Modules/Settings/WindowRulesTab.qml:367, Modules/Settings/DisplayConfig/IncludeWarningBox.qml:84",
+    "reference": "Modules/Settings/WindowRulesTab.qml:367, Modules/Settings/ThemeColorsTab.qml:2177, Modules/Settings/DisplayConfig/IncludeWarningBox.qml:84",
     "comment": ""
   },
   {
     "term": "Fixing...",
     "context": "Fixing...",
-    "reference": "Modules/Settings/ThemeColorsTab.qml:2177, Modules/Settings/WindowRulesTab.qml:367, Modules/Settings/DisplayConfig/IncludeWarningBox.qml:81",
+    "reference": "Modules/Settings/WindowRulesTab.qml:367, Modules/Settings/ThemeColorsTab.qml:2177, Modules/Settings/DisplayConfig/IncludeWarningBox.qml:81",
     "comment": ""
   },
   {
@@ -5060,7 +5072,7 @@
   {
     "term": "Functions",
     "context": "AI tool option",
-    "reference": "Modules/Settings/ToolboxTab.qml:32",
+    "reference": "Modules/Settings/ToolboxTab.qml:37",
     "comment": ""
   },
   {
@@ -5150,7 +5162,7 @@
   {
     "term": "Get the next page of results",
     "context": "Booru",
-    "reference": "Modules/Toolbox/Booru.qml:55",
+    "reference": "Modules/Toolbox/BooruCommand.qml:25",
     "comment": ""
   },
   {
@@ -5714,7 +5726,7 @@
   {
     "term": "Idle Inhibitor",
     "context": "Idle Inhibitor",
-    "reference": "Modules/Settings/OSDTab.qml:125, Modules/Settings/WidgetsTab.qml:190",
+    "reference": "Modules/Settings/WidgetsTab.qml:190, Modules/Settings/OSDTab.qml:125",
     "comment": ""
   },
   {
@@ -5756,7 +5768,7 @@
   {
     "term": "Image Boards",
     "context": "Booru",
-    "reference": "Modules/Toolbox/Booru.qml:186",
+    "reference": "Modules/Toolbox/Booru.qml:171",
     "comment": ""
   },
   {
@@ -5768,7 +5780,7 @@
   {
     "term": "Image provider used by the Toolbox",
     "context": "Image provider used by the Toolbox",
-    "reference": "Modules/Settings/ToolboxTab.qml:655",
+    "reference": "Modules/Settings/ToolboxTab.qml:828",
     "comment": ""
   },
   {
@@ -5810,7 +5822,7 @@
   {
     "term": "Include adult results when supported by the provider",
     "context": "Include adult results when supported by the provider",
-    "reference": "Modules/Settings/ToolboxTab.qml:683",
+    "reference": "Modules/Settings/ToolboxTab.qml:866",
     "comment": ""
   },
   {
@@ -5841,6 +5853,12 @@
     "term": "Individual Batteries",
     "context": "Individual Batteries",
     "reference": "Modules/DankBar/Popouts/BatteryPopout.qml:358",
+    "comment": ""
+  },
+  {
+    "term": "Individual Sounds",
+    "context": "Individual Sounds",
+    "reference": "Modules/Settings/SoundsTab.qml:95",
     "comment": ""
   },
   {
@@ -6020,13 +6038,13 @@
   {
     "term": "Invalid arguments. Must provide `command`.",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:1064",
+    "reference": "Services/Ai.qml:1068",
     "comment": ""
   },
   {
     "term": "Invalid arguments. Must provide `key` and `value`.",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:1052",
+    "reference": "Services/Ai.qml:1056",
     "comment": ""
   },
   {
@@ -6038,7 +6056,7 @@
   {
     "term": "Invalid model. Supported: \n```\n",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:763",
+    "reference": "Services/Ai.qml:767",
     "comment": ""
   },
   {
@@ -6050,13 +6068,13 @@
   {
     "term": "Invalid prompt filename",
     "context": "Toolbox prompt settings",
-    "reference": "Services/Ai.qml:466, Services/Ai.qml:499",
+    "reference": "Services/Ai.qml:464, Services/Ai.qml:497",
     "comment": ""
   },
   {
     "term": "Invalid tool. Supported tools:\n- %1",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:769",
+    "reference": "Services/Ai.qml:773",
     "comment": ""
   },
   {
@@ -6099,6 +6117,12 @@
     "term": "Keep Changes",
     "context": "Keep Changes",
     "reference": "Modals/DisplayConfirmationModal.qml:168",
+    "comment": ""
+  },
+  {
+    "term": "Keep Editing",
+    "context": "Toolbox prompt settings",
+    "reference": "Modules/Settings/ToolboxTab.qml:669",
     "comment": ""
   },
   {
@@ -6212,7 +6236,7 @@
   {
     "term": "Large language models",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:604",
+    "reference": "Modules/Toolbox/AiChat.qml:465",
     "comment": ""
   },
   {
@@ -6356,7 +6380,7 @@
   {
     "term": "Light Mode",
     "context": "Light Mode",
-    "reference": "Modules/Settings/ThemeColorsTab.qml:1346, Modules/Settings/ThemeColorsTab.qml:1416, Modules/Settings/WallpaperTab.qml:439",
+    "reference": "Modules/Settings/WallpaperTab.qml:439, Modules/Settings/ThemeColorsTab.qml:1346, Modules/Settings/ThemeColorsTab.qml:1416",
     "comment": ""
   },
   {
@@ -6422,25 +6446,25 @@
   {
     "term": "Load chat",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:158",
+    "reference": "Modules/Toolbox/AiCommand.qml:73",
     "comment": ""
   },
   {
     "term": "Load chat from %1",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:298",
+    "reference": "Modules/Toolbox/AiChat.qml:154",
     "comment": ""
   },
   {
     "term": "Load prompt from %1",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:292",
+    "reference": "Modules/Toolbox/AiChat.qml:148",
     "comment": ""
   },
   {
     "term": "Loaded the following system prompt from %1\n\n---\n\n%2",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:541",
+    "reference": "Services/Ai.qml:539",
     "comment": ""
   },
   {
@@ -6680,13 +6704,13 @@
   {
     "term": "Markdown and text prompt files are supported",
     "context": "Toolbox prompt settings",
-    "reference": "Modules/Settings/ToolboxTab.qml:430",
+    "reference": "Modules/Settings/ToolboxTab.qml:553",
     "comment": ""
   },
   {
     "term": "Markdown test",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:186",
+    "reference": "Modules/Toolbox/AiCommand.qml:101",
     "comment": ""
   },
   {
@@ -6872,7 +6896,7 @@
   {
     "term": "Maximum number of images requested per page",
     "context": "Maximum number of images requested per page",
-    "reference": "Modules/Settings/ToolboxTab.qml:668",
+    "reference": "Modules/Settings/ToolboxTab.qml:851",
     "comment": ""
   },
   {
@@ -6956,7 +6980,7 @@
   {
     "term": "Medium",
     "context": "Medium",
-    "reference": "Modules/Settings/NotificationsTab.qml:325, Modules/Settings/TypographyMotionTab.qml:212, Modules/Settings/TypographyMotionTab.qml:315, Modules/Settings/TypographyMotionTab.qml:399, Modules/Settings/WidgetsTabSection.qml:1633",
+    "reference": "Modules/Settings/WidgetsTabSection.qml:1633, Modules/Settings/NotificationsTab.qml:325, Modules/Settings/TypographyMotionTab.qml:212, Modules/Settings/TypographyMotionTab.qml:315, Modules/Settings/TypographyMotionTab.qml:399",
     "comment": ""
   },
   {
@@ -6992,7 +7016,7 @@
   {
     "term": "Message the model... \"%1\" for commands",
     "context": "AiChat interface",
-    "reference": "Modules/Toolbox/AiChat.qml:753",
+    "reference": "Modules/Toolbox/AiChat.qml:614",
     "comment": ""
   },
   {
@@ -7112,19 +7136,19 @@
   {
     "term": "Model",
     "context": "Model",
-    "reference": "Modules/Settings/DisplayConfigTab.qml:422, Modules/Settings/DisplayWidgetsTab.qml:225, Modules/Settings/PrinterTab.qml:1159, Modules/Settings/ToolboxTab.qml:241, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1228",
+    "reference": "Modules/Settings/DisplayConfigTab.qml:422, Modules/Settings/DisplayWidgetsTab.qml:225, Modules/Settings/PrinterTab.qml:1159, Modules/Settings/ToolboxTab.qml:342, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1228",
     "comment": ""
   },
   {
     "term": "Model set to %1",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:756",
+    "reference": "Services/Ai.qml:760",
     "comment": ""
   },
   {
     "term": "Model used by the Toolbox assistant",
     "context": "Model used by the Toolbox assistant",
-    "reference": "Modules/Settings/ToolboxTab.qml:242",
+    "reference": "Modules/Settings/ToolboxTab.qml:343",
     "comment": ""
   },
   {
@@ -7404,12 +7428,6 @@
     "comment": ""
   },
   {
-    "term": "New Notification",
-    "context": "New Notification",
-    "reference": "Modules/Settings/SoundsTab.qml:98",
-    "comment": ""
-  },
-  {
     "term": "New Window Rule",
     "context": "New Window Rule",
     "reference": "Modals/WindowRuleModal.qml:405",
@@ -7502,13 +7520,13 @@
   {
     "term": "No API key\nSet it with /key YOUR_API_KEY",
     "context": "Keyring",
-    "reference": "Modules/Toolbox/AiChat.qml:561",
+    "reference": "Modules/Toolbox/AiChat.qml:422",
     "comment": ""
   },
   {
     "term": "No API key set for %1",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:813",
+    "reference": "Services/Ai.qml:817",
     "comment": ""
   },
   {
@@ -7814,7 +7832,7 @@
   {
     "term": "No models available",
     "context": "No models available",
-    "reference": "Modules/Settings/ToolboxTab.qml:250",
+    "reference": "Modules/Settings/ToolboxTab.qml:351",
     "comment": ""
   },
   {
@@ -7886,7 +7904,7 @@
   {
     "term": "No prompt files found",
     "context": "No prompt files found",
-    "reference": "Modules/Settings/ToolboxTab.qml:307",
+    "reference": "Modules/Settings/ToolboxTab.qml:424",
     "comment": ""
   },
   {
@@ -7922,7 +7940,7 @@
   {
     "term": "No system prompt file is selected",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:529",
+    "reference": "Services/Ai.qml:527",
     "comment": ""
   },
   {
@@ -7952,7 +7970,7 @@
   {
     "term": "No wallpaper selected",
     "context": "no wallpaper status",
-    "reference": "Modules/Settings/ThemeColorsTab.qml:434, Modules/Settings/WallpaperTab.qml:240",
+    "reference": "Modules/Settings/WallpaperTab.qml:240, Modules/Settings/ThemeColorsTab.qml:434",
     "comment": ""
   },
   {
@@ -7994,7 +8012,7 @@
   {
     "term": "None",
     "context": "AI tool option | wallpaper transition option",
-    "reference": "Modals/WindowRuleModal.qml:740, Services/CupsService.qml:784, Modules/Settings/DankBarTab.qml:729, Modules/Settings/DankBarTab.qml:729, Modules/Settings/DankBarTab.qml:766, Modules/Settings/DesktopWidgetInstanceCard.qml:258, Modules/Settings/DesktopWidgetInstanceCard.qml:274, Modules/Settings/NotificationsTab.qml:325, Modules/Settings/TypographyMotionTab.qml:212, Modules/Settings/TypographyMotionTab.qml:315, Modules/Settings/TypographyMotionTab.qml:399, Modules/Settings/WallpaperTab.qml:1208, Modules/Settings/ToolboxTab.qml:36, Modules/Settings/DisplayConfig/HyprlandOutputSettings.qml:87, Modules/Settings/DisplayConfig/HyprlandOutputSettings.qml:100, Modules/Settings/DisplayConfig/HyprlandOutputSettings.qml:104",
+    "reference": "Modals/WindowRuleModal.qml:740, Services/CupsService.qml:784, Modules/Settings/DankBarTab.qml:729, Modules/Settings/DankBarTab.qml:729, Modules/Settings/DankBarTab.qml:766, Modules/Settings/DesktopWidgetInstanceCard.qml:258, Modules/Settings/DesktopWidgetInstanceCard.qml:274, Modules/Settings/WallpaperTab.qml:1208, Modules/Settings/ToolboxTab.qml:41, Modules/Settings/NotificationsTab.qml:325, Modules/Settings/TypographyMotionTab.qml:212, Modules/Settings/TypographyMotionTab.qml:315, Modules/Settings/TypographyMotionTab.qml:399, Modules/Settings/DisplayConfig/HyprlandOutputSettings.qml:87, Modules/Settings/DisplayConfig/HyprlandOutputSettings.qml:100, Modules/Settings/DisplayConfig/HyprlandOutputSettings.qml:104",
     "comment": ""
   },
   {
@@ -8079,6 +8097,12 @@
     "term": "Nothing to see here",
     "context": "Nothing to see here",
     "reference": "Modules/Notifications/Center/NotificationEmptyState.qml:27",
+    "comment": ""
+  },
+  {
+    "term": "Notification",
+    "context": "Row label for the normal notification sound setting",
+    "reference": "Modules/Settings/SoundsTab.qml:142",
     "comment": ""
   },
   {
@@ -8570,7 +8594,7 @@
   {
     "term": "Pattern",
     "context": "Pattern",
-    "reference": "Modules/Settings/NotificationsTab.qml:502, Modules/Settings/NotificationsTab.qml:511, Modules/Settings/RunningAppsTab.qml:87",
+    "reference": "Modules/Settings/RunningAppsTab.qml:87, Modules/Settings/NotificationsTab.qml:502, Modules/Settings/NotificationsTab.qml:511",
     "comment": ""
   },
   {
@@ -8700,27 +8724,9 @@
     "comment": ""
   },
   {
-    "term": "Play sound when new notification arrives",
-    "context": "Play sound when new notification arrives",
-    "reference": "Modules/Settings/SoundsTab.qml:99",
-    "comment": ""
-  },
-  {
-    "term": "Play sound when power cable is connected",
-    "context": "Play sound when power cable is connected",
-    "reference": "Modules/Settings/SoundsTab.qml:120",
-    "comment": ""
-  },
-  {
-    "term": "Play sound when volume is adjusted",
-    "context": "Play sound when volume is adjusted",
-    "reference": "Modules/Settings/SoundsTab.qml:109",
-    "comment": ""
-  },
-  {
     "term": "Play sounds for system events",
     "context": "Play sounds for system events",
-    "reference": "Modules/Settings/SoundsTab.qml:37",
+    "reference": "Modules/Settings/SoundsTab.qml:41",
     "comment": ""
   },
   {
@@ -8736,6 +8742,48 @@
     "comment": ""
   },
   {
+    "term": "Plays when a critical notification arrives",
+    "context": "Plays when a critical notification arrives",
+    "reference": "Modules/Settings/SoundsTab.qml:153",
+    "comment": ""
+  },
+  {
+    "term": "Plays when a notification arrives",
+    "context": "Plays when a notification arrives",
+    "reference": "Modules/Settings/SoundsTab.qml:143",
+    "comment": ""
+  },
+  {
+    "term": "Plays when a timer counts down to zero",
+    "context": "Plays when a timer counts down to zero",
+    "reference": "Modules/Settings/SoundsTab.qml:173",
+    "comment": ""
+  },
+  {
+    "term": "Plays when the charger is connected",
+    "context": "Plays when the charger is connected",
+    "reference": "Modules/Settings/SoundsTab.qml:122",
+    "comment": ""
+  },
+  {
+    "term": "Plays when the charger is removed",
+    "context": "Plays when the charger is removed",
+    "reference": "Modules/Settings/SoundsTab.qml:133",
+    "comment": ""
+  },
+  {
+    "term": "Plays when the output volume is adjusted",
+    "context": "Plays when the output volume is adjusted",
+    "reference": "Modules/Settings/SoundsTab.qml:111",
+    "comment": ""
+  },
+  {
+    "term": "Plays while an alarm is ringing",
+    "context": "Plays while an alarm is ringing",
+    "reference": "Modules/Settings/SoundsTab.qml:163",
+    "comment": ""
+  },
+  {
     "term": "Please wait...",
     "context": "network status",
     "reference": "Modules/ControlCenter/Components/DragDropGrid.qml:333",
@@ -8744,7 +8792,7 @@
   {
     "term": "Plugged In",
     "context": "battery status",
-    "reference": "Services/BatteryService.qml:159, Services/BatteryService.qml:165, Modules/Settings/SoundsTab.qml:119",
+    "reference": "Services/BatteryService.qml:159, Services/BatteryService.qml:165",
     "comment": ""
   },
   {
@@ -8904,6 +8952,12 @@
     "comment": ""
   },
   {
+    "term": "Power Plugged In",
+    "context": "Row label for the charger connected sound setting",
+    "reference": "Modules/Settings/SoundsTab.qml:121",
+    "comment": ""
+  },
+  {
     "term": "Power Profile",
     "context": "Power Profile",
     "reference": "Modules/Settings/OSDTab.qml:149",
@@ -8919,6 +8973,12 @@
     "term": "Power Saver",
     "context": "power profile option",
     "reference": "Common/Theme.qml:1474",
+    "comment": ""
+  },
+  {
+    "term": "Power Unplugged",
+    "context": "Row label for the charger removed sound setting",
+    "reference": "Modules/Settings/SoundsTab.qml:132",
     "comment": ""
   },
   {
@@ -9012,6 +9072,12 @@
     "comment": ""
   },
   {
+    "term": "Preview sound",
+    "context": "Preview sound",
+    "reference": "Modules/Settings/Widgets/SettingsSoundRow.qml:121",
+    "comment": ""
+  },
+  {
     "term": "Previous page",
     "context": "Booru",
     "reference": "Modules/Toolbox/booru/BooruResponse.qml:277",
@@ -9020,7 +9086,7 @@
   {
     "term": "Primary",
     "context": "button color option | color option | primary color | shadow color option | tile color option",
-    "reference": "Modules/Settings/DankBarTab.qml:1211, Modules/Settings/DockTab.qml:379, Modules/Settings/DockTab.qml:590, Modules/Settings/LauncherTab.qml:181, Modules/Settings/LauncherTab.qml:477, Modules/Settings/NetworkTab.qml:227, Modules/Settings/ThemeColorsTab.qml:1489, Modules/Settings/ThemeColorsTab.qml:1499, Modules/Settings/ThemeColorsTab.qml:1521, Modules/Settings/ThemeColorsTab.qml:1531, Modules/Settings/ThemeColorsTab.qml:1621, Modules/Settings/ThemeColorsTab.qml:1627, Modules/Settings/ThemeColorsTab.qml:1638, Modules/Settings/WorkspacesTab.qml:359, Modules/Settings/Widgets/SettingsColorPicker.qml:42",
+    "reference": "Modules/Settings/DankBarTab.qml:1211, Modules/Settings/DockTab.qml:379, Modules/Settings/DockTab.qml:590, Modules/Settings/LauncherTab.qml:181, Modules/Settings/LauncherTab.qml:477, Modules/Settings/NetworkTab.qml:227, Modules/Settings/WorkspacesTab.qml:359, Modules/Settings/ThemeColorsTab.qml:1489, Modules/Settings/ThemeColorsTab.qml:1499, Modules/Settings/ThemeColorsTab.qml:1521, Modules/Settings/ThemeColorsTab.qml:1531, Modules/Settings/ThemeColorsTab.qml:1621, Modules/Settings/ThemeColorsTab.qml:1627, Modules/Settings/ThemeColorsTab.qml:1638, Modules/Settings/Widgets/SettingsColorPicker.qml:42",
     "comment": ""
   },
   {
@@ -9188,25 +9254,25 @@
   {
     "term": "Prompt File",
     "context": "Prompt File",
-    "reference": "Modules/Settings/ToolboxTab.qml:301",
+    "reference": "Modules/Settings/ToolboxTab.qml:415",
     "comment": ""
   },
   {
     "term": "Prompt file not found",
     "context": "Toolbox prompt settings",
-    "reference": "Services/Ai.qml:484, Services/Ai.qml:518",
+    "reference": "Services/Ai.qml:482, Services/Ai.qml:516",
     "comment": ""
   },
   {
     "term": "Prompt file not found: %1",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:575, Services/Ai.qml:631",
+    "reference": "Services/Ai.qml:573, Services/Ai.qml:635",
     "comment": ""
   },
   {
     "term": "Prompt filename",
     "context": "Prompt filename",
-    "reference": "Modules/Settings/ToolboxTab.qml:452, Modules/Settings/ToolboxTab.qml:491",
+    "reference": "Modules/Settings/ToolboxTab.qml:575, Modules/Settings/ToolboxTab.qml:614",
     "comment": ""
   },
   {
@@ -9218,7 +9284,7 @@
   {
     "term": "Provider",
     "context": "Provider",
-    "reference": "Modules/Settings/ToolboxTab.qml:654",
+    "reference": "Modules/Settings/ToolboxTab.qml:827",
     "comment": ""
   },
   {
@@ -9458,7 +9524,7 @@
   {
     "term": "Rename",
     "context": "Toolbox prompt settings",
-    "reference": "Modals/WorkspaceRenameModal.qml:185, Modules/Settings/ToolboxTab.qml:322, Modules/Settings/ToolboxTab.qml:499",
+    "reference": "Modals/WorkspaceRenameModal.qml:185, Modules/Settings/ToolboxTab.qml:445, Modules/Settings/ToolboxTab.qml:622",
     "comment": ""
   },
   {
@@ -9540,6 +9606,12 @@
     "comment": ""
   },
   {
+    "term": "Reset to default",
+    "context": "Reset to default",
+    "reference": "Modules/Settings/Widgets/SettingsSoundRow.qml:129",
+    "comment": ""
+  },
+  {
     "term": "Reset to default name",
     "context": "Reset to default name",
     "reference": "Modules/Settings/Widgets/DeviceAliasRow.qml:127",
@@ -9584,7 +9656,7 @@
   {
     "term": "Results per Page",
     "context": "Results per Page",
-    "reference": "Modules/Settings/ToolboxTab.qml:667",
+    "reference": "Modules/Settings/ToolboxTab.qml:850",
     "comment": ""
   },
   {
@@ -9752,19 +9824,13 @@
   {
     "term": "Save",
     "context": "AiChat interface | save screenshot to file",
-    "reference": "Modals/DankColorPickerModal.qml:750, Widgets/ScreenshotControls.qml:36, Modules/Notepad/Notepad.qml:472, Modules/Notepad/NotepadTextEditor.qml:763, Modules/Settings/AudioTab.qml:693, Modules/Settings/KeybindsEditorTab.qml:1663, Modules/Clock/AlarmTab.qml:272, Modules/Toolbox/aiChat/AiMessage.qml:211, Modals/DankLauncherV2/AppEditView.qml:307, Modals/FileBrowser/FileBrowserSaveRow.qml:55",
+    "reference": "Modals/DankColorPickerModal.qml:750, Widgets/ScreenshotControls.qml:36, Modules/Notepad/Notepad.qml:472, Modules/Notepad/NotepadTextEditor.qml:763, Modules/Settings/AudioTab.qml:693, Modules/Settings/KeybindsEditorTab.qml:1663, Modules/Settings/ToolboxTab.qml:535, Modules/Clock/AlarmTab.qml:272, Modules/Toolbox/aiChat/AiMessage.qml:211, Modals/DankLauncherV2/AppEditView.qml:307, Modals/FileBrowser/FileBrowserSaveRow.qml:55",
     "comment": ""
   },
   {
     "term": "Save Notepad File",
     "context": "Save Notepad File",
     "reference": "Modules/Notepad/Notepad.qml:267",
-    "comment": ""
-  },
-  {
-    "term": "Save Prompt",
-    "context": "Save Prompt",
-    "reference": "Modules/Settings/ToolboxTab.qml:412",
     "comment": ""
   },
   {
@@ -9782,7 +9848,7 @@
   {
     "term": "Save chat",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:146",
+    "reference": "Modules/Toolbox/AiCommand.qml:61",
     "comment": ""
   },
   {
@@ -10004,7 +10070,7 @@
   {
     "term": "Search",
     "context": "AI tool option",
-    "reference": "Modules/Settings/ToolboxTab.qml:34",
+    "reference": "Modules/Settings/ToolboxTab.qml:39",
     "comment": ""
   },
   {
@@ -10016,13 +10082,13 @@
   {
     "term": "Search Engine URL",
     "context": "Search Engine URL",
-    "reference": "Modules/Settings/ToolboxTab.qml:576",
+    "reference": "Modules/Settings/ToolboxTab.qml:739",
     "comment": ""
   },
   {
     "term": "Search Exclusions",
     "context": "Search Exclusions",
-    "reference": "Modules/Settings/ToolboxTab.qml:600",
+    "reference": "Modules/Settings/ToolboxTab.qml:766",
     "comment": ""
   },
   {
@@ -10088,7 +10154,7 @@
   {
     "term": "Secondary",
     "context": "button color option | color option | secondary color | tile color option",
-    "reference": "Modules/Settings/DankBarTab.qml:1211, Modules/Settings/DockTab.qml:590, Modules/Settings/LauncherTab.qml:477, Modules/Settings/ThemeColorsTab.qml:1489, Modules/Settings/ThemeColorsTab.qml:1495, Modules/Settings/ThemeColorsTab.qml:1505, Modules/Settings/ThemeColorsTab.qml:1521, Modules/Settings/ThemeColorsTab.qml:1527, Modules/Settings/ThemeColorsTab.qml:1537, Modules/Settings/WorkspacesTab.qml:359, Modules/Settings/Widgets/SettingsColorPicker.qml:47",
+    "reference": "Modules/Settings/DankBarTab.qml:1211, Modules/Settings/DockTab.qml:590, Modules/Settings/LauncherTab.qml:477, Modules/Settings/WorkspacesTab.qml:359, Modules/Settings/ThemeColorsTab.qml:1489, Modules/Settings/ThemeColorsTab.qml:1495, Modules/Settings/ThemeColorsTab.qml:1505, Modules/Settings/ThemeColorsTab.qml:1521, Modules/Settings/ThemeColorsTab.qml:1527, Modules/Settings/ThemeColorsTab.qml:1537, Modules/Settings/Widgets/SettingsColorPicker.qml:47",
     "comment": ""
   },
   {
@@ -10158,6 +10224,12 @@
     "comment": ""
   },
   {
+    "term": "Select Sound File",
+    "context": "Select Sound File",
+    "reference": "Modules/Settings/SoundsTab.qml:223",
+    "comment": ""
+  },
+  {
     "term": "Select Video or Folder",
     "context": "Select Video or Folder",
     "reference": "Modules/Settings/LockScreenTab.qml:14",
@@ -10184,7 +10256,7 @@
   {
     "term": "Select a prompt file to edit",
     "context": "Toolbox prompt settings",
-    "reference": "Modules/Settings/ToolboxTab.qml:342",
+    "reference": "Modules/Settings/ToolboxTab.qml:465",
     "comment": ""
   },
   {
@@ -10256,7 +10328,7 @@
   {
     "term": "Select system sound theme",
     "context": "Select system sound theme",
-    "reference": "Modules/Settings/SoundsTab.qml:72",
+    "reference": "Modules/Settings/SoundsTab.qml:76",
     "comment": ""
   },
   {
@@ -10292,7 +10364,7 @@
   {
     "term": "Separate domains with commas",
     "context": "Separate domains with commas",
-    "reference": "Modules/Settings/ToolboxTab.qml:638",
+    "reference": "Modules/Settings/ToolboxTab.qml:807",
     "comment": ""
   },
   {
@@ -10310,7 +10382,7 @@
   {
     "term": "Set API key",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:135",
+    "reference": "Modules/Toolbox/AiCommand.qml:50",
     "comment": ""
   },
   {
@@ -10322,7 +10394,7 @@
   {
     "term": "Set config option `%1` to `%2`",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:1061",
+    "reference": "Services/Ai.qml:1065",
     "comment": ""
   },
   {
@@ -10364,25 +10436,25 @@
   {
     "term": "Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5.",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:175",
+    "reference": "Modules/Toolbox/AiCommand.qml:90",
     "comment": ""
   },
   {
     "term": "Set the current API provider",
     "context": "Booru",
-    "reference": "Modules/Toolbox/Booru.qml:47",
+    "reference": "Modules/Toolbox/BooruCommand.qml:15",
     "comment": ""
   },
   {
     "term": "Set the system prompt file for the model.",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:124",
+    "reference": "Modules/Toolbox/AiCommand.qml:39",
     "comment": ""
   },
   {
     "term": "Set the tool to use for the model.",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:111",
+    "reference": "Modules/Toolbox/AiCommand.qml:26",
     "comment": ""
   },
   {
@@ -10406,7 +10478,7 @@
   {
     "term": "Setup",
     "context": "Setup",
-    "reference": "Modules/Settings/ThemeColorsTab.qml:2177, Modules/Settings/WindowRulesTab.qml:367, Modules/Settings/DisplayConfig/IncludeWarningBox.qml:83",
+    "reference": "Modules/Settings/WindowRulesTab.qml:367, Modules/Settings/ThemeColorsTab.qml:2177, Modules/Settings/DisplayConfig/IncludeWarningBox.qml:83",
     "comment": ""
   },
   {
@@ -11090,7 +11162,7 @@
   {
     "term": "Sound Theme",
     "context": "Sound Theme",
-    "reference": "Modules/Settings/SoundsTab.qml:71",
+    "reference": "Modules/Settings/SoundsTab.qml:75",
     "comment": ""
   },
   {
@@ -11187,6 +11259,12 @@
     "term": "Status",
     "context": "Status",
     "reference": "Widgets/DankIconPicker.qml:55, Modules/Settings/AboutTab.qml:700, Modules/Settings/NetworkTab.qml:182, Modules/Settings/PrinterTab.qml:186",
+    "comment": ""
+  },
+  {
+    "term": "Stop preview",
+    "context": "Stop preview",
+    "reference": "Modules/Settings/Widgets/SettingsSoundRow.qml:121",
     "comment": ""
   },
   {
@@ -11312,7 +11390,7 @@
   {
     "term": "Switched to search mode. Continue with the user's request.",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:1044",
+    "reference": "Services/Ai.qml:1048",
     "comment": ""
   },
   {
@@ -11384,13 +11462,13 @@
   {
     "term": "System Prompt File",
     "context": "System Prompt File",
-    "reference": "Modules/Settings/ToolboxTab.qml:295",
+    "reference": "Modules/Settings/ToolboxTab.qml:408",
     "comment": ""
   },
   {
     "term": "System Sounds",
     "context": "System Sounds",
-    "reference": "Modules/Settings/SoundsTab.qml:27",
+    "reference": "Modules/Settings/SoundsTab.qml:31",
     "comment": ""
   },
   {
@@ -11426,13 +11504,19 @@
   {
     "term": "System prompt template used by the AI assistant",
     "context": "System prompt template used by the AI assistant",
-    "reference": "Modules/Settings/ToolboxTab.qml:302",
+    "reference": "Modules/Settings/ToolboxTab.qml:416",
     "comment": ""
   },
   {
     "term": "System sounds are not available. Install %1 for sound support.",
     "context": "System sounds are not available. Install %1 for sound support.",
-    "reference": "Modules/Settings/SoundsTab.qml:149",
+    "reference": "Modules/Settings/SoundsTab.qml:201",
+    "comment": ""
+  },
+  {
+    "term": "System theme",
+    "context": "System theme",
+    "reference": "Services/AudioService.qml:494",
     "comment": ""
   },
   {
@@ -11474,31 +11558,31 @@
   {
     "term": "Temperature",
     "context": "Temperature",
-    "reference": "Modules/Settings/ToolboxTab.qml:267",
+    "reference": "Modules/Settings/ToolboxTab.qml:380",
     "comment": ""
   },
   {
     "term": "Temperature\nChange with /temp VALUE",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:569",
+    "reference": "Modules/Toolbox/AiChat.qml:430",
     "comment": ""
   },
   {
     "term": "Temperature must be between 0 and 2",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:783",
+    "reference": "Services/Ai.qml:787",
     "comment": ""
   },
   {
     "term": "Temperature set to %1",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:788",
+    "reference": "Services/Ai.qml:792",
     "comment": ""
   },
   {
     "term": "Temperature: %1",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:821",
+    "reference": "Services/Ai.qml:825",
     "comment": ""
   },
   {
@@ -11576,7 +11660,7 @@
   {
     "term": "The current system prompt from %1 is\n\n---\n\n%2",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:532",
+    "reference": "Services/Ai.qml:530",
     "comment": ""
   },
   {
@@ -11750,7 +11834,7 @@
   {
     "term": "Time",
     "context": "theme auto mode tab | wallpaper cycling mode tab",
-    "reference": "Modules/Settings/ThemeColorsTab.qml:1025, Modules/Settings/WallpaperTab.qml:1007",
+    "reference": "Modules/Settings/WallpaperTab.qml:1007, Modules/Settings/ThemeColorsTab.qml:1025",
     "comment": ""
   },
   {
@@ -11811,6 +11895,12 @@
     "term": "Timer",
     "context": "Timer",
     "reference": "Services/ClockService.qml:62, Modules/Clock/ClockApp.qml:13",
+    "comment": ""
+  },
+  {
+    "term": "Timer Finished",
+    "context": "Row label for the timer finished sound setting",
+    "reference": "Modules/Settings/SoundsTab.qml:172",
     "comment": ""
   },
   {
@@ -11894,13 +11984,13 @@
   {
     "term": "Tool",
     "context": "Tool",
-    "reference": "Modules/Settings/ToolboxTab.qml:255",
+    "reference": "Modules/Settings/ToolboxTab.qml:363",
     "comment": ""
   },
   {
     "term": "Tool set to: %1",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:118",
+    "reference": "Modules/Toolbox/AiCommand.qml:33",
     "comment": ""
   },
   {
@@ -11912,13 +12002,13 @@
   {
     "term": "Toolbox Layout",
     "context": "Toolbox Layout",
-    "reference": "Modules/Settings/ToolboxTab.qml:217",
+    "reference": "Modules/Settings/ToolboxTab.qml:311",
     "comment": ""
   },
   {
     "term": "Toolbox Width",
     "context": "Toolbox Width",
-    "reference": "Modules/Settings/ToolboxTab.qml:220",
+    "reference": "Modules/Settings/ToolboxTab.qml:317",
     "comment": ""
   },
   {
@@ -11930,7 +12020,7 @@
   {
     "term": "Tools available to the selected model",
     "context": "Tools available to the selected model",
-    "reference": "Modules/Settings/ToolboxTab.qml:256",
+    "reference": "Modules/Settings/ToolboxTab.qml:364",
     "comment": ""
   },
   {
@@ -11996,7 +12086,7 @@
   {
     "term": "Total token count\nInput: %1\nOutput: %2",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:580",
+    "reference": "Modules/Toolbox/AiChat.qml:441",
     "comment": ""
   },
   {
@@ -12074,13 +12164,13 @@
   {
     "term": "Type",
     "context": "Type",
-    "reference": "Modules/Settings/NotificationsTab.qml:546, Modules/Settings/RunningAppsTab.qml:154",
+    "reference": "Modules/Settings/RunningAppsTab.qml:154, Modules/Settings/NotificationsTab.qml:546",
     "comment": ""
   },
   {
     "term": "Type /key to get started with online models",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:605",
+    "reference": "Modules/Toolbox/AiChat.qml:466",
     "comment": ""
   },
   {
@@ -12176,7 +12266,7 @@
   {
     "term": "Unknown",
     "context": "battery status | power profile option | unknown author | widget status",
-    "reference": "Common/Theme.qml:1480, Services/BatteryService.qml:148, Services/WeatherService.qml:151, Services/WeatherService.qml:605, Services/WeatherService.qml:606, Services/WeatherService.qml:765, Services/WeatherService.qml:766, Modules/Lock/LockScreenContent.qml:364, Modules/Lock/LockScreenContent.qml:484, Modules/Lock/LockScreenContent.qml:580, Modules/Settings/NetworkTab.qml:175, Modules/Settings/NetworkTab.qml:217, Modules/Settings/NetworkTab.qml:431, Modules/Settings/NetworkTab.qml:454, Modules/Settings/NetworkTab.qml:602, Modules/Settings/NetworkTab.qml:747, Modules/Settings/NetworkTab.qml:1172, Modules/Settings/NotificationsTab.qml:646, Modules/Settings/PluginBrowser.qml:537, Modules/Settings/PrinterTab.qml:1638, Modules/Settings/ThemeBrowser.qml:527, Modules/ControlCenter/Components/DragDropGrid.qml:325, Modules/ControlCenter/Components/DragDropGrid.qml:626, Modules/ControlCenter/Components/HeaderPane.qml:63, Modules/ControlCenter/Details/BatteryDetail.qml:183",
+    "reference": "Common/Theme.qml:1480, Services/BatteryService.qml:148, Services/WeatherService.qml:151, Services/WeatherService.qml:605, Services/WeatherService.qml:606, Services/WeatherService.qml:765, Services/WeatherService.qml:766, Modules/Lock/LockScreenContent.qml:364, Modules/Lock/LockScreenContent.qml:484, Modules/Lock/LockScreenContent.qml:580, Modules/Settings/NetworkTab.qml:175, Modules/Settings/NetworkTab.qml:217, Modules/Settings/NetworkTab.qml:431, Modules/Settings/NetworkTab.qml:454, Modules/Settings/NetworkTab.qml:602, Modules/Settings/NetworkTab.qml:747, Modules/Settings/NetworkTab.qml:1172, Modules/Settings/PluginBrowser.qml:537, Modules/Settings/PrinterTab.qml:1638, Modules/Settings/ThemeBrowser.qml:527, Modules/Settings/NotificationsTab.qml:646, Modules/ControlCenter/Components/DragDropGrid.qml:325, Modules/ControlCenter/Components/DragDropGrid.qml:626, Modules/ControlCenter/Components/HeaderPane.qml:63, Modules/ControlCenter/Details/BatteryDetail.qml:183",
     "comment": ""
   },
   {
@@ -12218,13 +12308,13 @@
   {
     "term": "Unknown command: ",
     "context": "AiChat interface | Booru",
-    "reference": "Modules/Toolbox/AiChat.qml:248, Modules/Toolbox/Booru.qml:83",
+    "reference": "Modules/Toolbox/AiChat.qml:108, Modules/Toolbox/Booru.qml:63",
     "comment": ""
   },
   {
     "term": "Unknown function call: %1",
     "context": "AiChat interface",
-    "reference": "Services/Ai.qml:1072",
+    "reference": "Services/Ai.qml:1076",
     "comment": ""
   },
   {
@@ -12330,21 +12420,27 @@
     "comment": ""
   },
   {
+    "term": "Urgent Notification",
+    "context": "Row label for the critical notification sound setting",
+    "reference": "Modules/Settings/SoundsTab.qml:152",
+    "comment": ""
+  },
+  {
     "term": "Usage: %1load CHAT_NAME",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:162",
+    "reference": "Modules/Toolbox/AiCommand.qml:77",
     "comment": ""
   },
   {
     "term": "Usage: %1save CHAT_NAME",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:150",
+    "reference": "Modules/Toolbox/AiCommand.qml:65",
     "comment": ""
   },
   {
     "term": "Usage: %1tool TOOL_NAME",
     "context": "AiChat toolbar",
-    "reference": "Modules/Toolbox/AiChat.qml:114",
+    "reference": "Modules/Toolbox/AiCommand.qml:29",
     "comment": ""
   },
   {
@@ -12392,7 +12488,7 @@
   {
     "term": "Use System Theme",
     "context": "Use System Theme",
-    "reference": "Modules/Settings/SoundsTab.qml:59",
+    "reference": "Modules/Settings/SoundsTab.qml:63",
     "comment": ""
   },
   {
@@ -12482,7 +12578,7 @@
   {
     "term": "Use sound theme from system settings",
     "context": "Use sound theme from system settings",
-    "reference": "Modules/Settings/SoundsTab.qml:60",
+    "reference": "Modules/Settings/SoundsTab.qml:64",
     "comment": ""
   },
   {
@@ -12698,13 +12794,13 @@
   {
     "term": "Volume",
     "context": "Volume",
-    "reference": "Modules/Settings/OSDTab.qml:93, Modules/Settings/WidgetsTabSection.qml:1137",
+    "reference": "Modules/Settings/WidgetsTabSection.qml:1137, Modules/Settings/OSDTab.qml:93",
     "comment": ""
   },
   {
     "term": "Volume Changed",
-    "context": "Volume Changed",
-    "reference": "Modules/Settings/SoundsTab.qml:108",
+    "context": "Row label for the output volume change sound setting",
+    "reference": "Modules/Settings/SoundsTab.qml:110",
     "comment": ""
   },
   {
@@ -12974,7 +13070,7 @@
   {
     "term": "Width of the Toolbox slideout",
     "context": "Width of the Toolbox slideout",
-    "reference": "Modules/Settings/ToolboxTab.qml:221",
+    "reference": "Modules/Settings/ToolboxTab.qml:318",
     "comment": ""
   },
   {
@@ -13208,7 +13304,7 @@
   {
     "term": "Zerochan only provides safe results",
     "context": "Zerochan only provides safe results",
-    "reference": "Modules/Settings/ToolboxTab.qml:683",
+    "reference": "Modules/Settings/ToolboxTab.qml:866",
     "comment": ""
   },
   {
@@ -13394,7 +13490,7 @@
   {
     "term": "quora.com, facebook.com",
     "context": "example excluded search domains",
-    "reference": "Modules/Settings/ToolboxTab.qml:629",
+    "reference": "Modules/Settings/ToolboxTab.qml:795",
     "comment": ""
   },
   {

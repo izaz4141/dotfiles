@@ -225,9 +225,7 @@ var SPEC = {
 
     soundsEnabled: { def: true },
     useSystemSoundTheme: { def: false },
-    soundNewNotification: { def: true },
-    soundVolumeChanged: { def: true },
-    soundPluggedIn: { def: true },
+    soundEvents: { def: {} },
     alarms: { def: [] },
 
     acMonitorTimeout: { def: 0 },

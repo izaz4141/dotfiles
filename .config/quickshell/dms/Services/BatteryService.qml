@@ -66,7 +66,7 @@ Singleton {
             return;
         }
 
-        if (SettingsData.soundsEnabled && SettingsData.soundPluggedIn) {
+        if (SettingsData.soundsEnabled) {
             if (isPluggedIn && !previousPluggedState) {
                 AudioService.playPowerPlugSound();
             } else if (!isPluggedIn && previousPluggedState) {

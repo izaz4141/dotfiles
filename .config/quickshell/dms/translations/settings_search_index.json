@@ -4482,6 +4482,26 @@
     "icon": "text_fields"
   },
   {
+    "section": "soundAlarm",
+    "label": "Alarm",
+    "tabIndex": 15,
+    "category": "Sounds",
+    "keywords": [
+      "alarm",
+      "audio",
+      "clock",
+      "effects",
+      "plays",
+      "ringing",
+      "sfx",
+      "sound",
+      "sounds",
+      "wake",
+      "while"
+    ],
+    "description": "Plays while an alarm is ringing"
+  },
+  {
     "section": "soundsEnabled",
     "label": "Enable System Sounds",
     "tabIndex": 15,
@@ -4500,8 +4520,26 @@
     "description": "Play sounds for system events"
   },
   {
-    "section": "soundNewNotification",
-    "label": "New Notification",
+    "section": "soundEvents",
+    "label": "Individual Sounds",
+    "tabIndex": 15,
+    "category": "Sounds",
+    "keywords": [
+      "audio",
+      "custom",
+      "effects",
+      "event",
+      "individual",
+      "sfx",
+      "sound",
+      "sounds"
+    ],
+    "icon": "music_note",
+    "conditionKey": "soundsAvailable"
+  },
+  {
+    "section": "soundMessage",
+    "label": "Notification",
     "tabIndex": 15,
     "category": "Sounds",
     "keywords": [
@@ -4509,28 +4547,31 @@
       "arrives",
       "audio",
       "effects",
+      "message",
       "new",
       "notif",
       "notification",
-      "play",
+      "plays",
       "sfx",
       "sound",
       "sounds"
     ],
-    "description": "Play sound when new notification arrives"
+    "description": "Plays when a notification arrives"
   },
   {
-    "section": "soundPluggedIn",
-    "label": "Plugged In",
+    "section": "soundPowerPlug",
+    "label": "Power Plugged In",
     "tabIndex": 15,
     "category": "Sounds",
     "keywords": [
       "audio",
-      "cable",
+      "battery",
+      "charge",
+      "charger",
       "connected",
       "effects",
       "hibernate",
-      "play",
+      "plays",
       "plugged",
       "power",
       "reboot",
@@ -4542,7 +4583,34 @@
       "sounds",
       "suspend"
     ],
-    "description": "Play sound when power cable is connected"
+    "description": "Plays when the charger is connected"
+  },
+  {
+    "section": "soundPowerUnplug",
+    "label": "Power Unplugged",
+    "tabIndex": 15,
+    "category": "Sounds",
+    "keywords": [
+      "audio",
+      "battery",
+      "charge",
+      "charger",
+      "effects",
+      "hibernate",
+      "plays",
+      "power",
+      "reboot",
+      "removed",
+      "restart",
+      "sfx",
+      "shutdown",
+      "sleep",
+      "sound",
+      "sounds",
+      "suspend",
+      "unplugged"
+    ],
+    "description": "Plays when the charger is removed"
   },
   {
     "section": "soundTheme",
@@ -4601,6 +4669,49 @@
     "conditionKey": "soundsAvailable"
   },
   {
+    "section": "soundTimerFinished",
+    "label": "Timer Finished",
+    "tabIndex": 15,
+    "category": "Sounds",
+    "keywords": [
+      "audio",
+      "clock",
+      "countdown",
+      "counts",
+      "down",
+      "effects",
+      "finished",
+      "plays",
+      "sfx",
+      "sound",
+      "sounds",
+      "timer",
+      "zero"
+    ],
+    "description": "Plays when a timer counts down to zero"
+  },
+  {
+    "section": "soundCriticalNotification",
+    "label": "Urgent Notification",
+    "tabIndex": 15,
+    "category": "Sounds",
+    "keywords": [
+      "alert",
+      "arrives",
+      "audio",
+      "critical",
+      "effects",
+      "notif",
+      "notification",
+      "plays",
+      "sfx",
+      "sound",
+      "sounds",
+      "urgent"
+    ],
+    "description": "Plays when a critical notification arrives"
+  },
+  {
     "section": "useSystemSoundTheme",
     "label": "Use System Theme",
     "tabIndex": 15,
@@ -4623,7 +4734,7 @@
     "description": "Use sound theme from system settings"
   },
   {
-    "section": "soundVolumeChanged",
+    "section": "soundVolumeChange",
     "label": "Volume Changed",
     "tabIndex": 15,
     "category": "Sounds",
@@ -4633,14 +4744,16 @@
       "changed",
       "effects",
       "loudness",
-      "play",
+      "output",
+      "plays",
       "sfx",
+      "slider",
       "sound",
       "sounds",
       "speaker",
       "volume"
     ],
-    "description": "Play sound when volume is adjusted"
+    "description": "Plays when the output volume is adjusted"
   },
   {
     "section": "_tab_16",
@@ -6522,7 +6635,7 @@
     "icon": "keyboard"
   },
   {
-    "section": "toolboxAiModel",
+    "section": "toolboxAi",
     "label": "AI Assistant",
     "tabIndex": 32,
     "category": "Toolbox",
@@ -6568,7 +6681,7 @@
     "description": "Zerochan only provides safe results"
   },
   {
-    "section": "toolboxBooruProvider",
+    "section": "toolboxBooru",
     "label": "Booru Settings",
     "tabIndex": 32,
     "category": "Toolbox",
@@ -6598,6 +6711,48 @@
       "toolbox"
     ],
     "description": "Animate AI response text as it appears"
+  },
+  {
+    "section": "toolboxAiModel",
+    "label": "Model",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "ai",
+      "assistant",
+      "model",
+      "toolbox"
+    ],
+    "description": "Model used by the Toolbox assistant"
+  },
+  {
+    "section": "toolboxAiSystemPromptFile",
+    "label": "Prompt File",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "ai",
+      "assistant",
+      "file",
+      "prompt",
+      "system",
+      "template",
+      "toolbox"
+    ],
+    "description": "System prompt template used by the AI assistant"
+  },
+  {
+    "section": "toolboxBooruProvider",
+    "label": "Provider",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "booru",
+      "image",
+      "provider",
+      "toolbox"
+    ],
+    "description": "Image provider used by the Toolbox"
   },
   {
     "section": "toolboxBooruLimit",
@@ -6635,7 +6790,7 @@
     "icon": "block"
   },
   {
-    "section": "toolboxAiSystemPromptFile",
+    "section": "toolboxSystemPrompt",
     "label": "System Prompt File",
     "tabIndex": 32,
     "category": "Toolbox",
@@ -6701,7 +6856,7 @@
     "icon": "service_toolbox"
   },
   {
-    "section": "toolboxWidth",
+    "section": "toolboxLayout",
     "label": "Toolbox Layout",
     "tabIndex": 32,
     "category": "Toolbox",
@@ -6713,6 +6868,19 @@
       "width"
     ],
     "icon": "view_sidebar",
+    "description": "Width of the Toolbox slideout"
+  },
+  {
+    "section": "toolboxWidth",
+    "label": "Toolbox Width",
+    "tabIndex": 32,
+    "category": "Toolbox",
+    "keywords": [
+      "size",
+      "slideout",
+      "toolbox",
+      "width"
+    ],
     "description": "Width of the Toolbox slideout"
   }
 ]

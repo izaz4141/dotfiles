@@ -947,7 +947,7 @@
   {
     "term": "Alarm",
     "translation": "",
-    "context": "",
+    "context": "Row label for the alarm sound setting",
     "reference": "",
     "comment": ""
   },
@@ -2408,6 +2408,13 @@
     "comment": ""
   },
   {
+    "term": "Choose sound file",
+    "translation": "",
+    "context": "Tooltip on the per-event sound row button that opens a file browser",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Choose the background color for widgets",
     "translation": "",
     "context": "",
@@ -2487,7 +2494,7 @@
   {
     "term": "Clear",
     "translation": "",
-    "context": "",
+    "context": "AiChat toolbar | Booru",
     "reference": "",
     "comment": ""
   },
@@ -4146,7 +4153,14 @@
   {
     "term": "Discard",
     "translation": "",
-    "context": "",
+    "context": "Toolbox prompt settings",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Discard unsaved changes to \"%1\"?",
+    "translation": "",
+    "context": "Toolbox prompt settings",
     "reference": "",
     "comment": ""
   },
@@ -6818,6 +6832,13 @@
     "comment": ""
   },
   {
+    "term": "Individual Sounds",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Individual bar configuration",
     "translation": "",
     "context": "",
@@ -7115,6 +7136,13 @@
     "term": "Keep Changes",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Keep Editing",
+    "translation": "",
+    "context": "Toolbox prompt settings",
     "reference": "",
     "comment": ""
   },
@@ -8638,13 +8666,6 @@
     "comment": ""
   },
   {
-    "term": "New Notification",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "New Window Rule",
     "translation": "",
     "context": "",
@@ -9429,6 +9450,13 @@
     "comment": ""
   },
   {
+    "term": "Notification",
+    "translation": "",
+    "context": "Row label for the normal notification sound setting",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Notification Center",
     "translation": "",
     "context": "",
@@ -10150,27 +10178,6 @@
     "comment": ""
   },
   {
-    "term": "Play sound when new notification arrives",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Play sound when power cable is connected",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Play sound when volume is adjusted",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
     "term": "Play sounds for system events",
     "translation": "",
     "context": "",
@@ -10186,6 +10193,55 @@
   },
   {
     "term": "Playback error: ",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Plays when a critical notification arrives",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Plays when a notification arrives",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Plays when a timer counts down to zero",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Plays when the charger is connected",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Plays when the charger is removed",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Plays when the output volume is adjusted",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Plays while an alarm is ringing",
     "translation": "",
     "context": "",
     "reference": "",
@@ -10388,6 +10444,13 @@
     "comment": ""
   },
   {
+    "term": "Power Plugged In",
+    "translation": "",
+    "context": "Row label for the charger connected sound setting",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Power Profile",
     "translation": "",
     "context": "",
@@ -10405,6 +10468,13 @@
     "term": "Power Saver",
     "translation": "",
     "context": "power profile option",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Power Unplugged",
+    "translation": "",
+    "context": "Row label for the charger removed sound setting",
     "reference": "",
     "comment": ""
   },
@@ -10508,6 +10578,13 @@
   },
   {
     "term": "Preview",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Preview sound",
     "translation": "",
     "context": "",
     "reference": "",
@@ -11130,6 +11207,13 @@
     "comment": ""
   },
   {
+    "term": "Reset to default",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Reset to default name",
     "translation": "",
     "context": "",
@@ -11383,13 +11467,6 @@
   },
   {
     "term": "Save Notepad File",
-    "translation": "",
-    "context": "",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Save Prompt",
     "translation": "",
     "context": "",
     "reference": "",
@@ -11847,6 +11924,13 @@
     "term": "Select Profile Image",
     "translation": "",
     "context": "profile image file browser title",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Select Sound File",
+    "translation": "",
+    "context": "",
     "reference": "",
     "comment": ""
   },
@@ -13055,6 +13139,13 @@
     "comment": ""
   },
   {
+    "term": "Stop preview",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Stopped",
     "translation": "",
     "context": "",
@@ -13336,6 +13427,13 @@
   },
   {
     "term": "System sounds are not available. Install %1 for sound support.",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "System theme",
     "translation": "",
     "context": "",
     "reference": "",
@@ -13779,6 +13877,13 @@
     "term": "Timer",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Timer Finished",
+    "translation": "",
+    "context": "Row label for the timer finished sound setting",
     "reference": "",
     "comment": ""
   },
@@ -14385,6 +14490,13 @@
     "comment": ""
   },
   {
+    "term": "Urgent Notification",
+    "translation": "",
+    "context": "Row label for the critical notification sound setting",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Usage: %1load CHAT_NAME",
     "translation": "",
     "context": "AiChat toolbar",
@@ -14821,7 +14933,7 @@
   {
     "term": "Volume Changed",
     "translation": "",
-    "context": "",
+    "context": "Row label for the output volume change sound setting",
     "reference": "",
     "comment": ""
   },

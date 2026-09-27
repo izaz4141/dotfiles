@@ -446,9 +446,7 @@ Singleton {
 
     property bool soundsEnabled: true
     property bool useSystemSoundTheme: false
-    property bool soundNewNotification: true
-    property bool soundVolumeChanged: true
-    property bool soundPluggedIn: true
+    property var soundEvents: ({})
 
     property var alarms: []
 
