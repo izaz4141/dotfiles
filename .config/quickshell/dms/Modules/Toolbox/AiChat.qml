@@ -95,147 +95,7 @@ Item {
             Ai.clearMessages();
     }
 
-    property var allCommands: [{
-        "name": "attach",
-        "icon": "attach_file",
-        "description": I18n.tr("Attach a file. Only works with Gemini.", "AiChat toolbar"),
-        "execute": args => Ai.attachFile(args.join(" ").trim())
-    }, {
-        "name": "model",
-        "icon": "psychology",
-        "description": I18n.tr("Choose model", "AiChat toolbar"),
-        "execute": args => Ai.setModel(args[0])
-    }, {
-        "name": "tool",
-        "icon": "service_toolbox",
-        "description": I18n.tr("Set the tool to use for the model.", "AiChat toolbar"),
-        "execute": args => {
-            if (args.length == 0 || args[0] == "get") {
-                Ai.addMessage(I18n.tr("Usage: %1tool TOOL_NAME", "AiChat toolbar").arg(root.commandPrefix), Ai.interfaceRole);
-            } else {
-                const tool = args[0];
-                if (Ai.setTool(tool))
-                    Ai.addMessage(I18n.tr("Tool set to: %1", "AiChat toolbar").arg(tool), Ai.interfaceRole);
-            }
-        }
-    }, {
-        "name": "prompt",
-        "icon": "notes",
-        "description": I18n.tr("Set the system prompt file for the model.", "AiChat toolbar"),
-        "execute": args => {
-            if (args.length === 0 || args[0] === "get") {
-                Ai.printPrompt();
-                return;
-            }
-            Ai.loadPrompt(args.join(" ").trim());
-        }
-    }, {
-        "name": "key",
-        "icon": "key",
-        "description": I18n.tr("Set API key", "AiChat toolbar"),
-        "execute": args => {
-            if (args[0] == "get") {
-                Ai.printApiKey();
-            } else {
-                Ai.setApiKey(args[0]);
-            }
-        }
-    }, {
-        "name": "save",
-        "icon": "save",
-        "description": I18n.tr("Save chat", "AiChat toolbar"),
-        "execute": args => {
-            const joinedArgs = args.join(" ");
-            if (joinedArgs.trim().length == 0) {
-                Ai.addMessage(I18n.tr("Usage: %1save CHAT_NAME", "AiChat toolbar").arg(root.commandPrefix), Ai.interfaceRole);
-                return;
-            }
-            Ai.saveChat(joinedArgs);
-        }
-    }, {
-        "name": "load",
-        "icon": "folder_open",
-        "description": I18n.tr("Load chat", "AiChat toolbar"),
-        "execute": args => {
-            const joinedArgs = args.join(" ");
-            if (joinedArgs.trim().length == 0) {
-                Ai.addMessage(I18n.tr("Usage: %1load CHAT_NAME", "AiChat toolbar").arg(root.commandPrefix), Ai.interfaceRole);
-                return;
-            }
-            Ai.loadChat(joinedArgs);
-        }
-    }, {
-        "name": "clear",
-        "icon": "delete_sweep",
-        "description": I18n.tr("Clear chat history", "AiChat toolbar"),
-        "execute": () => Ai.clearMessages()
-    }, {
-        "name": "temp",
-        "icon": "device_thermostat",
-        "description": I18n.tr("Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5.", "AiChat toolbar"),
-        "execute": args => {
-            if (args.length == 0 || args[0] == "get") {
-                Ai.printTemperature();
-            } else {
-                Ai.setTemperature(parseFloat(args[0]));
-            }
-        }
-    }, {
-        "name": "test",
-        "icon": "science",
-        "description": I18n.tr("Markdown test", "AiChat toolbar"),
-        "execute": () => {
-            Ai.addMessage(`
-thinking
-A longer think block to test the revealing animation
-It should fade in chunk by chunk as the model streams. Every paragraph is a separate
-line of the fade-in animation, so longer replies feel alive while they generate.
-response
-## ✏️ Markdown test
-### Formatting
-
-- *Italic*, \`Monospace\`, **Bold**, [Link](https://example.com)
-- Arch lincox icon <img src="${Quickshell.shellPath("assets/icons/arch-symbolic.svg")}" height="${Theme.fontSizeMedium}"/>
-
-### Table
-
-Quickshell vs AGS/Astal
-
-|                          | Quickshell       | AGS/Astal         |
-|--------------------------|------------------|-------------------|
-| UI Toolkit               | Qt               | Gtk3/Gtk4         |
-| Language                 | QML              | Js/Ts/Lua         |
-| Reactivity               | Implied          | Needs declaration |
-| Widget placement         | Mildly difficult | More intuitive    |
-| Bluetooth & Wifi support | ❌               | ✅                |
-| No-delay keybinds        | ✅               | ❌                |
-| Development              | New APIs         | New syntax        |
-
-### Code block
-
-Just a hello world with syntax highlighting...
-
-\`\`\`cpp
-#include <bits/stdc++.h>
-// This is intentionally very long to test scrolling
-const std::string GREETING = "UwU";
-int main(int argc, char* argv[]) {
-    std::cout << GREETING;
-}
-\`\`\`
-
-### LaTeX
-
-Inline w/ dollar signs: $\\frac{1}{2} = \\frac{2}{4}$
-
-Inline w/ double dollar signs: $$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$
-
-Inline w/ backslash and square brackets \\[\\int_0^\\infty \\frac{1}{x^2} dx = \\infty\\]
-
-Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
-`, Ai.interfaceRole);
-        }
-    }]
+    readonly property var allCommands: aiCommands.commands
 
     function handleInput(inputText) {
         if (inputText.startsWith(root.commandPrefix)) {
@@ -262,10 +122,6 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
         });
     }
 
-    function commandIcon(name) {
-        return root.allCommands.find(cmd => cmd.name === name)?.icon ?? "";
-    }
-
     function makeSuggestionEntry(text, name, displayName, description, icon) {
         const leadingToken = text.trim().split(/\s+/).length == 1;
         return {
@@ -286,23 +142,23 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
         if (text.startsWith(root.commandPrefix + "model")) {
             root.suggestionQuery = text.split(" ")[1] ?? "";
-            root.suggestionList = root.makeFinder(Ai.modelList).find(root.suggestionQuery).map(r => root.makeSuggestionEntry(text, root.commandPrefix + "model " + r.item, Ai.models[r.item].name, Ai.models[r.item].description, root.commandIcon("model")));
+            root.suggestionList = root.makeFinder(Ai.modelList).find(root.suggestionQuery).map(r => root.makeSuggestionEntry(text, root.commandPrefix + "model " + r.item, Ai.models[r.item].name, Ai.models[r.item].description, aiCommands.commandIcon("model")));
         } else if (text.startsWith(root.commandPrefix + "prompt")) {
             root.suggestionQuery = text.split(" ")[1] ?? "";
-            root.suggestionList = root.makeFinder(Ai.promptFileNames).find(root.suggestionQuery).map(r => root.makeSuggestionEntry(text, root.commandPrefix + "prompt " + r.item, r.item, I18n.tr("Load prompt from %1", "AiChat toolbar").arg(r.item), root.commandIcon("prompt")));
+            root.suggestionList = root.makeFinder(Ai.promptFileNames).find(root.suggestionQuery).map(r => root.makeSuggestionEntry(text, root.commandPrefix + "prompt " + r.item, r.item, I18n.tr("Load prompt from %1", "AiChat toolbar").arg(r.item), aiCommands.commandIcon("prompt")));
         } else if (text.startsWith(root.commandPrefix + "save") || text.startsWith(root.commandPrefix + "load")) {
             const verb = text.startsWith(root.commandPrefix + "save") ? "save" : "load";
             root.suggestionQuery = text.split(" ")[1] ?? "";
             root.suggestionList = root.makeFinder(Ai.savedChats).find(root.suggestionQuery).map(r => {
                 const chatName = FileUtils.trimFileExt(FileUtils.fileNameForPath(r.item)).trim();
-                return root.makeSuggestionEntry(text, root.commandPrefix + verb + " " + chatName, chatName, I18n.tr("Load chat from %1", "AiChat toolbar").arg(r.item), root.commandIcon(verb));
+                return root.makeSuggestionEntry(text, root.commandPrefix + verb + " " + chatName, chatName, I18n.tr("Load chat from %1", "AiChat toolbar").arg(r.item), aiCommands.commandIcon(verb));
             });
         } else if (text.startsWith(root.commandPrefix + "tool")) {
             root.suggestionQuery = text.split(" ")[1] ?? "";
-            root.suggestionList = root.makeFinder(Ai.availableTools).find(root.suggestionQuery).map(r => root.makeSuggestionEntry(text, root.commandPrefix + "tool " + r.item, r.item, Ai.toolDescriptions[r.item], root.commandIcon("tool")));
+            root.suggestionList = root.makeFinder(Ai.availableTools).find(root.suggestionQuery).map(r => root.makeSuggestionEntry(text, root.commandPrefix + "tool " + r.item, r.item, Ai.toolDescriptions[r.item], aiCommands.commandIcon("tool")));
         } else if (text.startsWith(root.commandPrefix)) {
             root.suggestionQuery = text;
-            root.suggestionList = root.allCommands.filter(cmd => cmd.name.startsWith(text.substring(1))).slice(0, text === root.commandPrefix ? 5 : 10).map(cmd => ({
+            root.suggestionList = root.allCommands.filter(cmd => cmd.name.startsWith(text.substring(1))).map(cmd => ({
                 "name": root.commandPrefix + cmd.name,
                 "icon": cmd.icon,
                 "description": `${cmd.description}`
@@ -377,6 +233,11 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 event.accepted = true;
             }
         }
+    }
+
+    AiCommand {
+        id: aiCommands
+        commandPrefix: root.commandPrefix
     }
 
     Process {
@@ -645,7 +506,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     id: suggestionRepeater
                     model: {
                         suggestions.selectedIndex = 0;
-                        return root.suggestionList.slice(0, 10);
+                        return root.suggestionList;
                     }
                     delegate: SuggestionChip {
                         id: commandButton
@@ -830,17 +691,6 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                 }
                 spacing: 4
 
-                property var commandsShown: [{
-                    "name": "",
-                    "icon": "keyboard_command_key",
-                    "sendDirectly": false,
-                    "dontAddSpace": true
-                }, {
-                    "name": "clear",
-                    "icon": "delete_sweep",
-                    "sendDirectly": true
-                }]
-
                 ToolInputIndicator {
                     icon: "api"
                     text: Ai.getModel().name
@@ -857,38 +707,21 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     Layout.fillWidth: true
                 }
 
-                ToolButtonGroup {
-                    padding: 0
+                DankButton {
+                    text: I18n.tr("Clear", "AiChat toolbar")
+                    iconName: "delete_sweep"
+                    buttonHeight: 30
+                    minWidth: 0
+                    horizontalPadding: 8
+                    vPadding: 6
+                    radius: Appearance.rounding.small
+                    backgroundColor: Theme.surfaceContainerHigh
+                    textColor: Theme.surfaceText
+                    textSize: Theme.fontSizeSmall
 
-                    Repeater {
-                        model: commandButtonsRow.commandsShown
-                        delegate: DankButton {
-                            required property var modelData
-                            property string commandRepresentation: root.commandPrefix + modelData.name
-                            text: commandRepresentation
-                            iconName: modelData.icon ?? ""
-                            buttonHeight: 30
-                            expandOnPress: true
-                            minWidth: 0
-                            horizontalPadding: 8
-                            vPadding: 6
-                            radius: Appearance.rounding.small
-                            backgroundColor: Theme.surfaceContainerHigh
-                            textColor: Theme.surfaceText
-                            textSize: Theme.fontSizeSmall
-
-                            downAction: () => {
-                                if (modelData.sendDirectly) {
-                                    root.handleInput(commandRepresentation);
-                                } else {
-                                    messageInputField.text = commandRepresentation + (modelData.dontAddSpace ? "" : " ");
-                                    messageInputField.cursorPosition = messageInputField.text.length;
-                                    messageInputField.forceActiveFocus();
-                                }
-                                if (modelData.name === "clear")
-                                    messageInputField.text = "";
-                            }
-                        }
+                    onClicked: {
+                        Ai.clearMessages();
+                        messageInputField.text = "";
                     }
                 }
             }

@@ -42,27 +42,7 @@ property bool pullLoading: false
         }
     }
 
-    property var allCommands: [{
-        "name": "mode",
-        "description": I18n.tr("Set the current API provider", "Booru"),
-        "execute": args => Booru.setProvider(args[0] || Booru.providerList[0])
-    }, {
-        "name": "clear",
-        "description": I18n.tr("Clear the current list of images", "Booru"),
-        "execute": () => Booru.clearResponses()
-    }, {
-        "name": "next",
-        "description": I18n.tr("Get the next page of results", "Booru"),
-        "execute": () => Booru.nextPage()
-    }, {
-        "name": "safe",
-        "description": I18n.tr("Disable NSFW content", "Booru"),
-        "execute": () => SettingsData.set("toolboxBooruAllowNsfw", false)
-    }, {
-        "name": "lewd",
-        "description": I18n.tr("Allow NSFW content", "Booru"),
-        "execute": () => SettingsData.set("toolboxBooruAllowNsfw", true)
-    }]
+    readonly property var allCommands: booruCommands.commands
 
     function makeFinder(items) {
         return new Fzf.Finder(items, {
@@ -119,6 +99,11 @@ property bool pullLoading: false
         }
         if ((event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier) && event.key === Qt.Key_O)
             Booru.clearResponses();
+    }
+
+    BooruCommand {
+        id: booruCommands
+        commandPrefix: root.commandPrefix
     }
 
     ColumnLayout {
@@ -227,7 +212,7 @@ property bool pullLoading: false
                     id: tagSuggestionRepeater
                     model: {
                         tagSuggestions.selectedIndex = 0;
-                        return root.suggestionList.slice(0, 10);
+                        return root.suggestionList;
                     }
                     delegate: SuggestionChip {
                         id: tagButton
@@ -237,6 +222,7 @@ property bool pullLoading: false
                         readonly property bool isSelected: tagSuggestions.selectedIndex === index
 
                         toggled: tagButton.isSelected
+                        iconName: modelData.icon ?? ""
                         text: (tagButton.modelData.displayName ?? tagButton.modelData.name) + "  " + (tagButton.modelData.count ?? "")
 
                         onHoveredChanged: {
@@ -378,6 +364,7 @@ property bool pullLoading: false
                                         "name": `${leadingToken ? root.commandPrefix + "mode " : ""}${provider}`,
                                         "displayName": `${Booru.providers[provider].name}`,
                                         "description": `${Booru.providers[provider].description}`,
+                                        "icon": booruCommands.commandIcon("mode"),
                                     };
                                 });
                                 searchTimer.stop();
@@ -389,6 +376,7 @@ property bool pullLoading: false
                                     return {
                                         "name": `${root.commandPrefix}${cmd.name}`,
                                         "description": `${cmd.description}`,
+                                        "icon": cmd.icon ?? "",
                                     };
                                 });
                                 searchTimer.stop();
@@ -465,14 +453,6 @@ property bool pullLoading: false
                 anchors.rightMargin: 5
                 spacing: 5
 
-                property var commandsShown: [{
-                    "name": "mode",
-                    "sendDirectly": false
-                }, {
-                    "name": "clear",
-                    "sendDirectly": true
-                }]
-
                 ToolInputIndicator {
                     icon: "api"
                     text: Booru.providers[Booru.currentProvider].name
@@ -521,37 +501,21 @@ property bool pullLoading: false
                     Layout.fillWidth: true
                 }
 
-                ToolButtonGroup {
-                    padding: 0
+                DankButton {
+                    text: I18n.tr("Clear", "Booru")
+                    iconName: "delete_sweep"
+                    buttonHeight: 30
+                    minWidth: 0
+                    horizontalPadding: 8
+                    vPadding: 6
+                    radius: Appearance.rounding.small
+                    backgroundColor: Theme.surfaceContainerHigh
+                    textColor: Theme.surfaceText
+                    textSize: Theme.fontSizeSmall
 
-                    Repeater {
-                        model: commandButtonsRow.commandsShown
-                        delegate: DankButton {
-                            required property var modelData
-                            property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
-                            text: commandRepresentation
-                            buttonHeight: 30
-                            expandOnPress: true
-                            minWidth: 0
-                            horizontalPadding: 8
-                            vPadding: 6
-                            radius: Appearance.rounding.small
-                            backgroundColor: Theme.surfaceContainerHigh
-                            textColor: Theme.surfaceText
-                            textSize: Theme.fontSizeSmall
-
-                            downAction: () => {
-                                if (modelData.sendDirectly) {
-                                    root.handleInput(commandRepresentation);
-                                } else {
-                                    tagInputField.text = commandRepresentation + " ";
-                                    tagInputField.cursorPosition = tagInputField.text.length;
-                                    tagInputField.forceActiveFocus();
-                                }
-                                if (modelData.name === "clear")
-                                    tagInputField.text = "";
-                            }
-                        }
+                    onClicked: {
+                        Booru.clearResponses();
+                        tagInputField.text = "";
                     }
                 }
             }
