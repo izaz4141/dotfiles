@@ -2331,6 +2331,13 @@
     "comment": ""
   },
   {
+    "term": "Children",
+    "translation": "",
+    "context": "child process count",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Choose Color",
     "translation": "",
     "context": "",
@@ -3297,6 +3304,13 @@
     "comment": ""
   },
   {
+    "term": "Copy command",
+    "translation": "",
+    "context": "copy full command line to clipboard",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Copy image",
     "translation": "",
     "context": "Booru",
@@ -3307,6 +3321,13 @@
     "term": "Copy path",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Copy process id",
+    "translation": "",
+    "context": "copy process id to clipboard",
     "reference": "",
     "comment": ""
   },
@@ -4230,7 +4251,7 @@
   {
     "term": "Disks",
     "translation": "",
-    "context": "",
+    "context": "Disks",
     "reference": "",
     "comment": ""
   },
@@ -4977,6 +4998,13 @@
     "comment": ""
   },
   {
+    "term": "Executable",
+    "translation": "",
+    "context": "process binary path",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Experimental Feature",
     "translation": "",
     "context": "",
@@ -5488,6 +5516,13 @@
     "comment": ""
   },
   {
+    "term": "File Descriptors",
+    "translation": "",
+    "context": "open file descriptor count",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "File Information",
     "translation": "",
     "context": "",
@@ -5855,13 +5890,6 @@
     "term": "Fruit Salad",
     "translation": "",
     "context": "matugen color scheme option",
-    "reference": "",
-    "comment": ""
-  },
-  {
-    "term": "Full Command:",
-    "translation": "",
-    "context": "process detail label",
     "reference": "",
     "comment": ""
   },
@@ -8995,6 +9023,13 @@
     "comment": ""
   },
   {
+    "term": "No command line available",
+    "translation": "",
+    "context": "process details when cmdline is unreadable",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "No custom theme file",
     "translation": "",
     "context": "no custom theme file status",
@@ -9018,7 +9053,7 @@
   {
     "term": "No disk data",
     "translation": "",
-    "context": "",
+    "context": "No disk data",
     "reference": "",
     "comment": ""
   },
@@ -9380,6 +9415,13 @@
     "comment": ""
   },
   {
+    "term": "Not available for system processes",
+    "translation": "",
+    "context": "sigkill disabled for low pids",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Not connected",
     "translation": "",
     "context": "network status",
@@ -9716,6 +9758,13 @@
     "comment": ""
   },
   {
+    "term": "Open details",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Open folder",
     "translation": "",
     "context": "",
@@ -9926,6 +9975,13 @@
     "comment": ""
   },
   {
+    "term": "PPID",
+    "translation": "",
+    "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Pad",
     "translation": "",
     "context": "wallpaper fill mode",
@@ -10020,6 +10076,13 @@
     "term": "Path to a video file or folder containing videos",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Paths",
+    "translation": "",
+    "context": "process details paths section",
     "reference": "",
     "comment": ""
   },
@@ -10717,9 +10780,30 @@
     "comment": ""
   },
   {
+    "term": "Process",
+    "translation": "",
+    "context": "fallback process name",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Process Count",
     "translation": "",
     "context": "",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Process Details",
+    "translation": "",
+    "context": "process details window title",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Process no longer running",
+    "translation": "",
+    "context": "shown when the inspected process has exited",
     "reference": "",
     "comment": ""
   },
@@ -11238,6 +11322,13 @@
     "term": "Resolution, position, scale",
     "translation": "",
     "context": "greeter displays description",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Resources",
+    "translation": "",
+    "context": "process details resources section",
     "reference": "",
     "comment": ""
   },
@@ -13195,6 +13286,20 @@
     "comment": ""
   },
   {
+    "term": "Subtree CPU",
+    "translation": "",
+    "context": "cpu total including child processes",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Subtree Memory",
+    "translation": "",
+    "context": "memory total including child processes",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "Summary",
     "translation": "",
     "context": "notification rule match field option",
@@ -13706,6 +13811,13 @@
     "comment": ""
   },
   {
+    "term": "This process has exited. Details are no longer available.",
+    "translation": "",
+    "context": "detail window empty state after process exit",
+    "reference": "",
+    "comment": ""
+  },
+  {
     "term": "This shortcut can't be reordered.",
     "translation": "",
     "context": "Reorder restriction",
@@ -13737,6 +13849,13 @@
     "term": "Thought",
     "translation": "",
     "context": "AiChat interface",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Threads",
+    "translation": "",
+    "context": "process detail thread count",
     "reference": "",
     "comment": ""
   },
@@ -15368,6 +15487,13 @@
     "term": "Wipe",
     "translation": "",
     "context": "wallpaper transition option",
+    "reference": "",
+    "comment": ""
+  },
+  {
+    "term": "Working Directory",
+    "translation": "",
+    "context": "process current directory",
     "reference": "",
     "comment": ""
   },

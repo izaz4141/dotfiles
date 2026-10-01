@@ -277,7 +277,7 @@ PanelWindow {
                             property bool showTooltip: false
 
                             onClicked: {
-                                Quickshell.execDetached(["dms", "cl", "copy", ToastService.currentDetails]);
+                                ClipboardService.copy(ToastService.currentDetails);
                                 showTooltip = true;
                                 detailsTooltipTimer.start();
                             }
@@ -362,7 +362,7 @@ PanelWindow {
                             property bool showTooltip: false
 
                             onClicked: {
-                                Quickshell.execDetached(["dms", "cl", "copy", ToastService.currentCommand]);
+                                ClipboardService.copy(ToastService.currentCommand);
                                 showTooltip = true;
                                 tooltipTimer.start();
                             }

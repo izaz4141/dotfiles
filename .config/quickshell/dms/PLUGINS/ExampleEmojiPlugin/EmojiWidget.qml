@@ -135,7 +135,7 @@ PluginComponent {
                             cursorShape: Qt.PointingHandCursor
 
                             onClicked: {
-                                Quickshell.execDetached(["dms", "cl", "copy", modelData])
+                                ClipboardService.copy(modelData)
                                 ToastService.showInfo("Copied " + modelData + " to clipboard")
                                 popoutColumn.closePopout()
                             }

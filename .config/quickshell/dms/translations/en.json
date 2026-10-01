@@ -26,7 +26,7 @@
   {
     "term": "%1 characters",
     "context": "%1 characters",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:835",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:803",
     "comment": ""
   },
   {
@@ -812,7 +812,7 @@
   {
     "term": "Alarm",
     "context": "Row label for the alarm sound setting",
-    "reference": "Services/ClockService.qml:240, Modules/Settings/SoundsTab.qml:162, Modules/Clock/AlarmTab.qml:116, Modules/Clock/ClockApp.qml:15",
+    "reference": "Services/ClockService.qml:240, Modules/Settings/SoundsTab.qml:161, Modules/Clock/AlarmTab.qml:116, Modules/Clock/ClockApp.qml:15",
     "comment": ""
   },
   {
@@ -836,7 +836,7 @@
   {
     "term": "All",
     "context": "notification history filter | screenshot entire screen",
-    "reference": "Modals/ProcessListModal.qml:377, Services/AppSearchService.qml:712, Services/AppSearchService.qml:733, Widgets/ScreenshotControls.qml:25, Modules/ProcessList/ProcessListPopout.qml:155, Modules/Settings/WidgetsTabSection.qml:2051, Modules/Settings/WidgetsTabSection.qml:2105, Modules/Settings/DisplayConfig/NiriOutputSettings.qml:94, Modules/Settings/DisplayConfig/NiriOutputSettings.qml:97, Modules/Settings/DisplayConfig/NiriOutputSettings.qml:109, Modules/Notifications/Center/HistoryNotificationList.qml:87, Modals/DankLauncherV2/Controller.qml:784, Modals/DankLauncherV2/LauncherContent.qml:334, Modals/DankLauncherV2/LauncherContent.qml:623, Modals/DankLauncherV2/SpotlightLauncherContent.qml:460",
+    "reference": "Modals/ProcessListModal.qml:377, Services/AppSearchService.qml:712, Services/AppSearchService.qml:733, Widgets/ScreenshotControls.qml:25, Modules/ProcessList/ProcessListPopout.qml:155, Modules/Settings/WidgetsTabSection.qml:2051, Modules/Settings/WidgetsTabSection.qml:2105, Modules/Settings/DisplayConfig/NiriOutputSettings.qml:94, Modules/Settings/DisplayConfig/NiriOutputSettings.qml:97, Modules/Settings/DisplayConfig/NiriOutputSettings.qml:109, Modules/Notifications/Center/HistoryNotificationList.qml:87, Modals/DankLauncherV2/Controller.qml:790, Modals/DankLauncherV2/LauncherContent.qml:334, Modals/DankLauncherV2/LauncherContent.qml:623, Modals/DankLauncherV2/SpotlightLauncherContent.qml:460",
     "comment": ""
   },
   {
@@ -1046,7 +1046,7 @@
   {
     "term": "Applications",
     "context": "Applications",
-    "reference": "Modules/Dock/DockLauncherButton.qml:25, Modules/Settings/ThemeColorsTab.qml:2089, Modals/DankLauncherV2/Controller.qml:199",
+    "reference": "Modules/Dock/DockLauncherButton.qml:25, Modules/Settings/ThemeColorsTab.qml:2089, Modals/DankLauncherV2/Controller.qml:205",
     "comment": ""
   },
   {
@@ -1322,7 +1322,7 @@
   {
     "term": "Auto-saving...",
     "context": "Auto-saving...",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:851",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:819",
     "comment": ""
   },
   {
@@ -1760,7 +1760,7 @@
   {
     "term": "Browse",
     "context": "theme category option",
-    "reference": "Modules/Settings/PluginsTab.qml:209, Modules/Settings/LockScreenTab.qml:273, Modules/Settings/ThemeColorsTab.qml:252, Modals/DankLauncherV2/Controller.qml:220, Modals/DankLauncherV2/Controller.qml:1435, Modals/DankLauncherV2/SpotlightResultRow.qml:61",
+    "reference": "Modules/Settings/PluginsTab.qml:209, Modules/Settings/LockScreenTab.qml:273, Modules/Settings/ThemeColorsTab.qml:252, Modals/DankLauncherV2/Controller.qml:226, Modals/DankLauncherV2/Controller.qml:1441, Modals/DankLauncherV2/SpotlightResultRow.qml:61",
     "comment": ""
   },
   {
@@ -1790,7 +1790,7 @@
   {
     "term": "CPU",
     "context": "CPU",
-    "reference": "Modules/ProcessList/SystemView.qml:76, Modules/Settings/DesktopWidgetSettings/SystemMonitorSettings.qml:86",
+    "reference": "Modals/ProcessDetailsModal.qml:321, Modules/ProcessList/SystemView.qml:76, Modules/Settings/DesktopWidgetSettings/SystemMonitorSettings.qml:86",
     "comment": ""
   },
   {
@@ -1995,6 +1995,12 @@
     "term": "Check for system updates",
     "context": "Check for system updates",
     "reference": "Modules/Settings/WidgetsTab.qml:246",
+    "comment": ""
+  },
+  {
+    "term": "Children",
+    "context": "child process count",
+    "reference": "Modals/ProcessDetailsModal.qml:46",
     "comment": ""
   },
   {
@@ -2240,7 +2246,7 @@
   {
     "term": "Clipboard",
     "context": "copy screenshot to clipboard",
-    "reference": "Widgets/ScreenshotControls.qml:35, Modals/DankLauncherV2/Controller.qml:213, Modals/DankLauncherV2/Controller.qml:1283, Modals/DankLauncherV2/ResultItem.qml:229, Modals/DankLauncherV2/SpotlightResultRow.qml:67, Modals/Settings/SettingsSidebar.qml:269",
+    "reference": "Widgets/ScreenshotControls.qml:35, Modals/DankLauncherV2/Controller.qml:219, Modals/DankLauncherV2/Controller.qml:1289, Modals/DankLauncherV2/ResultItem.qml:229, Modals/DankLauncherV2/SpotlightResultRow.qml:67, Modals/Settings/SettingsSidebar.qml:269",
     "comment": ""
   },
   {
@@ -2432,7 +2438,7 @@
   {
     "term": "Command",
     "context": "Command",
-    "reference": "Modules/Settings/DesktopWidgetInstanceCard.qml:386",
+    "reference": "Modals/ProcessDetailsModal.qml:540, Modules/Settings/DesktopWidgetInstanceCard.qml:386",
     "comment": ""
   },
   {
@@ -2444,7 +2450,7 @@
   {
     "term": "Commands",
     "context": "Commands",
-    "reference": "Modals/DankLauncherV2/Controller.qml:234",
+    "reference": "Modals/DankLauncherV2/Controller.qml:240",
     "comment": ""
   },
   {
@@ -2774,7 +2780,7 @@
   {
     "term": "Copied to clipboard",
     "context": "Copied to clipboard",
-    "reference": "tests/ClipboardModal.backup/ClipboardHistoryModal.qml:101, Modules/Notepad/NotepadTextEditor.qml:250, Modules/Settings/DesktopWidgetInstanceCard.qml:426, Modals/Settings/SettingsModal.qml:317, Modals/Settings/SettingsModal.qml:334, Modals/Clipboard/ClipboardHistoryModal.qml:64",
+    "reference": "Modals/ProcessDetailsModal.qml:106, tests/ClipboardModal.backup/ClipboardHistoryModal.qml:101, Modules/Notepad/NotepadTextEditor.qml:234, Modules/Settings/DesktopWidgetInstanceCard.qml:426, Modals/Settings/SettingsModal.qml:317, Modals/Settings/SettingsModal.qml:334, Modals/Clipboard/ClipboardHistoryModal.qml:64",
     "comment": ""
   },
   {
@@ -2786,43 +2792,49 @@
   {
     "term": "Copy",
     "context": "AiChat interface",
-    "reference": "Modules/Toolbox/aiChat/AiMessage.qml:194, Modals/DankLauncherV2/Controller.qml:1267",
+    "reference": "Modules/Toolbox/aiChat/AiMessage.qml:194, Modals/DankLauncherV2/Controller.qml:1273",
     "comment": ""
   },
   {
     "term": "Copy Full Command",
     "context": "Copy Full Command",
-    "reference": "Modules/ProcessList/ProcessContextMenu.qml:32",
+    "reference": "Modules/ProcessList/ProcessContextMenu.qml:39",
     "comment": ""
   },
   {
     "term": "Copy HTML",
     "context": "Copy HTML",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:701",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:669",
     "comment": ""
   },
   {
     "term": "Copy Name",
     "context": "Copy Name",
-    "reference": "Modules/ProcessList/ProcessContextMenu.qml:26",
+    "reference": "Modules/ProcessList/ProcessContextMenu.qml:33",
     "comment": ""
   },
   {
     "term": "Copy PID",
     "context": "Copy PID",
-    "reference": "Modules/ProcessList/ProcessContextMenu.qml:20",
+    "reference": "Modals/ProcessDetailsModal.qml:608, Modules/ProcessList/ProcessContextMenu.qml:27",
     "comment": ""
   },
   {
     "term": "Copy Text",
     "context": "Copy Text",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:679",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:647",
     "comment": ""
   },
   {
     "term": "Copy code",
     "context": "AiChat interface",
     "reference": "Modules/Toolbox/aiChat/MessageCodeBlock.qml:106",
+    "comment": ""
+  },
+  {
+    "term": "Copy command",
+    "context": "copy full command line to clipboard",
+    "reference": "Modals/ProcessDetailsModal.qml:560",
     "comment": ""
   },
   {
@@ -2834,7 +2846,13 @@
   {
     "term": "Copy path",
     "context": "Copy path",
-    "reference": "Modals/DankLauncherV2/Controller.qml:1263",
+    "reference": "Modals/DankLauncherV2/Controller.qml:1269",
+    "comment": ""
+  },
+  {
+    "term": "Copy process id",
+    "context": "copy process id to clipboard",
+    "reference": "Modals/ProcessDetailsModal.qml:611",
     "comment": ""
   },
   {
@@ -3608,7 +3626,7 @@
   {
     "term": "Disk I/O",
     "context": "disk io header in system monitor",
-    "reference": "Modules/ProcessList/DisksView.qml:58",
+    "reference": "Modules/ProcessList/DisksView.qml:68",
     "comment": ""
   },
   {
@@ -3626,7 +3644,7 @@
   {
     "term": "Disks",
     "context": "Disks",
-    "reference": "Modals/ProcessListModal.qml:315",
+    "reference": "Modals/ProcessListModal.qml:315, Modules/ProcessList/DisksView.qml:141",
     "comment": ""
   },
   {
@@ -3992,7 +4010,7 @@
   {
     "term": "Empty",
     "context": "battery status",
-    "reference": "Services/BatteryService.qml:140, Modules/Notepad/NotepadTextEditor.qml:835",
+    "reference": "Services/BatteryService.qml:140, Modules/Notepad/NotepadTextEditor.qml:803",
     "comment": ""
   },
   {
@@ -4263,6 +4281,12 @@
     "term": "Exclusive Zone Offset",
     "context": "Exclusive Zone Offset",
     "reference": "Modules/Settings/DankBarTab.qml:830, Modules/Settings/DockTab.qml:536",
+    "comment": ""
+  },
+  {
+    "term": "Executable",
+    "context": "process binary path",
+    "reference": "Modals/ProcessDetailsModal.qml:522",
     "comment": ""
   },
   {
@@ -4704,6 +4728,12 @@
     "comment": ""
   },
   {
+    "term": "File Descriptors",
+    "context": "open file descriptor count",
+    "reference": "Modals/ProcessDetailsModal.qml:476",
+    "comment": ""
+  },
+  {
     "term": "File Information",
     "context": "File Information",
     "reference": "Modals/FileBrowser/FileInfo.qml:137",
@@ -4724,7 +4754,7 @@
   {
     "term": "Files",
     "context": "Files",
-    "reference": "Modals/DankLauncherV2/Controller.qml:227, Modals/DankLauncherV2/Controller.qml:1167, Modals/DankLauncherV2/Controller.qml:1188, Modals/DankLauncherV2/LauncherContent.qml:344, Modals/DankLauncherV2/LauncherContent.qml:628, Modals/DankLauncherV2/SpotlightLauncherContent.qml:468",
+    "reference": "Modals/DankLauncherV2/Controller.qml:233, Modals/DankLauncherV2/Controller.qml:1173, Modals/DankLauncherV2/Controller.qml:1194, Modals/DankLauncherV2/LauncherContent.qml:344, Modals/DankLauncherV2/LauncherContent.qml:628, Modals/DankLauncherV2/SpotlightLauncherContent.qml:468",
     "comment": ""
   },
   {
@@ -4748,7 +4778,7 @@
   {
     "term": "Find in note...",
     "context": "Find in note...",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:372",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:340",
     "comment": ""
   },
   {
@@ -4868,7 +4898,7 @@
   {
     "term": "Folders",
     "context": "Folders",
-    "reference": "Modals/DankLauncherV2/Controller.qml:1178, Modals/DankLauncherV2/Controller.qml:1188, Modals/DankLauncherV2/LauncherContent.qml:633",
+    "reference": "Modals/DankLauncherV2/Controller.qml:1184, Modals/DankLauncherV2/Controller.qml:1194, Modals/DankLauncherV2/LauncherContent.qml:633",
     "comment": ""
   },
   {
@@ -4928,7 +4958,7 @@
   {
     "term": "Force Kill (SIGKILL)",
     "context": "Force Kill (SIGKILL)",
-    "reference": "Modules/ProcessList/ProcessContextMenu.qml:48",
+    "reference": "Modals/ProcessDetailsModal.qml:633, Modules/ProcessList/ProcessContextMenu.qml:55",
     "comment": ""
   },
   {
@@ -5019,12 +5049,6 @@
     "term": "Fruit Salad",
     "context": "matugen color scheme option",
     "reference": "Common/Theme.qml:492",
-    "comment": ""
-  },
-  {
-    "term": "Full Command:",
-    "context": "process detail label",
-    "reference": "Modules/ProcessList/ProcessesView.qml:681",
     "comment": ""
   },
   {
@@ -5126,7 +5150,7 @@
   {
     "term": "General",
     "context": "Booru",
-    "reference": "Services/Booru.qml:226",
+    "reference": "Modals/ProcessDetailsModal.qml:441, Services/Booru.qml:226",
     "comment": ""
   },
   {
@@ -5330,7 +5354,7 @@
   {
     "term": "HTML copied to clipboard",
     "context": "HTML copied to clipboard",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:275",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:244",
     "comment": ""
   },
   {
@@ -5762,7 +5786,7 @@
   {
     "term": "Image",
     "context": "Image",
-    "reference": "tests/ClipboardModal.backup/ClipboardEntry.qml:83, Modals/DankLauncherV2/Controller.qml:1283, Modals/Clipboard/ClipboardEntry.qml:84",
+    "reference": "tests/ClipboardModal.backup/ClipboardEntry.qml:83, Modals/DankLauncherV2/Controller.qml:1289, Modals/Clipboard/ClipboardEntry.qml:84",
     "comment": ""
   },
   {
@@ -6188,7 +6212,7 @@
   {
     "term": "Kill Process",
     "context": "Kill Process",
-    "reference": "Modules/ProcessList/ProcessContextMenu.qml:41",
+    "reference": "Modals/ProcessDetailsModal.qml:621, Modules/ProcessList/ProcessContextMenu.qml:48",
     "comment": ""
   },
   {
@@ -6308,7 +6332,7 @@
   {
     "term": "Launch",
     "context": "Launch",
-    "reference": "Modals/DankLauncherV2/Controller.qml:1241, Modals/DankLauncherV2/Controller.qml:1715, Modals/DankLauncherV2/LauncherContextMenu.qml:230",
+    "reference": "Modals/DankLauncherV2/Controller.qml:1247, Modals/DankLauncherV2/Controller.qml:1721, Modals/DankLauncherV2/LauncherContextMenu.qml:230",
     "comment": ""
   },
   {
@@ -6416,7 +6440,7 @@
   {
     "term": "Lines: %1",
     "context": "Lines: %1",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:841",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:809",
     "comment": ""
   },
   {
@@ -6986,7 +7010,7 @@
   {
     "term": "Memory",
     "context": "Memory",
-    "reference": "Modules/ProcessList/PerformanceView.qml:91, Modules/ProcessList/ProcessListPopout.qml:319, Modules/ProcessList/ProcessesView.qml:268, Modules/Settings/DesktopWidgetSettings/SystemMonitorSettings.qml:210",
+    "reference": "Modals/ProcessDetailsModal.qml:354, Modules/ProcessList/PerformanceView.qml:91, Modules/ProcessList/ProcessesView.qml:270, Modules/ProcessList/ProcessListPopout.qml:319, Modules/Settings/DesktopWidgetSettings/SystemMonitorSettings.qml:210",
     "comment": ""
   },
   {
@@ -7232,7 +7256,7 @@
   {
     "term": "Mount Points",
     "context": "mount points header in system monitor",
-    "reference": "Modules/ProcessList/DisksView.qml:131",
+    "reference": "Modules/ProcessList/DisksView.qml:406",
     "comment": ""
   },
   {
@@ -7328,7 +7352,7 @@
   {
     "term": "Name",
     "context": "Name",
-    "reference": "Modules/ProcessList/ProcessesView.qml:249, Modules/Settings/DesktopWidgetInstanceCard.qml:203, Modules/Settings/DisplayConfigTab.qml:422, Modules/Settings/DisplayWidgetsTab.qml:225, Modules/Settings/PrinterTab.qml:754, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1228, Modules/Settings/Widgets/SystemMonitorVariantCard.qml:144, Modals/DankLauncherV2/AppEditView.qml:142, Modals/DankLauncherV2/LauncherContent.qml:699, Modals/DankLauncherV2/LauncherContent.qml:708, Modals/DankLauncherV2/LauncherContent.qml:713",
+    "reference": "Modules/ProcessList/ProcessesView.qml:251, Modules/Settings/DesktopWidgetInstanceCard.qml:203, Modules/Settings/DisplayConfigTab.qml:422, Modules/Settings/DisplayWidgetsTab.qml:225, Modules/Settings/PrinterTab.qml:754, Modules/Settings/DisplayConfig/DisplayConfigState.qml:1228, Modules/Settings/Widgets/SystemMonitorVariantCard.qml:144, Modals/DankLauncherV2/AppEditView.qml:142, Modals/DankLauncherV2/LauncherContent.qml:699, Modals/DankLauncherV2/LauncherContent.qml:708, Modals/DankLauncherV2/LauncherContent.qml:713",
     "comment": ""
   },
   {
@@ -7424,7 +7448,7 @@
   {
     "term": "New",
     "context": "New",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:795",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:763",
     "comment": ""
   },
   {
@@ -7710,6 +7734,12 @@
     "comment": ""
   },
   {
+    "term": "No command line available",
+    "context": "process details when cmdline is unreadable",
+    "reference": "Modals/ProcessDetailsModal.qml:575",
+    "comment": ""
+  },
+  {
     "term": "No custom theme file",
     "context": "no custom theme file status",
     "reference": "Modules/Settings/ThemeColorsTab.qml:519",
@@ -7730,7 +7760,7 @@
   {
     "term": "No disk data",
     "context": "No disk data",
-    "reference": "Modules/ControlCenter/Widgets/DiskUsagePill.qml:38",
+    "reference": "Modules/ProcessList/DisksView.qml:373, Modules/ControlCenter/Widgets/DiskUsagePill.qml:38",
     "comment": ""
   },
   {
@@ -7820,13 +7850,13 @@
   {
     "term": "No matches",
     "context": "No matches",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:382, Modals/Settings/SettingsSidebar.qml:811",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:350, Modals/Settings/SettingsSidebar.qml:811",
     "comment": ""
   },
   {
     "term": "No matching processes",
     "context": "empty state in process list",
-    "reference": "Modules/ProcessList/ProcessesView.qml:361",
+    "reference": "Modules/ProcessList/ProcessesView.qml:360",
     "comment": ""
   },
   {
@@ -7844,7 +7874,7 @@
   {
     "term": "No mount points found",
     "context": "empty state in disk mounts list",
-    "reference": "Modules/ProcessList/DisksView.qml:335",
+    "reference": "Modules/ProcessList/DisksView.qml:610",
     "comment": ""
   },
   {
@@ -7958,7 +7988,7 @@
   {
     "term": "No trigger",
     "context": "No trigger",
-    "reference": "Modules/Settings/LauncherTab.qml:742, Modals/DankLauncherV2/Controller.qml:1437",
+    "reference": "Modules/Settings/LauncherTab.qml:742, Modals/DankLauncherV2/Controller.qml:1443",
     "comment": ""
   },
   {
@@ -8040,6 +8070,12 @@
     "comment": ""
   },
   {
+    "term": "Not available for system processes",
+    "context": "sigkill disabled for low pids",
+    "reference": "Modals/ProcessDetailsModal.qml:639",
+    "comment": ""
+  },
+  {
     "term": "Not connected",
     "context": "network status",
     "reference": "Modules/Settings/NetworkTab.qml:826, Modules/ControlCenter/Components/DragDropGrid.qml:307",
@@ -8072,7 +8108,7 @@
   {
     "term": "Notepad",
     "context": "Notepad",
-    "reference": "DMSShell.qml:813, Services/AppSearchService.qml:179, Modules/Settings/WidgetsTab.qml:231",
+    "reference": "DMSShell.qml:829, Services/AppSearchService.qml:179, Modules/Settings/WidgetsTab.qml:231",
     "comment": ""
   },
   {
@@ -8102,7 +8138,7 @@
   {
     "term": "Notification",
     "context": "Row label for the normal notification sound setting",
-    "reference": "Modules/Settings/SoundsTab.qml:142",
+    "reference": "Modules/Settings/SoundsTab.qml:141",
     "comment": ""
   },
   {
@@ -8312,7 +8348,7 @@
   {
     "term": "Open",
     "context": "Open",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:779, Modules/Settings/NetworkTab.qml:1201, Modules/Settings/NetworkTab.qml:1448, Modules/ControlCenter/Details/NetworkDetail.qml:607, Modals/DankLauncherV2/Controller.qml:1245, Modals/DankLauncherV2/Controller.qml:1249, Modals/DankLauncherV2/Controller.qml:1263",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:747, Modules/Settings/NetworkTab.qml:1201, Modules/Settings/NetworkTab.qml:1448, Modules/ControlCenter/Details/NetworkDetail.qml:607, Modals/DankLauncherV2/Controller.qml:1251, Modals/DankLauncherV2/Controller.qml:1255, Modals/DankLauncherV2/Controller.qml:1269",
     "comment": ""
   },
   {
@@ -8328,9 +8364,15 @@
     "comment": ""
   },
   {
+    "term": "Open details",
+    "context": "Open details",
+    "reference": "Modules/ProcessList/ProcessContextMenu.qml:21",
+    "comment": ""
+  },
+  {
     "term": "Open folder",
     "context": "Open folder",
-    "reference": "Modals/DankLauncherV2/Controller.qml:1263",
+    "reference": "Modals/DankLauncherV2/Controller.qml:1269",
     "comment": ""
   },
   {
@@ -8342,7 +8384,7 @@
   {
     "term": "Open in terminal",
     "context": "Open in terminal",
-    "reference": "Modals/DankLauncherV2/Controller.qml:1263",
+    "reference": "Modals/DankLauncherV2/Controller.qml:1269",
     "comment": ""
   },
   {
@@ -8508,6 +8550,12 @@
     "comment": ""
   },
   {
+    "term": "PPID",
+    "context": "PPID",
+    "reference": "Modals/ProcessDetailsModal.qml:48",
+    "comment": ""
+  },
+  {
     "term": "Pad",
     "context": "wallpaper fill mode",
     "reference": "Modules/Settings/WallpaperTab.qml:329",
@@ -8582,13 +8630,19 @@
   {
     "term": "Paste",
     "context": "Paste",
-    "reference": "Modals/DankLauncherV2/Controller.qml:1268",
+    "reference": "Modals/DankLauncherV2/Controller.qml:1274",
     "comment": ""
   },
   {
     "term": "Path to a video file or folder containing videos",
     "context": "Path to a video file or folder containing videos",
     "reference": "Modules/Settings/LockScreenTab.qml:247",
+    "comment": ""
+  },
+  {
+    "term": "Paths",
+    "context": "process details paths section",
+    "reference": "Modals/ProcessDetailsModal.qml:493",
     "comment": ""
   },
   {
@@ -8690,7 +8744,7 @@
   {
     "term": "Pinned",
     "context": "Pinned",
-    "reference": "Modules/ControlCenter/Details/AudioInputDetail.qml:295, Modules/ControlCenter/Details/AudioOutputDetail.qml:304, Modules/ControlCenter/Details/BluetoothDetail.qml:340, Modules/ControlCenter/Details/BrightnessDetail.qml:207, Modules/ControlCenter/Details/NetworkDetail.qml:674, Modals/DankLauncherV2/Controller.qml:192, Modals/DankLauncherV2/Controller.qml:1283",
+    "reference": "Modules/ControlCenter/Details/AudioInputDetail.qml:295, Modules/ControlCenter/Details/AudioOutputDetail.qml:304, Modules/ControlCenter/Details/BluetoothDetail.qml:340, Modules/ControlCenter/Details/BrightnessDetail.qml:207, Modules/ControlCenter/Details/NetworkDetail.qml:674, Modals/DankLauncherV2/Controller.qml:198, Modals/DankLauncherV2/Controller.qml:1289",
     "comment": ""
   },
   {
@@ -8744,43 +8798,43 @@
   {
     "term": "Plays when a critical notification arrives",
     "context": "Plays when a critical notification arrives",
-    "reference": "Modules/Settings/SoundsTab.qml:153",
+    "reference": "Modules/Settings/SoundsTab.qml:152",
     "comment": ""
   },
   {
     "term": "Plays when a notification arrives",
     "context": "Plays when a notification arrives",
-    "reference": "Modules/Settings/SoundsTab.qml:143",
+    "reference": "Modules/Settings/SoundsTab.qml:142",
     "comment": ""
   },
   {
     "term": "Plays when a timer counts down to zero",
     "context": "Plays when a timer counts down to zero",
-    "reference": "Modules/Settings/SoundsTab.qml:173",
+    "reference": "Modules/Settings/SoundsTab.qml:172",
     "comment": ""
   },
   {
     "term": "Plays when the charger is connected",
     "context": "Plays when the charger is connected",
-    "reference": "Modules/Settings/SoundsTab.qml:122",
+    "reference": "Modules/Settings/SoundsTab.qml:121",
     "comment": ""
   },
   {
     "term": "Plays when the charger is removed",
     "context": "Plays when the charger is removed",
-    "reference": "Modules/Settings/SoundsTab.qml:133",
+    "reference": "Modules/Settings/SoundsTab.qml:132",
     "comment": ""
   },
   {
     "term": "Plays when the output volume is adjusted",
     "context": "Plays when the output volume is adjusted",
-    "reference": "Modules/Settings/SoundsTab.qml:111",
+    "reference": "Modules/Settings/SoundsTab.qml:110",
     "comment": ""
   },
   {
     "term": "Plays while an alarm is ringing",
     "context": "Plays while an alarm is ringing",
-    "reference": "Modules/Settings/SoundsTab.qml:163",
+    "reference": "Modules/Settings/SoundsTab.qml:162",
     "comment": ""
   },
   {
@@ -8954,7 +9008,7 @@
   {
     "term": "Power Plugged In",
     "context": "Row label for the charger connected sound setting",
-    "reference": "Modules/Settings/SoundsTab.qml:121",
+    "reference": "Modules/Settings/SoundsTab.qml:120",
     "comment": ""
   },
   {
@@ -8978,7 +9032,7 @@
   {
     "term": "Power Unplugged",
     "context": "Row label for the charger removed sound setting",
-    "reference": "Modules/Settings/SoundsTab.qml:132",
+    "reference": "Modules/Settings/SoundsTab.qml:131",
     "comment": ""
   },
   {
@@ -9068,7 +9122,7 @@
   {
     "term": "Preview",
     "context": "Preview",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:813",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:781",
     "comment": ""
   },
   {
@@ -9186,15 +9240,33 @@
     "comment": ""
   },
   {
+    "term": "Process",
+    "context": "fallback process name",
+    "reference": "Modals/ProcessDetailsModal.qml:38",
+    "comment": ""
+  },
+  {
     "term": "Process Count",
     "context": "Process Count",
     "reference": "Modules/Settings/DesktopWidgetSettings/SystemMonitorSettings.qml:283",
     "comment": ""
   },
   {
+    "term": "Process Details",
+    "context": "process details window title",
+    "reference": "Modals/ProcessDetailsModal.qml:53",
+    "comment": ""
+  },
+  {
+    "term": "Process no longer running",
+    "context": "shown when the inspected process has exited",
+    "reference": "Modals/ProcessDetailsModal.qml:41, Modals/ProcessDetailsModal.qml:236",
+    "comment": ""
+  },
+  {
     "term": "Processes",
     "context": "Processes",
-    "reference": "Modals/ProcessListModal.qml:307, Modules/ProcessList/ProcessListPopout.qml:140, Modules/ProcessList/SystemView.qml:88",
+    "reference": "Modals/ProcessListModal.qml:307, Modules/ProcessList/SystemView.qml:88, Modules/ProcessList/ProcessListPopout.qml:140",
     "comment": ""
   },
   {
@@ -9398,7 +9470,7 @@
   {
     "term": "Read:",
     "context": "disk read label",
-    "reference": "Modules/ProcessList/DisksView.qml:73",
+    "reference": "Modules/ProcessList/DisksView.qml:83",
     "comment": ""
   },
   {
@@ -9636,6 +9708,12 @@
     "comment": ""
   },
   {
+    "term": "Resources",
+    "context": "process details resources section",
+    "reference": "Modals/ProcessDetailsModal.qml:282",
+    "comment": ""
+  },
+  {
     "term": "Restart DMS",
     "context": "Restart DMS",
     "reference": "Modals/PowerMenuModal.qml:216, Modules/Settings/PowerSleepTab.qml:456",
@@ -9824,7 +9902,7 @@
   {
     "term": "Save",
     "context": "AiChat interface | save screenshot to file",
-    "reference": "Modals/DankColorPickerModal.qml:750, Widgets/ScreenshotControls.qml:36, Modules/Notepad/Notepad.qml:472, Modules/Notepad/NotepadTextEditor.qml:763, Modules/Settings/AudioTab.qml:693, Modules/Settings/KeybindsEditorTab.qml:1663, Modules/Settings/ToolboxTab.qml:535, Modules/Clock/AlarmTab.qml:272, Modules/Toolbox/aiChat/AiMessage.qml:211, Modals/DankLauncherV2/AppEditView.qml:307, Modals/FileBrowser/FileBrowserSaveRow.qml:55",
+    "reference": "Modals/DankColorPickerModal.qml:750, Widgets/ScreenshotControls.qml:36, Modules/Notepad/Notepad.qml:472, Modules/Notepad/NotepadTextEditor.qml:731, Modules/Settings/AudioTab.qml:693, Modules/Settings/KeybindsEditorTab.qml:1663, Modules/Settings/ToolboxTab.qml:535, Modules/Clock/AlarmTab.qml:272, Modules/Toolbox/aiChat/AiMessage.qml:211, Modals/DankLauncherV2/AppEditView.qml:307, Modals/FileBrowser/FileBrowserSaveRow.qml:55",
     "comment": ""
   },
   {
@@ -9896,7 +9974,7 @@
   {
     "term": "Saved",
     "context": "Saved",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:861, Modules/Settings/NetworkTab.qml:1214, Modules/ControlCenter/Details/NetworkDetail.qml:613",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:829, Modules/Settings/NetworkTab.qml:1214, Modules/ControlCenter/Details/NetworkDetail.qml:613",
     "comment": ""
   },
   {
@@ -10184,7 +10262,7 @@
   {
     "term": "Select",
     "context": "Select",
-    "reference": "Modals/DankLauncherV2/Controller.qml:1588",
+    "reference": "Modals/DankLauncherV2/Controller.qml:1594",
     "comment": ""
   },
   {
@@ -10226,7 +10304,7 @@
   {
     "term": "Select Sound File",
     "context": "Select Sound File",
-    "reference": "Modules/Settings/SoundsTab.qml:223",
+    "reference": "Modules/Settings/SoundsTab.qml:222",
     "comment": ""
   },
   {
@@ -10466,7 +10544,7 @@
   {
     "term": "Settings",
     "context": "settings window title",
-    "reference": "Services/AppSearchService.qml:168, Services/AppSearchService.qml:201, Services/AppSearchService.qml:668, Services/PopoutService.qml:465, Services/PopoutService.qml:482, Modules/DankDash/DankDashPopout.qml:291, Modals/DankLauncherV2/Controller.qml:206, Modals/Settings/SettingsModal.qml:82, Modals/Settings/SettingsModal.qml:224, Modals/Settings/SettingsSidebar.qml:121",
+    "reference": "Services/AppSearchService.qml:168, Services/AppSearchService.qml:201, Services/AppSearchService.qml:668, Services/PopoutService.qml:467, Services/PopoutService.qml:484, Modules/DankDash/DankDashPopout.qml:291, Modals/DankLauncherV2/Controller.qml:212, Modals/Settings/SettingsModal.qml:82, Modals/Settings/SettingsModal.qml:224, Modals/Settings/SettingsSidebar.qml:121",
     "comment": ""
   },
   {
@@ -10544,13 +10622,13 @@
   {
     "term": "Shift+Enter to copy",
     "context": "Shift+Enter to copy",
-    "reference": "Modals/DankLauncherV2/Controller.qml:1270",
+    "reference": "Modals/DankLauncherV2/Controller.qml:1276",
     "comment": ""
   },
   {
     "term": "Shift+Enter to paste",
     "context": "Shift+Enter to paste",
-    "reference": "Modals/DankLauncherV2/Controller.qml:1270",
+    "reference": "Modals/DankLauncherV2/Controller.qml:1276",
     "comment": ""
   },
   {
@@ -11246,13 +11324,13 @@
   {
     "term": "Start typing your notes here...",
     "context": "Start typing your notes here...",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:623",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:591",
     "comment": ""
   },
   {
     "term": "State",
     "context": "State",
-    "reference": "Modules/Settings/NetworkTab.qml:601, Modules/Settings/PrinterTab.qml:1149",
+    "reference": "Modals/ProcessDetailsModal.qml:468, Modules/Settings/NetworkTab.qml:601, Modules/Settings/PrinterTab.qml:1149",
     "comment": ""
   },
   {
@@ -11307,6 +11385,18 @@
     "term": "Stripes",
     "context": "wallpaper transition option",
     "reference": "Modules/Settings/WallpaperTab.qml:1216",
+    "comment": ""
+  },
+  {
+    "term": "Subtree CPU",
+    "context": "cpu total including child processes",
+    "reference": "Modals/ProcessDetailsModal.qml:387",
+    "comment": ""
+  },
+  {
+    "term": "Subtree Memory",
+    "context": "memory total including child processes",
+    "reference": "Modals/ProcessDetailsModal.qml:420",
     "comment": ""
   },
   {
@@ -11510,7 +11600,7 @@
   {
     "term": "System sounds are not available. Install %1 for sound support.",
     "context": "System sounds are not available. Install %1 for sound support.",
-    "reference": "Modules/Settings/SoundsTab.qml:201",
+    "reference": "Modules/Settings/SoundsTab.qml:200",
     "comment": ""
   },
   {
@@ -11624,7 +11714,7 @@
   {
     "term": "Text",
     "context": "text color",
-    "reference": "tests/ClipboardModal.backup/ClipboardEntry.qml:87, Modules/Settings/LauncherTab.qml:477, Modals/DankLauncherV2/Controller.qml:1283, Modals/Clipboard/ClipboardEntry.qml:88",
+    "reference": "tests/ClipboardModal.backup/ClipboardEntry.qml:87, Modules/Settings/LauncherTab.qml:477, Modals/DankLauncherV2/Controller.qml:1289, Modals/Clipboard/ClipboardEntry.qml:88",
     "comment": ""
   },
   {
@@ -11748,6 +11838,12 @@
     "comment": ""
   },
   {
+    "term": "This process has exited. Details are no longer available.",
+    "context": "detail window empty state after process exit",
+    "reference": "Modals/ProcessDetailsModal.qml:245",
+    "comment": ""
+  },
+  {
     "term": "This shortcut can't be reordered.",
     "context": "Reorder restriction",
     "reference": "Modules/Settings/KeybindsEditorTab.qml:120",
@@ -11775,6 +11871,12 @@
     "term": "Thought",
     "context": "AiChat interface",
     "reference": "Modules/Toolbox/aiChat/MessageThinkBlock.qml:87",
+    "comment": ""
+  },
+  {
+    "term": "Threads",
+    "context": "process detail thread count",
+    "reference": "Modals/ProcessDetailsModal.qml:472",
     "comment": ""
   },
   {
@@ -11900,7 +12002,7 @@
   {
     "term": "Timer Finished",
     "context": "Row label for the timer finished sound setting",
-    "reference": "Modules/Settings/SoundsTab.qml:172",
+    "reference": "Modules/Settings/SoundsTab.qml:171",
     "comment": ""
   },
   {
@@ -11996,7 +12098,7 @@
   {
     "term": "Toolbox",
     "context": "Toolbox",
-    "reference": "DMSShell.qml:847, Modals/Settings/SettingsSidebar.qml:318",
+    "reference": "DMSShell.qml:863, Modals/Settings/SettingsSidebar.qml:318",
     "comment": ""
   },
   {
@@ -12128,7 +12230,7 @@
   {
     "term": "Trigger: %1",
     "context": "Trigger: %1",
-    "reference": "Modules/Settings/LauncherTab.qml:742, Modals/DankLauncherV2/Controller.qml:1436",
+    "reference": "Modules/Settings/LauncherTab.qml:742, Modals/DankLauncherV2/Controller.qml:1442",
     "comment": ""
   },
   {
@@ -12356,13 +12458,13 @@
   {
     "term": "Unsaved changes",
     "context": "Unsaved changes",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:858",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:826",
     "comment": ""
   },
   {
     "term": "Unsaved note...",
     "context": "Unsaved note...",
-    "reference": "Modules/Notepad/NotepadTextEditor.qml:856",
+    "reference": "Modules/Notepad/NotepadTextEditor.qml:824",
     "comment": ""
   },
   {
@@ -12422,7 +12524,7 @@
   {
     "term": "Urgent Notification",
     "context": "Row label for the critical notification sound setting",
-    "reference": "Modules/Settings/SoundsTab.qml:152",
+    "reference": "Modules/Settings/SoundsTab.qml:151",
     "comment": ""
   },
   {
@@ -12590,7 +12692,7 @@
   {
     "term": "User",
     "context": "User",
-    "reference": "Modals/ProcessListModal.qml:377, Modules/ProcessList/ProcessListPopout.qml:155, Modules/ControlCenter/Components/HeaderPane.qml:57",
+    "reference": "Modals/ProcessListModal.qml:377, Modals/ProcessDetailsModal.qml:464, Modules/ProcessList/ProcessListPopout.qml:155, Modules/ControlCenter/Components/HeaderPane.qml:57",
     "comment": ""
   },
   {
@@ -12800,7 +12902,7 @@
   {
     "term": "Volume Changed",
     "context": "Row label for the output volume change sound setting",
-    "reference": "Modules/Settings/SoundsTab.qml:110",
+    "reference": "Modules/Settings/SoundsTab.qml:109",
     "comment": ""
   },
   {
@@ -13176,6 +13278,12 @@
     "comment": ""
   },
   {
+    "term": "Working Directory",
+    "context": "process current directory",
+    "reference": "Modals/ProcessDetailsModal.qml:516",
+    "comment": ""
+  },
+  {
     "term": "Workspace",
     "context": "Workspace",
     "reference": "Modals/WindowRuleModal.qml:586, Modals/WindowRuleModal.qml:1076, Widgets/DankIconPicker.qml:27, Modules/Settings/DankBarTab.qml:729, Modules/Settings/DankBarTab.qml:729, Modules/Settings/DankBarTab.qml:766, Modules/Settings/WindowRulesTab.qml:541, Modules/Settings/WindowRulesTab.qml:568",
@@ -13238,7 +13346,7 @@
   {
     "term": "Write:",
     "context": "disk write label",
-    "reference": "Modules/ProcessList/DisksView.qml:91",
+    "reference": "Modules/ProcessList/DisksView.qml:101",
     "comment": ""
   },
   {

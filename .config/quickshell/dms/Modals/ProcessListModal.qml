@@ -13,7 +13,7 @@ FloatingWindow {
     property bool disablePopupTransparency: true
     property int currentTab: 0
     property string searchText: ""
-    property string expandedPid: ""
+    property var expandedPids: []
     property string processFilter: "all"
     property bool shouldHaveFocus: visible
     property alias shouldBeVisible: processListModal.visible
@@ -98,7 +98,7 @@ FloatingWindow {
         if (!visible) {
             closingModal();
             searchText = "";
-            expandedPid = "";
+            expandedPids = [];
             processFilter = "all";
             processFilterGroup.currentIndex = 0;
             if (processesTabLoader.item)
@@ -436,10 +436,10 @@ FloatingWindow {
                     visible: currentTab === 0
                     sourceComponent: ProcessesView {
                         searchText: processListModal.searchText
-                        expandedPid: processListModal.expandedPid
+                        expandedPids: processListModal.expandedPids
                         processFilter: processListModal.processFilter
                         contextMenu: processContextMenu
-                        onExpandedPidChanged: processListModal.expandedPid = expandedPid
+                        onExpandedPidsChanged: processListModal.expandedPids = expandedPids
                     }
                 }
 
@@ -553,7 +553,7 @@ FloatingWindow {
                         }
 
                         StyledText {
-                            text: "↓" + formatBytes(SysMonitorService.diskReadRate) + " ↑" + formatBytes(SysMonitorService.diskWriteRate)
+                            text: "R " + formatBytes(SysMonitorService.diskReadRate) + "  W " + formatBytes(SysMonitorService.diskWriteRate)
                             font.pixelSize: Theme.fontSizeSmall
                             font.family: SettingsData.monoFontFamily
                             color: Theme.surfaceText

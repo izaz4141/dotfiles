@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Effects
-import Quickshell.Io
 import qs.Common
+import qs.Services
 import qs.Widgets
 import qs.Modals.Clipboard
 
@@ -17,10 +17,11 @@ Item {
     Image {
         id: thumbnailImage
 
-        property string entryId: entryData.split('\t')[0]
         property bool isVisible: false
         property string cachedImageData: ""
+        property string cachedMimeType: ""
         property bool loadQueued: false
+        property bool loadInProgress: false
 
         anchors.fill: parent
         source: ""
@@ -32,11 +33,17 @@ Item {
         sourceSize.width: 128
         sourceSize.height: 128
 
-        onCachedImageDataChanged: {
-            if (cachedImageData) {
-                source = ""
-                source = `data:image/png;base64,${cachedImageData}`
+        onCachedImageDataChanged: refreshSource()
+        onCachedMimeTypeChanged: refreshSource()
+
+        function refreshSource() {
+            const rawData = cachedImageData || ""
+            let url = ""
+            if (rawData.length > 0 && cachedMimeType && cachedMimeType.startsWith("image/")) {
+                url = `data:${cachedMimeType};base64,${rawData}`
             }
+            source = ""
+            source = url
         }
 
         function tryLoadImage() {
@@ -44,21 +51,45 @@ Item {
                 loadQueued = true
                 if (modal.activeImageLoads < modal.maxConcurrentLoads) {
                     modal.activeImageLoads++
-                    imageLoader.running = true
+                    startImageLoad()
                 } else {
                     retryTimer.restart()
                 }
             }
         }
 
+        function startImageLoad() {
+            if (!loadQueued || loadInProgress)
+                return
+            loadInProgress = true
+            const requestId = ClipboardService.getEntryId(entryData)
+            if (requestId < 0) {
+                loadInProgress = false
+                loadQueued = false
+                if (modal.activeImageLoads > 0)
+                    modal.activeImageLoads--
+                return
+            }
+            ClipboardService.getEntryDataUrl(requestId, (mime, b64) => {
+                loadInProgress = false
+                loadQueued = false
+                if (modal.activeImageLoads > 0)
+                    modal.activeImageLoads--
+                if (mime && b64 && mime.startsWith("image/")) {
+                    cachedMimeType = mime
+                    cachedImageData = b64
+                }
+            })
+        }
+
         Timer {
             id: retryTimer
             interval: ClipboardConstants.retryInterval
             onTriggered: {
-                if (thumbnailImage.loadQueued && !imageLoader.running) {
+                if (thumbnailImage.loadQueued && !thumbnailImage.loadInProgress) {
                     if (modal.activeImageLoads < modal.maxConcurrentLoads) {
                         modal.activeImageLoads++
-                        imageLoader.running = true
+                        thumbnailImage.startImageLoad()
                     } else {
                         retryTimer.restart()
                     }
@@ -99,31 +130,6 @@ Item {
                     thumbnailImage.tryLoadImage()
                 }
             }
-        }
-
-        Process {
-            id: imageLoader
-            running: false
-            command: ["sh", "-c", `cliphist decode ${thumbnailImage.entryId} | base64 -w 0`]
-
-            stdout: StdioCollector {
-                onStreamFinished: {
-                    const imageData = text.trim()
-                    if (imageData && imageData.length > 0) {
-                        thumbnailImage.cachedImageData = imageData
-                    }
-                }
-            }
-
-            onExited: exitCode => {
-                          thumbnailImage.loadQueued = false
-                          if (modal.activeImageLoads > 0) {
-                              modal.activeImageLoads--
-                          }
-                          if (exitCode !== 0) {
-                              console.warn("Failed to load clipboard image:", thumbnailImage.entryId)
-                          }
-                      }
         }
     }
 

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import Quickshell
 import qs.Common
+import qs.Services
 import qs.Widgets
 
 Popup {
@@ -16,6 +17,12 @@ Popup {
     signal processKilled
 
     readonly property var menuItems: [
+        {
+            text: I18n.tr("Open details"),
+            icon: "info",
+            action: openDetails,
+            enabled: true
+        },
         {
             text: I18n.tr("Copy PID"),
             icon: "tag",
@@ -118,22 +125,28 @@ Popup {
 
     function copyPid() {
         if (processData)
-            Quickshell.execDetached(["dms", "cl", "copy", processData.pid.toString()]);
+            ClipboardService.copy(processData.pid.toString());
         close();
     }
 
     function copyName() {
         if (processData) {
-            const name = processData.command || "";
-            Quickshell.execDetached(["dms", "cl", "copy", name]);
+            const name = processData.displayCommand || processData.command || "";
+            ClipboardService.copy(name);
         }
+        close();
+    }
+
+    function openDetails() {
+        if (processData)
+            PopoutService.showProcessDetailsModal(processData.pid);
         close();
     }
 
     function copyFullCommand() {
         if (processData) {
             const fullCmd = processData.fullCommand || processData.command || "";
-            Quickshell.execDetached(["dms", "cl", "copy", fullCmd]);
+            ClipboardService.copy(fullCmd);
         }
         close();
     }

@@ -80,7 +80,7 @@ tagged_rule(float_tag, {
     "blueman-manager",                    -- Bluetooth GUI
     "com.github.GradienceTeam.Gradience", -- GTK themer (deprecated)
     "org.quickshell",                     -- Quickshell
-    "id.glicole.nadekodon",
+    "id.glicole.nadekodon",               -- Download Manager
 }, "class")
 tagged_rule(float_tag, {
     "File (Operation|Upload)( Progress)?", -- File manager operation progress (upload, move, copy, etc)
@@ -101,6 +101,7 @@ tagged_rule(float_60_70_tag, {
 tagged_rule(float_60_70_tag, {
     "org.pulseaudio.pavucontrol|com.saivert.pwvucontrol", -- Audio control
     "yad-icon-browser",                                   -- GTK icon browser
+    "bitwarden"                                           -- Password Manager
 }, "class")
 
 -- 70% x 80%
@@ -163,7 +164,7 @@ tagged_rule(xwl_popup_tag, { { class = "steam", title = "" } })
 hl.window_rule({ match = { class = "ueberzugpp_.*" }, float = true, no_initial_focus = true })
 
 -- Image viewers
-hl.window_rule({ match = { class = "feh|imv|swappy|org.gnome.Loupe" }, float = true, keep_aspect_ratio = true })
+hl.window_rule({ match = { class = "feh|imv|swappy|org.gnome.Loupe" }, float = true })
 
 -- Autodesk Fusion 360
 hl.window_rule({ match = { class = "fusion360.exe", title = "Fusion360|(Marking Menu)" }, no_blur = true })
@@ -174,6 +175,14 @@ tagged_rule(float_tag, {
     { class = "PandoraLauncher",    title = "Minecraft Game Output" },
 })
 
+-- Desktop pet
+hl.window_rule({
+    match = { class = "MateEngineX.x86_64" },
+    float = true,
+    pin = true,
+    group = "deny"
+})
+
 
 -------------------------
 ---- Tag definitions ----
@@ -181,10 +190,10 @@ tagged_rule(float_tag, {
 -- These have to come after all uses of window tagging. Thank you Hyprland...
 
 create_tag(opaque_tag, { opaque = true })
-create_tag(float_tag, { float = true })
-create_tag(float_50_60_tag, { float = true, size = "(monitor_w*0.5) (monitor_h*0.6)", center = true })
-create_tag(float_60_70_tag, { float = true, size = "(monitor_w*0.6) (monitor_h*0.7)", center = true })
-create_tag(float_70_80_tag, { float = true, size = "(monitor_w*0.7) (monitor_h*0.8)", center = true })
+create_tag(float_tag, { float = true , group = "deny" })
+create_tag(float_50_60_tag, { float = true, size = "(monitor_w*0.5) (monitor_h*0.6)", center = true , group = "deny" })
+create_tag(float_60_70_tag, { float = true, size = "(monitor_w*0.6) (monitor_h*0.7)", center = true , group = "deny" })
+create_tag(float_70_80_tag, { float = true, size = "(monitor_w*0.7) (monitor_h*0.8)", center = true , group = "deny" })
 create_tag(game_tag, { opaque = true, immediate = true, idle_inhibit = "always" })
 create_tag(xwl_popup_tag, {
     no_dim = true,

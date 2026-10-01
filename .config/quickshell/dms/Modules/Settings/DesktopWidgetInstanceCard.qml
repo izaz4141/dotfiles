@@ -404,7 +404,7 @@ SettingsCard {
 
                         StyledText {
                             id: ipcText
-                            text: "dms ipc call desktopWidget toggleOverlay " + root.instanceId
+                            text: "qs ipc call desktopWidget toggleOverlay " + root.instanceId
                             font.pixelSize: Theme.fontSizeSmall
                             font.family: Theme.monoFontFamily
                             color: Theme.surfaceVariantText
@@ -422,8 +422,9 @@ SettingsCard {
                             horizontalPadding: 4
                             anchors.verticalCenter: parent.verticalCenter
                             onClicked: {
-                                Quickshell.execDetached(["dms", "cl", "copy", "dms ipc call desktopWidget toggleOverlay " + root.instanceId]);
-                                ToastService.showInfo(I18n.tr("Copied to clipboard"));
+                                ClipboardService.copy("qs ipc call desktopWidget toggleOverlay " + root.instanceId, () => {
+                                    ToastService.showInfo(I18n.tr("Copied to clipboard"));
+                                });
                             }
                         }
                     }

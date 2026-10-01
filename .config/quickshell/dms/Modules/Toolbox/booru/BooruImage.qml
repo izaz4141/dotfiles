@@ -26,6 +26,7 @@ Button {
     property string tooltipSide: "bottom"
 
     property bool downloaded: false
+    property bool copying: false
 
     function probeImageDimensions() {
         if (root.imageData.width && root.imageData.height) return;
@@ -44,18 +45,6 @@ Button {
             if (exitCode === 0) {
                 root.downloaded = true;
                 imageObject.source = Qt.resolvedUrl(root.filePath);
-            }
-        }
-    }
-
-    Process {
-        id: copyProcess
-
-        onExited: (exitCode) => {
-            if (exitCode === 0) {
-                ToastService.showInfo(I18n.tr("Image copied", "booru image copied to clipboard"));
-            } else {
-                ToastService.showError(I18n.tr("Failed to copy image", "booru image copy failure"));
             }
         }
     }
@@ -219,7 +208,7 @@ Button {
             tooltipText: I18n.tr("Copy image", "Booru")
             visible: root.hovered
             opacity: visible ? 1 : 0
-            enabled: !copyProcess.running
+            enabled: !root.copying
 
             Behavior on opacity {
                 NumberAnimation {
@@ -238,25 +227,30 @@ Button {
                     name: "content_copy"
                     size: Theme.fontSizeLarge
                     color: Theme.surfaceText
-                    visible: !copyProcess.running
+                    visible: !root.copying
                 }
 
                 DankSpinner {
                     anchors.centerIn: parent
                     size: Theme.fontSizeSmall
                     color: Theme.surfaceText
-                    visible: copyProcess.running
-                    running: copyProcess.running
+                    visible: root.copying
+                    running: root.copying
                 }
             }
 
             onClicked: {
-                const ext = root.fileName.split(".").pop() || "img";
-                copyProcess.command = [
-                    "bash", "-c",
-                    `tmp="$(mktemp --suffix=.${ext})"; if curl -sL '${StringUtils.shellSingleQuoteEscape(root.imageData.file_url)}' -o "$tmp" && wl-copy < "$tmp"; then rm -f "$tmp"; exit 0; else rm -f "$tmp"; exit 1; fi`
-                ];
-                copyProcess.running = true;
+                if (root.copying)
+                    return;
+                root.copying = true;
+                Booru.copyImage(root.imageData, exitCode => {
+                    root.copying = false;
+                    if (exitCode === 0) {
+                        ToastService.showInfo(I18n.tr("Image copied", "booru image copied to clipboard"));
+                    } else {
+                        ToastService.showError(I18n.tr("Failed to copy image", "booru image copy failure"));
+                    }
+                });
             }
         }
     }

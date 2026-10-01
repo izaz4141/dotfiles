@@ -9,7 +9,7 @@ Item {
     id: root
 
     property string searchText: ""
-    property string expandedPid: ""
+    property var expandedPids: []
     property var contextMenu: null
     property string processFilter: "all" // "all", "user", "system"
 
@@ -17,26 +17,32 @@ Item {
     property bool keyboardNavigationActive: false
     property int forceRefreshCount: 0
 
-    readonly property bool pauseUpdates: (contextMenu?.visible ?? false) || expandedPid.length > 0
+    readonly property bool pauseUpdates: (contextMenu?.visible ?? false) || (expandedPids.length > 0 && searchText.length === 0)
     readonly property bool shouldUpdate: !pauseUpdates || forceRefreshCount > 0
     property var cachedProcesses: []
 
     signal openContextMenuRequested(int index, real x, real y, bool fromKeyboard)
 
-    onFilteredProcessesChanged: {
+    onGroupedRowsChanged: {
         if (!shouldUpdate)
             return;
-        cachedProcesses = filteredProcesses;
+        cachedProcesses = groupedRows;
         if (forceRefreshCount > 0)
             forceRefreshCount--;
     }
 
     onShouldUpdateChanged: {
         if (shouldUpdate)
-            cachedProcesses = filteredProcesses;
+            cachedProcesses = groupedRows;
     }
 
-    readonly property var filteredProcesses: {
+    readonly property var effectiveExpanded: {
+        if (searchText.length === 0)
+            return expandedPids;
+        return groupedRows.filter(row => row.isGroup).map(row => row.pid);
+    }
+
+    readonly property var groupedRows: {
         if (!SysMonitorService.allProcesses || SysMonitorService.allProcesses.length === 0)
             return [];
 
@@ -48,47 +54,23 @@ Item {
             procs = procs.filter(p => p.username !== UserInfoService.username);
         }
 
-        if (searchText.length > 0) {
-            const search = searchText.toLowerCase();
-            procs = procs.filter(p => {
-                const cmd = (p.command || "").toLowerCase();
-                const fullCmd = (p.fullCommand || "").toLowerCase();
-                const pid = p.pid.toString();
-                return cmd.includes(search) || fullCmd.includes(search) || pid.includes(search);
-            });
-        }
+        const rows = SysMonitorService.groupProcesses(procs);
+        rows.sort((a, b) => SysMonitorService.compareProcesses(a, b));
+        for (const row of rows)
+            row.children.sort((a, b) => SysMonitorService.compareProcesses(a, b));
 
-        const asc = SysMonitorService.sortAscending;
-        procs.sort((a, b) => {
-            let valueA, valueB, result;
-            switch (SysMonitorService.currentSort) {
-            case "cpu":
-                valueA = a.cpu || 0;
-                valueB = b.cpu || 0;
-                result = valueB - valueA;
-                break;
-            case "memory":
-                valueA = a.memoryKB || 0;
-                valueB = b.memoryKB || 0;
-                result = valueB - valueA;
-                break;
-            case "name":
-                valueA = (a.command || "").toLowerCase();
-                valueB = (b.command || "").toLowerCase();
-                result = valueA.localeCompare(valueB);
-                break;
-            case "pid":
-                valueA = a.pid || 0;
-                valueB = b.pid || 0;
-                result = valueA - valueB;
-                break;
-            default:
-                return 0;
-            }
-            return asc ? -result : result;
-        });
+        if (searchText.length === 0)
+            return rows;
 
-        return procs;
+        const search = searchText.toLowerCase();
+        const matches = proc => {
+            const cmd = (proc.displayCommand || proc.command || "").toLowerCase();
+            const bin = (proc.command || "").toLowerCase();
+            const fullCmd = (proc.fullCommand || "").toLowerCase();
+            const pid = proc.pid.toString();
+            return cmd.includes(search) || bin.includes(search) || fullCmd.includes(search) || pid.includes(search);
+        };
+        return rows.filter(row => matches(row.process) || row.children.some(matches));
     }
 
     function selectNext() {
@@ -131,9 +113,30 @@ Item {
     function toggleExpand() {
         if (selectedIndex < 0 || selectedIndex >= cachedProcesses.length)
             return;
-        const process = cachedProcesses[selectedIndex];
-        const pidStr = (process?.pid ?? -1).toString();
-        expandedPid = (expandedPid === pidStr) ? "" : pidStr;
+        const row = cachedProcesses[selectedIndex];
+        if (!row?.isGroup)
+            return;
+        toggleExpandPid(row.pid);
+    }
+
+    function toggleExpandPid(pid) {
+        const index = expandedPids.indexOf(pid);
+        if (index === -1) {
+            expandedPids = expandedPids.concat([pid]);
+            return;
+        }
+        const next = expandedPids.slice();
+        next.splice(index, 1);
+        expandedPids = next;
+    }
+
+    function requestContextMenu(processData, sourceItem, x, y) {
+        if (!processData || !contextMenu || !sourceItem)
+            return;
+        contextMenu.processData = processData;
+        contextMenu.parentFocusItem = root;
+        const globalPos = sourceItem.mapToItem(contextMenu.parent, x, y);
+        contextMenu.show(globalPos.x, globalPos.y, false);
     }
 
     function openContextMenu() {
@@ -142,10 +145,10 @@ Item {
         const delegate = processListView.itemAtIndex(selectedIndex);
         if (!delegate)
             return;
-        const process = cachedProcesses[selectedIndex];
-        if (!process || !contextMenu)
+        const row = cachedProcesses[selectedIndex];
+        if (!row?.process || !contextMenu)
             return;
-        contextMenu.processData = process;
+        contextMenu.processData = row.process;
         const itemPos = delegate.mapToItem(contextMenu.parent, delegate.width / 2, delegate.height / 2);
         contextMenu.parentFocusItem = root;
         contextMenu.show(itemPos.x, itemPos.y, true);
@@ -154,7 +157,7 @@ Item {
     function reset() {
         selectedIndex = -1;
         keyboardNavigationActive = false;
-        expandedPid = "";
+        expandedPids = [];
     }
 
     function forceRefresh(count) {
@@ -222,7 +225,7 @@ Item {
 
     Component.onCompleted: {
         SysMonitorService.addRef(["processes", "cpu", "memory", "system"]);
-        cachedProcesses = filteredProcesses;
+        cachedProcesses = groupedRows;
     }
 
     Component.onDestruction: {
@@ -245,7 +248,7 @@ Item {
 
                 SortableHeader {
                     Layout.fillWidth: true
-                    Layout.minimumWidth: 200
+                    Layout.minimumWidth: 160
                     text: I18n.tr("Name")
                     sortKey: "name"
                     currentSort: SysMonitorService.currentSort
@@ -255,7 +258,7 @@ Item {
                 }
 
                 SortableHeader {
-                    Layout.preferredWidth: 100
+                    Layout.preferredWidth: 92
                     text: "CPU"
                     sortKey: "cpu"
                     currentSort: SysMonitorService.currentSort
@@ -264,7 +267,7 @@ Item {
                 }
 
                 SortableHeader {
-                    Layout.preferredWidth: 100
+                    Layout.preferredWidth: 92
                     text: I18n.tr("Memory")
                     sortKey: "memory"
                     currentSort: SysMonitorService.currentSort
@@ -273,7 +276,16 @@ Item {
                 }
 
                 SortableHeader {
-                    Layout.preferredWidth: 80
+                    Layout.preferredWidth: 96
+                    text: "I/O"
+                    sortKey: "io"
+                    currentSort: SysMonitorService.currentSort
+                    sortAscending: SysMonitorService.sortAscending
+                    onClicked: SysMonitorService.toggleSort("io")
+                }
+
+                SortableHeader {
+                    Layout.preferredWidth: 72
                     text: "PID"
                     sortKey: "pid"
                     currentSort: SysMonitorService.currentSort
@@ -312,29 +324,26 @@ Item {
             }
 
             delegate: ProcessItem {
+                id: processRow
+
                 required property var modelData
                 required property int index
 
                 width: processListView.width
-                process: modelData
-                isExpanded: root.expandedPid === (modelData?.pid ?? -1).toString()
+                rowData: modelData
+                isExpanded: root.effectiveExpanded.indexOf(modelData.pid) !== -1
                 isSelected: root.keyboardNavigationActive && root.selectedIndex === index
                 contextMenu: root.contextMenu
-                onToggleExpand: {
-                    const pidStr = (modelData?.pid ?? -1).toString();
-                    root.expandedPid = (root.expandedPid === pidStr) ? "" : pidStr;
-                }
+                onToggleExpand: root.toggleExpandPid(modelData.pid)
                 onClicked: {
                     root.keyboardNavigationActive = true;
                     root.selectedIndex = index;
                 }
                 onContextMenuRequested: (mouseX, mouseY) => {
-                    if (root.contextMenu) {
-                        root.contextMenu.processData = modelData;
-                        root.contextMenu.parentFocusItem = root;
-                        const globalPos = mapToItem(root.contextMenu.parent, mouseX, mouseY);
-                        root.contextMenu.show(globalPos.x, globalPos.y, false);
-                    }
+                    root.requestContextMenu(modelData.process, processRow, mouseX, mouseY);
+                }
+                onChildContextMenuRequested: (childProcess, sourceItem, mouseX, mouseY) => {
+                    root.requestContextMenu(childProcess, sourceItem, mouseX, mouseY);
                 }
             }
 
@@ -439,10 +448,41 @@ Item {
         }
     }
 
+    component IoCell: Item {
+        id: ioCell
+
+        property real readRate: 0
+        property real writeRate: 0
+        property bool available: true
+        property int fontSize: Theme.fontSizeSmall
+
+        readonly property real topRate: Math.max(readRate, writeRate)
+        readonly property bool isRead: readRate >= writeRate
+
+        StyledText {
+            anchors.centerIn: parent
+            visible: ioCell.available
+            text: (ioCell.isRead ? "R " : "W ") + SysMonitorService.formatIoRate(ioCell.topRate)
+            font.pixelSize: ioCell.fontSize
+            font.family: SettingsData.monoFontFamily
+            color: ioCell.isRead ? Theme.info : Theme.warning
+        }
+
+        StyledText {
+            anchors.centerIn: parent
+            visible: !ioCell.available
+            text: "—"
+            font.pixelSize: ioCell.fontSize
+            font.family: SettingsData.monoFontFamily
+            color: Theme.surfaceVariantText
+            opacity: 0.5
+        }
+    }
+
     component ProcessItem: Rectangle {
         id: processItemRoot
 
-        property var process: null
+        property var rowData: null
         property bool isExpanded: false
         property bool isSelected: false
         property var contextMenu: null
@@ -450,12 +490,16 @@ Item {
         signal toggleExpand
         signal clicked
         signal contextMenuRequested(real mouseX, real mouseY)
+        signal childContextMenuRequested(var childProcess, var sourceItem, real mouseX, real mouseY)
 
+        readonly property var process: rowData?.process ?? null
+        readonly property var childProcesses: rowData?.children ?? []
+        readonly property bool isGroup: rowData?.isGroup === true
         readonly property int processPid: process?.pid ?? 0
-        readonly property real processCpu: process?.cpu ?? 0
-        readonly property int processMemKB: process?.memoryKB ?? 0
+        readonly property real processCpu: rowData?.cpu ?? 0
+        readonly property int processMemKB: rowData?.memoryKB ?? 0
         readonly property string processCmd: process?.command ?? ""
-        readonly property string processFullCmd: process?.fullCommand ?? processCmd
+        readonly property string processName: process?.displayCommand ?? processCmd
 
         height: isExpanded ? (44 + expandedRect.height + Theme.spacingXS) : 44
         radius: Theme.cornerRadius
@@ -497,7 +541,8 @@ Item {
                     return;
                 }
                 processItemRoot.clicked();
-                processItemRoot.toggleExpand();
+                if (processItemRoot.isGroup)
+                    processItemRoot.toggleExpand();
             }
         }
 
@@ -516,8 +561,9 @@ Item {
                     spacing: 0
 
                     Item {
+                        id: nameItem
                         Layout.fillWidth: true
-                        Layout.minimumWidth: 200
+                        Layout.minimumWidth: 160
                         height: parent.height
 
                         Row {
@@ -540,20 +586,20 @@ Item {
                             }
 
                             StyledText {
-                                text: processItemRoot.processCmd
+                                text: processItemRoot.processName
                                 font.pixelSize: Theme.fontSizeSmall
                                 font.family: SettingsData.monoFontFamily
                                 font.weight: Font.Medium
                                 color: Theme.surfaceText
                                 elide: Text.ElideRight
-                                width: Math.min(implicitWidth, 280)
+                                width: Math.min(implicitWidth, Math.min(280, nameItem.width - Theme.iconSize))
                                 anchors.verticalCenter: parent.verticalCenter
                             }
                         }
                     }
 
                     Item {
-                        Layout.preferredWidth: 100
+                        Layout.preferredWidth: 92
                         height: parent.height
 
                         Rectangle {
@@ -587,7 +633,7 @@ Item {
                     }
 
                     Item {
-                        Layout.preferredWidth: 100
+                        Layout.preferredWidth: 92
                         height: parent.height
 
                         Rectangle {
@@ -620,8 +666,16 @@ Item {
                         }
                     }
 
+                    IoCell {
+                        Layout.preferredWidth: 96
+                        height: parent.height
+                        readRate: processItemRoot.rowData?.readRate ?? 0
+                        writeRate: processItemRoot.rowData?.writeRate ?? 0
+                        available: processItemRoot.rowData?.ioAvailable ?? false
+                    }
+
                     Item {
-                        Layout.preferredWidth: 80
+                        Layout.preferredWidth: 72
                         height: parent.height
 
                         StyledText {
@@ -642,6 +696,7 @@ Item {
                             name: processItemRoot.isExpanded ? "expand_less" : "expand_more"
                             size: Theme.iconSize - 4
                             color: Theme.surfaceVariantText
+                            visible: processItemRoot.isGroup
                         }
                     }
                 }
@@ -649,7 +704,7 @@ Item {
 
             Rectangle {
                 id: expandedRect
-                width: parent.width - Theme.spacingM * 2
+                width: parent.width
                 height: processItemRoot.isExpanded ? (expandedContent.implicitHeight + Theme.spacingS * 2) : 0
                 anchors.horizontalCenter: parent.horizontalCenter
                 radius: Theme.cornerRadius - 2
@@ -666,99 +721,122 @@ Item {
 
                 Column {
                     id: expandedContent
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    width: parent.width
                     anchors.top: parent.top
-                    anchors.margins: Theme.spacingS
-                    spacing: Theme.spacingXS
+                    anchors.topMargin: Theme.spacingS
+                    spacing: 0
 
-                    RowLayout {
-                        width: parent.width
-                        spacing: Theme.spacingS
-
-                        StyledText {
-                            id: cmdLabel
-                            text: I18n.tr("Full Command:", "process detail label")
-                            font.pixelSize: Theme.fontSizeSmall - 2
-                            font.weight: Font.Bold
-                            color: Theme.surfaceVariantText
-                            Layout.alignment: Qt.AlignVCenter
-                        }
-
-                        StyledText {
-                            id: cmdText
-                            text: processItemRoot.processFullCmd
-                            font.pixelSize: Theme.fontSizeSmall - 2
-                            font.family: SettingsData.monoFontFamily
-                            color: Theme.surfaceText
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignVCenter
-                            elide: Text.ElideMiddle
-                        }
+                    Repeater {
+                        model: processItemRoot.childProcesses
 
                         Rectangle {
-                            id: copyBtn
-                            Layout.preferredWidth: 24
-                            Layout.preferredHeight: 24
-                            Layout.alignment: Qt.AlignVCenter
-                            radius: Theme.cornerRadius - 2
-                            color: copyMouseArea.containsMouse ? Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.15) : "transparent"
+                            id: childRow
 
-                            DankIcon {
-                                anchors.centerIn: parent
-                                name: "content_copy"
-                                size: 14
-                                color: copyMouseArea.containsMouse ? Theme.primary : Theme.surfaceVariantText
+                            required property var modelData
+
+                            width: expandedContent.width
+                            height: 30
+                            radius: Theme.cornerRadius - 2
+                            color: childMouseArea.containsMouse ? Qt.rgba(Theme.primary.r, Theme.primary.g, Theme.primary.b, 0.1) : "transparent"
+
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: Theme.shortDuration
+                                }
+                            }
+
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.leftMargin: Theme.spacingS
+                                anchors.rightMargin: Theme.spacingS
+                                spacing: 0
+
+                                Item {
+                                    id: childNameItem
+                                    Layout.fillWidth: true
+                                    Layout.minimumWidth: 160
+                                    Layout.leftMargin: Theme.spacingL
+                                    height: parent.height
+
+                                    StyledText {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        text: childRow.modelData.displayCommand ?? childRow.modelData.command ?? ""
+                                        font.pixelSize: Theme.fontSizeSmall - 1
+                                        font.family: SettingsData.monoFontFamily
+                                        color: Theme.surfaceVariantText
+                                        elide: Text.ElideRight
+                                        width: Math.min(implicitWidth, Math.min(280, childNameItem.width))
+                                    }
+                                }
+
+                                Item {
+                                    Layout.preferredWidth: 92
+                                    height: parent.height
+
+                                    StyledText {
+                                        anchors.centerIn: parent
+                                        text: SysMonitorService.formatCpuUsage(childRow.modelData.cpu ?? 0)
+                                        font.pixelSize: Theme.fontSizeSmall - 1
+                                        font.family: SettingsData.monoFontFamily
+                                        color: Theme.surfaceVariantText
+                                    }
+                                }
+
+                                Item {
+                                    Layout.preferredWidth: 92
+                                    height: parent.height
+
+                                    StyledText {
+                                        anchors.centerIn: parent
+                                        text: SysMonitorService.formatMemoryUsage(childRow.modelData.memoryKB ?? 0)
+                                        font.pixelSize: Theme.fontSizeSmall - 1
+                                        font.family: SettingsData.monoFontFamily
+                                        color: Theme.surfaceVariantText
+                                    }
+                                }
+
+                                IoCell {
+                                    Layout.preferredWidth: 96
+                                    height: parent.height
+                                    fontSize: Theme.fontSizeSmall - 1
+                                    readRate: childRow.modelData.readRate ?? 0
+                                    writeRate: childRow.modelData.writeRate ?? 0
+                                    available: childRow.modelData.ioAvailable ?? false
+                                }
+
+                                Item {
+                                    Layout.preferredWidth: 72
+                                    height: parent.height
+
+                                    StyledText {
+                                        anchors.centerIn: parent
+                                        text: (childRow.modelData.pid ?? 0).toString()
+                                        font.pixelSize: Theme.fontSizeSmall - 1
+                                        font.family: SettingsData.monoFontFamily
+                                        color: Theme.surfaceVariantText
+                                        opacity: 0.7
+                                    }
+                                }
+
+                                Item {
+                                    Layout.preferredWidth: 40
+                                    height: parent.height
+                                }
                             }
 
                             MouseArea {
-                                id: copyMouseArea
+                                id: childMouseArea
                                 anchors.fill: parent
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    Quickshell.execDetached(["dms", "cl", "copy", processItemRoot.processFullCmd]);
+                                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                onClicked: mouse => {
+                                    if (mouse.button === Qt.RightButton) {
+                                        processItemRoot.childContextMenuRequested(childRow.modelData, childRow, mouse.x, mouse.y);
+                                        return;
+                                    }
+                                    processItemRoot.clicked();
                                 }
-                            }
-                        }
-                    }
-
-                    Row {
-                        spacing: Theme.spacingL
-
-                        Row {
-                            spacing: Theme.spacingXS
-
-                            StyledText {
-                                text: "PPID:"
-                                font.pixelSize: Theme.fontSizeSmall - 2
-                                font.weight: Font.Bold
-                                color: Theme.surfaceVariantText
-                            }
-
-                            StyledText {
-                                text: (processItemRoot.process?.ppid ?? 0) > 0 ? processItemRoot.process.ppid.toString() : "--"
-                                font.pixelSize: Theme.fontSizeSmall - 2
-                                font.family: SettingsData.monoFontFamily
-                                color: Theme.surfaceText
-                            }
-                        }
-
-                        Row {
-                            spacing: Theme.spacingXS
-
-                            StyledText {
-                                text: "Mem:"
-                                font.pixelSize: Theme.fontSizeSmall - 2
-                                font.weight: Font.Bold
-                                color: Theme.surfaceVariantText
-                            }
-
-                            StyledText {
-                                text: (processItemRoot.process?.memoryPercent ?? 0).toFixed(1) + "%"
-                                font.pixelSize: Theme.fontSizeSmall - 2
-                                font.family: SettingsData.monoFontFamily
-                                color: Theme.surfaceText
                             }
                         }
                     }

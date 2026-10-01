@@ -41,6 +41,8 @@ Singleton {
     property var powerMenuModalLoader: null
     property var processListModal: null
     property var processListModalLoader: null
+    property var processDetailsModal: null
+    property var processDetailsModalLoader: null
     property var colorPickerModal: null
     property var screenshotControls: null
     property var notificationModal: null
@@ -885,6 +887,21 @@ Singleton {
             processListModalLoader.active = true;
             Qt.callLater(() => processListModal?.show());
         }
+    }
+
+    function showProcessDetailsModal(pid) {
+        if (!pid || pid <= 0)
+            return;
+        if (processDetailsModal) {
+            processDetailsModal.showFor(pid);
+        } else if (processDetailsModalLoader) {
+            processDetailsModalLoader.active = true;
+            Qt.callLater(() => processDetailsModal?.showFor(pid));
+        }
+    }
+
+    function hideProcessDetailsModal() {
+        processDetailsModal?.hide();
     }
 
     function showColorPicker() {

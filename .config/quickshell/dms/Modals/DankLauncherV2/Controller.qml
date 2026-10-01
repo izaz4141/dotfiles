@@ -178,6 +178,12 @@ Item {
         const pluginId = selectedItem.pluginId;
         if (!pluginId)
             return;
+        const pasteText = AppSearchService.getPluginPasteText(pluginId, selectedItem.data);
+        if (pasteText) {
+            ClipboardService.copy(pasteText);
+            itemExecuted();
+            return;
+        }
         const pasteArgs = AppSearchService.getPluginPasteArgs(pluginId, selectedItem.data);
         if (!pasteArgs)
             return;
@@ -2136,6 +2142,6 @@ Item {
     function copyToClipboard(text) {
         if (!text)
             return;
-        Quickshell.execDetached(["dms", "cl", "copy", text]);
+        ClipboardService.copy(text);
     }
 }

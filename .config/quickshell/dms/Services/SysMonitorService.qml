@@ -50,15 +50,28 @@ Singleton {
 
     property real diskReadRate: 0
     property real diskWriteRate: 0
-    property var lastDiskStats: null
     property var diskMounts: []
     property var diskDevices: []
+    property var diskBaselines: ({})
+    property string diskBaselineKey: ""
+    property var blockDevices: []
+    property var blockDeviceInfo: ({})
+    property bool blockScanInFlight: false
 
     property var processes: []
     property var allProcesses: []
     property string currentSort: "cpu"
     property bool sortAscending: false
     property var availableGpus: []
+    property var processDetails: ({})
+    readonly property var nonGroupableCommands: [
+        "sddm", "lightdm", "gdm", "xdm", "greetd", "ly", "login", "display-manager",
+        "start-hyprland", "hyprland-session", "startx", "xsession", "gnome-session",
+        "startplasma", "plasmashell", "xfce4-session", "mate-session", "lxqt-session",
+        "lxsession", "dde-session", "ukui-session", "deepin-session", "cinnamon",
+        "i3", "awesome", "sway-launch",
+        "hyprland", "niri", "sway", "mangowc", "labwc", "scroll"
+    ]
 
     property string kernelVersion: ""
     property string distribution: ""
@@ -87,6 +100,10 @@ Singleton {
     property var pidList: []
     property var procCpuTicks: ({})
     property var procPrevCpuTicks: ({})
+    property var procIoCurrent: ({})
+    property var procIoPrev: ({})
+    property real procIoElapsed: 0
+    property real lastProcScanWall: 0
     property bool procScanInFlight: false
     property int procScanIndex: 0
 
@@ -243,6 +260,9 @@ Singleton {
         }
 
         if (isModuleEnabled("disk")) {
+            if (blockDevices.length === 0 && !blockScanInFlight) {
+                startBlockDeviceScan();
+            }
             parseDiskStats(readFile("/proc/diskstats"), elapsed);
         }
 
@@ -257,6 +277,8 @@ Singleton {
             if (!procScanInFlight) {
                 procScanInFlight = true;
                 threadsTotal = 0;
+                procIoElapsed = root.lastProcScanWall > 0 ? (now - root.lastProcScanWall) / 1000 : 0;
+                root.lastProcScanWall = now;
                 procTableProcess.running = true;
             }
         }
@@ -507,47 +529,163 @@ Singleton {
         lastNetworkStats = {rx: totalRx, tx: totalTx};
     }
 
+    function looksLikeWholeDisk(name) {
+        return /^(sd[a-z]+|nvme\d+n\d+|mmcblk\d+|vd[a-z]+|xvd[a-z]+|hd[a-z]+|bcache\d+)$/.test(name);
+    }
+
+    function isWholeDisk(name) {
+        if (blockDevices.length > 0) {
+            return blockDevices.indexOf(name) !== -1;
+        }
+        return looksLikeWholeDisk(name);
+    }
+
+    function parseBlockDeviceList(content) {
+        const names = [];
+        const info = {};
+
+        for (const line of content.split("\n")) {
+            const name = line.trim();
+            if (!name)
+                continue;
+
+            const base = "/sys/block/" + name;
+            if (readFile(base + "/device/uevent").trim().length === 0)
+                continue;
+
+            names.push(name);
+            info[name] = {
+                model: readFile(base + "/device/model").trim(),
+                sizeBytes: (parseInt(readFile(base + "/size"), 10) || 0) * 512,
+                rotational: readFile(base + "/queue/rotational").trim() === "1",
+                removable: readFile(base + "/removable").trim() === "1"
+            };
+        }
+
+        blockDevices = names;
+        blockDeviceInfo = info;
+        blockScanInFlight = false;
+    }
+
+    function startBlockDeviceScan() {
+        if (blockScanInFlight)
+            return;
+        blockScanInFlight = true;
+        blockDeviceListProcess.running = true;
+    }
+
+    function requestProcessDetails(pid) {
+        if (!pid || pid <= 0)
+            return;
+        if (processDetailsProcess.running)
+            return;
+        processDetailsProcess.pid = pid;
+        processDetailsProcess.running = true;
+    }
+
+    function parseProcessDetails(content) {
+        const details = {};
+        for (const line of content.split("\n")) {
+            if (!line.trim())
+                continue;
+            const idx = line.indexOf("\t");
+            if (idx === -1)
+                continue;
+            const key = line.substring(0, idx);
+            const value = line.substring(idx + 1).trim();
+            if (!key || !value)
+                continue;
+            details[key] = value;
+        }
+        details.fds = parseInt(details.fds, 10) || 0;
+        details.threads = parseInt(details.threads, 10) || 0;
+        processDetails = details;
+    }
+
     function parseDiskStats(content, elapsed) {
         if (!content)
             return;
-        const lines = content.split("\n");
-        let totalRead = 0;
-        let totalWrite = 0;
-        const devices = [];
 
-        for (const line of lines) {
+        const raw = {};
+        const seen = [];
+
+        for (const line of content.split("\n")) {
             if (!line.trim())
                 continue;
             const parts = line.trim().split(/\s+/);
-            if (parts.length < 10)
+            if (parts.length < 14)
                 continue;
             const name = parts[2];
-            if (name.startsWith("loop") || name.startsWith("ram") || name.startsWith("fd"))
+            raw[name] = {
+                read: (parseFloat(parts[5]) || 0) * 512,
+                write: (parseFloat(parts[9]) || 0) * 512,
+                ioTicks: parseFloat(parts[12]) || 0
+            };
+            seen.push(name);
+        }
+
+        for (const name of seen) {
+            if (!looksLikeWholeDisk(name))
                 continue;
-            const readSectors = parseFloat(parts[5]) || 0;
-            const writeSectors = parseFloat(parts[9]) || 0;
-            const readBytes = readSectors * 512;
-            const writeBytes = writeSectors * 512;
-            totalRead += readBytes;
-            totalWrite += writeBytes;
-            devices.push({name: name, read: readBytes, write: writeBytes});
+            if (blockDevices.indexOf(name) === -1) {
+                startBlockDeviceScan();
+                break;
+            }
+        }
+
+        const names = seen.filter(isWholeDisk).sort();
+        const key = names.join(",");
+        const stable = key.length > 0 && key === diskBaselineKey;
+
+        const devices = [];
+        const baselines = {};
+        let totalRead = 0;
+        let totalWrite = 0;
+
+        for (const name of names) {
+            const current = raw[name];
+            const previous = diskBaselines[name];
+            const meta = blockDeviceInfo[name] || {};
+
+            let readRate = 0;
+            let writeRate = 0;
+            let busyPercent = 0;
+
+            if (previous && stable && elapsed > 0) {
+                readRate = Math.max(0, (current.read - previous.read) / elapsed);
+                writeRate = Math.max(0, (current.write - previous.write) / elapsed);
+                busyPercent = Math.min(100, Math.max(0, ((current.ioTicks - previous.ioTicks) / (elapsed * 1000)) * 100));
+            }
+
+            baselines[name] = current;
+            totalRead += readRate;
+            totalWrite += writeRate;
+
+            devices.push({
+                name: name,
+                model: meta.model || "",
+                sizeBytes: meta.sizeBytes || 0,
+                rotational: meta.rotational === true,
+                removable: meta.removable === true,
+                read: current.read,
+                write: current.write,
+                readRate: readRate,
+                writeRate: writeRate,
+                busyPercent: Math.round(busyPercent)
+            });
         }
 
         diskDevices = devices;
+        diskBaselines = baselines;
+        diskBaselineKey = key;
 
-        if (lastDiskStats && elapsed > 0) {
-            const readDelta = Math.max(0, totalRead - lastDiskStats.read);
-            const writeDelta = Math.max(0, totalWrite - lastDiskStats.write);
-            diskReadRate = readDelta / elapsed;
-            diskWriteRate = writeDelta / elapsed;
-            addToHistory(diskHistory.read, diskReadRate / (1024 * 1024));
-            addToHistory(diskHistory.write, diskWriteRate / (1024 * 1024));
-        } else {
-            diskReadRate = 0;
-            diskWriteRate = 0;
+        diskReadRate = totalRead;
+        diskWriteRate = totalWrite;
+
+        if (stable) {
+            addToHistory(diskHistory.read, totalRead / (1024 * 1024));
+            addToHistory(diskHistory.write, totalWrite / (1024 * 1024));
         }
-
-        lastDiskStats = {read: totalRead, write: totalWrite};
     }
 
     function parseDf(content) {
@@ -561,7 +699,7 @@ Singleton {
             if (!line)
                 continue;
             const parts = line.split(/\s+/);
-            if (parts.length < 6)
+            if (parts.length < 7)
                 continue;
             const device = parts[0];
             if (device === "tmpfs" || device === "devtmpfs" || device === "sysfs" || device === "proc" ||
@@ -571,23 +709,34 @@ Singleton {
                 device === "pstore" || device === "autofs" || device === "nsfs" || device === "bpf" || device === "rpc_pipefs")
                 continue;
 
-            const usedKB = parseFloat(parts[2]) || 0;
-            const availKB = parseFloat(parts[3]) || 0;
+            const usedKB = parseFloat(parts[3]) || 0;
+            const availKB = parseFloat(parts[4]) || 0;
             const totalKB = usedKB + availKB;
-            const mountPoint = parts.slice(5).join(" ");
-            const pct = parts[4];
+            const mountPoint = parts.slice(6).join(" ");
+            const pct = parts[5];
 
             const toGB = kb => Math.round((kb / (1024 * 1024)) * 10) / 10;
+
+            const toTB = totalKB / (1024 * 1024) >= 1024;
+            const divisor = toTB ? 1024 : 1;
+            const unit = toTB ? "TB" : "GB";
+            const digits = toTB ? 2 : 1;
+            const formatVolume = kb => (kb / (1024 * 1024) / divisor).toFixed(digits) + " " + unit;
 
             mounts.push({
                 mount: mountPoint,
                 mountpoint: mountPoint,
                 device: device,
+                fstype: parts[1],
                 percent: pct,
                 used: toGB(usedKB),
                 avail: toGB(availKB),
                 size: toGB(totalKB),
-                total: toGB(totalKB)
+                total: toGB(totalKB),
+                unit: unit,
+                usedLabel: formatVolume(usedKB),
+                availLabel: formatVolume(availKB),
+                sizeLabel: formatVolume(totalKB)
             });
         }
 
@@ -618,7 +767,7 @@ Singleton {
 
     function parseProcRow(line) {
         const parts = line.split("\t");
-        if (parts.length < 9)
+        if (parts.length < 10)
             return;
 
         const pid = parseInt(parts[0], 10) || 0;
@@ -629,14 +778,19 @@ Singleton {
         const numThreads = parseInt(parts[5], 10) || 0;
         const memoryKB = parseInt(parts[6], 10) || 0;
         const uidStr = parts[7];
-        const cmdline = parts[8];
+        const readBytes = parseInt(parts[8], 10) || 0;
+        const writeBytes = parseInt(parts[9], 10) || 0;
+        const ioAvailable = parts[10] === "1";
+        const cmdline = parts.slice(11).join("\t");
         const ticks = utime + stime;
 
         const fullCommand = cmdline || comm;
         const command = cmdline ? cmdline.split(/\s+/)[0].replace(/^.*\/([^/]+)$/, (m, p1) => p1) : comm;
+        const displayCommand = root.resolveProcessName(comm, command);
         const username = (passwdMap[uidStr] || "root");
 
         procCpuTicks[pid] = ticks;
+        procIoCurrent[pid] = {read: readBytes, write: writeBytes, available: ioAvailable};
         threadsTotal += numThreads;
 
         addProc({
@@ -646,8 +800,13 @@ Singleton {
             memoryPercent: totalMemoryKB > 0 ? Math.round((memoryKB / totalMemoryKB) * 10000) / 100 : 0,
             memoryKB: memoryKB,
             command: command,
+            displayCommand: displayCommand,
             fullCommand: fullCommand,
             username: username,
+            threads: numThreads,
+            ioAvailable: ioAvailable,
+            readRate: 0,
+            writeRate: 0,
             displayName: (fullCommand && fullCommand.length > 15) ? fullCommand.substring(0, 15) + "..." : (fullCommand || "")
         });
     }
@@ -662,8 +821,26 @@ Singleton {
     function applySorting() {
         const procs = pendingProcs.slice();
         pendingProcs = [];
+        const ioCurrent = procIoCurrent;
+        procIoCurrent = {};
         if (procs.length === 0)
             return;
+
+        const ioElapsed = root.procIoElapsed;
+        if (ioElapsed > 0) {
+            for (const p of procs) {
+                const cur = ioCurrent[p.pid];
+                const prev = procIoPrev[p.pid];
+                if (!cur || !prev || !cur.available || !prev.available) {
+                    p.readRate = 0;
+                    p.writeRate = 0;
+                    continue;
+                }
+                p.readRate = Math.max(0, (cur.read - prev.read) / ioElapsed);
+                p.writeRate = Math.max(0, (cur.write - prev.write) / ioElapsed);
+            }
+        }
+        procIoPrev = ioCurrent;
 
         const totalDelta = root.cpuTotalTicksDelta;
         if (totalDelta > 0) {
@@ -682,38 +859,148 @@ Singleton {
         threadCount = threadsTotal;
         threadsTotal = 0;
 
-        const asc = sortAscending;
-        procs.sort((a, b) => {
-            let valueA, valueB, result;
-            switch (currentSort) {
-            case "cpu":
-                valueA = a.cpu || 0;
-                valueB = b.cpu || 0;
-                result = valueB - valueA;
-                break;
-            case "memory":
-                valueA = a.memoryKB || 0;
-                valueB = b.memoryKB || 0;
-                result = valueB - valueA;
-                break;
-            case "name":
-                valueA = (a.command || "").toLowerCase();
-                valueB = (b.command || "").toLowerCase();
-                result = valueA.localeCompare(valueB);
-                break;
-            case "pid":
-                valueA = a.pid || 0;
-                valueB = b.pid || 0;
-                result = valueA - valueB;
-                break;
-            default:
-                return 0;
-            }
-            return asc ? -result : result;
-        });
+        procs.sort((a, b) => compareProcesses(a, b));
 
         allProcesses = procs;
         processes = procs.slice(0, processLimit);
+    }
+
+    function compareProcesses(a, b) {
+        let valueA, valueB, result;
+        switch (currentSort) {
+        case "cpu":
+            valueA = a.cpu || 0;
+            valueB = b.cpu || 0;
+            result = valueB - valueA;
+            break;
+        case "memory":
+            valueA = a.memoryKB || 0;
+            valueB = b.memoryKB || 0;
+            result = valueB - valueA;
+            break;
+        case "io":
+            valueA = Math.max(a.readRate || 0, a.writeRate || 0);
+            valueB = Math.max(b.readRate || 0, b.writeRate || 0);
+            result = valueB - valueA;
+            break;
+        case "name":
+            valueA = (a.displayCommand || a.command || "").toLowerCase();
+            valueB = (b.displayCommand || b.command || "").toLowerCase();
+            result = valueA.localeCompare(valueB);
+            break;
+        case "pid":
+            valueA = a.pid || 0;
+            valueB = b.pid || 0;
+            result = valueA - valueB;
+            break;
+        default:
+            return 0;
+        }
+        return sortAscending ? -result : result;
+    }
+
+    function isGroupableProcess(proc) {
+        if (!proc || proc.pid <= 2)
+            return false;
+        const cmd = (proc.command || "").toLowerCase();
+        if (cmd.includes("systemd") || cmd.includes("kthreadd") || cmd === "init")
+            return false;
+        for (const entry of nonGroupableCommands) {
+            if (cmd.startsWith(entry))
+                return false;
+        }
+        return true;
+    }
+
+    function groupProcesses(list) {
+        if (!list || list.length === 0)
+            return [];
+
+        const pids = {};
+        const childrenOf = {};
+        for (const proc of list) {
+            pids[proc.pid] = true;
+            const ppid = proc.ppid ?? 0;
+            if (!childrenOf[ppid])
+                childrenOf[ppid] = [];
+            childrenOf[ppid].push(proc);
+        }
+
+        const descendantCache = {};
+        function descendantsOf(pid) {
+            if (descendantCache[pid])
+                return descendantCache[pid];
+            const found = [];
+            const seen = { [pid]: true };
+            const stack = (childrenOf[pid] || []).slice();
+            while (stack.length > 0) {
+                const node = stack.pop();
+                if (seen[node.pid])
+                    continue;
+                seen[node.pid] = true;
+                found.push(node);
+                for (const child of (childrenOf[node.pid] || [])) {
+                    if (!seen[child.pid])
+                        stack.push(child);
+                }
+            }
+            descendantCache[pid] = found;
+            return found;
+        }
+
+        const rows = [];
+        const visited = {};
+
+        function emitRow(proc, children) {
+            let cpu = proc.cpu || 0;
+            let memoryKB = proc.memoryKB || 0;
+            let readRate = proc.readRate || 0;
+            let writeRate = proc.writeRate || 0;
+            for (const child of children) {
+                cpu += child.cpu || 0;
+                memoryKB += child.memoryKB || 0;
+                readRate += child.readRate || 0;
+                writeRate += child.writeRate || 0;
+                visited[child.pid] = true;
+            }
+            rows.push({
+                pid: proc.pid,
+                process: proc,
+                children: children,
+                isGroup: children.length > 0,
+                childCount: children.length,
+                cpu: Math.round(cpu * 10) / 10,
+                memoryKB: memoryKB,
+                readRate: readRate,
+                writeRate: writeRate,
+                ioAvailable: proc.ioAvailable === true
+            });
+        }
+
+        function emit(proc) {
+            if (visited[proc.pid])
+                return;
+            visited[proc.pid] = true;
+
+            const kids = (childrenOf[proc.pid] || []).filter(child => !visited[child.pid]);
+            if (isGroupableProcess(proc) && kids.length > 0) {
+                emitRow(proc, descendantsOf(proc.pid));
+                return;
+            }
+
+            emitRow(proc, []);
+            for (const kid of kids)
+                emit(kid);
+        }
+
+        for (const proc of list) {
+            if (!pids[proc.ppid ?? 0])
+                emit(proc);
+        }
+        for (const proc of list)
+            emit(proc);
+
+        return rows;
     }
 
     function startGpuHwmonScan() {
@@ -807,6 +1094,16 @@ Singleton {
         }
     }
 
+    function resolveProcessName(comm, binaryName) {
+        if (!comm)
+            return binaryName;
+        if (!binaryName || comm === binaryName)
+            return comm;
+        if (comm.length === 15 && binaryName.startsWith(comm))
+            return binaryName;
+        return comm;
+    }
+
     function getProcessIcon(command) {
         const cmd = command.toLowerCase();
         if (cmd.includes("firefox") || cmd.includes("chrome") || cmd.includes("browser") || cmd.includes("chromium")) {
@@ -845,6 +1142,19 @@ Singleton {
         }
     }
 
+    function formatIoRate(bytesPerSecond) {
+        const bytes = bytesPerSecond || 0;
+        if (bytes < 1024) {
+            return bytes.toFixed(0) + " B/s";
+        } else if (bytes < 1024 * 1024) {
+            return (bytes / 1024).toFixed(1) + " KB/s";
+        } else if (bytes < 1024 * 1024 * 1024) {
+            return (bytes / (1024 * 1024)).toFixed(1) + " MB/s";
+        } else {
+            return (bytes / (1024 * 1024 * 1024)).toFixed(2) + " GB/s";
+        }
+    }
+
     function formatSystemMemory(memoryKB) {
         const mem = memoryKB || 0;
         if (mem === 0) {
@@ -857,10 +1167,13 @@ Singleton {
         }
     }
 
-    function killProcess(pid) {
-        if (pid > 0) {
+    function killProcess(pid, force) {
+        if (pid <= 0)
+            return;
+        if (force)
+            Quickshell.execDetached(["kill", "-9", pid.toString()]);
+        else
             Quickshell.execDetached("kill", [pid.toString()]);
-        }
     }
 
     function updateUptime() {
@@ -1071,8 +1384,43 @@ Singleton {
     }
 
     Process {
+        id: blockDeviceListProcess
+        command: ["ls", "/sys/block"]
+        running: false
+        onExited: exitCode => {
+            if (exitCode !== 0) {
+                console.warn("SysMonitorService: Failed to list block devices");
+                blockScanInFlight = false;
+            }
+        }
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.parseBlockDeviceList(text);
+            }
+        }
+    }
+
+    Process {
+        id: processDetailsProcess
+        property int pid: 0
+        command: ["sh", "-c", "d=/proc/$1; [ -d \"$d\" ] || exit 1; printf 'cwd\\t%s\\n' \"$(readlink $d/cwd 2>/dev/null)\"; printf 'exe\\t%s\\n' \"$(readlink $d/exe 2>/dev/null)\"; printf 'fds\\t%s\\n' \"$(ls -1 $d/fd 2>/dev/null | wc -l)\"; printf 'threads\\t%s\\n' \"$(awk '/^Threads:/{print $2}' $d/status 2>/dev/null)\"; printf 'state\\t%s\\n' \"$(awk '/^State:/{sub(/^State:[\\\\t ]+/,\"\"); print}' $d/status 2>/dev/null)\"; printf 'cmdline\\t%s\\n' \"$(tr '\\0' ' ' < $d/cmdline 2>/dev/null)\"", "sh", pid.toString()]
+        running: false
+        onExited: exitCode => {
+            if (exitCode !== 0) {
+                console.warn("SysMonitorService: process details unavailable for pid", pid);
+                processDetails = {};
+            }
+        }
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.parseProcessDetails(text);
+            }
+        }
+    }
+
+    Process {
         id: dfProcess
-        command: ["df", "-kP"]
+        command: ["df", "-kPT"]
         running: false
         onExited: exitCode => {
             if (exitCode !== 0) {
@@ -1092,7 +1440,7 @@ Singleton {
     Process {
         id: procTableProcess
         command: ["sh", "-c",
-            "for p in /proc/[0-9]*; do stat=$(< \"$p/stat\") 2>/dev/null || continue; pid=${p##*/}; comm=${stat#*\"(\"}; comm=${comm%\")\"*}; rest=${stat##*\") \"}; set -- $rest; sppid=$2; sutime=${12}; sstime=${13}; snthreads=${18}; status=$(< \"$p/status\") 2>/dev/null || continue; rss=\"\"; uid=\"\"; while IFS= read -r line; do case \"$line\" in VmRSS:*) set -- $line; rss=$2 ;; Uid:*) set -- $line; uid=$2 ;; esac; done << EOF\n$status\nEOF\ncmd=$(tr \"\\0\" \" \" < \"$p/cmdline\" 2>/dev/null | tr \"\\t\\n\" \"  \"); printf \"%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\n\" \"$pid\" \"$comm\" \"$sppid\" \"$sutime\" \"$sstime\" \"$snthreads\" \"$rss\" \"$uid\" \"$cmd\"; done"]
+            "for p in /proc/[0-9]*; do stat=$(< \"$p/stat\") 2>/dev/null || continue; pid=${p##*/}; comm=${stat#*\"(\"}; comm=${comm%\")\"*}; rest=${stat##*\") \"}; set -- $rest; sppid=$2; sutime=${12}; sstime=${13}; snthreads=${18}; status=$(< \"$p/status\") 2>/dev/null || continue; rss=\"\"; uid=\"\"; while IFS= read -r line; do case \"$line\" in VmRSS:*) set -- $line; rss=$2 ;; Uid:*) set -- $line; uid=$2 ;; esac; done << EOF\n$status\nEOF\nioa=0; rb=0; wb=0; if [ \"$sppid\" != 2 ]; then while IFS= read -r line; do set -- $line; case \"$1\" in read_bytes:) rb=$2; ioa=1 ;; write_bytes:) wb=$2 ;; esac; done 2>/dev/null < \"$p/io\"; fi; cmd=$(tr \"\\0\" \" \" < \"$p/cmdline\" 2>/dev/null | tr \"\\t\\n\" \"  \"); printf \"%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\t%s\\n\" \"$pid\" \"$comm\" \"$sppid\" \"$sutime\" \"$sstime\" \"$snthreads\" \"$rss\" \"$uid\" \"$rb\" \"$wb\" \"$ioa\" \"$cmd\"; done"]
         running: false
         onExited: exitCode => {
             if (exitCode !== 0) {
@@ -1259,6 +1607,7 @@ Singleton {
         initializeSystemMetadata();
         hwmonListProcess.running = true;
         lsDrmProcess.running = true;
+        startBlockDeviceScan();
         try {
             lspciProcess.running = true;
         } catch (e) {

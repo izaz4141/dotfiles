@@ -145,7 +145,7 @@ Rectangle {
                             }
 
                             StyledText {
-                                text: `${modelData.used || "?"} / ${modelData.size || "?"}`
+                                text: `${modelData.usedLabel || "?"} / ${modelData.sizeLabel || "?"}`
                                 font.pixelSize: Theme.fontSizeSmall
                                 color: Theme.surfaceVariantText
                                 elide: Text.ElideRight

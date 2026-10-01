@@ -925,12 +925,6 @@ Singleton {
         if (typeof instance.getPasteArgs === "function")
             return instance.getPasteArgs(item);
 
-        if (typeof instance.getPasteText === "function") {
-            const text = instance.getPasteText(item);
-            if (text)
-                return ["dms", "cl", "copy", text];
-        }
-
         return null;
     }
 

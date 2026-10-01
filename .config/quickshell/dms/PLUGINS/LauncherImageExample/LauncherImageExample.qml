@@ -101,7 +101,7 @@ QtObject {
                 action: () => {
                     const url = item.imageUrl || "";
                     if (url) {
-                        Quickshell.execDetached(["dms", "cl", "copy", url]);
+                        ClipboardService.copy(url);
                         if (typeof ToastService !== "undefined") {
                             ToastService.showInfo("Copied", url);
                         }

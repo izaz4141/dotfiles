@@ -15,7 +15,7 @@ hl.config({
             gradients                 = true,
             gradient_round_only_edges = false,
             gradient_rounding         = 5,
-            height                    = 25,
+            height                    = 20,
             indicator_height          = 0,
             gaps_in                   = 3,
             gaps_out                  = 3,

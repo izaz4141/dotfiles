@@ -785,6 +785,22 @@ Item {
     }
 
     LazyLoader {
+        id: processDetailsModalLoader
+
+        active: false
+
+        Component.onCompleted: PopoutService.processDetailsModalLoader = processDetailsModalLoader
+
+        ProcessDetailsModal {
+            id: processDetailsModal
+
+            Component.onCompleted: {
+                PopoutService.processDetailsModal = processDetailsModal;
+            }
+        }
+    }
+
+    LazyLoader {
         id: systemUpdateLoader
 
         active: false

@@ -292,6 +292,15 @@ Singleton {
         responses = []
     }
 
+    function copyImage(imageData, callback) {
+        if (!imageData?.file_url) {
+            if (callback) callback(1);
+            return;
+        }
+        const ext = String(imageData.file_ext || "").replace(/^\s*\./, "").toLowerCase() || "img";
+        ClipboardService.copyImageUrl(imageData.file_url, ext, callback);
+    }
+
     function addSystemMessage(message) {
         responses = [...responses, root.booruResponseDataComponent.createObject(null, {
             "provider": "system",

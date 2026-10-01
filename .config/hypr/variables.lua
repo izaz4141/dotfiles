@@ -164,6 +164,7 @@ return {
     kbClipboardPasteLatest     = "CTRL + SHIFT + ALT + V",
     kbRandomWallpaper          = "SUPER + SHIFT + W",
     kbPowerMenu = "XF86PowerOff",
+    kbBarToggle = "SUPER + SHIFT + B",
 
     -- Widgets
     kbClipboard                = "CTRL + SUPER + V",

@@ -117,10 +117,21 @@ Singleton {
         id: copyProcess
         running: false
         property var pendingCallback: null
+        property var queuedCommand: null
+        property var queuedCallback: null
         onExited: exitCode => {
             const cb = pendingCallback
             pendingCallback = null
-            if (cb) cb()
+            if (exitCode !== 0)
+                console.warn("ClipboardService: copy failed, exit code:", exitCode)
+            if (cb) cb(exitCode)
+            if (queuedCommand) {
+                const nextCommand = queuedCommand
+                const nextCallback = queuedCallback
+                queuedCommand = null
+                queuedCallback = null
+                Qt.callLater(() => root.runCopy(nextCommand, nextCallback))
+            }
         }
     }
 
@@ -248,11 +259,77 @@ Singleton {
         listProcess.running = true
     }
 
-    function copyEntry(entry, callback) {
-        const entryId = entry.split('\t')[0]
-        copyProcess.command = ["sh", "-c", `cliphist decode ${entryId} | wl-copy`]
+    function runCopy(command, callback) {
+        if (copyProcess.running) {
+            copyProcess.queuedCommand = command
+            copyProcess.queuedCallback = callback || null
+            return;
+        }
         copyProcess.pendingCallback = callback || null
-        copyProcess.running = true
+        copyProcess.command = command
+        copyProcess.running = true;
+    }
+
+    function copy(text, callback) {
+        if (text === undefined || text === null)
+            return;
+        const value = String(text);
+        if (value.length === 0) {
+            if (callback) callback(1);
+            return;
+        }
+        runCopy(["sh", "-c", `printf '%s' '${StringUtils.shellSingleQuoteEscape(value)}' | wl-copy`], callback);
+    }
+
+    function copyBinary(base64Data, mimeType, callback) {
+        if (!base64Data) {
+            if (callback) callback(1);
+            return;
+        }
+        const mime = mimeType && mimeType.length > 0 ? mimeType : "application/octet-stream";
+        const typeArg = StringUtils.shellSingleQuoteEscape(mime);
+        runCopy(["sh", "-c", `printf '%s' '${StringUtils.shellSingleQuoteEscape(base64Data)}' | base64 -d | wl-copy --type '${typeArg}'`], callback);
+    }
+
+    function imageMime(ext) {
+        switch (ext) {
+        case "jpg":
+        case "jpeg":
+            return "image/jpeg";
+        case "png":
+            return "image/png";
+        case "gif":
+            return "image/gif";
+        case "webp":
+            return "image/webp";
+        case "avif":
+            return "image/avif";
+        case "bmp":
+            return "image/bmp";
+        case "svg":
+            return "image/svg+xml";
+        default:
+            return "application/octet-stream";
+        }
+    }
+
+    function copyImageUrl(url, ext, callback) {
+        if (!url) {
+            if (callback) callback(1);
+            return;
+        }
+        const safeExt = ext && /^[a-z0-9]+$/.test(String(ext)) ? String(ext).toLowerCase() : "img";
+        const mime = root.imageMime(safeExt);
+        const urlArg = StringUtils.shellSingleQuoteEscape(url);
+        const mimeArg = StringUtils.shellSingleQuoteEscape(mime);
+        runCopy(["sh", "-c",
+            `tmp="$(mktemp --suffix=.${safeExt})"; if curl -sL '${urlArg}' -o "$tmp" && wl-copy --type '${mimeArg}' < "$tmp"; then rm -f "$tmp"; exit 0; else rm -f "$tmp"; exit 1; fi`], callback);
+    }
+
+    function copyEntry(entry, callback) {
+        const entryId = getEntryId(entry)
+        runCopy(["sh", "-c",
+            `tmp="$(mktemp)"; rc=1; if cliphist decode ${entryId} > "$tmp"; then wl-copy --type "$(file -b --mime-type "$tmp")" < "$tmp" && rc=0; fi; rm -f "$tmp"; exit $rc`], callback)
     }
 
     function pasteEntry(entry, callback) {

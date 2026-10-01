@@ -47,7 +47,7 @@ CompoundPill {
         if (!selectedMount) {
             return I18n.tr("No disk data available");
         }
-        return `${selectedMount.used} / ${selectedMount.size} (${usagePercent.toFixed(0)}%)`;
+        return `${selectedMount.usedLabel} / ${selectedMount.sizeLabel} (${usagePercent.toFixed(0)}%)`;
     }
 
     iconColor: {

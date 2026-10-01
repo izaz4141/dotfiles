@@ -133,9 +133,9 @@ BasePill {
                         }
                         if (!root.selectedMount) return "--";
                         switch (root.diskUsageMode) {
-                            case 1: return root.selectedMount.size || "--";
-                            case 2: return root.selectedMount.avail || "--";
-                            case 3: return (root.selectedMount.avail || "--") + " / " + (root.selectedMount.size || "--");
+                            case 1: return root.selectedMount.sizeLabel || "--";
+                            case 2: return root.selectedMount.availLabel || "--";
+                            case 3: return (root.selectedMount.availLabel || "--") + " / " + (root.selectedMount.sizeLabel || "--");
                             default: return root.diskUsagePercent.toFixed(0);
                         }
                     }
@@ -187,9 +187,9 @@ BasePill {
                         }
                         if (!root.selectedMount) return "--%";
                         switch (root.diskUsageMode) {
-                            case 1: return root.selectedMount.size || "--";
-                            case 2: return root.selectedMount.avail || "--";
-                            case 3: return (root.selectedMount.avail || "--") + " / " + (root.selectedMount.size || "--");
+                            case 1: return root.selectedMount.sizeLabel || "--";
+                            case 2: return root.selectedMount.availLabel || "--";
+                            case 3: return (root.selectedMount.availLabel || "--") + " / " + (root.selectedMount.sizeLabel || "--");
                             default: return root.diskUsagePercent.toFixed(0) + "%";
                         }
                     }
@@ -204,9 +204,9 @@ BasePill {
                         font.pixelSize: Theme.barTextSize(root.barThickness, root.barConfig?.fontScale, root.barConfig?.maximizeWidgetText)
                         text: {
                             switch (root.diskUsageMode) {
-                                case 3: return "888.8G / 888.8G";
+                                case 3: return "888.8 GB / 888.8 GB";
                                 case 1:
-                                case 2: return "888.8G";
+                                case 2: return "888.8 GB";
                                 default: return "100%";
                             }
                         }

@@ -13,7 +13,7 @@ DankPopout {
     property var parentWidget: null
     property var triggerScreen: null
     property string searchText: ""
-    property string expandedPid: ""
+    property var expandedPids: []
     property string processFilter: "all"
 
     function hide() {
@@ -42,7 +42,7 @@ DankPopout {
     onShouldBeVisibleChanged: {
         if (!shouldBeVisible) {
             searchText = "";
-            expandedPid = "";
+            expandedPids = [];
             processFilter = "all";
         }
     }
@@ -365,10 +365,10 @@ DankPopout {
                         anchors.fill: parent
                         anchors.margins: Theme.spacingS
                         searchText: processListPopout.searchText
-                        expandedPid: processListPopout.expandedPid
+                        expandedPids: processListPopout.expandedPids
                         processFilter: processListPopout.processFilter
                         contextMenu: processContextMenu
-                        onExpandedPidChanged: processListPopout.expandedPid = expandedPid
+                        onExpandedPidsChanged: processListPopout.expandedPids = expandedPids
                     }
                 }
             }

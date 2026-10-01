@@ -97,6 +97,12 @@ create_bind(
     "Toggle power menu"
 )
 
+create_bind(
+    vars.kbBarToggle,
+    hl.dsp.exec_cmd(sf("qs -p %s ipc call bar toggle index 0", dms)),
+    "Bar toggle"
+)
+
 -- Widgets
 create_bind(vars.kbClipboard, hl.dsp.exec_cmd(sf("qs -p %s ipc call clipboard toggle", dms)), "Open clipboard")
 create_bind(vars.kbClipboardDel, hl.dsp.exec_cmd("cliphist wipe"), "Delete clipboard history")
