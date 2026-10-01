@@ -40,7 +40,7 @@ This checkout is **pure quickshell (`qs`)**. The `dms` Go backend and the `dms`
 CLI (daemon, `dms run`, `dms ipc`, `dms keybinds`, etc.) are **NOT available**
 in this environment. Do NOT document, run, or rely on any `dms` command.
 
-- **Run the shell**: `qs -p .` (hot-reloads on file changes). No backend needed.
+- **Run the shell**: `qs -n -d` (hot-reloads on file changes). No backend needed.
 - **IPC to the running shell**: `qs ipc call <target> <function> [args...]`.
   Handlers are declared with `IpcHandler { target: "..." }` in `DMSShellIPC.qml`
   (e.g. `qs ipc call notepad toggle`). List available targets with
@@ -51,9 +51,6 @@ in this environment. Do NOT document, run, or rely on any `dms` command.
   `nmcli`, `cliphist`). Never use `DMSService` (see `TO-MIGRATE.md`).
 - **Keybinds**: entries in `Common/KeybindActions.js` spawn `qs ipc call …`,
   NOT `spawn dms ipc call …`.
-- Sections below that describe the Go backend (`core/`, IPC server, CLI
-  commands, `dms restart`, etc.) are **upstream/legacy documentation** and do
-  not apply to this checkout.
 
 ## Project Overview
 
@@ -68,14 +65,6 @@ DankMaterialShell is a complete desktop environment for Wayland compositors, bui
 **Distribution Support**: Arch, Fedora, Debian, Ubuntu, openSUSE, Gentoo (6 distributions supported)
 
 ## Technology Stack
-
-### Backend (core/)
-- **Go 1.24+** - System integration and backend services
-- **Wayland Protocols** - Display management, screenshots, clipboard, workspaces
-- **D-Bus** - Bluetooth, NetworkManager, systemd-logind, desktop portals
-- **IPC Server** - Unix socket JSON API for QML ↔ Go communication
-- **CLI Tools** - `dms` command with 20+ subcommands, `dankinstall` TUI installer
-
 ### Frontend (quickshell/)
 - **QML (Qt Modeling Language)** - UI components and visual presentation
 - **Quickshell Framework** - QML-based desktop shell framework
@@ -84,22 +73,14 @@ DankMaterialShell is a complete desktop environment for Wayland compositors, bui
 
 ## Development Commands
 
-### Backend (Go)
-
-> **NOTE:** Not applicable to this checkout — this config is **pure quickshell
-> (`qs`)**. The Go backend (`core/`, `dms` CLI, `dankinstall`) is **not
-> available** here; do not try to build or invoke it. See
-> "Important — Pure Quickshell" above.
-
 ### Frontend (QML)
 
 ```bash
 cd quickshell/
 
 # Run the shell (pure quickshell — no backend needed; hot-reloads on change)
-quickshell -p shell.qml
-qs -p .              # Shorthand
-qs -v -p shell.qml   # Verbose debugging
+qs -n -d             # Shorthand
+qs -v -n -d          # Verbose debugging
 
 # IPC to a running shell (instead of dms ipc)
 qs ipc show
@@ -108,7 +89,7 @@ qs ipc call <target> <function> [args...]
 # Code formatting and linting
 
 > **NOTE:** `qmllint`, `qmlformat`, and `qmlfmt` are currently **broken in this environment** and should be IGNORED. Any `.qml` file containing `pragma ComponentBehavior: Bound` crashes these tools (they exit 255 with no output). Formatting is handled manually following the documented QML style guidelines; do not run or rely on these lint/format tools.
-> Checking whether changes compile can be done with `qs -n -d -p <path> log` if qs is already running, or `timeout <s> qs -p <path> | tail -<n>`
+> Checking whether changes compile can be done with `qs -n -d log` if qs is already running, or `timeout <s> qs -n -d | tail -<n>`
 
 ```bash
 # qmlfmt -t 4 -i 4 -b 250 -w /path/to/file.qml  # BROKEN - do not use
@@ -379,154 +360,6 @@ import (
 - Use `Theme.propertyName` for consistent styling
 - Use `DankIcon { name: "icon_name" }` for all icons instead of manual Text components
 
-### Go Backend Code Conventions
-
-#### 1. Package Structure
-
-- **cmd/** - Binary entrypoints only, minimal logic
-- **internal/** - Implementation packages (not importable by external projects)
-- **pkg/** - Shared packages (potentially importable)
-- Each package should have a clear, single responsibility
-
-#### 2. Error Handling
-
-```go
-// Always wrap errors with context
-if err != nil {
-    return fmt.Errorf("failed to connect to D-Bus: %w", err)
-}
-
-// Use custom error types for specific error handling
-if errors.Is(err, errdefs.ErrNotFound) {
-    // Handle specific error
-}
-```
-
-#### 3. IPC Handler Pattern
-
-All server modules should follow this pattern:
-
-```go
-package mymodule
-
-import (
-    "github.com/AvengeMedia/DankMaterialShell/core/internal/server/models"
-    "github.com/AvengeMedia/DankMaterialShell/core/internal/server/params"
-)
-
-type Manager struct {
-    // State, connections, etc.
-}
-
-func NewManager() (*Manager, error) {
-    // Initialize
-    return &Manager{}, nil
-}
-
-func (m *Manager) HandleRequest(req models.Request) models.Response {
-    switch req.Method {
-    case "list":
-        return m.handleList(req)
-    case "action":
-        return m.handleAction(req)
-    default:
-        return models.ErrorResponse(req.ID, "unknown method")
-    }
-}
-
-func (m *Manager) handleAction(req models.Request) models.Response {
-    // Extract and validate parameters
-    param, err := params.String(req.Params, "name")
-    if err != nil {
-        return models.ErrorResponse(req.ID, err.Error())
-    }
-
-    // Perform action
-    result, err := m.doSomething(param)
-    if err != nil {
-        return models.ErrorResponse(req.ID, err.Error())
-    }
-
-    return models.SuccessResponse(req.ID, result)
-}
-```
-
-#### 4. D-Bus Integration
-
-```go
-// Use context for cancellation
-ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-defer cancel()
-
-// Always check for D-Bus availability
-if !dbusutil.ServiceExists(conn, "org.bluez") {
-    return fmt.Errorf("bluetooth service not available")
-}
-
-// Handle signals properly with channels
-signals := make(chan *dbus.Signal, 10)
-conn.Signal(signals)
-defer conn.RemoveSignal(signals)
-```
-
-#### 5. Wayland Protocol Integration
-
-```go
-// Check protocol availability before use
-if registry.GetGammaControl() == nil {
-    return errdefs.ErrNotSupported
-}
-
-// Clean up Wayland resources
-defer output.Destroy()
-defer surface.Destroy()
-```
-
-#### 6. Testing
-
-```go
-// Use table-driven tests
-func TestManager_HandleRequest(t *testing.T) {
-    tests := []struct {
-        name    string
-        request models.Request
-        want    models.Response
-        wantErr bool
-    }{
-        {
-            name: "valid request",
-            request: models.Request{
-                ID:     "1",
-                Method: "list",
-            },
-            wantErr: false,
-        },
-    }
-
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            m := NewManager()
-            got := m.HandleRequest(tt.request)
-            // Assertions
-        })
-    }
-}
-
-// Use mocks for external dependencies (see internal/mocks/)
-```
-
-#### 7. Logging
-
-```go
-import "github.com/AvengeMedia/DankMaterialShell/core/internal/log"
-
-// Use appropriate log levels
-log.Debug("Processing request", "method", req.Method)
-log.Info("Service started", "address", addr)
-log.Warn("Feature unavailable", "reason", "missing dependency")
-log.Error("Failed to connect", "error", err)
-log.Fatal("Critical failure", "error", err) // Only for unrecoverable errors
-```
 
 ### Component Development Patterns
 
@@ -661,10 +494,6 @@ When modifying the shell:
 2. **Code quality**: Manually verify QML style follows the documented guidelines. Do NOT rely on `qmlformat`, `qmlfmt`, or `qmllint` — they are broken in this environment (crash on `pragma ComponentBehavior: Bound`).
 3. **Performance**: Ensure animations remain smooth (60 FPS target)
 4. **Theming**: Use `Theme.propertyName` for Material Design 3 consistency
-
-**Go Backend:**
-> **NOTE:** Not applicable — no Go backend in this checkout (pure quickshell).
-> Use `qs -p .` + `qs ipc call` instead.
 
 1. **IPC testing**: Use `qs ipc show` to list targets; `qs ipc call <target> <function>` to trigger handlers (e.g. `qs ipc call notepad toggle`).
 

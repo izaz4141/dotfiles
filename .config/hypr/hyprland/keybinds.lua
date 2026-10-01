@@ -78,7 +78,7 @@ end
 local launcher_default = normalise_keybind("SUPER + SUPER_L")
 create_bind(
     vars.kbLauncher,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call spotlight toggle", dms)),
+    hl.dsp.exec_cmd("qs ipc call spotlight toggle"),
     "Launch spotlight",
     function(key)
         return normalise_keybind(key) == launcher_default and release or nil
@@ -87,24 +87,24 @@ create_bind(
 
 -- Misc
 create_bind(vars.kbSession, hl.dsp.global("caelestia:session"), "Open session menu")
-create_bind(vars.kbClearNotifs, hl.dsp.exec_cmd(sf("qs -p %s ipc call notifications clearAll", dms)), "Clear notifications", locked)
+create_bind(vars.kbClearNotifs, hl.dsp.exec_cmd("qs ipc call notifications clearAll"), "Clear notifications", locked)
 create_bind(vars.kbLock, hl.dsp.exec_cmd("loginctl lock-session $XDG_SESSION_ID"), "Lock the screen", locked)
-create_bind(vars.kbRandomWallpaper, hl.dsp.exec_cmd(sf("qs -p %s ipc call wallpaper random", dms)), "Choose random wallpaper")
+create_bind(vars.kbRandomWallpaper, hl.dsp.exec_cmd("qs ipc call wallpaper random"), "Choose random wallpaper")
 
 create_bind(
     vars.kbPowerMenu,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call powermenu toggle", dms)),
+    hl.dsp.exec_cmd("qs ipc call powermenu toggle"),
     "Toggle power menu"
 )
 
 create_bind(
     vars.kbBarToggle,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call bar toggle index 0", dms)),
+    hl.dsp.exec_cmd("qs ipc call bar toggle index 0"),
     "Bar toggle"
 )
 
 -- Widgets
-create_bind(vars.kbClipboard, hl.dsp.exec_cmd(sf("qs -p %s ipc call clipboard toggle", dms)), "Open clipboard")
+create_bind(vars.kbClipboard, hl.dsp.exec_cmd("qs ipc call clipboard toggle"), "Open clipboard")
 create_bind(vars.kbClipboardDel, hl.dsp.exec_cmd("cliphist wipe"), "Delete clipboard history")
 create_bind(
     vars.kbEmoji,
@@ -117,33 +117,33 @@ create_bind(
     "Paste latest clipboard entry",
     locked
 )
-create_bind(vars.kbNotif, hl.dsp.exec_cmd(sf("qs -p %s ipc call notifications toggle", dms)), "Open Notification Center")
-create_bind(vars.kbControlCenter, hl.dsp.exec_cmd(sf("qs -p %s ipc call control-center toggle", dms)), "Open Control Center")
+create_bind(vars.kbNotif, hl.dsp.exec_cmd("qs ipc call notifications toggle"), "Open Notification Center")
+create_bind(vars.kbControlCenter, hl.dsp.exec_cmd("qs ipc call control-center toggle"), "Open Control Center")
 create_bind(vars.kbShowSidebar, hl.dsp.global("caelestia:sidebar"), "Toggle sidebar")
-create_bind(vars.kbChooseWallpaper, hl.dsp.exec_cmd(sf("qs -p %s ipc call dankdash wallpaper", dms)), "Open Wallpaper Picker")
-create_bind(vars.kbCheatsheet, hl.dsp.exec_cmd(sf("qs -p %s ipc call cheatsheet toggle", dms)), "Open keybinds cheatsheet")
+create_bind(vars.kbChooseWallpaper, hl.dsp.exec_cmd("qs ipc call dankdash wallpaper"), "Open Wallpaper Picker")
+create_bind(vars.kbCheatsheet, hl.dsp.exec_cmd("qs ipc call cheatsheet toggle"), "Open keybinds cheatsheet")
 
 create_bind(
     vars.kbOpenClock,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call clock toggle", dms)),
+    hl.dsp.exec_cmd("qs ipc call clock toggle"),
     "Open clock"
 )
 
 create_bind(
     vars.kbToolbox,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call toolbox toggle", dms)),
+    hl.dsp.exec_cmd("qs ipc call toolbox toggle"),
     "Toggle toolbox"
 )
 
 create_bind(
     vars.kbNotepad,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call notepad toggle", dms)),
+    hl.dsp.exec_cmd("qs ipc call notepad toggle"),
     "Toggle notepad"
 )
 
 create_bind(
     vars.kbProcessMonitor,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call processlist toggle", dms)),
+    hl.dsp.exec_cmd("qs ipc call processlist toggle"),
     "Toggle process monitor"
 )
 
@@ -156,7 +156,7 @@ end, "Restore & lock screen")
 -- Kill/restart
 create_bind(
     vars.kbRestartQS,
-    hl.dsp.exec_cmd(sf("qs -p %s kill; sleep 1; qs -p %s -n -d", dms, dms)),
+    hl.dsp.exec_cmd("qs kill; sleep 2; qs -n -d"),
     "Restart quickshell",
     release
 )
@@ -243,7 +243,7 @@ create_bind(
 )
 create_bind(
     vars.kbOpenOverview,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call hypr toggleOverview", dms)),
+    hl.dsp.exec_cmd("qs ipc call hypr toggleOverview"),
     "Open overview"
 )
 
@@ -268,18 +268,18 @@ create_bind(vars.kbAudioSettings, hl.dsp.exec_cmd(vars.audioSettings), "Open aud
 -- Utilities
 create_bind(
     vars.kbScreenshot,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call screenshot all clipboard", dms)),
+    hl.dsp.exec_cmd("qs ipc call screenshot all clipboard"),
     "Take screenshot",
     locked
 )
 create_bind(
     vars.kbScreenshotFreeze,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call screenshot region clipboard", dms)),
+    hl.dsp.exec_cmd("qs ipc call screenshot region clipboard"),
     "Screenshot a region to clipboard"
 )
 create_bind(
     vars.kbControlledScreenshot,
-    hl.dsp.exec_cmd(sf("qs -p %s ipc call screenshot controls", dms)),
+    hl.dsp.exec_cmd("qs ipc call screenshot controls"),
     "Controlled screenshot"
 )
 create_bind(vars.kbRecord, hl.dsp.exec_cmd("caelestia record"), "Record screen")
