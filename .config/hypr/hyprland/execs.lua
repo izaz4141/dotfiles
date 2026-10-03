@@ -20,7 +20,7 @@ hl.on("hyprland.start", function()
     -- hl.exec_cmd("sleep 1 && gammastep")
 
     -- Shell
-    hl.exec_cmd("qs -p ~/.config/quickshell/dms -n -d")
+    hl.exec_cmd("qs -n -d")
 end)
 
 -- Resizer listeners

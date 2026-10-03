@@ -95,6 +95,10 @@ Singleton {
     property var cpuLast: null
     property var perCoreLast: null
     property int cpuTotalTicksDelta: 0
+    property real cpuLastSampleWall: 0
+    readonly property int cpuMinSampleInterval: 1000
+    readonly property real procMinCpuInterval: 0.5
+    readonly property int clkTicksPerSecond: 100
     property real lastTickWall: 0
 
     property var pidList: []
@@ -116,6 +120,14 @@ Singleton {
     property bool lspciAvailable: false
     property bool nvidiaSmiAvailable: false
     property int nvidiaGpuCount: 0
+    property real nvidiaSmiLastRun: 0
+
+    readonly property int dfMinInterval: 10000
+    readonly property int nvidiaSmiMinInterval: 15000
+    property real dfLastRun: 0
+    property real blockScanLastAttempt: 0
+    property int blockScanBackoff: 0
+    readonly property int blockScanMaxBackoff: 60000
 
     property var passwdMap: ({})
     property bool gpuInitialized: false
@@ -153,8 +165,6 @@ Singleton {
         if (modulesChanged || refCount === 1) {
             enabledModules = enabledModules.slice();
             moduleRefCounts = Object.assign({}, moduleRefCounts);
-            updateAllStats();
-        } else if (gpuPciIds.length > 0 && refCount > 0) {
             updateAllStats();
         }
     }
@@ -260,15 +270,16 @@ Singleton {
         }
 
         if (isModuleEnabled("disk")) {
-            if (blockDevices.length === 0 && !blockScanInFlight) {
+            if (blockDevices.length === 0 && !blockScanInFlight && now - root.blockScanLastAttempt >= root.blockScanBackoff) {
                 startBlockDeviceScan();
             }
             parseDiskStats(readFile("/proc/diskstats"), elapsed);
         }
 
         if (isModuleEnabled("diskmounts")) {
-            if (!dfInFlight) {
+            if (!dfInFlight && now - root.dfLastRun >= root.dfMinInterval) {
                 dfInFlight = true;
+                dfLastRun = now;
                 dfProcess.running = true;
             }
         }
@@ -294,63 +305,96 @@ Singleton {
         isUpdating = false;
     }
 
+    function parseCpuFields(line) {
+        const parts = line.trim().split(/\s+/);
+        if (parts.length < 6)
+            return null;
+        const fields = [];
+        for (let i = 1; i < parts.length; i++) {
+            if (!/^\d+$/.test(parts[i]))
+                return null;
+            fields.push(parseInt(parts[i], 10));
+        }
+        return fields;
+    }
+
+    function sumCpuFields(fields) {
+        let sum = 0;
+        for (const value of fields)
+            sum += value;
+        return sum;
+    }
+
+    function cpuUsageFromDeltas(total, busy, lastTotal, lastBusy) {
+        const totalDelta = Math.max(0, total - lastTotal);
+        if (totalDelta <= 0)
+            return -1;
+        const busyDelta = Math.max(0, Math.min(busy - lastBusy, totalDelta));
+        return Math.round((busyDelta / totalDelta) * 1000) / 10;
+    }
+
     function parseCpu(statContent, cpuinfoContent) {
         if (!statContent)
             return;
 
         const lines = statContent.split("\n");
-        let cpuTotal = 0;
-        let cpuBusy = 0;
+        let cpuFields = null;
         let btime = 0;
+        let statCores = 0;
         const perCore = [];
 
         for (const line of lines) {
-            if (line.startsWith("cpu ")) {
-                const parts = line.trim().split(/\s+/).slice(1);
-                cpuTotal = parts.reduce((a, b) => a + parseInt(b, 10) || 0, 0);
-                cpuBusy = cpuTotal - (parseInt(parts[3], 10) || 0) - (parseInt(parts[4], 10) || 0);
-            } else if (/^cpu\d+ /.test(line)) {
-                const parts = line.trim().split(/\s+/).slice(1);
-                const total = parts.reduce((a, b) => a + parseInt(b, 10) || 0, 0);
-                const busy = total - (parseInt(parts[3], 10) || 0) - (parseInt(parts[4], 10) || 0);
-                perCore.push({total: total, busy: busy});
+            if (/^cpu\s/.test(line)) {
+                const fields = parseCpuFields(line);
+                if (fields)
+                    cpuFields = fields;
+            } else if (/^cpu\d+\s/.test(line)) {
+                statCores++;
+                const fields = parseCpuFields(line);
+                if (fields) {
+                    const total = sumCpuFields(fields);
+                    perCore.push({total: total, busy: total - fields[3] - fields[4]});
+                }
             } else if (line.startsWith("btime")) {
                 btime = parseInt(line.trim().split(/\s+/)[1], 10) || 0;
             }
         }
 
-        if (cpuTotal > 0) {
-            if (root.cpuLast) {
-                const totalDelta = cpuTotal - root.cpuLast.total;
-                const busyDelta = cpuBusy - root.cpuLast.busy;
-                if (totalDelta > 0) {
-                    cpuUsage = Math.round((busyDelta / totalDelta) * 1000) / 10;
-                    cpuTotalTicksDelta = totalDelta;
-                }
-            } else {
-                cpuTotalTicksDelta = 0;
+        const now = Date.now();
+        const publish = root.cpuLastSampleWall === 0 || (now - root.cpuLastSampleWall) >= root.cpuMinSampleInterval;
+        root.cpuLastSampleWall = now;
+
+        if (cpuFields) {
+            const total = sumCpuFields(cpuFields);
+            const busy = total - cpuFields[3] - cpuFields[4];
+            const usage = root.cpuLast ? cpuUsageFromDeltas(total, busy, root.cpuLast.total, root.cpuLast.busy) : -1;
+            if (publish && usage >= 0) {
+                cpuUsage = usage;
+                cpuTotalTicksDelta = total - root.cpuLast.total;
             }
-            root.cpuLast = {total: cpuTotal, busy: cpuBusy};
+            root.cpuLast = {total: total, busy: busy};
         }
 
-        if (perCore.length > 0 && root.perCoreLast) {
-            const usage = [];
-            for (let i = 0; i < Math.min(perCore.length, root.perCoreLast.length); i++) {
-                const totalDelta = perCore[i].total - root.perCoreLast[i].total;
-                const busyDelta = perCore[i].busy - root.perCoreLast[i].busy;
-                usage.push(totalDelta > 0 ? Math.round((busyDelta / totalDelta) * 1000) / 10 : 0);
+        if (perCore.length > 0) {
+            const rebaseline = !root.perCoreLast || root.perCoreLast.length !== perCore.length;
+            if (publish && !rebaseline) {
+                const usage = [];
+                for (let i = 0; i < perCore.length; i++) {
+                    const value = cpuUsageFromDeltas(perCore[i].total, perCore[i].busy, root.perCoreLast[i].total, root.perCoreLast[i].busy);
+                    usage.push(value >= 0 ? value : 0);
+                }
+                perCoreCpuUsage = usage;
+            } else if (!publish || rebaseline) {
+                perCoreCpuUsage = new Array(perCore.length).fill(0);
             }
-            perCoreCpuUsage = usage;
-        } else if (root.perCoreLast === null && perCore.length > 0) {
-            perCoreCpuUsage = new Array(perCore.length).fill(0);
+            root.perCoreLast = perCore;
         }
-        root.perCoreLast = perCore;
 
         if (cpuinfoContent) {
             let model = "";
             let mhzTotal = 0;
             let mhzCount = 0;
-            let cores = 0;
+            let infoCores = 0;
             for (const line of cpuinfoContent.split("\n")) {
                 const idx = line.indexOf(":");
                 if (idx < 0)
@@ -366,16 +410,21 @@ Singleton {
                         mhzCount++;
                     }
                 } else if (key === "processor") {
-                    cores++;
+                    infoCores++;
                 }
             }
             cpuModel = model || cpuModel;
-            if (cores > 0)
-                cpuCores = cores;
             cpuFrequency = mhzCount > 0 ? Math.round(mhzTotal / mhzCount) : 0;
+            if (statCores > 0)
+                cpuCores = statCores;
+            else if (infoCores > 0)
+                cpuCores = infoCores;
+        } else if (statCores > 0) {
+            cpuCores = statCores;
         }
 
-        addToHistory(cpuHistory, cpuUsage);
+        if (publish)
+            addToHistory(cpuHistory, cpuUsage);
 
         if (btime > 0 && root.bootEpoch === 0) {
             root.bootEpoch = btime;
@@ -565,12 +614,14 @@ Singleton {
         blockDevices = names;
         blockDeviceInfo = info;
         blockScanInFlight = false;
+        blockScanBackoff = names.length > 0 ? 0 : Math.min(root.blockScanMaxBackoff, root.blockScanBackoff === 0 ? 5000 : root.blockScanBackoff * 2);
     }
 
     function startBlockDeviceScan() {
         if (blockScanInFlight)
             return;
         blockScanInFlight = true;
+        blockScanLastAttempt = Date.now();
         blockDeviceListProcess.running = true;
     }
 
@@ -842,18 +893,29 @@ Singleton {
         }
         procIoPrev = ioCurrent;
 
-        const totalDelta = root.cpuTotalTicksDelta;
-        if (totalDelta > 0) {
-            for (const p of procs) {
-                const cur = procCpuTicks[p.pid] || 0;
-                const prev = procPrevCpuTicks[p.pid] !== undefined ? procPrevCpuTicks[p.pid] : cur;
-                if (cur > prev) {
-                    p.cpu = Math.round(((cur - prev) / totalDelta) * Math.max(1, cpuCores) * 1000) / 10;
-                }
-            }
+        const currentTicks = procCpuTicks;
+        const previousTicks = procPrevCpuTicks;
+        const scanWall = root.lastProcScanWall;
+
+        for (const p of procs) {
+            const cur = currentTicks[p.pid];
+            if (cur === undefined)
+                continue;
+            const previous = previousTicks[p.pid];
+            if (previous === undefined)
+                continue;
+            const elapsed = (scanWall - previous.wall) / 1000;
+            if (elapsed < root.procMinCpuInterval)
+                continue;
+            p.cpu = Math.round((Math.max(0, cur - previous.ticks) / elapsed / root.clkTicksPerSecond) * 1000) / 10;
         }
 
-        procPrevCpuTicks = procCpuTicks;
+        if (Object.keys(currentTicks).length > 0) {
+            const nextTicks = {};
+            for (const pid in currentTicks)
+                nextTicks[pid] = {ticks: currentTicks[pid], wall: scanWall};
+            procPrevCpuTicks = nextTicks;
+        }
         procCpuTicks = {};
 
         threadCount = threadsTotal;
@@ -1053,12 +1115,14 @@ Singleton {
         if (changed)
             availableGpus = updated;
 
-        if (nvidiaNeeded && nvidiaSmiAvailable) {
-            if (!nvidiaSmiInFlight) {
-                nvidiaSmiInFlight = true;
-                nvidiaSmiProcess.running = true;
-            }
-        }
+        if (!nvidiaNeeded || !nvidiaSmiAvailable || nvidiaSmiInFlight)
+            return;
+        const now = Date.now();
+        if (now - root.nvidiaSmiLastRun < root.nvidiaSmiMinInterval)
+            return;
+        nvidiaSmiInFlight = true;
+        nvidiaSmiLastRun = now;
+        nvidiaSmiProcess.running = true;
     }
 
     function applyNvidiaTemps(content) {
@@ -1391,6 +1455,7 @@ Singleton {
             if (exitCode !== 0) {
                 console.warn("SysMonitorService: Failed to list block devices");
                 blockScanInFlight = false;
+                blockScanBackoff = Math.min(root.blockScanMaxBackoff, root.blockScanBackoff === 0 ? 5000 : root.blockScanBackoff * 2);
             }
         }
         stdout: StdioCollector {
@@ -1440,7 +1505,7 @@ Singleton {
     Process {
         id: procTableProcess
         command: ["sh", "-c",
-            "for p in /proc/[0-9]*; do stat=$(< \"$p/stat\") 2>/dev/null || continue; pid=${p##*/}; comm=${stat#*\"(\"}; comm=${comm%\")\"*}; rest=${stat##*\") \"}; set -- $rest; sppid=$2; sutime=${12}; sstime=${13}; snthreads=${18}; status=$(< \"$p/status\") 2>/dev/null || continue; rss=\"\"; uid=\"\"; while IFS= read -r line; do case \"$line\" in VmRSS:*) set -- $line; rss=$2 ;; Uid:*) set -- $line; uid=$2 ;; esac; done << EOF\n$status\nEOF\nioa=0; rb=0; wb=0; if [ \"$sppid\" != 2 ]; then while IFS= read -r line; do set -- $line; case \"$1\" in read_bytes:) rb=$2; ioa=1 ;; write_bytes:) wb=$2 ;; esac; done 2>/dev/null < \"$p/io\"; fi; cmd=$(tr \"\\0\" \" \" < \"$p/cmdline\" 2>/dev/null | tr \"\\t\\n\" \"  \"); printf \"%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\t%s\\n\" \"$pid\" \"$comm\" \"$sppid\" \"$sutime\" \"$sstime\" \"$snthreads\" \"$rss\" \"$uid\" \"$rb\" \"$wb\" \"$ioa\" \"$cmd\"; done"]
+            "for p in /proc/[0-9]*; do stat=$(< \"$p/stat\") 2>/dev/null || continue; pid=${p##*/}; comm=${stat#*\"(\"}; comm=${comm%\")\"*}; rest=${stat##*\") \"}; set -- $rest; sppid=$2; sutime=${12}; sstime=${13}; snthreads=${18}; status=$(< \"$p/status\") 2>/dev/null || continue; rss=\"\"; uid=\"\"; case $status in *VmRSS:*) t=${status#*VmRSS:}; t=${t%%$'\\n'*}; set -- $t; rss=$1 ;; esac; case $status in *Uid:*) t=${status#*Uid:}; t=${t%%$'\\n'*}; set -- $t; uid=$1 ;; esac; ioa=0; rb=0; wb=0; if [ \"$sppid\" != 2 ] && io=$(< \"$p/io\") 2>/dev/null; then case $io in *read_bytes:*) t=${io#*read_bytes:}; t=${t%%$'\\n'*}; set -- $t; rb=$1; ioa=1 ;; esac; case $io in *write_bytes:*) t=${io#*write_bytes:}; t=${t%%$'\\n'*}; set -- $t; wb=$1 ;; esac; fi; cmd=\"\"; IFS= read -r -d \"\" cmd < \"$p/cmdline\" 2>/dev/null; cmd=${cmd//$'\\t'/ }; cmd=${cmd//$'\\n'/ }; printf \"%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\n\" \"$pid\" \"$comm\" \"$sppid\" \"$sutime\" \"$sstime\" \"$snthreads\" \"$rss\" \"$uid\" \"$rb\" \"$wb\" \"$ioa\" \"$cmd\"; done"]
         running: false
         onExited: exitCode => {
             if (exitCode !== 0) {
@@ -1590,7 +1655,6 @@ Singleton {
         interval: root.updateInterval
         running: root.monitorAvailable && root.refCount > 0 && root.enabledModules.length > 0
         repeat: true
-        triggeredOnStart: true
         onTriggered: root.updateAllStats()
     }
 
